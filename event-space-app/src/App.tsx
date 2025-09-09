@@ -1,8 +1,12 @@
-import { Button } from "@/components/ui/button.tsx";
+import MainPage from "@/pages/main-page.tsx";
+import { Header } from '@/components/shared';
 
 const App = () => {
   return (
-    <Button>Test</Button>
+    <>
+      <Header/>
+      <MainPage/>
+    </>
   )
 }
 
