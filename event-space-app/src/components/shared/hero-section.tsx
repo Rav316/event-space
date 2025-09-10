@@ -31,7 +31,7 @@ export const HeroSection = () => {
       >
         <Button className={'group h-[40px] max-[440px]:w-full'}>
           Создать мероприятие
-          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-[3px] transition-transform" />
         </Button>
         <Button variant={'outline'} className={'h-[40px] max-[440px]:w-full'}>
           Обзор мероприятий

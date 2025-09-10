@@ -4,7 +4,9 @@ import { Header } from '@/components/shared';
 const App = () => {
   return (
     <>
-      <Header/>
+      <div className={'sticky top-0 w-full bg-white/50 backdrop-blur-lg'}>
+        <Header />
+      </div>
       <MainPage/>
     </>
   )

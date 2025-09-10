@@ -19,7 +19,9 @@ export const Header = () => {
       >
         <div className={'flex items-center gap-2'}>
           <Calendar width={40} height={40} />
-          <h1 className={'text-3xl font-medium max-[800px]:hidden'}>EventSpace</h1>
+          <h1 className={'text-3xl font-medium max-[800px]:hidden'}>
+            EventSpace
+          </h1>
         </div>
         <div className={'flex items-center gap-x-4 max-[1200px]:hidden'}>
           <HeaderItem Icon={Calendar} text={'Мероприятия'} />
@@ -37,8 +39,8 @@ export const Header = () => {
             <Plus />
             <span className={'max-[500px]:hidden'}>Создать</span>
           </Button>
-          <ProfileMenu/>
-          <NavigationMenu className={'hidden max-[1200px]:block'}/>
+          <ProfileMenu />
+          <NavigationMenu className={'hidden max-[1200px]:block'} />
         </div>
       </div>
     </header>
