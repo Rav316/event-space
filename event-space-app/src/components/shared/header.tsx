@@ -1,6 +1,6 @@
 import { Calendar, ChartColumn, History, Plus, Users } from 'lucide-react';
-import { HeaderItem } from '@/components/ui/header-item.tsx';
-import { SearchInput } from '@/components/ui/search-input.tsx';
+import { HeaderItem } from '@/components/shared/header-item.tsx';
+import { SearchInput } from '@/components/shared/search-input.tsx';
 import { Button } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
@@ -9,7 +9,7 @@ export const Header = () => {
   return (
     <header
       className={
-        'flex justify-center items-center py-[20px] px-[20px] border-b border-gray-400'
+        'flex justify-center items-center py-[20px] px-[20px] border-b border-[#E5E5E5]'
       }
     >
       <div
