@@ -13,14 +13,14 @@ interface Props {
   className?: string;
 }
 
-export const HeaderMenu: React.FC<Props> = ({className}) => {
+export const NavigationMenu: React.FC<Props> = ({className}) => {
   return (
     <div className={className}>
       <DropdownMenu>
         <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-200 transition-colors duration-200">
           <Menu width={20} height={20}/>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className={'min-w-[200px]'}>
+        <DropdownMenuContent className={'min-w-[200px]'} collisionPadding={20}>
           <DropdownMenuLabel>
             Навигация
           </DropdownMenuLabel>

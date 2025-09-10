@@ -1,8 +1,9 @@
 import { Calendar, ChartColumn, History, Plus, Users } from 'lucide-react';
 import { HeaderItem } from '@/components/ui/header-item.tsx';
 import { SearchInput } from '@/components/ui/search-input.tsx';
-import { Avatar, AvatarImage, Button } from '@/components/ui';
-import {HeaderMenu} from "@/components/shared/header-menu.tsx";
+import { Button } from '@/components/ui';
+import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
+import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 
 export const Header = () => {
   return (
@@ -31,17 +32,13 @@ export const Header = () => {
             <SearchInput />
           </div>
         </div>
-        <div className={'flex gap-3 items-center'}>
+        <div className={'flex gap-x-3 items-center'}>
           <Button className={'h-[30px]'}>
             <Plus />
             <span className={'max-[500px]:hidden'}>Создать</span>
           </Button>
-          <Avatar>
-            <AvatarImage
-              src={'https://avatars.githubusercontent.com/u/118563959?v=4'}
-            />
-          </Avatar>
-          <HeaderMenu className={'hidden max-[1200px]:block'}/>
+          <ProfileMenu/>
+          <NavigationMenu className={'hidden max-[1200px]:block'}/>
         </div>
       </div>
     </header>
