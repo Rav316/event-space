@@ -1,7 +1,11 @@
 import { Wrapper } from '@/components/hoc';
-import { EventGroup, HeroSection } from '@/components/shared';
+import {
+  EventGroup,
+  GetStartedSection,
+  HeroSection,
+} from '@/components/shared';
 import { Button } from '@/components/ui';
-import { ArrowRight, Calendar } from 'lucide-react';
+import { ArrowRight, BellPlus, Calendar } from 'lucide-react';
 
 const MainPage = () => {
   return (
@@ -17,7 +21,11 @@ const MainPage = () => {
       </div>
 
       <Wrapper>
-        <div className={'flex max-[660px]:flex-col justify-between min-[660px]:items-center my-[35px] gap-y-5'}>
+        <div
+          className={
+            'flex max-[660px]:flex-col justify-between min-[660px]:items-center my-[35px] gap-y-5'
+          }
+        >
           <div className={'flex flex-col gap-y-2'}>
             <span className={'font-medium text-3xl'}>
               Ближайшие мероприятия
@@ -33,6 +41,27 @@ const MainPage = () => {
           </Button>
         </div>
         <EventGroup />
+        <div className={'flex justify-center my-5'}>
+          <span className={'text-muted-foreground text-center'}>
+            Показано 6 ближайших мероприятий
+          </span>
+        </div>
+        <div
+          className={
+            'flex justify-center min-[528px]:items-center max-[528px]:flex-col gap-4 my-5'
+          }
+        >
+          <Button className={'h-[40px]'}>
+            <Calendar />
+            <span className={'font-medium'}>Смотреть все мероприятия</span>
+            <ArrowRight />
+          </Button>
+          <Button variant={'outline'} className={'h-[40px]'}>
+            <BellPlus />
+            <span>Подписаться на уведомления</span>
+          </Button>
+        </div>
+        <GetStartedSection className={'mb-5'} />
       </Wrapper>
     </>
   );

@@ -8,3 +8,4 @@ export {HeroSectionCard} from './hero-section-card';
 export {EventCard} from './event-card';
 export {EventGroup} from './event-group';
 export {EventCardLabel} from './event-card-label';
+export {GetStartedSection} from './get-started-section';
