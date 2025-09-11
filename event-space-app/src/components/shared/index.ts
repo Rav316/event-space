@@ -5,3 +5,6 @@ export {HeroSection} from './hero-section.tsx';
 export {HeaderItem} from './header-item';
 export {SearchInput} from './search-input';
 export {HeroSectionCard} from './hero-section-card';
+export {EventCard} from './event-card';
+export {EventGroup} from './event-group';
+export {EventCardLabel} from './event-card-label';
