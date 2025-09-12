@@ -3,6 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scrollbar-gutter: stable;
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

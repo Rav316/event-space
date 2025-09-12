@@ -4,6 +4,7 @@ import { SearchInput } from '@/components/shared/search-input.tsx';
 import { Button } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
+import { Link } from 'react-router';
 
 export const Header = () => {
   return (
@@ -17,14 +18,18 @@ export const Header = () => {
           'flex items-center  w-full max-w-[1720px] justify-between gap-4'
         }
       >
-        <div className={'flex items-center gap-2'}>
-          <Calendar width={40} height={40} />
-          <h1 className={'text-3xl font-medium max-[800px]:hidden'}>
-            EventSpace
-          </h1>
-        </div>
+        <Link to={'/'}>
+          <div className={'flex items-center gap-2'}>
+            <Calendar width={40} height={40} />
+            <h1 className={'text-3xl font-medium max-[800px]:hidden'}>
+              EventSpace
+            </h1>
+          </div>
+        </Link>
         <div className={'flex items-center gap-x-4 max-[1200px]:hidden'}>
-          <HeaderItem Icon={Calendar} text={'Мероприятия'} />
+          <Link to={'/events'}>
+            <HeaderItem Icon={Calendar} text={'Мероприятия'} />
+          </Link>
           <HeaderItem Icon={Users} text={'Мои регистрации'} />
           <HeaderItem Icon={ChartColumn} text={'Статистика'} />
           <HeaderItem Icon={History} text={'История'} />

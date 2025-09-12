@@ -1,6 +1,7 @@
 import { ArrowRight, Calendar, Sparkles, Users } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { HeroSectionCard } from '@/components/shared/hero-section-card.tsx';
+import { Link } from 'react-router';
 
 export const HeroSection = () => {
   return (
@@ -33,9 +34,11 @@ export const HeroSection = () => {
           Создать мероприятие
           <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-[3px] transition-transform" />
         </Button>
-        <Button variant={'outline'} className={'h-[40px] max-[440px]:w-full'}>
-          Обзор мероприятий
-        </Button>
+        <Link to={'/events'}>
+          <Button variant={'outline'} className={'h-[40px] max-[440px]:w-full'}>
+            Обзор мероприятий
+          </Button>
+        </Link>
       </div>
 
       <div

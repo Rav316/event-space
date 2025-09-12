@@ -1,15 +1,19 @@
-import MainPage from "@/pages/main-page.tsx";
-import { Header } from '@/components/shared';
+import MainPage from '@/pages/main-page.tsx';
+import { Route, Routes } from 'react-router';
+import { OutletHeader } from '@/components/hoc';
+import EventsPage from '@/pages/events-page.tsx';
+import Page404 from '@/pages/page-404.tsx';
 
 const App = () => {
   return (
-    <>
-      <div className={'sticky top-0 w-full bg-white/70 backdrop-blur-lg z-40'}>
-        <Header />
-      </div>
-      <MainPage/>
-    </>
-  )
-}
+    <Routes>
+      <Route element={<OutletHeader />}>
+        <Route path="/" element={<MainPage />} />
+        <Route path={'/events'} element={<EventsPage />} />
+        <Route path="*" element={<Page404 />} />
+      </Route>
+    </Routes>
+  );
+};
 
-export default App
+export default App;
