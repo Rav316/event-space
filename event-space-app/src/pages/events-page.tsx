@@ -1,5 +1,5 @@
 import { Wrapper } from '@/components/hoc';
-import { EventCategories, SearchInput } from '@/components/shared';
+import { EventCategories, EventGroup, EventsPagination, SearchInput } from '@/components/shared';
 import {EventFilters} from "@/components/shared/event-filters.tsx";
 
 const EventsPage = () => {
@@ -22,6 +22,9 @@ const EventsPage = () => {
           </div>
         </div>
         <EventFilters/>
+        <span className={'text-muted-foreground text-sm'}>Найдено 12 из 12 мероприятий</span>
+        <EventGroup/>
+        <EventsPagination/>
       </div>
     </Wrapper>
   );
