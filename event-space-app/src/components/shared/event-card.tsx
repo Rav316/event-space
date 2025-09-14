@@ -68,7 +68,7 @@ export const EventCard: React.FC<Props> = ({
       <div className={'flex flex-col p-[21px]'}>
         <div className={'pb-[21px] flex flex-col gap-y-3'}>
           <span className={'font-medium'}>{title}</span>
-          <p className={'text-muted-foreground line-clamp-3'}>{description}</p>
+          <p className={'text-muted-foreground line-clamp-2'}>{description}</p>
           <div className={'flex flex-col gap-y-2'}>
             <div
               className={

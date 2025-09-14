@@ -8,6 +8,7 @@ import {
 } from '@/components/ui';
 import { Calendar, ChartColumn, History, Menu, Users } from 'lucide-react';
 import * as React from 'react';
+import { Link } from 'react-router';
 
 interface Props {
   className?: string;
@@ -25,10 +26,12 @@ export const NavigationMenu: React.FC<Props> = ({className}) => {
             Навигация
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Calendar/>
-            Мероприятия
-          </DropdownMenuItem>
+          <Link to={'/events'}>
+            <DropdownMenuItem>
+              <Calendar/>
+              Мероприятия
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             <Users/>
             Мои регистрации

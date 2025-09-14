@@ -36,7 +36,7 @@ export const Header = () => {
         </div>
         <div className={'w-[400px]'}>
           <div className="relative w-full max-w-sm">
-            <SearchInput />
+            <SearchInput placeholder={'Поиск...'} />
           </div>
         </div>
         <div className={'flex gap-x-3 items-center'}>

@@ -7,6 +7,10 @@ html {
   scrollbar-gutter: stable;
 }
 
+body {
+  @apply min-w-full;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

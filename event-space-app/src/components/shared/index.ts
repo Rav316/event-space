@@ -9,3 +9,8 @@ export {EventCard} from './event-card';
 export {EventGroup} from './event-group';
 export {EventCardLabel} from './event-card-label';
 export {GetStartedSection} from './get-started-section';
+export {EventCategory} from './event-category';
+export {EventCategories} from './event-categories';
+export {CategoriesFilter} from './categories-filter';
+export {TagsFilter} from './tags-filter';
+export {DateFilter} from './date-filter';
