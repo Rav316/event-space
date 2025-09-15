@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: event-space-api
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/event_space_db
+    username: postgres
+    password: 1
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
