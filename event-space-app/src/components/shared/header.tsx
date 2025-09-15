@@ -5,8 +5,12 @@ import { Button } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
+import { useState } from 'react';
+import { LoginModal } from '@/components/modal';
 
 export const Header = () => {
+  const [isAuth, setIsAuth] = useState(false);
+
   return (
     <header
       className={
@@ -39,14 +43,18 @@ export const Header = () => {
             <SearchInput placeholder={'Поиск...'} />
           </div>
         </div>
-        <div className={'flex gap-x-3 items-center'}>
-          <Button className={'h-[30px]'}>
-            <Plus />
-            <span className={'max-[500px]:hidden'}>Создать</span>
-          </Button>
-          <ProfileMenu />
-          <NavigationMenu className={'hidden max-[1200px]:block'} />
-        </div>
+        {!isAuth ? (
+          <LoginModal/>
+        ) : (
+          <div className={'flex gap-x-3 items-center'}>
+            <Button className={'h-[30px]'}>
+              <Plus />
+              <span className={'max-[500px]:hidden'}>Создать</span>
+            </Button>
+            <ProfileMenu />
+            <NavigationMenu className={'hidden max-[1200px]:block'} />
+          </div>
+        )}
       </div>
     </header>
   );
