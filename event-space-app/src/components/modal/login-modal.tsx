@@ -3,24 +3,29 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogTrigger, Input, Label
+  DialogTrigger,
+  Input,
+  Label,
 } from '@/components/ui';
-import { Eye, EyeOff, Lock, LogIn, Mail } from 'lucide-react';
+import { LogIn, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { PasswordInput } from '@/components/shared';
 
 export const LoginModal = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild={true}>
         <Button>
           <span>Войти</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogTitle className={'text-center text-2xl'}>Вход в систему</DialogTitle>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogTitle className={'text-center text-2xl'}>
+          Вход в систему
+        </DialogTitle>
         <Label htmlFor={'email'}>Email</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -32,28 +37,9 @@ export const LoginModal = () => {
           />
         </div>
         <Label htmlFor={'password'}>Пароль</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
-          <Input
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Введите пароль"
-            className="pl-10 pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2"
-          >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4 text-muted-foreground" />
-            ) : (
-              <Eye className="h-4 w-4 text-muted-foreground" />
-            )}
-          </button>
-        </div>
+        <PasswordInput/>
         <Button>
-          <LogIn/>
+          <LogIn />
           <span>Войти</span>
         </Button>
         <div className="gap-y-4">
@@ -69,7 +55,11 @@ export const LoginModal = () => {
           <div className="text-center gap-y-2">
             <p className="text-sm text-muted-foreground">
               Нет аккаунта?{' '}
-              <Link to="/register" className="text-primary hover:underline font-medium">
+              <Link
+                to="/register"
+                className="text-primary hover:underline font-medium"
+                onClick={() => setOpen(false)}
+              >
                 Зарегистрироваться
               </Link>
             </p>
