@@ -10,12 +10,24 @@ import {
 } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
+import { queryClient } from '@/api/query-client.ts';
+import { AUTH_KEYS } from '@/api/auth/keys.ts';
+import { useAuthStore } from '@/store/use-auth-store.ts';
+import { toast } from 'sonner';
 
 interface Props {
   className?: string;
 }
 
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
+  const setToken = useAuthStore((s) => s.setToken);
+
+  const onClickLogout = () => {
+    setToken(null);
+    queryClient.removeQueries({queryKey: AUTH_KEYS.me});
+    toast.success('Вы успешно вышли из системы');
+  }
+
   return (
     <div className={cn(className, 'flex items-center')}>
       <DropdownMenu>
@@ -44,7 +56,7 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             <Settings/>
             Настройки
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={onClickLogout}>
             <LogOut/>
             Выйти
           </DropdownMenuItem>

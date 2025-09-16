@@ -5,11 +5,12 @@ import { Button } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
-import { useState } from 'react';
 import { LoginModal } from '@/components/modal';
+import { useMe } from '@/api/auth/hooks.ts';
 
 export const Header = () => {
-  const [isAuth, setIsAuth] = useState(false);
+
+  const {data, isFetching} = useMe();
 
   return (
     <header
@@ -43,7 +44,7 @@ export const Header = () => {
             <SearchInput placeholder={'Поиск...'} />
           </div>
         </div>
-        {!isAuth ? (
+        {!isFetching && !data ? (
           <LoginModal/>
         ) : (
           <div className={'flex gap-x-3 items-center'}>

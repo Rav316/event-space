@@ -4,6 +4,7 @@ export {Badge} from './badge';
 export {Checkbox} from './checkbox';
 export {Label} from './label';
 export {Stepper} from './stepper';
+export {Toaster} from './sonner';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';
