@@ -2,6 +2,8 @@ package ru.alex.eventspaceapi.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import ru.alex.eventspaceapi.model.Role;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -26,7 +28,10 @@ public class User {
     private String lastName;
 
     private String email;
-    private String role;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private Short course;
     private String description;
     private String phone;
@@ -44,10 +49,11 @@ public class User {
     private String githubUrl;
 
     @Column(name = "isActive")
-    private boolean active;
+    private boolean active = true;
 
     @Column(name = "register_date")
-    private LocalDate date;
+    @CreationTimestamp
+    private LocalDate registerDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")

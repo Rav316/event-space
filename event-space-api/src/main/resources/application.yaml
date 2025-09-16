@@ -1,3 +1,15 @@
+app:
+  security:
+    jwt:
+      access-token:
+        secret: ybPsdl@zizYpYQ#-|~FP1M|?x_w;s8V3Bsl0CX+7nHD1]-%q;e<[,B7S((op&s+M
+        expiration: 900000 # 15 minutes
+      refresh-token:
+        secret: agwj?4)U1i_6[gg16_l28=>^`J6s4Wtc`T/ye6R+]2uMqY{Y]<q'uzQRmkuY@FeX
+        expiration: 2592000000 # 30 days
+      subject: User Details
+      issuer: event space
+
 spring:
   application:
     name: event-space-api

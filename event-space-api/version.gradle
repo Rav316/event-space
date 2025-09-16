@@ -1,5 +1,7 @@
 ext {
     versions = [
-            'hypersistenceUtils': '3.11.0'
+            'hypersistenceUtils': '3.11.0',
+            'auth0Jwt': '4.5.0',
+            'mapstruct': '1.6.3'
     ]
 }

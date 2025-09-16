@@ -11,3 +11,7 @@ databaseChangeLog:
       file: db/changelog/db-create-users-table-1.0.sql
   - include:
       file: db/changelog/db-create-event-user-table-1.0.sql
+  - include:
+      file: db/changelog/db-insert-init-data-1.0.sql
+  - include:
+      file: db/changelog/db-update-users-table-1.0.sql
