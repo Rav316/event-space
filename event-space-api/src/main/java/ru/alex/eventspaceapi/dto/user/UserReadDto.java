@@ -1,5 +1,7 @@
 package ru.alex.eventspaceapi.dto.user;
 
+import ru.alex.eventspaceapi.dto.faculty.FacultyAuthDto;
+
 import java.time.LocalDate;
 
 public record UserReadDto(
@@ -16,7 +18,7 @@ public record UserReadDto(
         String vkUrl,
         String githubUrl,
         boolean active,
-        LocalDate date,
-        Integer faculty
+        LocalDate registerDate,
+        FacultyAuthDto faculty
 ) {
 }

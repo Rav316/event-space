@@ -18,7 +18,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailWithFaculty(email)
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
     }

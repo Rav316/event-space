@@ -50,7 +50,7 @@ public class AuthService {
         );
         authenticationManager.authenticate(authInputToken);
 
-        User user = userRepository.findByEmail(userLoginDto.email())
+        User user = userRepository.findByEmailWithFaculty(userLoginDto.email())
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + userLoginDto.email()));
         return new AuthResponse(
                 userReadMapper.toDto(user),
@@ -60,7 +60,7 @@ public class AuthService {
 
     public AuthResponse refreshAccessToken(String refreshToken) {
         String email = jwtService.validateRefreshToken(refreshToken);
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailWithFaculty(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
         return new AuthResponse(
                 userReadMapper.toDto(user),
