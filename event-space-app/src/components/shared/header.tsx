@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/use-auth-store.ts';
 export const Header = () => {
 
   const {data, isFetching, isSuccess, error} = useMe();
+  const setToken = useAuthStore(state => state.setToken);
   const removeToken = useAuthStore(state => state.removeToken);
 
   useEffect(() => {
@@ -27,9 +28,9 @@ export const Header = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      useAuthStore.setState({ token: data.accessToken });
+      setToken(data.accessToken);
     }
-  }, [data, isSuccess]);
+  }, [data, isSuccess, setToken]);
 
   return (
     <header
