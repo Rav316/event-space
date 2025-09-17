@@ -4,6 +4,7 @@ import { queryClient } from '@/api/query-client.ts';
 import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 
 export const useLogin = () => {
   const setToken = useAuthStore(state => state.setToken)
@@ -13,6 +14,15 @@ export const useLogin = () => {
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
       queryClient.setQueryData(AUTH_KEYS.me, data.user);
+    },
+    onError: (error) => {
+      if(error instanceof AxiosError) {
+        if(error.response?.status === 403) {
+          toast.error('Неверный email или пароль');
+        } else {
+          toast.error('Произошла ошибка при входе в систему');
+        }
+      }
     }
   })
 }

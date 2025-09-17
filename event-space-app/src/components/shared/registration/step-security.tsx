@@ -22,7 +22,7 @@ export const StepSecurity = () => {
 
       <div className="space-y-2">
         <Label htmlFor="confirmPassword">Подтвердите пароль *</Label>
-        <PasswordInput placeholder={'Подтвердите пароль'}/>
+        <PasswordInput id={'confirmPassword'} placeholder={'Подтвердите пароль'}/>
       </div>
 
       <div className="bg-muted/30 p-4 rounded-lg">

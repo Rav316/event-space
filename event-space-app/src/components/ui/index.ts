@@ -6,6 +6,7 @@ export {Label} from './label';
 export {Stepper} from './stepper';
 export {Toaster} from './sonner';
 export {Skeleton} from './skeleton';
+export {FormErrorMessage} from './form-error-message';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';

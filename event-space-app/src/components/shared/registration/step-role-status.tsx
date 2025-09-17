@@ -31,7 +31,7 @@ export const StepRoleStatus = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 max-[460px]:grid-cols-1">
         <button className="p-4 rounded-lg border-2 transition-all text-left border-border hover:border-primary/50">
           <BookOpen className="w-6 h-6 mb-2 text-primary" />
           <div className="font-medium">Студент</div>
@@ -40,7 +40,7 @@ export const StepRoleStatus = () => {
 
         <button className="p-4 rounded-lg border-2 transition-all text-left border-border hover:border-primary/50">
           <GraduationCap className="w-6 h-6 mb-2 text-primary" />
-          <div className="font-medium">Преподаватель</div>
+          <div className="font-medium">Организатор</div>
           <div className="text-xs text-muted-foreground">Создание мероприятий</div>
         </button>
       </div>
@@ -51,7 +51,7 @@ export const StepRoleStatus = () => {
           <div className="relative">
             <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
             <Select>
-              <SelectTrigger className="pl-10">
+              <SelectTrigger className="pl-10" id={'faculty'}>
                 <SelectValue placeholder="Выберите ваш факультет" />
               </SelectTrigger>
               <SelectContent>
@@ -70,7 +70,7 @@ export const StepRoleStatus = () => {
           <div className="relative">
             <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
             <Select>
-              <SelectTrigger className="pl-10">
+              <SelectTrigger className="pl-10" id={'year'}>
                 <SelectValue placeholder="Выберите курс" />
               </SelectTrigger>
               <SelectContent>

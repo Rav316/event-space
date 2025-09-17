@@ -14,25 +14,32 @@ import {
   StepRoleStatus,
   StepSecurity,
 } from '@/components/shared/registration';
-
-const steps = [
-  {
-    number: 1,
-    title: 'Личные данные',
-    description: 'Основная информация о вас',
-  },
-  { number: 2, title: 'Роль и статус', description: 'Выберите вашу роль' },
-  { number: 3, title: 'Безопасность', description: 'Создайте надежный пароль' },
-];
+import { useForm } from 'react-hook-form';
+import { type PersonalInfoData, personalInfoSchema } from '@/schemas/personal-info-schema.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { registrationSteps } from '@/constants/registration-steps.ts';
+import { useRegistrationStore } from '@/store/use-registration-store.ts';
 
 const RegistrationPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
+  const registrationData = useRegistrationStore(state => state.registrationData);
+  const setRegistrationData = useRegistrationStore(state => state.setRegistrationData);
+
+  const personalDataForm = useForm<PersonalInfoData>({
+    resolver: zodResolver(personalInfoSchema),
+    defaultValues: {
+      firstName: registrationData.firstName,
+      lastName: registrationData.lastName,
+      email: registrationData.email,
+    },
+  });
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <StepPersonalData />;
+        return <StepPersonalData form={personalDataForm}/>;
       case 2:
         return <StepRoleStatus />;
       case 3:
@@ -43,7 +50,10 @@ const RegistrationPage = () => {
   };
 
   const onStepNext = () => {
-    if (currentStep === steps.length) return;
+    if (currentStep === registrationSteps.length) return;
+    if(currentStep === 1) {
+      setRegistrationData(personalDataForm.getValues());
+    }
     setCompletedSteps([...completedSteps, currentStep]);
     setCurrentStep((prev) => prev + 1);
   };
@@ -51,7 +61,7 @@ const RegistrationPage = () => {
   const onStepBack = () => {
     if (currentStep === 1) return;
     setCurrentStep((prev) => prev - 1);
-    setCompletedSteps((prev) => prev.filter((step) => step !== currentStep));
+    setCompletedSteps((prev) => prev.filter((step) => step !== currentStep - 1));
   };
 
   return (
@@ -71,7 +81,7 @@ const RegistrationPage = () => {
         </div>
 
         <Stepper
-          steps={steps}
+          steps={registrationSteps}
           currentStep={currentStep}
           completedSteps={completedSteps}
         />
@@ -95,14 +105,15 @@ const RegistrationPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 <span>Назад</span>
               </Button>
-              {currentStep < 3 ? (
+              {currentStep === 1 ? (
                 <Button
-                  className="flex items-center space-x-2"
-                  onClick={onStepNext}
+                  onClick={personalDataForm.handleSubmit(onStepNext)}
                 >
                   <span>Далее</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
+              ) : currentStep < 3 ? (
+                <Button onClick={onStepNext}>Далее</Button>
               ) : (
                 <Button className="flex items-center space-x-2">
                   <UserPlus className="h-4 w-4" />

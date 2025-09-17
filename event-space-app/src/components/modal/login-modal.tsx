@@ -4,17 +4,18 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  FormErrorMessage,
   Input,
   Label,
 } from '@/components/ui';
 import { LogIn, Mail } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
 import { PasswordInput } from '@/components/shared';
 import { useLogin } from '@/api/auth/hooks.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { formLoginSchema, type LoginData } from '@/schemas/auth-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'react-router';
 
 export const LoginModal = () => {
   const [open, setOpen] = useState(false);
@@ -29,50 +30,82 @@ export const LoginModal = () => {
   });
 
   const onSubmit = (data: LoginData) => {
-    console.log('on submit');
     loginMutation.mutate(data);
   };
 
+  const onOpenChange = (open: boolean) => {
+    setOpen(prev => !prev);
+    if(!open) {
+      form.reset();
+    }
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild={true}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
         <Button>
           <span>Войти</span>
         </Button>
       </DialogTrigger>
-      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
-        <DialogTitle className={'text-center text-2xl'}>
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        aria-describedby={undefined}
+      >
+        <DialogTitle className="text-center text-2xl">
           Вход в систему
         </DialogTitle>
+
         <FormProvider {...form}>
-          <form className={'space-y-4'} onSubmit={form.handleSubmit(onSubmit)}>
-            <Label htmlFor={'email'}>Email</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="email"
-                type="email"
-                placeholder="example@student.ru"
-                className="pl-10"
-                {...form.register('email')}
-              />
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            {/* Email */}
+            <Label htmlFor="email">Email</Label>
+            <div className={'flex flex-col gap-1'}>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="example@student.ru"
+                  className="pl-10"
+                  {...form.register('email')}
+                />
+              </div>
+              {form.formState.errors.email && (
+                <FormErrorMessage>
+                  {form.formState.errors.email.message}
+                </FormErrorMessage>
+              )}
             </div>
-            <Label htmlFor={'password'}>Пароль</Label>
-            <PasswordInput {...form.register('password')} />
+
+            {/* Password */}
+            <Label htmlFor="password">Пароль</Label>
+            <div className={'flex flex-col gap-1'}>
+              <PasswordInput {...form.register('password')} />
+              {form.formState.errors.password && (
+                <FormErrorMessage>
+                  {form.formState.errors.password.message}
+                </FormErrorMessage>
+              )}
+            </div>
+
+            {/* Submit */}
             <Button
-              type={'submit'}
-              className={'w-full'}
+              type="submit"
+              className="w-full"
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? (
-                <div className={'flex items-center justify-center gap-x-2'}>
+                <div className="flex items-center justify-center gap-x-2">
                   <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
                   <span>Вход...</span>
                 </div>
               ) : (
-                <div className={'flex items-center justify-center gap-x-2'}>
+                <div className="flex items-center justify-center gap-x-2">
                   <LogIn />
-                  <span>Войти</span>
+                  <span>Войти</span>
                 </div>
               )}
             </Button>

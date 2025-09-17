@@ -18,3 +18,13 @@ export interface UserReadDto {
   registerDate: Date;
   faculty: FacultyAuthDto;
 }
+
+export interface UserRegisterDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: Role;
+  faculty: number;
+  course?: number;
+  password: string;
+}
