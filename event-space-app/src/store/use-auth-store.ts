@@ -4,7 +4,8 @@ import { immer } from 'zustand/middleware/immer';
 
 interface AuthStore {
   token: string | null;
-  setToken: (token: string | null) => void;
+  setToken: (token: string) => void;
+  removeToken: () => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -12,19 +13,29 @@ export const useAuthStore = create<AuthStore>()(
     immer((set) => ({
       token: localStorage.getItem('token'),
       setToken: (token) => {
-        if (token) {
-          localStorage.setItem('token', token)
-        }
-        else {
-          localStorage.removeItem('token')
-        }
+        localStorage.setItem('token', token);
 
-        set((state) => {
-          state.token = token;
-        }, false, 'setToken');
+        set(
+          (state) => {
+            state.token = token;
+          },
+          false,
+          'setToken',
+        );
       },
-    })), {
-      store: 'auth-store'
-    }
-  )
+      removeToken: () => {
+        localStorage.removeItem('token');
+        set(
+          (state) => {
+            state.token = null;
+          },
+          false,
+          'removeToken',
+        );
+      },
+    })),
+    {
+      store: 'auth-store',
+    },
+  ),
 );

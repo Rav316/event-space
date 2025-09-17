@@ -20,10 +20,10 @@ interface Props {
 }
 
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
-  const setToken = useAuthStore((s) => s.setToken);
+  const removeToken = useAuthStore(state => state.removeToken);
 
   const onClickLogout = () => {
-    setToken(null);
+    removeToken();
     queryClient.removeQueries({queryKey: AUTH_KEYS.me});
     toast.success('Вы успешно вышли из системы');
   }

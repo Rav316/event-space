@@ -7,10 +7,29 @@ import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
 import { LoginModal } from '@/components/modal';
 import { useMe } from '@/api/auth/hooks.ts';
+import { useEffect } from 'react';
+import type { AxiosError } from 'axios';
+import { useAuthStore } from '@/store/use-auth-store.ts';
 
 export const Header = () => {
 
-  const {data, isFetching} = useMe();
+  const {data, isFetching, isSuccess, error} = useMe();
+  const removeToken = useAuthStore(state => state.removeToken);
+
+  useEffect(() => {
+    if(error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 401) {
+        removeToken();
+      }
+    }
+  }, [error, removeToken]);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      useAuthStore.setState({ token: data.accessToken });
+    }
+  }, [data, isSuccess]);
 
   return (
     <header
