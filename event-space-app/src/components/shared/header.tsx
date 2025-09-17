@@ -1,7 +1,7 @@
 import { Calendar, ChartColumn, History, Plus, Users } from 'lucide-react';
 import { HeaderItem } from '@/components/shared/header-item.tsx';
 import { SearchInput } from '@/components/shared/search-input.tsx';
-import { Button } from '@/components/ui';
+import { Button, Skeleton } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
@@ -68,12 +68,22 @@ export const Header = () => {
           <LoginModal/>
         ) : (
           <div className={'flex gap-x-3 items-center'}>
-            <Button className={'h-[30px]'}>
-              <Plus />
-              <span className={'max-[500px]:hidden'}>Создать</span>
-            </Button>
-            <ProfileMenu />
-            <NavigationMenu className={'hidden max-[1200px]:block'} />
+            {isFetching ? (
+              <div className={'flex gap-x-3 items-center'}>
+                <Skeleton className={'h-[30px] w-[103px]'} />
+                <Skeleton className={'rounded-full h-[30px] w-[30px]'} />
+                <Skeleton className={'hidden max-[1200px]:block h-[30px] w-[35px]'} />
+              </div>
+            ) : (
+              <>
+                <Button className={'h-[30px]'}>
+                  <Plus />
+                  <span className={'max-[500px]:hidden'}>Создать</span>
+                </Button>
+                <ProfileMenu />
+                <NavigationMenu className={'hidden max-[1200px]:block'} />
+              </>
+            )}
           </div>
         )}
       </div>
