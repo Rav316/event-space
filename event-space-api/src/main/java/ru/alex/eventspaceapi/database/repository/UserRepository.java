@@ -1,4 +1,4 @@
-package ru.alex.eventspaceapi.database.entity.repository;
+package ru.alex.eventspaceapi.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

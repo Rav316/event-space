@@ -1,6 +1,6 @@
 package ru.alex.eventspaceapi.dto.user;
 
-import ru.alex.eventspaceapi.dto.faculty.FacultyAuthDto;
+import ru.alex.eventspaceapi.dto.faculty.FacultyListDto;
 
 import java.time.LocalDate;
 
@@ -19,6 +19,6 @@ public record UserReadDto(
         String githubUrl,
         boolean active,
         LocalDate registerDate,
-        FacultyAuthDto faculty
+        FacultyListDto faculty
 ) {
 }

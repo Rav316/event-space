@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alex.eventspaceapi.database.entity.repository.UserRepository;
+import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.mapper.user.UserDetailsMapper;
 
 @Service
