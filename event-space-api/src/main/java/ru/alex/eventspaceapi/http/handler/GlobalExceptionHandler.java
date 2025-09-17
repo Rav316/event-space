@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.dto.response.ErrorResponse;
 import ru.alex.eventspaceapi.util.ExceptionUtils;
 
@@ -21,7 +22,7 @@ import static org.springframework.http.HttpStatus.GONE;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, List<String>> errors = new TreeMap<>();
 
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -50,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundExceptions(EntityNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(EntityNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 Instant.now(),
                 ex.getMessage()
@@ -59,7 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JWTVerificationException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedExceptions(RuntimeException ex) {
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 Instant.now(),
                 ex.getMessage()
@@ -74,5 +75,14 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, GONE);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                ex.getReason() != null ? ex.getReason() : ex.getStatusCode().toString()
+        );
+        return new ResponseEntity<>(errorResponse, ex.getStatusCode());
     }
 }

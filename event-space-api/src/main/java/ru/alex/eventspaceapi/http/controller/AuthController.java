@@ -7,14 +7,14 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
 import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.JwtService;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,7 +47,10 @@ public class AuthController {
     }
 
     @PutMapping("/refresh-token")
-    public ResponseEntity<AuthResponse> refreshAccessToken(@CookieValue(name = "token") String token) {
+    public ResponseEntity<AuthResponse> refreshAccessToken(@CookieValue(name = "token", required = false) String token) {
+        if(token == null) {
+            throw new ResponseStatusException(UNAUTHORIZED, "refresh token is missing");
+        }
         AuthResponse authResponse = authService.refreshAccessToken(token);
         String refreshToken = jwtService.generateRefreshToken(authResponse.user().email());
 
