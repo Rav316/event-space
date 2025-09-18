@@ -8,39 +8,22 @@ import {
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
-import { useState } from 'react';
 import {
   StepPersonalData,
   StepRoleStatus,
   StepSecurity,
 } from '@/components/shared/registration';
-import { useForm } from 'react-hook-form';
-import {
-  type PersonalInfoData,
-  personalInfoSchema,
-} from '@/schemas/personal-info-schema.ts';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { registrationSteps } from '@/constants/registration-steps.ts';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
-import {
-  type RoleStatusData,
-  roleStatusSchema,
-} from '@/schemas/role-status-schema.ts';
-import {
-  type PasswordCreateData,
-  passwordCreateSchema,
-} from '@/schemas/password-create-schema.ts';
 import { toast } from 'sonner';
+import { useStepper } from '@/hooks/use-stepper.ts';
+import { useRegistrationForms } from '@/hooks/use-registration-forms.ts';
 
 const RegistrationPage = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const { currentStep, completedSteps, next, back } = useStepper(3);
 
   const navigate = useNavigate();
 
-  const registrationData = useRegistrationStore(
-    (state) => state.registrationData,
-  );
   const setRegistrationData = useRegistrationStore(
     (state) => state.setRegistrationData,
   );
@@ -48,31 +31,8 @@ const RegistrationPage = () => {
     (state) => state.resetRegistrationData,
   );
 
-  const personalDataForm = useForm<PersonalInfoData>({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: {
-      firstName: registrationData.firstName,
-      lastName: registrationData.lastName,
-      email: registrationData.email,
-    },
-  });
-
-  const roleStatusForm = useForm<RoleStatusData>({
-    resolver: zodResolver(roleStatusSchema),
-    defaultValues: {
-      role: registrationData.role,
-      faculty: registrationData.faculty,
-      course: registrationData.course,
-    },
-  });
-
-  const passwordCreateForm = useForm<PasswordCreateData>({
-    resolver: zodResolver(passwordCreateSchema),
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
-  });
+  const { personalDataForm, roleStatusForm, passwordCreateForm } =
+    useRegistrationForms();
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -102,16 +62,12 @@ const RegistrationPage = () => {
         resetRegistrationData();
         break;
     }
-    setCompletedSteps([...completedSteps, currentStep]);
-    setCurrentStep((prev) => prev + 1);
+    next();
   };
 
   const onStepBack = () => {
     if (currentStep === 1) return;
-    setCurrentStep((prev) => prev - 1);
-    setCompletedSteps((prev) =>
-      prev.filter((step) => step !== currentStep - 1),
-    );
+    back();
   };
 
   return (
