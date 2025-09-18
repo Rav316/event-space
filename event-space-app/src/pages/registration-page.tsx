@@ -7,7 +7,7 @@ import {
   Stepper,
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useState } from 'react';
 import {
   StepPersonalData,
@@ -15,18 +15,38 @@ import {
   StepSecurity,
 } from '@/components/shared/registration';
 import { useForm } from 'react-hook-form';
-import { type PersonalInfoData, personalInfoSchema } from '@/schemas/personal-info-schema.ts';
+import {
+  type PersonalInfoData,
+  personalInfoSchema,
+} from '@/schemas/personal-info-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registrationSteps } from '@/constants/registration-steps.ts';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
-import { type RoleStatusData, roleStatusSchema } from '@/schemas/role-status-schema.ts';
+import {
+  type RoleStatusData,
+  roleStatusSchema,
+} from '@/schemas/role-status-schema.ts';
+import {
+  type PasswordCreateData,
+  passwordCreateSchema,
+} from '@/schemas/password-create-schema.ts';
+import { toast } from 'sonner';
 
 const RegistrationPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
-  const registrationData = useRegistrationStore(state => state.registrationData);
-  const setRegistrationData = useRegistrationStore(state => state.setRegistrationData);
+  const navigate = useNavigate();
+
+  const registrationData = useRegistrationStore(
+    (state) => state.registrationData,
+  );
+  const setRegistrationData = useRegistrationStore(
+    (state) => state.setRegistrationData,
+  );
+  const resetRegistrationData = useRegistrationStore(
+    (state) => state.resetRegistrationData,
+  );
 
   const personalDataForm = useForm<PersonalInfoData>({
     resolver: zodResolver(personalInfoSchema),
@@ -42,31 +62,45 @@ const RegistrationPage = () => {
     defaultValues: {
       role: registrationData.role,
       faculty: registrationData.faculty,
-      course: registrationData.course
-    }
-  })
+      course: registrationData.course,
+    },
+  });
+
+  const passwordCreateForm = useForm<PasswordCreateData>({
+    resolver: zodResolver(passwordCreateSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <StepPersonalData form={personalDataForm}/>;
+        return <StepPersonalData form={personalDataForm} />;
       case 2:
-        return <StepRoleStatus form={roleStatusForm}/>;
+        return <StepRoleStatus form={roleStatusForm} />;
       case 3:
-        return <StepSecurity />;
+        return <StepSecurity form={passwordCreateForm} />;
       default:
         return null;
     }
   };
 
   const onStepNext = () => {
-    if (currentStep === registrationSteps.length) return;
-    if(currentStep === 1) {
-      setRegistrationData(personalDataForm.getValues());
-    }
-
-    if(currentStep === 2) {
-      setRegistrationData(roleStatusForm.getValues())
+    switch (currentStep) {
+      case 1:
+        setRegistrationData(personalDataForm.getValues());
+        break;
+      case 2:
+        setRegistrationData(roleStatusForm.getValues());
+        break;
+      case 3:
+        setRegistrationData(passwordCreateForm.getValues());
+        navigate('/');
+        toast.success('Вы успешно зарегистрировались');
+        resetRegistrationData();
+        break;
     }
     setCompletedSteps([...completedSteps, currentStep]);
     setCurrentStep((prev) => prev + 1);
@@ -75,7 +109,9 @@ const RegistrationPage = () => {
   const onStepBack = () => {
     if (currentStep === 1) return;
     setCurrentStep((prev) => prev - 1);
-    setCompletedSteps((prev) => prev.filter((step) => step !== currentStep - 1));
+    setCompletedSteps((prev) =>
+      prev.filter((step) => step !== currentStep - 1),
+    );
   };
 
   return (
@@ -130,7 +166,10 @@ const RegistrationPage = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button className="flex items-center space-x-2">
+                <Button
+                  className="flex items-center space-x-2"
+                  onClick={passwordCreateForm.handleSubmit(onStepNext)}
+                >
                   <UserPlus className="h-4 w-4" />
                   <span>Создать аккаунт</span>
                 </Button>
