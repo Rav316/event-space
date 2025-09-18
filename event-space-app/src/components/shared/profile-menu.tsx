@@ -14,12 +14,14 @@ import { queryClient } from '@/api/query-client.ts';
 import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { toast } from 'sonner';
+import { useMe } from '@/api/auth/hooks.ts';
 
 interface Props {
   className?: string;
 }
 
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
+  const {data} = useMe();
   const removeToken = useAuthStore(state => state.removeToken);
 
   const onClickLogout = () => {
@@ -38,12 +40,12 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             />
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className={'max-w-[200px]'} collisionPadding={20}>
+        <DropdownMenuContent className={'w-[200px]'} collisionPadding={20}>
           <DropdownMenuLabel>
             <div className={'flex flex-col gap-y-0.5'}>
-              <span>Rav316</span>
+              <span>{`${data?.user.firstName} ${data?.user.lastName}`}</span>
               <span className={'text-xs text-muted-foreground'}>
-                Студент, информационные технологии, 3 курс
+                Участник, {data?.user.faculty.name}, {data?.user.course} курс
               </span>
             </div>
           </DropdownMenuLabel>

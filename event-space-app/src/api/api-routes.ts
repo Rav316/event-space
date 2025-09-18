@@ -1,4 +1,5 @@
 export const ApiRoutes = {
   AUTH: '/auth',
-  FACULTIES: '/faculties'
+  FACULTIES: '/faculties',
+  USERS: '/users'
 }

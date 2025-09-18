@@ -52,7 +52,7 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
             onClick={() => onRoleChange(Roles.PARTICIPANT)}
           >
             <BookOpen className="w-6 h-6 mb-2 text-primary" />
-            <div className="font-medium">Студент</div>
+            <div className="font-medium">Участник</div>
             <div className="text-xs text-muted-foreground">
               Участие в мероприятиях
             </div>

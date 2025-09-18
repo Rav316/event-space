@@ -57,8 +57,11 @@ const RegistrationPage = () => {
         setRegistrationData(roleStatusForm.getValues());
         break;
       case 3:
-        setRegistrationData(passwordCreateForm.getValues());
-        registrationMutation.mutate(registrationData);
+        setRegistrationData(passwordCreateForm.getValues())
+        registrationMutation.mutate({
+          ...registrationData,
+          password: passwordCreateForm.getValues().password,
+        });
         break;
     }
     next();

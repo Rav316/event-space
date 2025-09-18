@@ -7,6 +7,7 @@ import type { UserRegisterDto } from '@/api/users/model.ts';
 export const register = async (
   registerData: UserRegisterDto,
 ): Promise<AuthResponse> => {
+  console.log(registerData);
   const response = await axiosInstance.post<AuthResponse>(
     `${ApiRoutes.AUTH}/register`,
     registerData,

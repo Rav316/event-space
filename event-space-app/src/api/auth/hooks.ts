@@ -17,7 +17,7 @@ export const useRegistration = () => {
     onSuccess: (data) => {
       toast.success('Вы успешно зарегистрировались');
       setToken(data.accessToken);
-      queryClient.setQueryData(AUTH_KEYS.me, data.user);
+      queryClient.setQueryData(AUTH_KEYS.me, data);
       navigate('/');
       resetRegistrationData();
     },
@@ -40,7 +40,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
-      queryClient.setQueryData(AUTH_KEYS.me, data.user);
+      queryClient.setQueryData(AUTH_KEYS.me, data);
     },
     onError: (error) => {
       if(error instanceof AxiosError) {
