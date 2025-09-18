@@ -1,5 +1,5 @@
 import type { Role } from '@/api/auth/model.ts';
-import type { FacultyAuthDto } from '@/api/faculty/model.ts';
+import type { FacultyListDto } from '@/api/faculties/model.ts';
 
 export interface UserReadDto {
   id: number;
@@ -16,7 +16,7 @@ export interface UserReadDto {
   githubUrl: string;
   active: boolean;
   registerDate: Date;
-  faculty: FacultyAuthDto;
+  faculty: FacultyListDto;
 }
 
 export interface UserRegisterDto {

@@ -19,6 +19,7 @@ import { type PersonalInfoData, personalInfoSchema } from '@/schemas/personal-in
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registrationSteps } from '@/constants/registration-steps.ts';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
+import { type RoleStatusData, roleStatusSchema } from '@/schemas/role-status-schema.ts';
 
 const RegistrationPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -36,12 +37,21 @@ const RegistrationPage = () => {
     },
   });
 
+  const roleStatusForm = useForm<RoleStatusData>({
+    resolver: zodResolver(roleStatusSchema),
+    defaultValues: {
+      role: registrationData.role,
+      faculty: registrationData.faculty,
+      course: registrationData.course
+    }
+  })
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return <StepPersonalData form={personalDataForm}/>;
       case 2:
-        return <StepRoleStatus />;
+        return <StepRoleStatus form={roleStatusForm}/>;
       case 3:
         return <StepSecurity />;
       default:
@@ -53,6 +63,10 @@ const RegistrationPage = () => {
     if (currentStep === registrationSteps.length) return;
     if(currentStep === 1) {
       setRegistrationData(personalDataForm.getValues());
+    }
+
+    if(currentStep === 2) {
+      setRegistrationData(roleStatusForm.getValues())
     }
     setCompletedSteps([...completedSteps, currentStep]);
     setCurrentStep((prev) => prev + 1);
@@ -106,14 +120,15 @@ const RegistrationPage = () => {
                 <span>Назад</span>
               </Button>
               {currentStep === 1 ? (
-                <Button
-                  onClick={personalDataForm.handleSubmit(onStepNext)}
-                >
+                <Button onClick={personalDataForm.handleSubmit(onStepNext)}>
                   <span>Далее</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-              ) : currentStep < 3 ? (
-                <Button onClick={onStepNext}>Далее</Button>
+              ) : currentStep === 2 ? (
+                <Button onClick={roleStatusForm.handleSubmit(onStepNext)}>
+                  <span>Далее</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
               ) : (
                 <Button className="flex items-center space-x-2">
                   <UserPlus className="h-4 w-4" />
