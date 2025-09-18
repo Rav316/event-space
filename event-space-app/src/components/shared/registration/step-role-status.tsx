@@ -130,7 +130,7 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
                   <SelectValue placeholder="Выберите курс" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[1, 2, 3, 4, 5, 6].map((course) => (
+                  {[1, 2, 3, 4].map((course) => (
                     <SelectItem key={course} value={String(course)}>
                       {course} курс
                     </SelectItem>

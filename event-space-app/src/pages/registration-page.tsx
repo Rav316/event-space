@@ -7,7 +7,7 @@ import {
   Stepper,
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import {
   StepPersonalData,
   StepRoleStatus,
@@ -15,21 +15,22 @@ import {
 } from '@/components/shared/registration';
 import { registrationSteps } from '@/constants/registration-steps.ts';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
-import { toast } from 'sonner';
 import { useStepper } from '@/hooks/use-stepper.ts';
 import { useRegistrationForms } from '@/hooks/use-registration-forms.ts';
+import { useRegistration } from '@/api/auth/hooks.ts';
 
 const RegistrationPage = () => {
   const { currentStep, completedSteps, next, back } = useStepper(3);
 
-  const navigate = useNavigate();
+  const registrationData = useRegistrationStore(
+    (state) => state.registrationData,
+  );
 
   const setRegistrationData = useRegistrationStore(
     (state) => state.setRegistrationData,
   );
-  const resetRegistrationData = useRegistrationStore(
-    (state) => state.resetRegistrationData,
-  );
+
+  const registrationMutation = useRegistration();
 
   const { personalDataForm, roleStatusForm, passwordCreateForm } =
     useRegistrationForms();
@@ -57,16 +58,13 @@ const RegistrationPage = () => {
         break;
       case 3:
         setRegistrationData(passwordCreateForm.getValues());
-        navigate('/');
-        toast.success('Вы успешно зарегистрировались');
-        resetRegistrationData();
+        registrationMutation.mutate(registrationData);
         break;
     }
     next();
   };
 
   const onStepBack = () => {
-    if (currentStep === 1) return;
     back();
   };
 
@@ -122,18 +120,26 @@ const RegistrationPage = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button
-                  className="flex items-center space-x-2"
-                  onClick={passwordCreateForm.handleSubmit(onStepNext)}
-                >
-                  <UserPlus className="h-4 w-4" />
-                  <span>Создать аккаунт</span>
-                </Button>
+                <>
+                  {registrationMutation.isPending ? (
+                    <Button>
+                      <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
+                      <span>Регистрируем...</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      className="flex items-center space-x-2"
+                      onClick={passwordCreateForm.handleSubmit(onStepNext)}
+                    >
+                      <UserPlus className="h-4 w-4" />
+                      <span>Создать аккаунт</span>
+                    </Button>
+                  )}
+                </>
               )}
             </div>
           </CardContent>
         </Card>
-
         <div className="text-center space-y-4">
           <Link
             to="/"

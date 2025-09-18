@@ -5,9 +5,36 @@ import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router';
+import { useRegistrationStore } from '@/store/use-registration-store.ts';
+
+export const useRegistration = () => {
+  const setToken = useAuthStore(state => state.setToken);
+  const resetRegistrationData = useRegistrationStore(state => state.resetRegistrationData);
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: Api.auth.register,
+    onSuccess: (data) => {
+      toast.success('Вы успешно зарегистрировались');
+      setToken(data.accessToken);
+      queryClient.setQueryData(AUTH_KEYS.me, data.user);
+      navigate('/');
+      resetRegistrationData();
+    },
+    onError: (error) => {
+      if(error instanceof AxiosError) {
+        if(error.response?.status === 409) {
+          toast.error('Пользователь с таким email уже существует');
+        } else {
+          toast.error('Произошла ошибка при регистрации');
+        }
+      }
+    }
+  })
+}
 
 export const useLogin = () => {
-  const setToken = useAuthStore(state => state.setToken)
+  const setToken = useAuthStore(state => state.setToken);
   return useMutation({
     mutationFn: Api.auth.login,
     onSuccess: (data) => {
