@@ -29,6 +29,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Validated @RequestBody UserRegisterDto userRegisterDto) {
         AuthResponse authResponse = authService.register(userRegisterDto);
+        System.out.println(userRegisterDto);
         String refreshToken = jwtService.generateRefreshToken(authResponse.user().email());
 
         return ResponseEntity.status(CREATED)

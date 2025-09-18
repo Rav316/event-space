@@ -22,4 +22,8 @@ public class UserService implements UserDetailsService {
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
     }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }
