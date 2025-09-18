@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
@@ -17,6 +18,9 @@ import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
 import ru.alex.eventspaceapi.exception.FacultyNotFoundException;
 import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
 import ru.alex.eventspaceapi.mapper.user.UserRegisterMapper;
+import ru.alex.eventspaceapi.model.Role;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +37,9 @@ public class AuthService {
     @Transactional
     public AuthResponse register(UserRegisterDto userRegisterDto) {
         User user = userRegisterMapper.toEntity(userRegisterDto);
+        if(user.getRole() == Role.ADMIN) {
+            throw new ResponseStatusException(FORBIDDEN);
+        }
         Faculty faculty = facultyRepository.findById(userRegisterDto.faculty())
                 .orElseThrow(() -> new FacultyNotFoundException(userRegisterDto.faculty()));
         user.setFaculty(faculty);

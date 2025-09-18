@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 ExceptionUtils.getSqlExceptionMessage(ex)
         );
-        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, CONFLICT);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
