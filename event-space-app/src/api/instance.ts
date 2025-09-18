@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: Array<{ resolve: (value?: any) => void; reject: (reason?: any) => void }> = [];
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
@@ -37,15 +37,20 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const authStore = useAuthStore.getState();
 
-    if (error.response?.status === 401 || error.response?.status === 410 && !originalRequest._retry) {
+    const isRefreshRequest = originalRequest.url?.includes('refresh-token');
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshRequest) {
+        authStore.removeToken();
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
-            if (token) {
-              originalRequest.headers["Authorization"] = "Bearer " + token;
-            }
+            originalRequest.headers.Authorization = `Bearer ${token}`;
             return axiosInstance(originalRequest);
           })
           .catch((err) => Promise.reject(err));
@@ -59,14 +64,12 @@ axiosInstance.interceptors.response.use(
           `${ApiRoutes.AUTH}/refresh-token`,
           {},
           { withCredentials: true }
-        )
+        );
 
         const newToken = response.data.accessToken;
         authStore.setToken(newToken);
-
         processQueue(null, newToken);
-
-        originalRequest.headers["Authorization"] = "Bearer " + newToken;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);

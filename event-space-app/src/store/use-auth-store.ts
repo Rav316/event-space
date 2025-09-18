@@ -24,6 +24,7 @@ export const useAuthStore = create<AuthStore>()(
         );
       },
       removeToken: () => {
+        console.log('removing token');
         localStorage.removeItem('token');
         set(
           (state) => {

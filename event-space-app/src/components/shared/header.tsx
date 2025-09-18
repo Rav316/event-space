@@ -8,23 +8,11 @@ import { Link } from 'react-router';
 import { LoginModal } from '@/components/modal';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useEffect } from 'react';
-import type { AxiosError } from 'axios';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 
 export const Header = () => {
-
-  const {data, isFetching, isSuccess, error} = useMe();
-  const setToken = useAuthStore(state => state.setToken);
-  const removeToken = useAuthStore(state => state.removeToken);
-
-  useEffect(() => {
-    if(error) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response?.status === 401) {
-        removeToken();
-      }
-    }
-  }, [error, removeToken]);
+  const { data, isFetching, isSuccess } = useMe();
+  const setToken = useAuthStore((state) => state.setToken);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -65,14 +53,16 @@ export const Header = () => {
           </div>
         </div>
         {!isFetching && !data ? (
-          <LoginModal/>
+          <LoginModal />
         ) : (
           <div className={'flex gap-x-3 items-center'}>
             {isFetching ? (
               <div className={'flex gap-x-3 items-center'}>
                 <Skeleton className={'h-[30px] w-[103px]'} />
                 <Skeleton className={'rounded-full h-[30px] w-[30px]'} />
-                <Skeleton className={'hidden max-[1200px]:block h-[30px] w-[35px]'} />
+                <Skeleton
+                  className={'hidden max-[1200px]:block h-[30px] w-[35px]'}
+                />
               </div>
             ) : (
               <>
