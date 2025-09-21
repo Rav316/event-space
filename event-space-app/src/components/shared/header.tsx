@@ -5,14 +5,15 @@ import { Button, Skeleton } from '@/components/ui';
 import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
 import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
-import { LoginModal } from '@/components/modal';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/use-auth-store.ts';
+import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 export const Header = () => {
   const { data, isFetching, isSuccess } = useMe();
   const setToken = useAuthStore((state) => state.setToken);
+  const openModal = useAuthModalStore((state) => state.setIsOpen);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -39,13 +40,17 @@ export const Header = () => {
             </h1>
           </div>
         </Link>
-        <div className={'flex items-center gap-x-4 max-[1200px]:hidden'}>
+        <div className={'flex items-center gap-x-4 max-[1200px]:hidden min-w-[500px]'}>
           <Link to={'/events'}>
             <HeaderItem Icon={Calendar} text={'Мероприятия'} />
           </Link>
-          <HeaderItem Icon={Users} text={'Мои регистрации'} />
-          <HeaderItem Icon={ChartColumn} text={'Статистика'} />
-          <HeaderItem Icon={History} text={'История'} />
+          {data && (
+            <>
+              <HeaderItem Icon={Users} text={'Мои регистрации'} />
+              <HeaderItem Icon={ChartColumn} text={'Статистика'} />
+              <HeaderItem Icon={History} text={'История'} />
+            </>
+          )}
         </div>
         <div className={'w-[400px]'}>
           <div className="relative w-full max-w-sm">
@@ -53,7 +58,9 @@ export const Header = () => {
           </div>
         </div>
         {!isFetching && !data ? (
-          <LoginModal />
+          <Button onClick={() => openModal(true)}>
+            <span>Войти</span>
+          </Button>
         ) : (
           <div className={'flex gap-x-3 items-center'}>
             {isFetching ? (

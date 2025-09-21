@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
+import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 export const useRegistration = () => {
   const setToken = useAuthStore(state => state.setToken);
@@ -35,9 +36,11 @@ export const useRegistration = () => {
 
 export const useLogin = () => {
   const setToken = useAuthStore(state => state.setToken);
+  const setAuthModalOpen = useAuthModalStore(state => state.setIsOpen);
   return useMutation({
     mutationFn: Api.auth.login,
     onSuccess: (data) => {
+      setAuthModalOpen(false)
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);

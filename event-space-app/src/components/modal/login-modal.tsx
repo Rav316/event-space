@@ -3,22 +3,22 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogTrigger,
   FormErrorMessage,
   Input,
   Label,
 } from '@/components/ui';
 import { LogIn, Mail } from 'lucide-react';
-import { useState } from 'react';
 import { PasswordInput } from '@/components/shared';
 import { useLogin } from '@/api/auth/hooks.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { formLoginSchema, type LoginData } from '@/schemas/auth-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router';
+import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 export const LoginModal = () => {
-  const [open, setOpen] = useState(false);
+  const open = useAuthModalStore((state) => state.isOpen);
+  const setOpen = useAuthModalStore((state) => state.setIsOpen);
   const loginMutation = useLogin();
 
   const form = useForm<LoginData>({
@@ -34,7 +34,7 @@ export const LoginModal = () => {
   };
 
   const onOpenChange = (open: boolean) => {
-    setOpen(prev => !prev);
+    setOpen(open);
     if(!open) {
       form.reset();
     }
@@ -42,11 +42,6 @@ export const LoginModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <span>Войти</span>
-        </Button>
-      </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
         aria-describedby={undefined}

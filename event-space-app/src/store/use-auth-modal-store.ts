@@ -1,0 +1,28 @@
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
+interface AuthModal {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export const useAuthModalStore = create<AuthModal>()(
+  devtools(
+    immer((set) => ({
+      isOpen: false,
+      setIsOpen: (isOpen) => {
+        set(
+          (state) => {
+            state.isOpen = isOpen;
+          },
+          false,
+          'setIsOpen',
+        );
+      },
+    })),
+    {
+      store: 'auth-modal',
+    },
+  ),
+);
