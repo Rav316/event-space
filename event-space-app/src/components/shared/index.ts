@@ -16,3 +16,4 @@ export {TagsFilter} from './tags-filter';
 export {DateFilter} from './date-filter';
 export {EventsPagination} from './events-pagination';
 export {PasswordInput} from './password-input';
+export {EventCreateHeader} from './event-create-header';
