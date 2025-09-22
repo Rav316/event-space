@@ -11,10 +11,10 @@ import {
 import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
 import { queryClient } from '@/api/query-client.ts';
-import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { toast } from 'sonner';
 import { useMe } from '@/api/auth/hooks.ts';
+import { useNavigate } from 'react-router';
 
 interface Props {
   className?: string;
@@ -23,10 +23,14 @@ interface Props {
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
   const {data} = useMe();
   const removeToken = useAuthStore(state => state.removeToken);
+  const navigate = useNavigate();
 
   const onClickLogout = () => {
-    removeToken();
-    queryClient.removeQueries({queryKey: AUTH_KEYS.me});
+    navigate('/', {replace: true});
+    setTimeout(() => {
+      removeToken();
+      queryClient.clear();
+    }, 100);
     toast.success('Вы успешно вышли из системы');
   }
 

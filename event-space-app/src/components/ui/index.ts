@@ -3,7 +3,6 @@ export {Input} from './input';
 export {Badge} from './badge';
 export {Checkbox} from './checkbox';
 export {Label} from './label';
-export {Stepper} from './stepper';
 export {Toaster} from './sonner';
 export {Skeleton} from './skeleton';
 export {FormErrorMessage} from './form-error-message';

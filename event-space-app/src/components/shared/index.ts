@@ -17,3 +17,5 @@ export {DateFilter} from './date-filter';
 export {EventsPagination} from './events-pagination';
 export {PasswordInput} from './password-input';
 export {EventCreateHeader} from './event-create-header';
+export {RegistrationStepper} from './registration-stepper.tsx';
+export {EventCreateStepper} from './event-create-stepper';

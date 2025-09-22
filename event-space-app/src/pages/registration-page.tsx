@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Stepper,
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
@@ -18,6 +17,7 @@ import { useRegistrationStore } from '@/store/use-registration-store.ts';
 import { useStepper } from '@/hooks/use-stepper.ts';
 import { useRegistrationForms } from '@/hooks/use-registration-forms.ts';
 import { useRegistration } from '@/api/auth/hooks.ts';
+import { RegistrationStepper } from '@/components/shared';
 
 const RegistrationPage = () => {
   const { currentStep, completedSteps, next, back } = useStepper(3);
@@ -87,7 +87,7 @@ const RegistrationPage = () => {
           </p>
         </div>
 
-        <Stepper
+        <RegistrationStepper
           steps={registrationSteps}
           currentStep={currentStep}
           completedSteps={completedSteps}

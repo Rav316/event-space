@@ -14,8 +14,11 @@ interface StepperProps {
   completedSteps: number[];
 }
 
-export const Stepper = ({ steps, currentStep, completedSteps }: StepperProps) => {
-
+export const RegistrationStepper = ({
+  steps,
+  currentStep,
+  completedSteps,
+}: StepperProps) => {
   return (
     <div className="flex justify-center mb-8 w-full">
       <div className="flex items-center w-full justify-between">
@@ -24,10 +27,11 @@ export const Stepper = ({ steps, currentStep, completedSteps }: StepperProps) =>
             <div className="flex flex-col items-center flex-1">
               <div
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                  currentStep >= step.number || completedSteps.includes(step.number)
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+                  'w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all',
+                  currentStep >= step.number ||
+                    completedSteps.includes(step.number)
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground',
                 )}
               >
                 {completedSteps.includes(step.number) ? (
@@ -37,7 +41,9 @@ export const Stepper = ({ steps, currentStep, completedSteps }: StepperProps) =>
                 )}
               </div>
               <div className="text-center mt-2">
-                <p className="text-xs font-medium whitespace-nowrap">{step.title}</p>
+                <p className="text-xs font-medium whitespace-nowrap">
+                  {step.title}
+                </p>
                 <p className="text-xs text-muted-foreground hidden sm:block">
                   {step.description}
                 </p>
@@ -47,10 +53,11 @@ export const Stepper = ({ steps, currentStep, completedSteps }: StepperProps) =>
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  "flex-1 h-px mx-1 sm:mx-2 transition-all",
-                  currentStep > step.number || completedSteps.includes(step.number)
-                    ? "bg-primary"
-                    : "bg-border"
+                  'flex-1 h-px mx-1 sm:mx-2 transition-all',
+                  currentStep > step.number ||
+                    completedSteps.includes(step.number)
+                    ? 'bg-primary'
+                    : 'bg-border',
                 )}
               />
             )}
@@ -59,5 +66,4 @@ export const Stepper = ({ steps, currentStep, completedSteps }: StepperProps) =>
       </div>
     </div>
   );
-
 };
