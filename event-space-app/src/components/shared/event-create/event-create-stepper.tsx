@@ -59,7 +59,7 @@ export const EventCreateStepper: React.FC<Props> = ({ currentStep }) => {
   return (
     <div className={'flex flex-col gap-2'}>
       <div className={'flex justify-between items-center w-full'}>
-        <span>Шаг 1 из 7</span>
+        <span>Шаг {currentStep + 1} из {eventCreateCategories.length + 1}</span>
         <span className={'text-muted-foreground'}>{progress}% завершено</span>
       </div>
       <Progress
