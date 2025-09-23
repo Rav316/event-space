@@ -17,7 +17,6 @@ export const useRegistrationStore = create<RegistrationStore>()(
         lastName: '',
         email: '',
         role: 0,
-        faculty: 0,
         password: ''
       },
       setRegistrationData: (data) => {

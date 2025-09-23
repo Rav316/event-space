@@ -7,6 +7,7 @@ export {Toaster} from './sonner';
 export {Skeleton} from './skeleton';
 export {FormErrorMessage} from './form-error-message';
 export {Progress} from './progress';
+export {Textarea} from './textarea';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';

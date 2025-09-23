@@ -92,6 +92,7 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
                 <div className="relative">
                   <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
                   <Select
+                    value={form.watch('faculty')?.toString()}
                     onValueChange={(value) =>
                       form.setValue('faculty', Number(value))
                     }
@@ -122,6 +123,7 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
             <div className="relative">
               <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
               <Select
+                value={form.watch('course')?.toString()}
                 onValueChange={(value) =>
                   form.setValue('course', Number(value))
                 }

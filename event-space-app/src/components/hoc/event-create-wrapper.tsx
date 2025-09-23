@@ -8,7 +8,7 @@ interface Props {
   text: string;
 }
 
-export const EventCreateStep: React.FC<PropsWithChildren<Props>> = ({
+export const EventCreateWrapper: React.FC<PropsWithChildren<Props>> = ({
   children,
   Icon,
   text,

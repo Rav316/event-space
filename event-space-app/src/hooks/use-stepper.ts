@@ -1,24 +1,18 @@
 import {useState} from "react";
-import { useNavigate } from 'react-router';
 
 export const useStepper = (totalSteps: number) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(0);
 
   const next = () => {
-    setCompletedSteps((prev) => [...prev, currentStep]);
     setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
   };
 
   const back = () => {
-    if (currentStep === 1) {
-      navigate('/');
+    if (currentStep === 0) {
       return;
     }
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
-    setCompletedSteps((prev) => prev.filter((step) => step !== currentStep - 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  return { currentStep, completedSteps, next, back };
+  return { currentStep, next, back };
 };

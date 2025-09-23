@@ -11,13 +11,11 @@ type Step = {
 interface StepperProps {
   steps: Step[];
   currentStep: number;
-  completedSteps: number[];
 }
 
 export const RegistrationStepper = ({
   steps,
-  currentStep,
-  completedSteps,
+  currentStep
 }: StepperProps) => {
   return (
     <div className="flex justify-center mb-8 w-full">
@@ -28,13 +26,12 @@ export const RegistrationStepper = ({
               <div
                 className={cn(
                   'w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all',
-                  currentStep >= step.number ||
-                    completedSteps.includes(step.number)
+                  currentStep >= step.number
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-muted text-muted-foreground',
                 )}
               >
-                {completedSteps.includes(step.number) ? (
+                {index < currentStep ? (
                   <CheckCircle className="w-5 h-5" />
                 ) : (
                   step.number
@@ -54,8 +51,7 @@ export const RegistrationStepper = ({
               <div
                 className={cn(
                   'flex-1 h-px mx-1 sm:mx-2 transition-all',
-                  currentStep > step.number ||
-                    completedSteps.includes(step.number)
+                  currentStep > step.number
                     ? 'bg-primary'
                     : 'bg-border',
                 )}

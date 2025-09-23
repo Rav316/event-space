@@ -20,7 +20,7 @@ import { useRegistration } from '@/api/auth/hooks.ts';
 import { RegistrationStepper } from '@/components/shared';
 
 const RegistrationPage = () => {
-  const { currentStep, completedSteps, next, back } = useStepper(3);
+  const { currentStep, next, back } = useStepper(3);
 
   const registrationData = useRegistrationStore(
     (state) => state.registrationData,
@@ -37,11 +37,11 @@ const RegistrationPage = () => {
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case 1:
+      case 0:
         return <StepPersonalData form={personalDataForm} />;
-      case 2:
+      case 1:
         return <StepRoleStatus form={roleStatusForm} />;
-      case 3:
+      case 2:
         return <StepSecurity form={passwordCreateForm} />;
       default:
         return null;
@@ -50,13 +50,13 @@ const RegistrationPage = () => {
 
   const onStepNext = () => {
     switch (currentStep) {
-      case 1:
+      case 0:
         setRegistrationData(personalDataForm.getValues());
         break;
-      case 2:
+      case 1:
         setRegistrationData(roleStatusForm.getValues());
         break;
-      case 3:
+      case 2:
         setRegistrationData(passwordCreateForm.getValues())
         registrationMutation.mutate({
           ...registrationData,
@@ -90,14 +90,13 @@ const RegistrationPage = () => {
         <RegistrationStepper
           steps={registrationSteps}
           currentStep={currentStep}
-          completedSteps={completedSteps}
         />
 
         <Card className="backdrop-blur-sm bg-card/80 border border-border/50 shadow-xl">
           <CardHeader className="text-center pb-4">
             <div className="flex items-center justify-center space-x-2">
               <Badge variant="outline" className="px-3 py-1">
-                Шаг {currentStep} из 3
+                Шаг {currentStep + 1} из 3
               </Badge>
             </div>
           </CardHeader>
@@ -105,6 +104,7 @@ const RegistrationPage = () => {
             {renderStepContent()}
             <div className="flex justify-between pt-6 mt-6 border-t border-border/50">
               <Button
+                disabled={currentStep === 0}
                 variant="outline"
                 className="flex items-center space-x-2"
                 onClick={onStepBack}
@@ -112,12 +112,12 @@ const RegistrationPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 <span>Назад</span>
               </Button>
-              {currentStep === 1 ? (
+              {currentStep === 0 ? (
                 <Button onClick={personalDataForm.handleSubmit(onStepNext)}>
                   <span>Далее</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-              ) : currentStep === 2 ? (
+              ) : currentStep === 1 ? (
                 <Button onClick={roleStatusForm.handleSubmit(onStepNext)}>
                   <span>Далее</span>
                   <ArrowRight className="w-4 h-4" />
