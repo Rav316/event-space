@@ -24,7 +24,7 @@ export const EventCreateHeader = () => {
           <h1 className={'font-bold text-3xl max-[443px]:text-2xl'}>
             Создать мероприятие
           </h1>
-          <p className={'text-muted-foreground max-[443px]:text-sm'}>
+          <p className={'text-muted-foreground max-[443px]:text-sm text-center'}>
             Заполните информацию о вашем мероприятии
           </p>
         </div>
