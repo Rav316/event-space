@@ -24,7 +24,9 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
 
         <div className="grid grid-cols-2 gap-4 max-[600px]:grid-cols-1">
           <div className="space-y-2">
-            <Label htmlFor="firstName">Имя *</Label>
+            <Label htmlFor="firstName">
+              Имя <span className={'text-red-500'}>*</span>
+            </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -44,7 +46,9 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="lastName">Фамилия *</Label>
+            <Label htmlFor="lastName">
+              Фамилия <span className={'text-red-500'}>*</span>
+            </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -65,7 +69,9 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email адрес *</Label>
+          <Label htmlFor="email">
+            Email адрес <span className={'text-red-500'}>*</span>
+          </Label>
           <div className={'flex flex-col gap-1'}>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

@@ -24,7 +24,9 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Пароль *</Label>
+          <Label htmlFor="password">
+            Пароль <span className={'text-red-500'}>*</span>
+          </Label>
           <PasswordInput {...form.register('password')} />
           {form.formState.errors.password && (
             <FormErrorMessage>
@@ -34,7 +36,9 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Подтвердите пароль *</Label>
+          <Label htmlFor="confirmPassword">
+            Подтвердите пароль <span className={'text-red-500'}>*</span>
+          </Label>
           <PasswordInput
             id={'confirmPassword'}
             placeholder={'Подтвердите пароль'}

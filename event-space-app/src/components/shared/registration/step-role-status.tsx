@@ -81,10 +81,11 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
           )}
         </div>
 
-
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="faculty">Факультет *</Label>
+            <Label htmlFor="faculty">
+              Факультет <span className={'text-red-500'}>*</span>
+            </Label>
             {isPending ? (
               <Skeleton className={'h-9 w-[236px]'} />
             ) : (

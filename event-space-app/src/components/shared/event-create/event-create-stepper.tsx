@@ -1,54 +1,15 @@
 import { Progress } from '@/components/ui';
 import { EventCreateStepCircle } from '@/components/shared/event-create/event-create-step-circle.tsx';
-import {
-  Calendar,
-  Clock,
-  FileText,
-  type LucideProps,
-  MapPin,
-  Upload,
-  Users,
-} from 'lucide-react';
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
 import type { eventCreateStepType } from '@/types/event-create-step-type.ts';
 import { eventCreateCategories } from '@/constants/event-create-categories.ts';
+import { eventCreateSteps } from '@/constants/event-create-steps.ts';
 
 interface Props {
   currentStep: number;
 }
 
-const steps: {
-  Icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-  >;
-  text: string;
-}[] = [
-  {
-    Icon: FileText,
-    text: 'Основная информация',
-  },
-  {
-    Icon: Calendar,
-    text: 'Дата и время',
-  },
-  {
-    Icon: Clock,
-    text: 'Программа',
-  },
-  {
-    Icon: MapPin,
-    text: 'Место проведения',
-  },
-  {
-    Icon: Users,
-    text: 'Участники',
-  },
-  {
-    Icon: Upload,
-    text: 'Медиа и настройки',
-  },
-];
 
 export const EventCreateStepper: React.FC<Props> = ({ currentStep }) => {
   const progress = eventCreateCategories.length > 0
@@ -70,7 +31,7 @@ export const EventCreateStepper: React.FC<Props> = ({ currentStep }) => {
       <h3 className={'font-medium text-xl'}>Основная информация</h3>
 
       <div className={'flex justify-between mt-4 max-[400px]:hidden'}>
-        {steps.map((step, index) => (
+        {eventCreateSteps.map((step, index) => (
           <EventCreateStepCircle
             key={index}
             Icon={step.Icon}
