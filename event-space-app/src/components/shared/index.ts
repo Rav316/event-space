@@ -16,4 +16,5 @@ export {TagsFilter} from './tags-filter';
 export {DateFilter} from './date-filter';
 export {EventsPagination} from './events-pagination';
 export {PasswordInput} from './password-input';
-export {RegistrationStepper} from './registration-stepper.tsx';
+export {RegistrationStepper} from './registration-stepper';
+export {ProgramStep} from './program-step.tsx';

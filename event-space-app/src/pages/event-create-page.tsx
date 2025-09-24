@@ -2,8 +2,8 @@ import { EventCreateWrapper, Wrapper } from '@/components/hoc';
 import {
   DateTimeStep,
   EventCreateHeader,
-  EventCreateStepper,
-  MainInfoStep,
+  EventCreateStepper, EventProgramStep,
+  MainInfoStep
 } from '@/components/shared/event-create';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStepper } from '@/hooks/use-stepper.ts';
@@ -21,6 +21,8 @@ const EventCreatePage = () => {
         return <MainInfoStep />;
       case 1:
         return <DateTimeStep />;
+      case 2:
+        return <EventProgramStep/>
     }
   };
 

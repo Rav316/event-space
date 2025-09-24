@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+input[type='date'],
+input[type='time'] {
+  -webkit-appearance: none;
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

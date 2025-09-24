@@ -1,4 +1,4 @@
-import { FormErrorMessage, Input, Label } from '@/components/ui';
+import { FormErrorMessage, Input, Label, RequiredMark } from '@/components/ui';
 import { Mail, User } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { type PersonalInfoData } from '@/schemas/personal-info-schema.ts';
@@ -25,7 +25,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
         <div className="grid grid-cols-2 gap-4 max-[600px]:grid-cols-1">
           <div className="space-y-2">
             <Label htmlFor="firstName">
-              Имя <span className={'text-red-500'}>*</span>
+              Имя <RequiredMark/>
             </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
@@ -47,7 +47,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
 
           <div className="space-y-2">
             <Label htmlFor="lastName">
-              Фамилия <span className={'text-red-500'}>*</span>
+              Фамилия <RequiredMark/>
             </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
@@ -70,7 +70,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="email">
-            Email адрес <span className={'text-red-500'}>*</span>
+            Email адрес <RequiredMark/>
           </Label>
           <div className={'flex flex-col gap-1'}>
             <div className="relative">

@@ -1,4 +1,4 @@
-import { FormErrorMessage, Label } from '@/components/ui';
+import { FormErrorMessage, Label, RequiredMark } from '@/components/ui';
 import { CheckCircle, Lock } from 'lucide-react';
 import { PasswordInput } from '@/components/shared';
 import React from 'react';
@@ -25,7 +25,7 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="password">
-            Пароль <span className={'text-red-500'}>*</span>
+            Пароль <RequiredMark/>
           </Label>
           <PasswordInput {...form.register('password')} />
           {form.formState.errors.password && (
@@ -37,7 +37,7 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="confirmPassword">
-            Подтвердите пароль <span className={'text-red-500'}>*</span>
+            Подтвердите пароль <RequiredMark/>
           </Label>
           <PasswordInput
             id={'confirmPassword'}

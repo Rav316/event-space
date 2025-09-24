@@ -2,13 +2,13 @@ import {
   Badge,
   Button,
   Input,
-  Label,
+  Label, RequiredMark,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Textarea,
+  Textarea
 } from '@/components/ui';
 import React, { useState } from 'react';
 import { Hash } from 'lucide-react';
@@ -41,13 +41,13 @@ export const MainInfoStep = () => {
     <div className={'flex flex-col gap-4'}>
       <div className={'flex flex-col gap-2'}>
         <Label htmlFor={'name'}>
-          Название мероприятия <span className={'text-red-500'}>*</span>
+          Название мероприятия <RequiredMark/>
         </Label>
         <Input id={'name'} placeholder={'Введите названия мероприятия'} />
       </div>
       <div className={'flex flex-col gap-2'}>
         <Label htmlFor={'short-description'}>
-          Краткое описание <span className={'text-red-500'}>*</span>
+          Краткое описание <RequiredMark/>
         </Label>
         <div className={'flex flex-col gap-1'}>
           <Textarea
@@ -60,7 +60,7 @@ export const MainInfoStep = () => {
       </div>
       <div className={'flex flex-col gap-2'}>
         <Label htmlFor={'description'}>
-          Подробное описание <span className={'text-red-500'}>*</span>
+          Подробное описание <RequiredMark/>
         </Label>
         <Textarea
           className={'resize-none'}
@@ -71,7 +71,7 @@ export const MainInfoStep = () => {
       <div className="flex max-[600px]:flex-col justify-between gap-4">
         <div className="flex flex-col gap-2 w-1/2 max-[600px]:w-full">
           <Label htmlFor="category">
-            Категория <span className={'text-red-500'}>*</span>
+            Категория <RequiredMark/>
           </Label>
           <Select>
             <SelectTrigger id="category" className="w-full">
