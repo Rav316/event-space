@@ -4,7 +4,7 @@ export const useStepper = (totalSteps: number) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const next = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps - 1));
   };
 
   const back = () => {
