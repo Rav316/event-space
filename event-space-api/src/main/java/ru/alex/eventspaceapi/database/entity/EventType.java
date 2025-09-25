@@ -9,25 +9,18 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
+@Table(name = "event_type")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Space {
+public class EventType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_id", referencedColumnName = "id")
-    private Building building;
-
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "type")
     private List<Event> events;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space_type_id", referencedColumnName = "id")
-    private SpaceType type;
 }

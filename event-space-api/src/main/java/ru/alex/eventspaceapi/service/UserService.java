@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +18,7 @@ public class UserService implements UserDetailsService {
     private final UserDetailsMapper userDetailsMapper;
 
     @Override
+    @CacheEvict(value = "users", key = "#result.username")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmailWithFaculty(email)
                 .map(userDetailsMapper::toDto)

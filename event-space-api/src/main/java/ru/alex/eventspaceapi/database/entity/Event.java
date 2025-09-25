@@ -51,4 +51,8 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_type_id", referencedColumnName = "id")
+    private EventType type;
 }

@@ -2,6 +2,7 @@ ext {
     versions = [
             'hypersistenceUtils': '3.11.0',
             'auth0Jwt': '4.5.0',
-            'mapstruct': '1.6.3'
+            'mapstruct': '1.6.3',
+            'caffeine': '3.2.2'
     ]
 }
