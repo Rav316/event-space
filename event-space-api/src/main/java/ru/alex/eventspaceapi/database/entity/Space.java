@@ -19,6 +19,8 @@ public class Space {
     private Integer id;
 
     private String name;
+    private Short floor;
+    private Short capacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", referencedColumnName = "id")

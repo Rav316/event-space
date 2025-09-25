@@ -27,3 +27,7 @@ databaseChangeLog:
       file: db/changelog/db-update-space-table-1.0.sql
   - include:
       file: db/changelog/db-insert-init-data-2.0.sql
+  - include:
+      file: db/changelog/db-update-space-table-1.1.sql
+  - include:
+      file: db/changelog/db-insert-init-data-2.1.sql

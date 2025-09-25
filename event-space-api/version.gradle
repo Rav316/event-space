@@ -3,6 +3,9 @@ ext {
             'hypersistenceUtils': '3.11.0',
             'auth0Jwt': '4.5.0',
             'mapstruct': '1.6.3',
-            'caffeine': '3.2.2'
+            'caffeine': '3.2.2',
+            'querydsl': '7.0',
+            'hibernate': '6.6.29.Final',
+            'jakarta': '3.1.0'
     ]
 }

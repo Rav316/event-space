@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import ru.alex.eventspaceapi.validation.ValidPassword;
 
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
-    private static final String PASSWORD_PATTERN = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=!]).{8,}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*\\d)[a-zA-Z\\d]{8,}$";
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {

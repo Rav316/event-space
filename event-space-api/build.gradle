@@ -30,22 +30,40 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
+    implementation "org.hibernate.orm:hibernate-core:${versions.hibernate}"
     implementation "io.hypersistence:hypersistence-utils-hibernate-63:${versions.hypersistenceUtils}"
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "com.auth0:java-jwt:${versions.auth0Jwt}"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "com.github.ben-manes.caffeine:caffeine:${versions.caffeine}"
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation "io.github.openfeign.querydsl:querydsl-jpa:${versions.querydsl}"
+    implementation "io.github.openfeign.querydsl:querydsl-core:${versions.querydsl}"
+    implementation "jakarta.persistence:jakarta.persistence-api:${versions.jakarta}"
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
+    annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${versions.querydsl}:jpa"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api:${versions.jakarta}"
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+sourceSets {
+    main {
+        java {
+            srcDirs += ['build/generated/sources/annotationProcessor/java/main']
+        }
+    }
+}
+
+test {
     useJUnitPlatform()
+}
+
+clean {
+    delete file('build/generated')
 }
