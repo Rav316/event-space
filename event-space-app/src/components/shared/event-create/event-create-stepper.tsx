@@ -3,7 +3,6 @@ import { EventCreateStepCircle } from '@/components/shared/event-create/event-cr
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
 import type { eventCreateStepType } from '@/types/event-create-step-type.ts';
-import { eventCreateCategories } from '@/constants/event-create-categories.ts';
 import { eventCreateSteps } from '@/constants/event-create-steps.ts';
 
 interface Props {
@@ -12,15 +11,15 @@ interface Props {
 
 
 export const EventCreateStepper: React.FC<Props> = ({ currentStep }) => {
-  const progress = eventCreateCategories.length > 0
+  const progress = eventCreateSteps.length > 0
     ? Math.round(
-      (currentStep / (eventCreateCategories.length + 1)) * 100,
+      (currentStep / (eventCreateSteps.length)) * 100,
     )
     : 0;
   return (
     <div className={'flex flex-col gap-2'}>
       <div className={'flex justify-between items-center w-full'}>
-        <span>Шаг {currentStep + 1} из {eventCreateCategories.length + 1}</span>
+        <span>Шаг {currentStep + 1} из {eventCreateSteps.length}</span>
         <span className={'text-muted-foreground'}>{progress}% завершено</span>
       </div>
       <Progress

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Clock, FileText, type LucideProps, MapPin, Upload, Users } from 'lucide-react';
+import { Calendar, Clock, FileText, type LucideProps, MapPin, Upload } from 'lucide-react';
 
 export const eventCreateSteps: {
   Icon: React.ForwardRefExoticComponent<
@@ -22,10 +22,6 @@ export const eventCreateSteps: {
   {
     Icon: MapPin,
     text: 'Место проведения',
-  },
-  {
-    Icon: Users,
-    text: 'Участники',
   },
   {
     Icon: Upload,

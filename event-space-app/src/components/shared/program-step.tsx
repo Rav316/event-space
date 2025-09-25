@@ -13,7 +13,7 @@ export const ProgramStep: React.FC<Props> = ({step, onStepDelete}) => {
     <div className={
       'relative flex flex-col gap-4 p-5 border border-dashed border-[#E5E5E5] rounded-md'
     }>
-      <div className={'flex justify-between items-center'}>
+      <div className={'flex justify-between items-end'}>
         <Label htmlFor={'name'}>Название</Label>
         <Trash2
           onClick={onStepDelete}

@@ -4,3 +4,4 @@ export {EventCreateStepper} from './event-create-stepper';
 export {MainInfoStep} from './main-info-step';
 export {DateTimeStep} from './date-time-step';
 export {EventProgramStep} from './event-program-step';
+export {EventLocationStep} from './event-location-step';

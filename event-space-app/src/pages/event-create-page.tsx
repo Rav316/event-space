@@ -2,17 +2,18 @@ import { EventCreateWrapper, Wrapper } from '@/components/hoc';
 import {
   DateTimeStep,
   EventCreateHeader,
-  EventCreateStepper, EventProgramStep,
-  MainInfoStep
+  EventCreateStepper,
+  EventProgramStep,
+  MainInfoStep,
 } from '@/components/shared/event-create';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStepper } from '@/hooks/use-stepper.ts';
 import { Button } from '@/components/ui';
-import { eventCreateCategories } from '@/constants/event-create-categories.ts';
 import { eventCreateSteps } from '@/constants/event-create-steps.ts';
+import { EventLocationStep } from '@/components/shared/event-create/event-location-step.tsx';
 
 const EventCreatePage = () => {
-  const { currentStep, back, next } = useStepper(eventCreateCategories.length);
+  const { currentStep, back, next } = useStepper(eventCreateSteps.length);
   console.log(currentStep);
 
   const renderCurrentStep = () => {
@@ -22,7 +23,9 @@ const EventCreatePage = () => {
       case 1:
         return <DateTimeStep />;
       case 2:
-        return <EventProgramStep/>
+        return <EventProgramStep />;
+      case 3:
+        return <EventLocationStep />;
     }
   };
 

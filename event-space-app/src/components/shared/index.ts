@@ -18,3 +18,6 @@ export {EventsPagination} from './events-pagination';
 export {PasswordInput} from './password-input';
 export {RegistrationStepper} from './registration-stepper';
 export {ProgramStep} from './program-step.tsx';
+export {SpaceFilters} from './space-filters';
+export {SpaceList} from './space-list';
+export {SpaceItem} from './space-item';

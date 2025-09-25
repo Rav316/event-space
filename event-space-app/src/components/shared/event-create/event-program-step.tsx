@@ -1,4 +1,4 @@
-import { Button, Input, Label, Textarea } from '@/components/ui';
+import { Button, Input, Label, RequiredMark, Textarea } from '@/components/ui';
 import { Clock, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProgramStep } from '@/components/shared';
@@ -55,7 +55,10 @@ export const EventProgramStep = () => {
       >
         <h3 className={'font-medium text-xl'}>Добавить пункт программы</h3>
         <div className={'flex flex-col gap-1'}>
-          <Label htmlFor={'name'}>Название</Label>
+          <Label htmlFor={'name'}>
+            Название
+            <RequiredMark />
+          </Label>
           <Input
             id={'name'}
             name={'name'}
@@ -64,11 +67,17 @@ export const EventProgramStep = () => {
         </div>
         <div className={'flex w-full gap-4 max-[450px]:flex-col'}>
           <div className={'flex flex-col gap-1 flex-1 max-[530px]:w-full'}>
-            <Label htmlFor={'start-time'}>Время начала</Label>
+            <Label htmlFor={'start-time'}>
+              Время начала
+              <RequiredMark />
+            </Label>
             <Input id={'start-time'} name={'start-time'} type={'time'} />
           </div>
           <div className={'flex flex-col gap-1 flex-1 max-[530px]:w-full'}>
-            <Label htmlFor={'end-time'}>Время окончания</Label>
+            <Label htmlFor={'end-time'}>
+              Время окончания
+              <RequiredMark />
+            </Label>
             <Input id={'end-time'} name={'end-time'} type={'time'} />
           </div>
         </div>

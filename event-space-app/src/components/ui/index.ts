@@ -16,3 +16,4 @@ export * from './select';
 export * from './dialog';
 export * from './card';
 export * from './alert';
+export * from './scroll-area';
