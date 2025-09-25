@@ -5,6 +5,7 @@ import {
   EventCreateStepper,
   EventProgramStep,
   MainInfoStep,
+  MediaSettingsStep,
 } from '@/components/shared/event-create';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStepper } from '@/hooks/use-stepper.ts';
@@ -26,6 +27,8 @@ const EventCreatePage = () => {
         return <EventProgramStep />;
       case 3:
         return <EventLocationStep />;
+      case 4:
+        return <MediaSettingsStep />;
     }
   };
 
