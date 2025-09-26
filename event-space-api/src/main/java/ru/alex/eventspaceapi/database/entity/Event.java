@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "space")
+@EqualsAndHashCode(of = {"id", "name", "tags", "eventDate", "startTime", "endTime", "description", "imageUrl"})
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class Event {
     private LocalTime startTime;
 
     @Column(name = "end_time")
-    private String endTime;
+    private LocalTime endTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
@@ -55,4 +56,7 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_type_id", referencedColumnName = "id")
     private EventType type;
+
+    @OneToMany(mappedBy = "event")
+    private List<EventStep> steps;
 }
