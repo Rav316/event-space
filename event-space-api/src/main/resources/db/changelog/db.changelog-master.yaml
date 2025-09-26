@@ -35,3 +35,5 @@ databaseChangeLog:
       file: db/changelog/db-create-event-step-table-1.0.sql
   - include:
       file: db/changelog/db-update-event-step-table-1.0.sql
+  - include:
+      file: db/changelog/db-update-event-table-1.1.sql

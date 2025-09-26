@@ -10,6 +10,7 @@ import java.util.List;
 
 public record EventCreateDto (
         @NotNull
+        @Size(min = 5, max = 128)
         String name,
         @Size(min = 1)
         List<String> tags,
@@ -21,6 +22,9 @@ public record EventCreateDto (
         LocalTime endTime,
         @NotNull
         Integer space,
+        @Size(max = 120)
+        String shortDescription,
+        @Size(max = 200)
         String description,
         @NotNull
         Integer eventType,

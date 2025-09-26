@@ -40,6 +40,7 @@ public class Event {
     @JoinColumn(name = "space_id", referencedColumnName = "id")
     private Space space;
 
+    private String shortDescription;
     private String description;
 
     @Column(name = "image_url")
