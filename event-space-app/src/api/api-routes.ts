@@ -1,5 +1,6 @@
 export const ApiRoutes = {
   AUTH: '/auth',
   FACULTIES: '/faculties',
-  USERS: '/users'
+  USERS: '/users',
+  EVENT_CATEGORIES: '/event-categories',
 }

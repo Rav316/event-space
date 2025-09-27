@@ -1,7 +1,7 @@
 import type { AuthResponse } from '@/api/auth/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
-import type { LoginData } from '@/schemas/auth-schema.ts';
+import type { LoginData } from '@/schemas/form-login-schema.ts';
 import type { UserRegisterDto } from '@/api/users/model.ts';
 
 export const register = async (

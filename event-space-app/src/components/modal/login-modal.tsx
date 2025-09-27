@@ -11,7 +11,7 @@ import { LogIn, Mail } from 'lucide-react';
 import { PasswordInput } from '@/components/shared';
 import { useLogin } from '@/api/auth/hooks.ts';
 import { FormProvider, useForm } from 'react-hook-form';
-import { formLoginSchema, type LoginData } from '@/schemas/auth-schema.ts';
+import { formLoginSchema, type LoginData } from '@/schemas/form-login-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
