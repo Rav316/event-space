@@ -27,7 +27,7 @@ public record EventCreateDto (
         @Size(max = 200)
         String description,
         @NotNull
-        Integer eventType,
+        Integer category,
         @NotNull
         List<EventStepCreateDto> steps
 ) {

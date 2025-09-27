@@ -55,8 +55,8 @@ public class Event {
     private Set<User> users = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_type_id", referencedColumnName = "id")
-    private EventType type;
+    @JoinColumn(name = "event_category_id", referencedColumnName = "id")
+    private EventCategory category;
 
     @OneToMany(mappedBy = "event")
     private List<EventStep> steps;

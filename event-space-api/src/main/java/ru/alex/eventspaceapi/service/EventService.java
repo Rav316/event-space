@@ -6,15 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.entity.EventStep;
-import ru.alex.eventspaceapi.database.entity.EventType;
+import ru.alex.eventspaceapi.database.entity.EventCategory;
 import ru.alex.eventspaceapi.database.entity.Space;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventStepRepository;
-import ru.alex.eventspaceapi.database.repository.EventTypeRepository;
+import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
 import ru.alex.eventspaceapi.database.repository.SpaceRepository;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
-import ru.alex.eventspaceapi.exception.EventTypeNotFoundException;
+import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
@@ -29,7 +29,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventStepRepository eventStepRepository;
     private final SpaceRepository spaceRepository;
-    private final EventTypeRepository eventTypeRepository;
+    private final EventCategoryRepository eventCategoryRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
 
     @Transactional
@@ -57,9 +57,9 @@ public class EventService {
         event.setShortDescription(event.getShortDescription());
         event.setDescription(eventCreateDto.description());
 
-        EventType eventType = eventTypeRepository.findById(eventCreateDto.eventType())
-                .orElseThrow(() -> new EventTypeNotFoundException(eventCreateDto.eventType()));
-        event.setType(eventType);
+        EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
+                .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
+        event.setCategory(eventCategory);
 
         validateEventSteps(eventCreateDto);
 
