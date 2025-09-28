@@ -32,6 +32,7 @@ public class SpaceRepositoryImpl implements SpaceRepositoryCustom {
                 .map(space -> new SpaceListDto(
                         space.getId(),
                         space.getName(),
+                        space.getBuilding().getId(),
                         space.getType().getName(),
                         space.getFloor(),
                         space.getCapacity()
