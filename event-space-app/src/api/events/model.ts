@@ -1,9 +1,10 @@
 export interface EventCreateDto {
   name: string;
   tags: string[];
-  eventDate: Date;
+  eventDate: string;
   startTime: string;
   endTIme: string;
+  deadline: string;
   space: number;
   shortDescription: string;
   description: string;

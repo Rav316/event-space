@@ -20,21 +20,21 @@ const EventCreatePage = () => {
   const setEventData = useEventCreationStore((state) => state.setEventData);
   console.log(currentStep);
 
-  const {mainInfoForm} = useEventCreateForms();
-  console.log(mainInfoForm.getValues());
+  const { mainInfoForm, eventDateTimeForm } = useEventCreateForms();
+
   const onStepNext = () => {
     switch (currentStep) {
       case 0:
-        mainInfoForm.handleSubmit(
-          (data) => {
-            console.log('✅ Valid:', data);
-            setEventData(data);
-            next();
-          },
-          (errors) => {
-            console.log('❌ Validation errors:', errors);
-          }
-        )();
+        mainInfoForm.handleSubmit((data) => {
+          setEventData(data);
+          next();
+        })();
+        break;
+      case 1:
+        eventDateTimeForm.handleSubmit((data) => {
+          setEventData(data);
+          next();
+        })();
         break;
     }
   };
@@ -44,7 +44,7 @@ const EventCreatePage = () => {
       case 0:
         return <MainInfoStep form={mainInfoForm} />;
       case 1:
-        return <DateTimeStep />;
+        return <DateTimeStep form={eventDateTimeForm} />;
       case 2:
         return <EventProgramStep />;
       case 3:

@@ -2,6 +2,7 @@ import type { EventCreateDto, EventStep } from '@/api/events/model.ts';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { getTodayDate } from '@/utils/get-today-date.ts';
 
 interface EventCreationStore {
   event: EventCreateDto;
@@ -20,13 +21,14 @@ export const useEventCreationStore = create<EventCreationStore>()(
       event: {
         name: '',
         tags: [],
-        eventDate: new Date(),
+        eventDate: getTodayDate(),
         startTime: '',
         endTIme: '',
         space: 0,
         shortDescription: '',
         description: '',
-        category: 0
+        category: 0,
+        deadline: getTodayDate(),
       },
       eventSteps: [],
       setEventData: (event) =>
@@ -50,13 +52,14 @@ export const useEventCreationStore = create<EventCreationStore>()(
             (state.event = {
               name: '',
               tags: [],
-              eventDate: new Date(),
+              eventDate: getTodayDate(),
               startTime: '',
               endTIme: '',
               space: 0,
               shortDescription: '',
               description: '',
               category: 0,
+              deadline: getTodayDate(),
             }),
         ),
       resetEventSteps: () => set((state) => (state.eventSteps = [])),
