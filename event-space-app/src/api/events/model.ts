@@ -3,7 +3,7 @@ export interface EventCreateDto {
   tags: string[];
   eventDate: string;
   startTime: string;
-  endTIme: string;
+  endTime: string;
   deadline: string;
   space: number;
   shortDescription: string;
@@ -16,5 +16,5 @@ export interface EventStep {
   name: string;
   startTime: string;
   endTime: string;
-  description: string;
+  description?: string;
 }

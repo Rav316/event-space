@@ -9,6 +9,8 @@ import {
   type EventDateTime,
   eventDateTimeSchema,
 } from '@/schemas/event-date-time-schema.ts';
+import type { EventStep } from '@/api/events/model.ts';
+import { eventStepSchema } from '@/schemas/event-step-schema.ts';
 
 export const useEventCreateForms = () => {
   const eventCreateDto = useEventCreationStore((state) => state.event);
@@ -28,10 +30,20 @@ export const useEventCreateForms = () => {
     defaultValues: {
       eventDate: eventCreateDto.eventDate,
       startTime: eventCreateDto.startTime,
-      endTime: eventCreateDto.endTIme,
+      endTime: eventCreateDto.endTime,
       deadline: eventCreateDto.deadline,
     },
   });
 
-  return { mainInfoForm, eventDateTimeForm };
+  const eventStepForm = useForm<EventStep>({
+    resolver: zodResolver(eventStepSchema),
+    defaultValues: {
+      name: '',
+      startTime: '',
+      endTime: '',
+      description: ''
+    }
+  })
+
+  return { mainInfoForm, eventDateTimeForm, eventStepForm };
 };

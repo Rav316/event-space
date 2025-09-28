@@ -11,7 +11,7 @@ export const DateTimeStep: React.FC<Props> = ({ form }) => {
   return (
     <FormProvider {...form}>
       <form className={'flex flex-col gap-4'}>
-        <div className={'flex items-center gap-4 w-full max-[530px]:flex-col'}>
+        <div className={'flex items-start gap-4 w-full max-[530px]:flex-col'}>
           <div className={'flex flex-col gap-1 flex-1 max-[530px]:w-full'}>
             <Label htmlFor={'event-date'}>
               Дата проведения <RequiredMark />

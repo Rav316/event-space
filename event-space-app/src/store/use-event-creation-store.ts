@@ -13,6 +13,7 @@ interface EventCreationStore {
   removeEventStep: (index: number) => void;
   resetEvent: () => void;
   resetEventSteps: () => void;
+  updateEventStep: (index: number, data: Partial<EventStep>) => void;
 }
 
 export const useEventCreationStore = create<EventCreationStore>()(
@@ -23,7 +24,7 @@ export const useEventCreationStore = create<EventCreationStore>()(
         tags: [],
         eventDate: getTodayDate(),
         startTime: '',
-        endTIme: '',
+        endTime: '',
         space: 0,
         shortDescription: '',
         description: '',
@@ -32,19 +33,30 @@ export const useEventCreationStore = create<EventCreationStore>()(
       },
       eventSteps: [],
       setEventData: (event) =>
-        set((state) => {
-          state.event = {
-            ...state.event,
-            ...event,
-          };
-        }),
-      setEventSteps: (steps) => set({ eventSteps: steps }),
+        set(
+          (state) => {
+            state.event = { ...state.event, ...event };
+          },
+          false,
+          'setEventData',
+        ),
+      setEventSteps: (steps) =>
+        set({ eventSteps: steps }, false, 'setEventSteps'),
       addEventStep: (step) =>
-        set((state) => (state.eventSteps = [...state.eventSteps, step])),
+        set(
+          (state) => {
+            state.eventSteps.push(step);
+          },
+          false,
+          'addEventStep',
+        ),
       removeEventStep: (index) =>
         set(
-          (state) =>
-            (state.eventSteps = state.eventSteps.filter((_, i) => i !== index)),
+          (state) => {
+            state.eventSteps.splice(index, 1);
+          },
+          false,
+          'removeEventStep',
         ),
       resetEvent: () =>
         set(
@@ -54,17 +66,35 @@ export const useEventCreationStore = create<EventCreationStore>()(
               tags: [],
               eventDate: getTodayDate(),
               startTime: '',
-              endTIme: '',
+              endTime: '',
               space: 0,
               shortDescription: '',
               description: '',
               category: 0,
               deadline: getTodayDate(),
             }),
+          false,
+          'resetEvent',
         ),
-      resetEventSteps: () => set((state) => (state.eventSteps = [])),
+      resetEventSteps: () =>
+        set(
+          (state) => {
+            state.eventSteps = [];
+          },
+          false,
+          'resetEventSteps',
+        ),
+      updateEventStep: (index: number, data: Partial<EventStep>) =>
+        set(
+          (state) => {
+            state.eventSteps[index] = { ...state.eventSteps[index], ...data };
+          },
+          false,
+          'updateEventStep',
+        ),
     })),
     {
+      name: 'eventCreationStore',
       store: 'event-creation-store',
     },
   ),

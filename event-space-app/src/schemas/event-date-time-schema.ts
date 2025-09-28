@@ -17,12 +17,10 @@ export const eventDateTimeSchema = z
   })
   .superRefine((data, ctx) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().slice(0, 10); // "YYYY-MM-DD"
+    const nowMinutes = today.getHours() * 60 + today.getMinutes();
 
-    const eventDate = new Date(data.eventDate);
-    const deadline = new Date(data.deadline);
-
-    if (eventDate < today) {
+    if (data.eventDate < todayStr) {
       ctx.addIssue({
         code: 'custom',
         message: 'Дата начала не может быть раньше сегодняшней',
@@ -30,7 +28,7 @@ export const eventDateTimeSchema = z
       });
     }
 
-    if (deadline > eventDate) {
+    if (data.deadline > data.eventDate) {
       ctx.addIssue({
         code: 'custom',
         message: 'Дедлайн не может быть позже даты начала мероприятия',
@@ -41,13 +39,26 @@ export const eventDateTimeSchema = z
     const [startH, startM] = data.startTime.split(':').map(Number);
     const [endH, endM] = data.endTime.split(':').map(Number);
 
-    if (startH * 60 + startM >= endH * 60 + endM) {
+    const startMinutes = startH * 60 + startM;
+    const endMinutes = endH * 60 + endM;
+
+    if (startMinutes >= endMinutes) {
       ctx.addIssue({
         code: 'custom',
         message: 'Время начала должно быть раньше времени окончания',
         path: ['startTime'],
       });
     }
+
+    // если дата сегодня → проверяем, что startTime > сейчас
+    if (data.eventDate === todayStr && startMinutes <= nowMinutes) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Время начала должно быть позже текущего времени',
+        path: ['startTime'],
+      });
+    }
   });
+
 
 export type EventDateTime = z.infer<typeof eventDateTimeSchema>;
