@@ -9,8 +9,8 @@ export interface SpaceListDto {
 
 export interface SpaceFilter {
   building: number;
-  name: string;
-  type: number;
-  minCapacity: number;
-  maxCapacity: number;
+  name?: string;
+  type?: number;
+  minCapacity?: number;
+  maxCapacity?: number;
 }

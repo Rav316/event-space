@@ -11,6 +11,7 @@ import {
 } from '@/schemas/event-date-time-schema.ts';
 import type { EventStep } from '@/api/events/model.ts';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
+import { type EventLocationData, eventLocationSchema } from '@/schemas/event-location-schema.ts';
 
 export const useEventCreateForms = () => {
   const eventCreateDto = useEventCreationStore((state) => state.event);
@@ -43,7 +44,15 @@ export const useEventCreateForms = () => {
       endTime: '',
       description: ''
     }
-  })
+  });
 
-  return { mainInfoForm, eventDateTimeForm, eventStepForm };
+  const eventLocationForm = useForm<EventLocationData>({
+    resolver: zodResolver(eventLocationSchema),
+    defaultValues: {
+      space: eventCreateDto.space
+    }
+  });
+
+
+  return { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm };
 };

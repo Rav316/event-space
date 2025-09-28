@@ -1,4 +1,5 @@
 import {
+  FormErrorMessage,
   Label,
   RequiredMark,
   Select,
@@ -6,80 +7,84 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Skeleton,
 } from '@/components/ui';
 import { SpaceFilters, SpaceList } from '@/components/shared';
+import { FormProvider, type useForm } from 'react-hook-form';
+import type { EventLocationData } from '@/schemas/event-location-schema.ts';
+import React from 'react';
+import { useBuildings } from '@/api/buildings/hooks.ts';
+import { useSpaceFilterStore } from '@/store/use-space-filter-store.ts';
+import { useSpaces } from '@/api/spaces/hooks.ts';
 
-const locations = [
-  'Корпус 1',
-  'Корпус 2',
-  'Корпус 3',
-  'Корпус 4',
-  'Корпус 5',
-  'Корпус 6',
-  'Корпус 7',
-];
+interface Props {
+  form: ReturnType<typeof useForm<EventLocationData>>;
+}
 
-const spaces = [
-  'Аудитория 1',
-  'Аудитория 2',
-  'Аудитория 3',
-  'Аудитория 4',
-  'Аудитория 5',
-  'Аудитория 6',
-];
+export const EventLocationStep: React.FC<Props> = ({ form }) => {
+  const spaceFilter = useSpaceFilterStore((state) => state.filter);
+  const setSpaceFilter = useSpaceFilterStore((state) => state.setFilter);
 
-export const EventLocationStep = () => {
+  const { data: buildings, isPending: isBuildingsPending } = useBuildings();
+  const { data: spaces, isPending: isSpacesPending } = useSpaces(spaceFilter);
+
   return (
-    <div className={'flex flex-col gap-4'}>
-      <div
-        className={'flex items-center gap-4 mb-4 w-full max-[530px]:flex-col'}
-      >
+    <FormProvider {...form}>
+      <form className={'flex flex-col gap-4'}>
         <div className={'flex flex-col gap-1 flex-1 max-[530px]:w-full'}>
           <Label htmlFor={'location'}>
             Локация <RequiredMark />
           </Label>
-          <Select>
-            <SelectTrigger id={'location'} className={'w-full'}>
-              <SelectValue placeholder="Выберите корпус" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((location) => (
-                <SelectItem key={location} value={location}>
-                  {location}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {isBuildingsPending ? (
+            <Skeleton className={'w-full h-8'} />
+          ) : (
+            <Select
+              defaultValue={spaceFilter.building.toString()}
+              onValueChange={(value) =>
+                setSpaceFilter({ building: Number(value) })
+              }
+            >
+              <SelectTrigger id={'location'} className={'w-full'}>
+                <SelectValue placeholder="Выберите корпус" />
+              </SelectTrigger>
+              <SelectContent>
+                {buildings?.map((building) => (
+                  <SelectItem key={building.id} value={String(building.id)}>
+                    {building.address}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
-        <div className={'flex flex-col gap-1 flex-1 max-[530px]:w-full'}>
-          <Label htmlFor={'space'}>
-            Аудитория / зал <RequiredMark />
-          </Label>
-          <Select>
-            <SelectTrigger id={'space'} className={'w-full'}>
-              <SelectValue placeholder={'Выберите место проведения'} />
-            </SelectTrigger>
-            <SelectContent>
-              {spaces.map((space) => (
-                <SelectItem key={space} value={space}>
-                  {space}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className={'flex flex-col gap-0.5'}>
-        <h3 className={'font-medium text-lg'}>
-          Выбор места проведения <RequiredMark />
-        </h3>
-        <span className={'text-muted-foreground text-sm'}>
-          Выберите кабинет в корпусе "{locations[0]}" ({spaces.length} кабинетов
-          доступно)
-        </span>
-      </div>
-      <SpaceFilters />
-      <SpaceList />
-    </div>
+
+        {spaceFilter.building !== 0 && (
+          <>
+            <div className={'flex flex-col gap-0.5'}>
+              <h3 className={'font-medium text-lg'}>
+                Выбор места проведения <RequiredMark />
+              </h3>
+              <span className={'text-muted-foreground text-sm'}>
+                Выберите кабинет в корпусе "
+                {buildings?.find((b) => b.id === spaceFilter.building)?.address}
+                " ({spaces?.length} кабинетов доступно)
+              </span>
+            </div>
+            <SpaceFilters />
+            <SpaceList
+              spaces={spaces || []}
+              isPending={isSpacesPending}
+              value={form.watch('space')?.toString()}
+              onValueChange={(value) => form.setValue('space', Number(value))}
+            />
+          </>
+        )}
+        {form.formState.errors.space && (
+          <FormErrorMessage>
+            {form.formState.errors.space.message}
+          </FormErrorMessage>
+        )}
+      </form>
+    </FormProvider>
   );
 };

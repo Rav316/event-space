@@ -28,6 +28,14 @@ export const eventDateTimeSchema = z
       });
     }
 
+    if (data.deadline < todayStr) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Дедлайн не может быть раньше текущей даты',
+        path: ['deadline'],
+      });
+    }
+
     if (data.deadline > data.eventDate) {
       ctx.addIssue({
         code: 'custom',

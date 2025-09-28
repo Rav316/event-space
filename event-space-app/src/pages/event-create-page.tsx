@@ -28,7 +28,7 @@ const EventCreatePage = () => {
   );
   console.log(currentStep);
 
-  const { mainInfoForm, eventDateTimeForm, eventStepForm } =
+  const { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm } =
     useEventCreateForms();
 
   const onStepNext = () => {
@@ -65,6 +65,12 @@ const EventCreatePage = () => {
           }
         }
         break;
+      case 3:
+        eventLocationForm.handleSubmit((data) => {
+          setEventData(data);
+          next();
+        })();
+        break;
     }
   };
 
@@ -77,7 +83,7 @@ const EventCreatePage = () => {
       case 2:
         return <EventProgramStep form={eventStepForm} />;
       case 3:
-        return <EventLocationStep />;
+        return <EventLocationStep form={eventLocationForm} />;
       case 4:
         return <MediaSettingsStep />;
     }

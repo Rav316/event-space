@@ -4,5 +4,6 @@ export const ApiRoutes = {
   USERS: '/users',
   EVENT_CATEGORIES: '/event-categories',
   SPACES: '/spaces',
-  BUILDINGS: '/buildings'
+  BUILDINGS: '/buildings',
+  SPACE_TYPES: '/space-types'
 }

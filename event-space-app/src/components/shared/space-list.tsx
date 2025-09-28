@@ -1,8 +1,23 @@
 import { Building2 } from 'lucide-react';
 import { SpaceItem } from '@/components/shared/space-item.tsx';
-import { ScrollArea } from '@/components/ui';
+import { ScrollArea, Skeleton } from '@/components/ui';
+import React from 'react';
+import type { SpaceListDto } from '@/api/spaces/model.ts';
+import { SpacesNotFound } from '@/components/shared';
 
-export const SpaceList = () => {
+interface Props {
+  spaces: SpaceListDto[];
+  value?: string;
+  onValueChange?: (value: string) => void;
+  isPending?: boolean;
+}
+
+export const SpaceList: React.FC<Props> = ({
+  spaces,
+  value,
+  onValueChange,
+  isPending,
+}) => {
   return (
     <div
       className={'flex flex-col gap-4 p-5 border border-[#E5E5E5] rounded-md'}
@@ -13,30 +28,31 @@ export const SpaceList = () => {
       </div>
       <ScrollArea className="h-[300px]">
         <div className="flex flex-col gap-2">
-          <SpaceItem
-            name="Лаборатория 102"
-            capacity={20}
-            floor={1}
-            type="Лаборатория"
-          />
-          <SpaceItem
-            name="Лаборатория неорганической химии"
-            capacity={24}
-            floor={1}
-            type="Лаборатория"
-          />
-          <SpaceItem
-            name="Аудитория 201"
-            capacity={80}
-            floor={2}
-            type="Лекционная"
-          />
-          <SpaceItem
-            name="Конференц-зал"
-            capacity={80}
-            floor={4}
-            type="Конференц-зал"
-          />
+          {isPending ? (
+            Array.from({ length: 10 }).map((_, index) => (
+              <Skeleton key={index} className={'w-full h-[85px]'} />
+            ))
+          ) : (
+            <>
+              {spaces.length === 0 ? (
+                <SpacesNotFound/>
+              ) : (
+                <>
+                  {spaces.map((space) => (
+                    <SpaceItem
+                      key={space.id}
+                      onClick={() => onValueChange?.(String(space.id))}
+                      name={space.name}
+                      capacity={space.capacity}
+                      floor={space.floor}
+                      type={space.type}
+                      selected={Number(value) === space.id}
+                    />
+                  ))}
+                </>
+              )}
+            </>
+          )}
         </div>
       </ScrollArea>
     </div>
