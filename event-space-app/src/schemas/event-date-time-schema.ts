@@ -50,7 +50,6 @@ export const eventDateTimeSchema = z
       });
     }
 
-    // если дата сегодня → проверяем, что startTime > сейчас
     if (data.eventDate === todayStr && startMinutes <= nowMinutes) {
       ctx.addIssue({
         code: 'custom',

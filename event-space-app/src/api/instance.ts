@@ -2,23 +2,27 @@ import axios from 'axios';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import type { AuthResponse } from '@/api/auth/model.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
-
+import qs from 'qs';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000
-})
+  timeout: 5000,
+  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'comma' }),
+});
 
 axiosInstance.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
-  if(token) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (value?: any) => void; reject: (reason?: any) => void }> = [];
+let failedQueue: Array<{
+  resolve: (value?: any) => void;
+  reject: (reason?: any) => void;
+}> = [];
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
@@ -63,7 +67,7 @@ axiosInstance.interceptors.response.use(
         const response = await axiosInstance.put<AuthResponse>(
           `${ApiRoutes.AUTH}/refresh-token`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const newToken = response.data.accessToken;
@@ -81,5 +85,5 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
