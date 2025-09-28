@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-const dateSchema = z.coerce.date({
-  error: () => ({ message: 'Некорректная дата' }),
-});
+const dateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Дата должна быть в формате YYYY-MM-DD');
 
 export const eventDateTimeSchema = z
   .object({
@@ -19,7 +19,10 @@ export const eventDateTimeSchema = z
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    if (data.eventDate < today) {
+    const eventDate = new Date(data.eventDate);
+    const deadline = new Date(data.deadline);
+
+    if (eventDate < today) {
       ctx.addIssue({
         code: 'custom',
         message: 'Дата начала не может быть раньше сегодняшней',
@@ -27,7 +30,7 @@ export const eventDateTimeSchema = z
       });
     }
 
-    if (data.deadline > data.eventDate) {
+    if (deadline > eventDate) {
       ctx.addIssue({
         code: 'custom',
         message: 'Дедлайн не может быть позже даты начала мероприятия',
@@ -38,10 +41,7 @@ export const eventDateTimeSchema = z
     const [startH, startM] = data.startTime.split(':').map(Number);
     const [endH, endM] = data.endTime.split(':').map(Number);
 
-    const startMinutes = startH * 60 + startM;
-    const endMinutes = endH * 60 + endM;
-
-    if (startMinutes >= endMinutes) {
+    if (startH * 60 + startM >= endH * 60 + endM) {
       ctx.addIssue({
         code: 'custom',
         message: 'Время начала должно быть раньше времени окончания',
