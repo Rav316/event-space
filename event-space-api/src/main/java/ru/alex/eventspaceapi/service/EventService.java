@@ -19,6 +19,7 @@ import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -48,6 +49,9 @@ public class EventService {
         event.setEventDate(eventCreateDto.eventDate());
         if(eventCreateDto.endTime().isBefore(eventCreateDto.startTime())) {
             throw new IllegalArgumentException("the end time of an event cannot be earlier than the start time of the event");
+        }
+        if(eventCreateDto.eventDate().equals(LocalDate.now()) && eventCreateDto.startTime().isBefore(LocalTime.now())) {
+            throw new IllegalArgumentException("the start time of the event cannot be earlier than the current time on the day of the event");
         }
         event.setStartTime(eventCreateDto.startTime());
         event.setEndTime(eventCreateDto.endTime());

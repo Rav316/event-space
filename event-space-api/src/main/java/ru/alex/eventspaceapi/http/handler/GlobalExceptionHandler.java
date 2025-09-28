@@ -85,4 +85,16 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, ex.getStatusCode());
     }
+
+    @ExceptionHandler({
+            IllegalArgumentException.class,
+            IllegalStateException.class
+    })
+    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
 }
