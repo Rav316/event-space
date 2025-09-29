@@ -17,19 +17,34 @@ import { useEventCreateForms } from '@/hooks/use-event-create-forms.ts';
 import { eventStepsGlobalSchema } from '@/schemas/event-steps-global-schema.ts';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { useEventCreate } from '@/api/events/hooks.ts';
+import { useEventImageStore } from '@/store/use-event-image-store.ts';
+import { useEffect } from 'react';
 
 const EventCreatePage = () => {
   const { currentStep, back, next } = useStepper(eventCreateSteps.length);
   const event = useEventCreationStore((state) => state.event);
   const eventSteps = useEventCreationStore((state) => state.eventSteps);
+  const eventImage = useEventImageStore((state) => state.file);
   const setEventData = useEventCreationStore((state) => state.setEventData);
   const resetEventSteps = useEventCreationStore(
     (state) => state.resetEventSteps,
   );
-  console.log(currentStep);
 
-  const { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm } =
-    useEventCreateForms();
+  const {
+    mainInfoForm,
+    eventDateTimeForm,
+    eventStepForm,
+    eventLocationForm,
+    resetForms,
+  } = useEventCreateForms();
+  const eventCreateMutation = useEventCreate();
+
+  useEffect(() => {
+    if(eventCreateMutation.isSuccess) {
+      resetForms();
+    }
+  }, [eventCreateMutation.isSuccess, resetForms]);
 
   const onStepNext = () => {
     switch (currentStep) {
@@ -71,6 +86,12 @@ const EventCreatePage = () => {
           next();
         })();
         break;
+      case 4:
+        eventCreateMutation.mutate({
+          event: { ...event, steps: eventSteps },
+          image: eventImage,
+        });
+        break;
     }
   };
 
@@ -107,7 +128,18 @@ const EventCreatePage = () => {
           <span>Назад</span>
         </Button>
         <Button onClick={onStepNext}>
-          <span>Далее</span>
+          {eventCreateMutation.isPending ? (
+            <div className={'flex items-center justify-center gap-x-2'}>
+              <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
+              <span>Создание...</span>
+            </div>
+          ) : (
+            <span>
+              {currentStep === eventCreateSteps.length - 1
+                ? 'Создать'
+                : 'Далее'}
+            </span>
+          )}
           <ChevronRight />
         </Button>
       </div>

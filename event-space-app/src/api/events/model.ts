@@ -18,3 +18,8 @@ export interface EventStep {
   endTime: string;
   description?: string;
 }
+
+export interface EventCreateData {
+  event: EventCreateDto;
+  image: File | null;
+}

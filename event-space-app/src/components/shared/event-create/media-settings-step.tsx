@@ -3,25 +3,26 @@ import { Button } from '@/components/ui';
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { fileToBase64 } from '@/utils/file-to-base64';
-import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
+import { useEventImageStore } from '@/store/use-event-image-store.ts';
 
 export const MediaSettingsStep = () => {
-  const cover = useEventCreationStore((state) => state.eventImage);
-  const setCover = useEventCreationStore((state) => state.setEventImage);
-  const resetCover = useEventCreationStore((state) => state.resetEventImage);
+  const previewUrl = useEventImageStore((state) => state.previewUrl);
+  const setFile = useEventImageStore((state) => state.setFile);
+  const clearImage = useEventImageStore((state) => state.clearImage);
   const [isDragging, setIsDragging] = useState(false);
 
   const isValidFile = (file: File) =>
     ['image/jpeg', 'image/png', 'image/gif'].includes(file.type);
 
   const handleFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
     const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
     if (selectedFiles.length > 0 && isValidFile(selectedFiles[0])) {
-      const base64 = await fileToBase64(selectedFiles[0]);
-      setCover(base64);
+      setFile(e.target.files[0]);
+      e.target.value = '';
     } else {
       toast.warning('Можно загружать только jpg, png или gif');
+      e.target.value = '';
     }
   };
 
@@ -31,8 +32,7 @@ export const MediaSettingsStep = () => {
 
     const droppedFiles = Array.from(e.dataTransfer.files);
     if (droppedFiles.length > 0 && isValidFile(droppedFiles[0])) {
-      const base64 = await fileToBase64(droppedFiles[0]);
-      setCover(base64);
+      setFile(droppedFiles[0]);
     }
   };
 
@@ -60,9 +60,9 @@ export const MediaSettingsStep = () => {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
         >
-          {cover && (
+          {previewUrl && (
             <button
-              onClick={resetCover}
+              onClick={clearImage}
               className="absolute top-3 right-3 text-red-500 cursor-pointer"
             >
               <Trash2 className="w-5 h-5" />
@@ -70,10 +70,10 @@ export const MediaSettingsStep = () => {
           )}
 
           <div className="flex flex-col gap-4 items-center justify-center text-center">
-            {cover ? (
+            {previewUrl ? (
               <div className="w-full h-64 flex items-center justify-center overflow-hidden rounded-md">
                 <img
-                  src={cover}
+                  src={previewUrl}
                   alt="Preview"
                   className="object-contain w-full h-full"
                 />

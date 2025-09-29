@@ -53,6 +53,12 @@ export const useEventCreateForms = () => {
     }
   });
 
+  const resetForms = () => {
+    mainInfoForm.reset();
+    eventDateTimeForm.reset();
+    eventLocationForm.reset();
+  }
 
-  return { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm };
+
+  return { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm, resetForms };
 };

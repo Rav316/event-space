@@ -1,0 +1,32 @@
+import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
+import { useMutation } from '@tanstack/react-query';
+import { Api } from '@/api/api-client.ts';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
+import { AxiosError } from 'axios';
+import { useEventImageStore } from '@/store/use-event-image-store.ts';
+
+export const useEventCreate = () => {
+  const navigate = useNavigate();
+  const resetEvent = useEventCreationStore((state) => state.resetEvent);
+  const resetEventSteps = useEventCreationStore(
+    (state) => state.resetEventSteps,
+  );
+  const clearImage = useEventImageStore((state) => state.clearImage)
+
+  return useMutation({
+    mutationFn: Api.events.create,
+    onSuccess: () => {
+      toast.success('Вы успешно создали мероприятие');
+      navigate('/')
+      resetEvent();
+      resetEventSteps();
+      clearImage();
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при создании мероприятия');
+      }
+    }
+  });
+};

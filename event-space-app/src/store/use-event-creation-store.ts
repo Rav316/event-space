@@ -13,10 +13,6 @@ interface EventCreationStore {
   removeEventStep: (index: number) => void;
   resetEvent: () => void;
   resetEventSteps: () => void;
-  updateEventStep: (index: number, data: Partial<EventStep>) => void;
-  eventImage: string | null;
-  setEventImage: (image: string) => void;
-  resetEventImage: () => void;
 }
 
 export const useEventCreationStore = create<EventCreationStore>()(
@@ -94,24 +90,7 @@ export const useEventCreationStore = create<EventCreationStore>()(
           },
           false,
           'updateEventStep',
-        ),
-      eventImage: null,
-      setEventImage: (image) =>
-        set(
-          (state) => {
-            state.eventImage = image;
-          },
-          false,
-          'setEventImage',
-        ),
-      resetEventImage: () =>
-        set(
-          (state) => {
-            state.eventImage = null;
-          },
-          false,
-          'resetEventImage',
-        ),
+        )
     })),
     {
       name: 'eventCreationStore',

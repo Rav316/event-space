@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const dateSchema = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Дата должна быть в формате YYYY-MM-DD');
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Введите дату в правильном формате');
 
 export const eventDateTimeSchema = z
   .object({
