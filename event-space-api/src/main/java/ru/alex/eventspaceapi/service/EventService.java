@@ -58,7 +58,7 @@ public class EventService {
         Space space = spaceRepository.findById(eventCreateDto.space())
                 .orElseThrow(() -> new SpaceNotFoundException(eventCreateDto.space()));
         event.setSpace(space);
-        event.setShortDescription(event.getShortDescription());
+        event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
