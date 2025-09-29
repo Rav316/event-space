@@ -39,7 +39,11 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
             <Skeleton className={'w-full h-8'} />
           ) : (
             <Select
-              defaultValue={spaceFilter.building.toString()}
+              defaultValue={
+                spaceFilter.building === 0
+                  ? undefined
+                  : String(spaceFilter.building)
+              }
               onValueChange={(value) =>
                 setSpaceFilter({ building: Number(value) })
               }

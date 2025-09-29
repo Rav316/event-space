@@ -1,10 +1,3 @@
-// export const capacityValues = [
-//   'Любая',
-//   'До 30 человек',
-//   '30 - 100 человек',
-//   'Более 100 человек'
-// ]
-
 interface CapacityValue {
   label: string
   minCapacity?: number
