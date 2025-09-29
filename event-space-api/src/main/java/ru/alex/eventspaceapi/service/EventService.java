@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +14,14 @@ import ru.alex.eventspaceapi.database.repository.EventStepRepository;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
 import ru.alex.eventspaceapi.database.repository.SpaceRepository;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
+import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
+import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
+import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
+import ru.alex.eventspaceapi.util.AuthUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,6 +37,14 @@ public class EventService {
     private final SpaceRepository spaceRepository;
     private final EventCategoryRepository eventCategoryRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
+    private final EventListMapper eventListMapper;
+
+    public List<EventListDto> getActualEvents() {
+        return eventRepository.getActualEvents(PageRequest.of(0, 6))
+                .stream()
+                .map(eventListMapper::toDto)
+                .toList();
+    }
 
     @Transactional
     public void create(EventCreateDto eventCreateDto, MultipartFile eventImage) {
@@ -60,6 +73,8 @@ public class EventService {
         event.setSpace(space);
         event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
+        UserDetailsDto authorizedUser = AuthUtils.getAuthorizedUser();
+        event.setAuthor(authorizedUser.firstName() + " " + authorizedUser.lastName());
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
                 .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));

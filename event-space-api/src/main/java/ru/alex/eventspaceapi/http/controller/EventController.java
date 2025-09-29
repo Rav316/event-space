@@ -7,7 +7,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
+import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.service.EventService;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -16,6 +19,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+
+    @GetMapping
+    public List<EventListDto> getActualEvents() {
+        return eventService.getActualEvents();
+    }
 
     @PostMapping
     public ResponseEntity<HttpStatus> create(

@@ -46,6 +46,8 @@ public class Event {
     @Column(name = "image_url")
     private String imageUrl;
 
+    private String author;
+
     @ManyToMany
     @JoinTable(
             name = "event_user",

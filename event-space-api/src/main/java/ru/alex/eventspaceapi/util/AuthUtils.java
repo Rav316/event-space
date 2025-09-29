@@ -2,6 +2,8 @@ package ru.alex.eventspaceapi.util;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.experimental.UtilityClass;
+import org.springframework.security.core.context.SecurityContextHolder;
+import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 
 @UtilityClass
 public class AuthUtils {
@@ -15,5 +17,9 @@ public class AuthUtils {
             throw new JWTVerificationException("JWT token is not valid");
         }
         return jwt;
+    }
+
+    public UserDetailsDto getAuthorizedUser() {
+        return (UserDetailsDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
