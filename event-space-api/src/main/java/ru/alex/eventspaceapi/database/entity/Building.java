@@ -18,6 +18,8 @@ public class Building {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
     private String address;
 
     @OneToMany(mappedBy = "building")

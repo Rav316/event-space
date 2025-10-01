@@ -18,7 +18,7 @@ public class BuildingService {
     private final BuildingReadMapper buildingReadMapper;
 
     public List<BuildingReadDto> findAll() {
-        return buildingRepository.findAll(Sort.by("address"))
+        return buildingRepository.findAll(Sort.by("name"))
                 .stream()
                 .map(buildingReadMapper::toDto)
                 .toList();

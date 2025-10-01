@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class EventController {
     private final EventService eventService;
 
-    @GetMapping
+    @GetMapping("/actual")
     public List<EventListDto> getActualEvents() {
         return eventService.getActualEvents();
     }

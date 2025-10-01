@@ -22,7 +22,7 @@ public record EventCreateDto (
         LocalTime endTime,
         @NotNull
         Integer space,
-        @Size(max = 120)
+        @Size(max = 130)
         String shortDescription,
         @Size(max = 200)
         String description,
