@@ -54,7 +54,7 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
               <SelectContent>
                 {buildings?.map((building) => (
                   <SelectItem key={building.id} value={String(building.id)}>
-                    {building.address}
+                    {`${building.name}, ${building.address}`}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -70,7 +70,7 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
               </h3>
               <span className={'text-muted-foreground text-sm'}>
                 Выберите кабинет в корпусе "
-                {buildings?.find((b) => b.id === spaceFilter.building)?.address}
+                {buildings?.find((b) => b.id === spaceFilter.building)?.name}
                 " ({spaces?.length} кабинетов доступно)
               </span>
             </div>

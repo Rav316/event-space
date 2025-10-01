@@ -2,18 +2,21 @@ import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
 import { Calendar, Clock4, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
+import { categoryColors } from '@/constants/category-colors.ts';
+import type { EventCategory } from '@/api/event-categories/model.ts';
 
 interface Props {
   imageUrl: string;
   title: string;
   description: string;
   date: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   location: string;
   registered: number;
   participants: number;
-  author: string;
-  category: string;
+  author?: string;
+  category: EventCategory;
 }
 
 export const EventCard: React.FC<Props> = ({
@@ -21,7 +24,8 @@ export const EventCard: React.FC<Props> = ({
   title,
   description,
   date,
-  time,
+  startTime,
+  endTime,
   location,
   registered,
   participants,
@@ -35,7 +39,7 @@ export const EventCard: React.FC<Props> = ({
       }
     >
       <div className="absolute z-10 top-3 left-3">
-        <Badge className={'bg-orange-100 text-orange-900'}>{category}</Badge>
+        <Badge className={categoryColors[category.id - 1]}>{category.name}</Badge>
       </div>
 
       <div className={'absolute z-10 top-3 right-3 flex space-x-2'}>
@@ -75,8 +79,14 @@ export const EventCard: React.FC<Props> = ({
                 'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
               }
             >
-              <EventCardLabel Icon={Calendar} text={date} />
-              <EventCardLabel Icon={Clock4} text={time} />
+              <EventCardLabel
+                Icon={Calendar}
+                text={new Date(date).toLocaleDateString('ru-RU')}
+              />
+              <EventCardLabel
+                Icon={Clock4}
+                text={`${startTime.slice(0, 5)} - ${endTime.slice(0, 5)}`}
+              />
             </div>
             <EventCardLabel Icon={MapPin} text={location} />
             <div
@@ -88,7 +98,9 @@ export const EventCard: React.FC<Props> = ({
                 Icon={Users}
                 text={`${registered}/${participants} участников`}
               />
-              <span className={'text-muted-foreground'}>Автор: {author}</span>
+              {author && (
+                <span className={'text-muted-foreground'}>Автор: {author}</span>
+              )}
             </div>
           </div>
         </div>

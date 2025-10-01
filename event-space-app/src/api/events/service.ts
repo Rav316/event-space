@@ -1,4 +1,4 @@
-import type { EventCreateData } from '@/api/events/model.ts';
+import type { EventCreateData, EventListDto } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 
@@ -16,3 +16,8 @@ export const create = async (data: EventCreateData): Promise<void> => {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
+
+export const getActualEvents = async (): Promise<EventListDto[]> => {
+  const response = await axiosInstance.get<EventListDto[]>(`${ApiRoutes.EVENTS}/actual`);
+  return response.data;
+}

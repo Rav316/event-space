@@ -1,3 +1,5 @@
+import type { Building } from '@/api/buildings/model.ts';
+
 export interface SpaceListDto {
   id: number;
   name: string;
@@ -13,4 +15,11 @@ export interface SpaceFilter {
   type?: number;
   minCapacity?: number;
   maxCapacity?: number;
+}
+
+export interface Space {
+  id: number;
+  name: string;
+  capacity: number;
+  building: Building;
 }

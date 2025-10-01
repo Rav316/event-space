@@ -6,8 +6,11 @@ import {
 } from '@/components/shared';
 import { Button } from '@/components/ui';
 import { ArrowRight, BellPlus, Calendar } from 'lucide-react';
+import { useActualEvents } from '@/api/events/hooks.ts';
 
 const MainPage = () => {
+  const { data, isPending } = useActualEvents();
+
   return (
     <>
       <div className={'w-full flex justify-center bg-[#F4F2F7]'}>
@@ -40,12 +43,14 @@ const MainPage = () => {
             <ArrowRight />
           </Button>
         </div>
-        <EventGroup />
-        <div className={'flex justify-center my-5'}>
-          <span className={'text-muted-foreground text-center'}>
-            Показано 6 ближайших мероприятий
-          </span>
-        </div>
+        <EventGroup isLoading={isPending} events={data || []} />
+        {!isPending && data?.length && (
+          <div className={'flex justify-center my-5'}>
+            <span className={'text-muted-foreground text-center'}>
+              Показано {data?.length} ближайших мероприятий
+            </span>
+          </div>
+        )}
         <div
           className={
             'flex justify-center min-[528px]:items-center max-[528px]:flex-col gap-4 my-5'

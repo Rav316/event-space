@@ -25,7 +25,7 @@ interface Props {
 }
 
 export const MainInfoStep: React.FC<Props> = ({ form }) => {
-  const shortDescriptionLength = 120;
+  const shortDescriptionLength = 130;
   const descriptionLength = 1000;
 
   const shortDescValue = form.watch('shortDescription') || '';

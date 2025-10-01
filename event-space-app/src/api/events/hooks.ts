@@ -1,10 +1,11 @@
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Api } from '@/api/api-client.ts';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
+import { EVENTS_KEYS } from '@/api/events/keys.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -30,3 +31,10 @@ export const useEventCreate = () => {
     }
   });
 };
+
+export const useActualEvents = () => {
+  return useQuery({
+    queryFn: Api.events.getActualEvents,
+    queryKey: EVENTS_KEYS.actual
+  })
+}

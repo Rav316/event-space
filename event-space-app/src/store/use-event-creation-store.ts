@@ -20,7 +20,6 @@ export const useEventCreationStore = create<EventCreationStore>()(
     immer((set) => ({
       event: {
         name: '',
-        tags: [],
         eventDate: getTodayDate(),
         startTime: '',
         endTime: '',

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Badge } from '@/components/ui';
-import { colorMap } from '@/constants/category-colors.ts';
+import { categoryColors } from '@/constants/category-colors.ts';
 import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
 
 interface Props {
   text: string;
-  color: keyof typeof colorMap;
+  color: keyof typeof categoryColors;
   count: number;
   isResult?: boolean;
 }
@@ -39,7 +39,7 @@ export const EventCategory: React.FC<Props> = ({
       )}
     >
       <Badge
-        className={cn(colorMap[color], { 'border border-[#E5E5E5]': isResult })}
+        className={cn(categoryColors[color], { 'border border-[#E5E5E5]': isResult })}
       >
         {text}
       </Badge>
