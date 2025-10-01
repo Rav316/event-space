@@ -2,39 +2,39 @@ import { EventCategory } from '@/components/shared/event-category.tsx';
 
 const categories: {
   text: string;
-  color: string;
+  color: number;
   count: number;
   isResult?: boolean;
 }[] = [
   {
     text: 'IT-секции',
-    color: 'orange',
+    color: 0,
     count: 3,
   },
   {
     text: 'Культурные',
-    color: 'purple',
+    color: 1,
     count: 2,
   },
   {
     text: 'Учебные',
-    color: 'blue',
+    color: 2,
     count: 3,
   },
   {
     text: 'Спортивные',
-    color: 'green',
+    color: 3,
     count: 2,
   },
   {
     text: 'Социальные',
-    color: 'pink',
+    color: 4,
     count: 2,
   },
   {
     text: 'Всего',
     count: 12,
-    color: 'gray',
+    color: 5,
     isResult: true,
   },
 ];

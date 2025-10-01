@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 interface Props {
   text: string;
-  color: keyof typeof categoryColors;
+  color: number;
   count: number;
   isResult?: boolean;
 }

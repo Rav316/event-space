@@ -23,7 +23,7 @@ const EventsPage = () => {
         </div>
         <EventFilters/>
         <span className={'text-muted-foreground text-sm'}>Найдено 12 из 12 мероприятий</span>
-        <EventGroup/>
+        <EventGroup events={[]}/>
         <EventsPagination/>
       </div>
     </Wrapper>

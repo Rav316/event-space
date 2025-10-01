@@ -1,9 +1,10 @@
 import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import { Calendar, Clock4, MapPin, QrCode, Share2, Users } from 'lucide-react';
+import { Calendar, Clock4, Lock, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import type { EventCategory } from '@/api/event-categories/model.ts';
+import { useMe } from '@/api/auth/hooks.ts';
 
 interface Props {
   imageUrl: string;
@@ -32,6 +33,8 @@ export const EventCard: React.FC<Props> = ({
   author,
   category,
 }) => {
+  const {data} = useMe();
+
   return (
     <div
       className={
@@ -72,7 +75,7 @@ export const EventCard: React.FC<Props> = ({
       <div className={'flex flex-col p-[21px]'}>
         <div className={'pb-[21px] flex flex-col gap-y-3'}>
           <span className={'font-medium'}>{title}</span>
-          <p className={'text-muted-foreground line-clamp-2'}>{description}</p>
+          <p className={'text-muted-foreground line-clamp-2 min-h-[48px]'}>{description}</p>
           <div className={'flex flex-col gap-y-2'}>
             <div
               className={
@@ -104,7 +107,14 @@ export const EventCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        <Button>Зарегистрироваться</Button>
+        {data ? (
+          <Button>Зарегистрироваться</Button>
+        ) : (
+          <Button variant={'outline'}>
+            <Lock/>
+            Войти для регистрации
+          </Button>
+        )}
       </div>
     </div>
   );
