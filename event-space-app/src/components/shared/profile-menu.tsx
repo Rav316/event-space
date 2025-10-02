@@ -10,11 +10,7 @@ import {
 } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
-import { queryClient } from '@/api/query-client.ts';
-import { useAuthStore } from '@/store/use-auth-store.ts';
-import { toast } from 'sonner';
-import { useMe } from '@/api/auth/hooks.ts';
-import { useNavigate } from 'react-router';
+import { useLogout, useMe } from '@/api/auth/hooks.ts';
 
 interface Props {
   className?: string;
@@ -22,17 +18,7 @@ interface Props {
 
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
   const {data} = useMe();
-  const removeToken = useAuthStore(state => state.removeToken);
-  const navigate = useNavigate();
-
-  const onClickLogout = () => {
-    navigate('/', {replace: true});
-    setTimeout(() => {
-      removeToken();
-      queryClient.clear();
-    }, 100);
-    toast.success('Вы успешно вышли из системы');
-  }
+  const logoutMutation = useLogout();
 
   return (
     <div className={cn(className, 'flex items-center')}>
@@ -62,7 +48,7 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             <Settings/>
             Настройки
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={onClickLogout}>
+          <DropdownMenuItem onClick={() => logoutMutation.mutate()}>
             <LogOut/>
             Выйти
           </DropdownMenuItem>

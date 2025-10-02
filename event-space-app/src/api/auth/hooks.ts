@@ -57,6 +57,27 @@ export const useLogin = () => {
   })
 }
 
+export const useLogout = () => {
+  const removeToken = useAuthStore((state) => state.removeToken);
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: Api.auth.logout,
+    onSuccess: () => {
+      navigate('/', {replace: true});
+      setTimeout(() => {
+        removeToken();
+        queryClient.clear();
+      }, 100);
+      toast.success('Вы успешно вышли из системы');
+    },
+    onError: (error) => {
+      if(error instanceof AxiosError) {
+        toast.error('Произошла ошибка при выходе из системы');
+      }
+    }
+  })
+}
+
 export const useMe = () => {
   const token = useAuthStore((s) => s.token);
 

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
+import type { EventFilter } from '@/api/events/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -36,5 +37,12 @@ export const useActualEvents = () => {
   return useQuery({
     queryFn: Api.events.getActualEvents,
     queryKey: EVENTS_KEYS.actual
+  })
+}
+
+export const useEvents = (filter: EventFilter) => {
+  return useQuery({
+    queryFn: () => Api.events.findAllByFilter(filter),
+    queryKey: EVENTS_KEYS.filters(filter)
   })
 }

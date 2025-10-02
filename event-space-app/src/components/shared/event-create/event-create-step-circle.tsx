@@ -1,14 +1,14 @@
 import React from 'react';
 import { Check, type LucideProps } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
-import type { eventCreateStepType } from '@/types/event-create-step-type.ts';
+import type { EventCreateStep } from '@/types/event-create-step.ts';
 
 interface Props {
   Icon: React.ForwardRefExoticComponent<
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
   text: string;
-  variant?: eventCreateStepType;
+  variant?: EventCreateStep;
 }
 
 export const EventCreateStepCircle: React.FC<Props> = ({

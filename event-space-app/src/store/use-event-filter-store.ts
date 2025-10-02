@@ -1,25 +1,27 @@
+import type { EventFilter } from '@/api/events/model.ts';
 import { create } from 'zustand';
-import type { SpaceFilter } from '@/api/spaces/model.ts';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface SpaceFilterStore {
-  filter: SpaceFilter;
-  setFilter: (filterData: Partial<SpaceFilter>) => void;
+interface EventFilterStore {
+  filter: EventFilter;
+  setFilter: (filterData: Partial<EventFilter>) => void;
 }
 
-export const useSpaceFilterStore = create<SpaceFilterStore>()(
+export const useEventFilterStore = create<EventFilterStore>()(
   devtools(
     immer((set) => ({
       filter: {
         name: '',
-        building: 0,
+        categories: [],
+        tags: [],
+        page: 0
       },
       setFilter: (filterData) =>
         set((state) => {
           Object.assign(state.filter, filterData);
         }, false, 'setFilter'),
     })),
-    { name: 'spaceFilterStore' },
+    { name: 'eventFilterStore' },
   ),
 );

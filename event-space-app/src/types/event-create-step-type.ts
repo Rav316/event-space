@@ -1,1 +1,0 @@
-export type eventCreateStepType = 'default' | 'active' | 'completed';

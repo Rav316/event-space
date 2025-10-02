@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
 
     const isRefreshRequest = originalRequest.url?.includes('refresh-token');
 
-    if ((error.response?.status === 401 || error.response?.status === 410) && !originalRequest._retry) {
+    if (authStore.token && (error.response?.status === 401 || error.response?.status === 410) && !originalRequest._retry) {
       if (isRefreshRequest) {
         authStore.removeToken();
         return Promise.reject(error);

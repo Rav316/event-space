@@ -2,7 +2,7 @@ import { Progress } from '@/components/ui';
 import { EventCreateStepCircle } from '@/components/shared/event-create/event-create-step-circle.tsx';
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
-import type { eventCreateStepType } from '@/types/event-create-step-type.ts';
+import type { EventCreateStep } from '@/types/event-create-step.ts';
 import { eventCreateSteps } from '@/constants/event-create-steps.ts';
 
 interface Props {
@@ -40,7 +40,7 @@ export const EventCreateStepper: React.FC<Props> = ({ currentStep }) => {
                 active: currentStep === index,
                 completed: currentStep > index,
                 default: currentStep < index,
-              }) as eventCreateStepType
+              }) as EventCreateStep
             }
           />
         ))}
