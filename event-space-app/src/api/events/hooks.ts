@@ -40,7 +40,7 @@ export const useActualEvents = () => {
   })
 }
 
-export const useEvents = (filter: EventFilter) => {
+export const useEventsByFilter = (filter: EventFilter) => {
   return useQuery({
     queryFn: () => Api.events.findAllByFilter(filter),
     queryKey: EVENTS_KEYS.filters(filter)

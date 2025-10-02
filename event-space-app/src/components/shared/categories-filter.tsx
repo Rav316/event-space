@@ -5,34 +5,14 @@ import {
   Label,
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger, Skeleton
 } from '@/components/ui';
 import { ChevronDown, Funnel } from 'lucide-react';
-
-const categories: { text: string; count: number }[] = [
-  {
-    text: 'IT-секции',
-    count: 3,
-  },
-  {
-    text: 'Культурные',
-    count: 2,
-  },
-  {
-    text: 'Учебные',
-    count: 3,
-  },
-  {
-    text: 'Спортивные',
-    count: 2,
-  },
-  {
-    text: 'Социальные',
-    count: 1,
-  },
-];
+import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
 
 export const CategoriesFilter = () => {
+  const { data, isPending } = useEventCategoriesWithEventCount();
+
   return (
     <Popover>
       <PopoverTrigger asChild={true}>
@@ -42,22 +22,37 @@ export const CategoriesFilter = () => {
           <ChevronDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align={'start'} >
+      <PopoverContent align={'start'}>
         <div className={'flex flex-col gap-y-5 2xl:gap-y-2 lg:gap-y-4'}>
           <h4 className={'font-medium'}>Выберите категории</h4>
-          {categories.map((category, index) => (
-            <div key={index} className={'flex items-center justify-between'}>
-              <div className={'flex justify-between items-center gap-2 w-full'}>
-                <div className={'flex items-center gap-2'}>
-                  <Checkbox id={category.text} />
-                  <Label htmlFor={category.text}>{category.text}</Label>
+          {isPending ? (
+            <>
+              {Array.from({length: 5}).map((_, index) => ((
+                <Skeleton key={index} className={'w-full h-[22px]'}/>
+              )))}
+            </>
+          ) : (
+            <>
+              {data?.map((category) => (
+                <div
+                  key={category.id}
+                  className={'flex items-center justify-between'}
+                >
+                  <div
+                    className={'flex justify-between items-center gap-2 w-full'}
+                  >
+                    <div className={'flex items-center gap-2'}>
+                      <Checkbox id={category.name} />
+                      <Label htmlFor={category.name}>{category.name}</Label>
+                    </div>
+                    <Badge variant={'outline'} className={'text-xs'}>
+                      {category.eventCount}
+                    </Badge>
+                  </div>
                 </div>
-                <Badge variant={'outline'} className={'text-xs'}>
-                  {category.count}
-                </Badge>
-              </div>
-            </div>
-          ))}
+              ))}
+            </>
+          )}
         </div>
       </PopoverContent>
     </Popover>

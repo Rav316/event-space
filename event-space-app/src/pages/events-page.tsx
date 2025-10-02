@@ -6,13 +6,14 @@ import {
   SearchInput,
 } from '@/components/shared';
 import { EventFilters } from '@/components/shared/event-filters.tsx';
-import { useEvents } from '@/api/events/hooks.ts';
+import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 
 const EventsPage = () => {
   const eventFilter = useEventFilterStore((state) => state.filter);
 
-  const {data, isPending} = useEvents(eventFilter);
+  const { data: events, isPending: isEventsPending } =
+    useEventsByFilter(eventFilter);
 
   return (
     <Wrapper>
@@ -34,7 +35,10 @@ const EventsPage = () => {
         <span className={'text-muted-foreground text-sm'}>
           Найдено 12 из 12 мероприятий
         </span>
-        <EventGroup isLoading={isPending} events={data?.content || []} />
+        <EventGroup
+          isLoading={isEventsPending}
+          events={events?.content || []}
+        />
         <EventsPagination />
       </div>
     </Wrapper>

@@ -5,21 +5,21 @@ import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
 
 interface Props {
+  id: number;
   text: string;
-  color: number;
   count: number;
   isResult?: boolean;
 }
 
 export const EventCategory: React.FC<Props> = ({
+  id,
   text,
-  color,
   count,
   isResult,
 }) => {
   const [selected, setSelected] = useState(false);
 
-  const clickable = !isResult; // результат нельзя нажимать
+  const clickable = !isResult;
 
   return (
     <div
@@ -39,7 +39,7 @@ export const EventCategory: React.FC<Props> = ({
       )}
     >
       <Badge
-        className={cn(categoryColors[color], { 'border border-[#E5E5E5]': isResult })}
+        className={cn(categoryColors[id - 1], { 'border border-[#E5E5E5]': isResult })}
       >
         {text}
       </Badge>

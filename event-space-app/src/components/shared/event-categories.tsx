@@ -1,60 +1,40 @@
 import { EventCategory } from '@/components/shared/event-category.tsx';
-
-const categories: {
-  text: string;
-  color: number;
-  count: number;
-  isResult?: boolean;
-}[] = [
-  {
-    text: 'IT-секции',
-    color: 0,
-    count: 3,
-  },
-  {
-    text: 'Культурные',
-    color: 1,
-    count: 2,
-  },
-  {
-    text: 'Учебные',
-    color: 2,
-    count: 3,
-  },
-  {
-    text: 'Спортивные',
-    color: 3,
-    count: 2,
-  },
-  {
-    text: 'Социальные',
-    color: 4,
-    count: 2,
-  },
-  {
-    text: 'Всего',
-    count: 12,
-    color: 5,
-    isResult: true,
-  },
-];
+import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
+import { Skeleton } from '@/components/ui';
 
 export const EventCategories = () => {
+  const { data, isPending } = useEventCategoriesWithEventCount();
+
   return (
     <div
       className={
         'grid grid-cols-6 max-[1000px]:grid-cols-3 max-[460px]:grid-cols-2 gap-2'
       }
     >
-      {categories.map((category, index) => (
-        <EventCategory
-          key={index}
-          text={category.text}
-          count={category.count}
-          color={category.color}
-          isResult={category.isResult}
-        />
-      ))}
+      {isPending ? (
+        Array.from({ length: 6 }).map((_, index) => (
+          <Skeleton key={index} className={'w-full h-[134px]'} />
+        ))
+      ) : (
+        <>
+          {data?.map((category) => (
+            <EventCategory
+              key={category.id}
+              id={category.id}
+              text={category.name}
+              count={category.eventCount}
+            />
+          ))}
+          <EventCategory
+            id={0}
+            text={'Все'}
+            count={
+              data?.reduce((acc, category) => acc + category.eventCount, 0) || 0
+            }
+            isResult={true}
+          />
+        </>
+      )}
     </div>
   );
 };

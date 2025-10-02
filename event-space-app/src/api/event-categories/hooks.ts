@@ -8,3 +8,10 @@ export const useEventCategories = () => {
     queryKey: EVENT_CATEGORIES_KEYS.all
   })
 }
+
+export const useEventCategoriesWithEventCount = () => {
+  return useQuery({
+    queryFn: Api.eventCategories.findAllWithEventCount,
+    queryKey: EVENT_CATEGORIES_KEYS.withEventCount
+  })
+}
