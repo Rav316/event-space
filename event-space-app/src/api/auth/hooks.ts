@@ -8,10 +8,17 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
+import {
+  showLogoutError,
+  showLogoutLoading,
+  showLogoutSuccess,
+} from '@/components/shared/toast-logout';
 
 export const useRegistration = () => {
-  const setToken = useAuthStore(state => state.setToken);
-  const resetRegistrationData = useRegistrationStore(state => state.resetRegistrationData);
+  const setToken = useAuthStore((state) => state.setToken);
+  const resetRegistrationData = useRegistrationStore(
+    (state) => state.resetRegistrationData,
+  );
   const navigate = useNavigate();
   return useMutation({
     mutationFn: Api.auth.register,
@@ -23,60 +30,71 @@ export const useRegistration = () => {
       resetRegistrationData();
     },
     onError: (error) => {
-      if(error instanceof AxiosError) {
-        if(error.response?.status === 409) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
           toast.error('Пользователь с таким email уже существует');
         } else {
           toast.error('Произошла ошибка при регистрации');
         }
       }
-    }
-  })
-}
+    },
+  });
+};
 
 export const useLogin = () => {
-  const setToken = useAuthStore(state => state.setToken);
-  const setAuthModalOpen = useAuthModalStore(state => state.setIsOpen);
+  const setToken = useAuthStore((state) => state.setToken);
+  const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
   return useMutation({
     mutationFn: Api.auth.login,
     onSuccess: (data) => {
-      setAuthModalOpen(false)
+      setAuthModalOpen(false);
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);
     },
     onError: (error) => {
-      if(error instanceof AxiosError) {
-        if(error.response?.status === 403) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
           toast.error('Неверный email или пароль');
         } else {
           toast.error('Произошла ошибка при входе в систему');
         }
       }
-    }
-  })
-}
+    },
+  });
+};
 
 export const useLogout = () => {
   const removeToken = useAuthStore((state) => state.removeToken);
   const navigate = useNavigate();
   return useMutation({
     mutationFn: Api.auth.logout,
-    onSuccess: () => {
-      navigate('/', {replace: true});
+
+    onMutate: () => {
+      const toastId = showLogoutLoading();
+      return { toastId };
+    },
+
+    onSuccess: (_, __, context) => {
+      if (context?.toastId) toast.dismiss(context.toastId);
+
+      navigate('/', { replace: true });
       setTimeout(() => {
         removeToken();
         queryClient.clear();
       }, 100);
-      toast.success('Вы успешно вышли из системы');
+
+      showLogoutSuccess();
     },
-    onError: (error) => {
-      if(error instanceof AxiosError) {
-        toast.error('Произошла ошибка при выходе из системы');
+
+    onError: (error, _, context) => {
+      if (context?.toastId) toast.dismiss(context.toastId);
+      if (error instanceof AxiosError) {
+        showLogoutError();
       }
-    }
-  })
-}
+    },
+  });
+};
 
 export const useMe = () => {
   const token = useAuthStore((s) => s.token);
@@ -87,6 +105,6 @@ export const useMe = () => {
     retry: false,
     queryKey: AUTH_KEYS.me,
     queryFn: Api.auth.refreshToken,
-    staleTime: Infinity
-  })
-}
+    staleTime: Infinity,
+  });
+};

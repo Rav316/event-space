@@ -22,3 +22,4 @@ export {SpaceFilters} from './space-filters';
 export {SpaceList} from './space-list';
 export {SpaceItem} from './space-item';
 export {SpacesNotFound} from './spaces-not-found';
+export * as toastLogout from './toast-logout';
