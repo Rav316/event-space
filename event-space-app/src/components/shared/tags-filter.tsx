@@ -42,7 +42,7 @@ export const TagsFilter = () => {
       <PopoverContent align={'start'} collisionPadding={20} onOpenAutoFocus={(e) => e.preventDefault()}>
         <div className={'flex flex-col gap-y-5'}>
           <h4 className={'font-medium'}>Добавить теги для поиска</h4>
-          <Input placeholder={'Введите тег'} onKeyDown={handleKeyPress} />
+          <Input maxLength={10} placeholder={'Введите тег'} onKeyDown={handleKeyPress} />
           {tags.length !== 0 && (
             <div className={'flex flex-col gap-y-4'}>
               <div className={'flex justify-between items-center'}>

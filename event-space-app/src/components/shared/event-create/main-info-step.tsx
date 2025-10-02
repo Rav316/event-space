@@ -144,6 +144,7 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyDown={onInputTagEnterPress}
+                maxLength={10}
               />
               <Button type={'button'} variant={'outline'} onClick={addTag}>
                 <Hash />
