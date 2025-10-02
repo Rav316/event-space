@@ -25,6 +25,10 @@ public class Event {
     private String name;
 
     @Type(StringArrayType.class)
+    @Column(
+            name = "tags",
+            columnDefinition = "text[]"
+    )
     private String[] tags;
 
     @Column(name = "event_date")

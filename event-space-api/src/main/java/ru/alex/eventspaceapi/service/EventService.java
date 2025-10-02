@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import ru.alex.eventspaceapi.database.repository.SpaceRepository;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
+import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
@@ -38,6 +40,11 @@ public class EventService {
     private final EventCategoryRepository eventCategoryRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
     private final EventListMapper eventListMapper;
+
+    public Page<EventListDto> findAllByFilter(EventFilter filter) {
+        return eventRepository.findAllEventsByFilter(filter)
+                .map(eventListMapper::toDto);
+    }
 
     public List<EventListDto> getActualEvents() {
         return eventRepository.getActualEvents(PageRequest.of(0, 6))

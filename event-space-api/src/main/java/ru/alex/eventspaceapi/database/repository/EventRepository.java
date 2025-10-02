@@ -9,7 +9,7 @@ import ru.alex.eventspaceapi.database.entity.Event;
 import java.util.List;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Integer> {
+public interface EventRepository extends JpaRepository<Event, Integer>, EventRepositoryCustom {
     @Query("""
         SELECT e FROM Event e
         LEFT JOIN FETCH e.category c
