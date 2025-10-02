@@ -10,14 +10,18 @@ public abstract class FilterBase extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
 
-        if (requestURI.startsWith("/api/auth") ||
+        if (requestURI.equals("/api/auth/register") ||
+                requestURI.equals("/api/auth/login") ||
+                requestURI.equals("/api/auth/refresh-token") ||
                 requestURI.startsWith("/swagger-ui") ||
                 requestURI.startsWith("/v3/api-docs")) {
             return true;
         }
 
         return method.equalsIgnoreCase(HttpMethod.GET.toString()) && (
-                requestURI.startsWith("/api/faculties") || requestURI.startsWith("/api/users/exists-by-email")
+                requestURI.startsWith("/api/faculties") ||
+                        requestURI.startsWith("/api/users/exists-by-email") ||
+                        requestURI.startsWith("/api/events")
         );
     }
 }

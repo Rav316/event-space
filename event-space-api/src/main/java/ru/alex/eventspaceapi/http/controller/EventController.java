@@ -1,7 +1,6 @@
 package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(
+    public ResponseEntity<Void> create(
             @Validated @RequestPart("event")  EventCreateDto eventCreateDto,
             @RequestPart("image") MultipartFile image
     ) {

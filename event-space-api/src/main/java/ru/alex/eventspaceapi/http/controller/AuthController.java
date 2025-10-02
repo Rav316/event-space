@@ -60,11 +60,26 @@ public class AuthController {
                 .body(authResponse);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, deleteTokenCookie().toString())
+                .build();
+    }
+
     private ResponseCookie createTokenCookie(String refreshToken) {
         return ResponseCookie.from("token", refreshToken)
                 .httpOnly(true)
                 .path("/api/auth")
                 .maxAge(refreshTokenExpirationTime / 1000)
+                .build();
+    }
+
+    private ResponseCookie deleteTokenCookie() {
+        return ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .path("/api/auth")
+                .maxAge(0)
                 .build();
     }
 }
