@@ -3,13 +3,13 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface RegistrationStore {
+interface RegistrationState {
   registrationData: UserRegisterDto;
   setRegistrationData: (data: Partial<UserRegisterDto>) => void;
   resetRegistrationData: () => void;
 }
 
-export const useRegistrationStore = create<RegistrationStore>()(
+export const useRegistrationStore = create<RegistrationState>()(
   devtools(
     immer((set) => ({
       registrationData: {

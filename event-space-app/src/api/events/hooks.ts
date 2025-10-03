@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
-import type { EventFilter } from '@/api/events/model.ts';
+import type { EventRequestData } from '@/api/events/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -40,9 +40,10 @@ export const useActualEvents = () => {
   })
 }
 
-export const useEventsByFilter = (filter: EventFilter) => {
+export const useEventsByFilter = (eventRequestData: EventRequestData) => {
   return useQuery({
-    queryFn: () => Api.events.findAllByFilter(filter),
-    queryKey: EVENTS_KEYS.filters(filter)
+    queryFn: () => Api.events.findAllByFilter(eventRequestData),
+    queryKey: EVENTS_KEYS.filters(eventRequestData),
+    refetchOnWindowFocus: false
   })
 }

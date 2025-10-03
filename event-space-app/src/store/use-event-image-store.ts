@@ -2,14 +2,14 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface EventImageStore {
+interface EventImageState {
   file: File | null;
   previewUrl: string | null;
   setFile: (file: File) => void;
   clearImage: () => void;
 }
 
-export const useEventImageStore = create<EventImageStore>()(
+export const useEventImageStore = create<EventImageState>()(
   devtools(
     immer((set) => ({
       file: null,

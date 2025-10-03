@@ -15,7 +15,6 @@ export const EventGroup: React.FC<Props> = ({
   events,
   isLoading,
 }) => {
-  const staticUrl = import.meta.env.VITE_STATIC_URL;
 
   return (
     <div
@@ -27,7 +26,7 @@ export const EventGroup: React.FC<Props> = ({
       {isLoading ? (
         <>
           {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton key={index} className="h-[475px]" />
+            <Skeleton key={index} className="h-[475px] rounded-2xl" />
           ))}
         </>
       ) : (
@@ -35,7 +34,7 @@ export const EventGroup: React.FC<Props> = ({
           {events.map((event) => (
             <EventCard
               key={event.id}
-              imageUrl={`${staticUrl}/${event.imageUrl}`}
+              imageUrl={event.imageUrl}
               title={event.name}
               description={event.shortDescription}
               date={event.eventDate}

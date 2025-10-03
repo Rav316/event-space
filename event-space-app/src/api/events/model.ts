@@ -33,7 +33,7 @@ export interface EventListDto {
   name: string;
   category: EventCategory;
   shortDescription: string;
-  imageUrl: string;
+  imageUrl?: string;
   eventDate: string;
   startTime: string;
   endTime: string;
@@ -49,4 +49,9 @@ export interface EventFilter {
   hasPlaces?: boolean;
   sort?: EventSort;
   page?: number;
+}
+
+export interface EventRequestData {
+  filter: EventFilter;
+  page: number;
 }

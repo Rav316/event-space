@@ -4,7 +4,7 @@ import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { getTodayDate } from '@/utils/get-today-date.ts';
 
-interface EventCreationStore {
+interface EventCreationState {
   event: EventCreateDto;
   eventSteps: EventStep[];
   setEventData: (event: Partial<EventCreateDto>) => void;
@@ -15,7 +15,7 @@ interface EventCreationStore {
   resetEventSteps: () => void;
 }
 
-export const useEventCreationStore = create<EventCreationStore>()(
+export const useEventCreationStore = create<EventCreationState>()(
   devtools(
     immer((set) => ({
       event: {

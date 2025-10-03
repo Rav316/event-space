@@ -8,12 +8,43 @@ import {
 import { EventFilters } from '@/components/shared/event-filters.tsx';
 import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
+import { useEffect, useRef } from 'react';
+import { usePaginationStore } from '@/store/use-pagination-store.ts';
+import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
+import { Skeleton } from '@/components/ui';
 
 const EventsPage = () => {
   const eventFilter = useEventFilterStore((state) => state.filter);
+  const currentPage = usePaginationStore((state) => state.page);
+  const totalPages = usePaginationStore((state) => state.totalPages);
+  const setCurrentPage = usePaginationStore((state) => state.setPage);
+  const setTotalPages = usePaginationStore((state) => state.setTotalPages);
+  const { data: eventCategories, isPending: isEventCategoriesPending } = useEventCategoriesWithEventCount();
 
-  const { data: events, isPending: isEventsPending } =
-    useEventsByFilter(eventFilter);
+  const { data: events, isPending: isEventsPending } = useEventsByFilter({
+    filter: { ...eventFilter },
+    page: currentPage,
+  });
+
+  const foundDivRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (foundDivRef.current) {
+      foundDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [eventFilter, setCurrentPage]);
+
+  useEffect(() => {
+    if (!isEventsPending && events) {
+      setTotalPages(
+        Math.ceil(events.metadata.totalElements / events.metadata.size),
+      );
+    }
+  }, [events, isEventsPending, setTotalPages]);
 
   return (
     <Wrapper>
@@ -23,7 +54,7 @@ const EventsPage = () => {
           <span>Найдите интересные события и зарегистрируйтесь на участие</span>
         </div>
         <EventCategories />
-        <div className={'flex flex-col gap-y-2 leading-4'}>
+        <div className={'flex flex-col gap-y-2 leading-4'} ref={foundDivRef}>
           <span className={'font-medium'}>
             Поиск мероприятий по названию, описанию или автору...
           </span>
@@ -32,14 +63,27 @@ const EventsPage = () => {
           </div>
         </div>
         <EventFilters />
-        <span className={'text-muted-foreground text-sm'}>
-          Найдено 12 из 12 мероприятий
+        {isEventCategoriesPending || isEventsPending ? (
+          <Skeleton className={'h-[20px] w-[220px]'}/>
+          ) : (
+          <span className={'text-muted-foreground text-sm'}>
+          Найдено {events?.metadata.totalElements} из{' '}
+            {eventCategories?.reduce(
+              (acc, category) => acc + category.eventCount,
+              0,
+            )}{' '}
+            мероприятий
         </span>
+        )}
         <EventGroup
           isLoading={isEventsPending}
           events={events?.content || []}
         />
-        <EventsPagination />
+        <EventsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </Wrapper>
   );

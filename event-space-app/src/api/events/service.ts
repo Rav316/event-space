@@ -1,7 +1,6 @@
 import type {
   EventCreateData,
-  EventFilter,
-  EventListDto,
+  EventListDto, EventRequestData
 } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
@@ -23,11 +22,11 @@ export const create = async (data: EventCreateData): Promise<void> => {
 };
 
 export const findAllByFilter = async (
-  filter: EventFilter,
+  requestData: EventRequestData,
 ): Promise<PageResponse<EventListDto>> => {
   const response = await axiosInstance.get<PageResponse<EventListDto>>(
     ApiRoutes.EVENTS,
-    { params: filter },
+    { params: requestData },
   );
   return response.data;
 };

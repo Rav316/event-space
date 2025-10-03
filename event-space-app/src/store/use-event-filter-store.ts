@@ -3,12 +3,12 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface EventFilterStore {
+interface EventFilterState {
   filter: EventFilter;
   setFilter: (filterData: Partial<EventFilter>) => void;
 }
 
-export const useEventFilterStore = create<EventFilterStore>()(
+export const useEventFilterStore = create<EventFilterState>()(
   devtools(
     immer((set) => ({
       filter: {

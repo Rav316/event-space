@@ -1,13 +1,22 @@
 import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import { Calendar, Clock4, Lock, MapPin, QrCode, Share2, Users } from 'lucide-react';
+import {
+  Calendar,
+  Clock4,
+  Lock,
+  MapPin,
+  QrCode,
+  Share2,
+  Users,
+} from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import type { EventCategory } from '@/api/event-categories/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
+import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 interface Props {
-  imageUrl: string;
+  imageUrl?: string;
   title: string;
   description: string;
   date: string;
@@ -33,16 +42,20 @@ export const EventCard: React.FC<Props> = ({
   author,
   category,
 }) => {
-  const {data} = useMe();
+  const staticUrl = import.meta.env.VITE_STATIC_URL;
+  const { data } = useMe();
+  const setIsOpenAuthModal = useAuthModalStore((state) => state.setIsOpen);
 
   return (
     <div
       className={
-        'group relative min-h-[350px] flex flex-col rounded-3xl border border-[#E5E5E5] shadow-md hover:translate-y-[-3px] transition-all duration-300 hover:shadow-lg'
+        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md hover:translate-y-[-3px] transition-all duration-300 hover:shadow-lg'
       }
     >
       <div className="absolute z-10 top-3 left-3">
-        <Badge className={categoryColors[category.id - 1]}>{category.name}</Badge>
+        <Badge className={categoryColors[category.id - 1]}>
+          {category.name}
+        </Badge>
       </div>
 
       <div className={'absolute z-10 top-3 right-3 flex space-x-2'}>
@@ -64,10 +77,14 @@ export const EventCard: React.FC<Props> = ({
         </Button>
       </div>
 
-      <div className="overflow-hidden rounded-t-lg">
+      <div className="overflow-hidden rounded-t-2xl">
         <img
           className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-          src={imageUrl}
+          src={
+            imageUrl
+              ? `${staticUrl}/${imageUrl}`
+              : `https://placehold.co/142?text=${title}`
+          }
           alt="event example image"
         />
       </div>
@@ -75,7 +92,9 @@ export const EventCard: React.FC<Props> = ({
       <div className={'flex flex-col p-[21px]'}>
         <div className={'pb-[21px] flex flex-col gap-y-3'}>
           <span className={'font-medium'}>{title}</span>
-          <p className={'text-muted-foreground line-clamp-2 min-h-[48px]'}>{description}</p>
+          <p className={'text-muted-foreground line-clamp-2 min-h-[48px]'}>
+            {description}
+          </p>
           <div className={'flex flex-col gap-y-2'}>
             <div
               className={
@@ -110,8 +129,8 @@ export const EventCard: React.FC<Props> = ({
         {data ? (
           <Button>Зарегистрироваться</Button>
         ) : (
-          <Button variant={'outline'}>
-            <Lock/>
+          <Button variant={'outline'} onClick={() => setIsOpenAuthModal(true)}>
+            <Lock />
             Войти для регистрации
           </Button>
         )}

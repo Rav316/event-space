@@ -1,16 +1,32 @@
 import { Button } from '@/components/ui';
-import { useState } from 'react';
+import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export const EventsPagination = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 5;
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+export const EventsPagination: React.FC<Props> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
+  const maxVisible = 5;
+
+  let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
+  let end = start + maxVisible - 1;
+
+  if (end >= totalPages) {
+    end = totalPages - 1;
+    start = Math.max(0, end - maxVisible + 1);
+  }
+
+  const visiblePages = Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i,
+  );
 
   return (
     <div className={'flex justify-center mt-8'}>
@@ -18,30 +34,30 @@ export const EventsPagination = () => {
         <Button
           variant={'outline'}
           size={'sm'}
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 0}
+          onClick={() => onPageChange(currentPage - 1)}
         >
           <ChevronLeft />
           <span className={'max-[528px]:hidden'}>{'Предыдущая'}</span>
         </Button>
 
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {visiblePages.map((page) => (
           <Button
             key={page}
             variant={currentPage === page ? 'default' : 'outline'}
             size={'sm'}
-            onClick={() => handlePageChange(page)}
+            onClick={() => onPageChange(page)}
             className={'border'}
           >
-            {page}
+            {page + 1}
           </Button>
         ))}
 
         <Button
           variant={'outline'}
           size={'sm'}
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages - 1}
+          onClick={() => onPageChange(currentPage + 1)}
         >
           <span className={'max-[528px]:hidden'}>{'Следующая'}</span>
           <ChevronRight />

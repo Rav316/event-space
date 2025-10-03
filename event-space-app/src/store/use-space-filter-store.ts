@@ -3,12 +3,12 @@ import type { SpaceFilter } from '@/api/spaces/model.ts';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface SpaceFilterStore {
+interface SpaceFilterState {
   filter: SpaceFilter;
   setFilter: (filterData: Partial<SpaceFilter>) => void;
 }
 
-export const useSpaceFilterStore = create<SpaceFilterStore>()(
+export const useSpaceFilterStore = create<SpaceFilterState>()(
   devtools(
     immer((set) => ({
       filter: {

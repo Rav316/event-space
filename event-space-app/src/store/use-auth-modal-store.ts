@@ -2,12 +2,12 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface AuthModal {
+interface AuthModalState {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export const useAuthModalStore = create<AuthModal>()(
+export const useAuthModalStore = create<AuthModalState>()(
   devtools(
     immer((set) => ({
       isOpen: false,

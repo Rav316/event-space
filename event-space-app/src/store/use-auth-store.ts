@@ -2,13 +2,13 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface AuthStore {
+interface AuthState {
   token: string | null;
   setToken: (token: string) => void;
   removeToken: () => void;
 }
 
-export const useAuthStore = create<AuthStore>()(
+export const useAuthStore = create<AuthState>()(
   devtools(
     immer((set) => ({
       token: localStorage.getItem('token'),
