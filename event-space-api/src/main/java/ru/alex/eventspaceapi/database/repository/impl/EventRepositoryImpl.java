@@ -42,7 +42,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .where(predicate)
                 .orderBy(getSortOrder(filter))
                 .limit(pageSize)
-                .offset(page)
+                .offset((long) page * pageSize)
                 .fetch();
 
         Long total = queryFactory
