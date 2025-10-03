@@ -8,7 +8,7 @@ export const EventCategories = () => {
   return (
     <div
       className={
-        'grid grid-cols-6 max-[1000px]:grid-cols-3 max-[460px]:grid-cols-2 gap-2'
+        'grid grid-cols-6 max-[1000px]:grid-cols-3 max-[460px]:grid-cols-3 gap-2'
       }
     >
       {isPending ? (

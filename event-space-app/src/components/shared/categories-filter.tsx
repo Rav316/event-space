@@ -1,21 +1,19 @@
 import {
-  Badge,
   Button,
-  Checkbox,
-  Label,
   Popover,
   PopoverContent,
   PopoverTrigger, Skeleton
 } from '@/components/ui';
 import { ChevronDown, Funnel } from 'lucide-react';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
+import { CategoryCheckbox } from '@/components/shared/category-checkbox.tsx';
 
 export const CategoriesFilter = () => {
   const { data, isPending } = useEventCategoriesWithEventCount();
 
   return (
     <Popover>
-      <PopoverTrigger asChild={true}>
+      <PopoverTrigger asChild>
         <Button variant={'outline'} className={'max-[563px]:flex-1'}>
           <Funnel />
           <span>Категории</span>
@@ -27,29 +25,19 @@ export const CategoriesFilter = () => {
           <h4 className={'font-medium'}>Выберите категории</h4>
           {isPending ? (
             <>
-              {Array.from({length: 5}).map((_, index) => ((
-                <Skeleton key={index} className={'w-full h-[22px]'}/>
-              )))}
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton key={index} className={'w-full h-[22px]'} />
+              ))}
             </>
           ) : (
             <>
               {data?.map((category) => (
-                <div
+                <CategoryCheckbox
                   key={category.id}
-                  className={'flex items-center justify-between'}
-                >
-                  <div
-                    className={'flex justify-between items-center gap-2 w-full'}
-                  >
-                    <div className={'flex items-center gap-2'}>
-                      <Checkbox id={category.name} />
-                      <Label htmlFor={category.name}>{category.name}</Label>
-                    </div>
-                    <Badge variant={'outline'} className={'text-xs'}>
-                      {category.eventCount}
-                    </Badge>
-                  </div>
-                </div>
+                  id={category.id}
+                  name={category.name}
+                  count={category.eventCount}
+                />
               ))}
             </>
           )}

@@ -26,7 +26,7 @@ export const findAllByFilter = async (
 ): Promise<PageResponse<EventListDto>> => {
   const response = await axiosInstance.get<PageResponse<EventListDto>>(
     ApiRoutes.EVENTS,
-    { params: requestData },
+    { params: {...requestData.filter, page: requestData.page} },
   );
   return response.data;
 };

@@ -7,7 +7,7 @@ import qs from 'qs';
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
-  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'comma' }),
+  paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
 });
 
 axiosInstance.interceptors.request.use((config) => {

@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui';
 import { ArrowRight, BellPlus, Calendar } from 'lucide-react';
 import { useActualEvents } from '@/api/events/hooks.ts';
+import { Link } from 'react-router';
 
 const MainPage = () => {
   const { data, isPending } = useActualEvents();
@@ -56,11 +57,13 @@ const MainPage = () => {
             'flex justify-center min-[528px]:items-center max-[528px]:flex-col gap-4 my-5'
           }
         >
-          <Button className={'h-[40px]'}>
-            <Calendar />
-            <span className={'font-medium'}>Смотреть все мероприятия</span>
-            <ArrowRight />
-          </Button>
+          <Link to={'/events'}>
+            <Button className={'h-[40px]'}>
+              <Calendar />
+              <span className={'font-medium'}>Смотреть все мероприятия</span>
+              <ArrowRight />
+            </Button>
+          </Link>
           <Button variant={'outline'} className={'h-[40px]'}>
             <BellPlus />
             <span>Подписаться на уведомления</span>

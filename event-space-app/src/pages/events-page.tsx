@@ -26,17 +26,23 @@ const EventsPage = () => {
     page: currentPage,
   });
 
-  const foundDivRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
+  if (isFirstRender.current) {
+    window.scrollTo(0, 0);
+    isFirstRender.current = false;
+  } else {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
 
   useEffect(() => {
-    if (foundDivRef.current) {
-      foundDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!isEventsPending) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [eventFilter, setCurrentPage]);
+  }, [currentPage, isEventsPending]);
 
   useEffect(() => {
     if (!isEventsPending && events) {
@@ -54,7 +60,7 @@ const EventsPage = () => {
           <span>Найдите интересные события и зарегистрируйтесь на участие</span>
         </div>
         <EventCategories />
-        <div className={'flex flex-col gap-y-2 leading-4'} ref={foundDivRef}>
+        <div className={'flex flex-col gap-y-2 leading-4'}>
           <span className={'font-medium'}>
             Поиск мероприятий по названию, описанию или автору...
           </span>
