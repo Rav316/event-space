@@ -6,29 +6,32 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui';
+import { useEventFilterStore } from '@/store/use-event-filter-store';
 import { Plus, X } from 'lucide-react';
-import { useState } from 'react';
 import * as React from 'react';
 
 export const TagsFilter = () => {
-  const [tags, setTags] = useState<string[]>([]);
+  const tags = useEventFilterStore((state) => state.filter.tags);
+  const addTag = useEventFilterStore((state) => state.addTag);
+  const removeTag = useEventFilterStore((state) => state.removeTag);
+  const setFilter = useEventFilterStore((state) => state.setFilter);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      const newTag = event.currentTarget.value;
-      if (tags.length < 5 && !tags.includes(newTag)) {
-        setTags([...tags, newTag]);
+      const newTag = event.currentTarget.value.trim();
+      if (newTag && tags.length < 5 && !tags.includes(newTag)) {
+        addTag(newTag);
         event.currentTarget.value = '';
       }
     }
   };
 
   const handleRemoveTag = (tag: string) => {
-    setTags(tags.filter((t) => t !== tag));
+    removeTag(tag);
   };
 
   const handleClearTags = () => {
-    setTags([]);
+    setFilter({ tags: [] });
   };
 
   return (
@@ -39,7 +42,11 @@ export const TagsFilter = () => {
           <span>Теги</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align={'start'} collisionPadding={20} onOpenAutoFocus={(e) => e.preventDefault()}>
+      <PopoverContent
+        align={'start'}
+        collisionPadding={20}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <div className={'flex flex-col gap-y-5'}>
           <h4 className={'font-medium'}>Добавить теги для поиска</h4>
           <Input maxLength={10} placeholder={'Введите тег'} onKeyDown={handleKeyPress} />

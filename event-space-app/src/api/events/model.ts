@@ -44,8 +44,8 @@ export interface EventListDto {
 
 export interface EventFilter {
   name?: string;
-  categories?: number[];
-  tags?: string[];
+  categories: number[];
+  tags: string[];
   hasPlaces?: boolean;
   sort?: EventSort;
   page?: number;
