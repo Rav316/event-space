@@ -47,3 +47,12 @@ export const useEventsByFilter = (eventRequestData: EventRequestData) => {
     refetchOnWindowFocus: false
   })
 }
+
+export const useTagsStartWith = (prefix: string) => {
+  return useQuery({
+    queryFn: () => Api.events.findTagsStartWith(prefix),
+    queryKey: EVENTS_KEYS.tags(prefix),
+    refetchOnWindowFocus: false,
+    enabled: !!prefix
+  })
+}

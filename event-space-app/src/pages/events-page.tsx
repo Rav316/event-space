@@ -39,10 +39,8 @@ const EventsPage = () => {
   }
 
   useEffect(() => {
-    if (!isEventsPending) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [currentPage, isEventsPending]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
   useEffect(() => {
     if (!isEventsPending && events) {

@@ -37,3 +37,8 @@ export const getActualEvents = async (): Promise<EventListDto[]> => {
   );
   return response.data;
 };
+
+export const findTagsStartWith = async (prefix: string): Promise<string[]> => {
+  const response = await axiosInstance.get<string[]>(`${ApiRoutes.EVENTS}/tags/${prefix}`);
+  return response.data;
+}
