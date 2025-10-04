@@ -20,4 +20,11 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
         ORDER BY e.eventDate ASC , e.startTime DESC
         """)
     List<Event> getActualEvents(Pageable pageable);
+
+    @Query(value = """
+        SELECT DISTINCT t
+        FROM event, unnest(tags) AS t
+        WHERE t ILIKE concat(:prefix, '%')
+        """, nativeQuery = true)
+    List<String> findTagsStartWith(String prefix);
 }

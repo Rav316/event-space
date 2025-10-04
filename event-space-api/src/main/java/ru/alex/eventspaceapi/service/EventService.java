@@ -53,6 +53,10 @@ public class EventService {
                 .toList();
     }
 
+    public List<String> findTagsStartWith(String prefix) {
+        return eventRepository.findTagsStartWith(prefix);
+    }
+
     @Transactional
     public void create(EventCreateDto eventCreateDto, MultipartFile eventImage) {
         Event event = new Event();

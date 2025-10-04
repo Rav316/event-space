@@ -30,6 +30,11 @@ public class EventController {
     public List<EventListDto> getActualEvents() {
         return eventService.getActualEvents();
     }
+    
+    @GetMapping("/tags/{prefix}")
+    public List<String> findTagsStartWith(@PathVariable("prefix") String prefix) {
+        return eventService.findTagsStartWith(prefix);
+    }
 
     @PostMapping
     public ResponseEntity<Void> create(
