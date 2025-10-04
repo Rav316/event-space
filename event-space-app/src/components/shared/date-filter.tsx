@@ -6,27 +6,26 @@ import {
   SelectValue,
 } from '@/components/ui';
 import { SortAsc } from 'lucide-react';
-import { useState } from 'react';
-
-const sortCategories = [
-  { label: 'По дате', value: 'date' },
-  { label: 'По популярности', value: 'popularity' },
-  { label: 'По доступности', value: 'availability' },
-  { label: 'По алфавиту', value: 'alphabetical' },
-];
+import { eventSortCategories } from '@/constants/event-sort-categories.ts';
+import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 
 export const DateFilter = () => {
-  const [sortBy, setSortBy] = useState(sortCategories[0].value);
+  // const [sortBy, setSortBy] = useState(eventSortCategories[0].value);
+  const filter = useEventFilterStore((state) => state.filter);
+  const setFilter = useEventFilterStore((state) => state.setFilter);
 
   return (
-    <Select value={sortBy} onValueChange={setSortBy}>
+    <Select
+      value={filter.sort}
+      onValueChange={(value) => setFilter({ sort: value })}
+    >
       <SelectTrigger className="h-9 min-w-0 max-[563px]:flex-1">
         <SortAsc className="h-4 w-4 mr-2" />
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {sortCategories.map(({ label, value }) => (
-          <SelectItem key={value} value={value} >
+        {eventSortCategories.map(({ label, value }) => (
+          <SelectItem key={value} value={value}>
             {label}
           </SelectItem>
         ))}
@@ -34,4 +33,3 @@ export const DateFilter = () => {
     </Select>
   );
 };
-
