@@ -96,7 +96,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                     orderSpecifiers.add(event.users.size().desc());
                     break;
                 case "alphabet":
-                    orderSpecifiers.add(event.name.desc());
+                    orderSpecifiers.add(event.name.asc());
                     break;
             }
         }
