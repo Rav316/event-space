@@ -2,6 +2,7 @@ import { Wrapper } from '@/components/hoc';
 import {
   EventCategories,
   EventGroup,
+  EventsNotFound,
   EventsPagination,
   SearchInput,
 } from '@/components/shared';
@@ -19,7 +20,8 @@ const EventsPage = () => {
   const totalPages = usePaginationStore((state) => state.totalPages);
   const setCurrentPage = usePaginationStore((state) => state.setPage);
   const setTotalPages = usePaginationStore((state) => state.setTotalPages);
-  const { data: eventCategories, isPending: isEventCategoriesPending } = useEventCategoriesWithEventCount();
+  const { data: eventCategories, isPending: isEventCategoriesPending } =
+    useEventCategoriesWithEventCount();
 
   const { data: events, isPending: isEventsPending } = useEventsByFilter({
     filter: { ...eventFilter },
@@ -34,7 +36,7 @@ const EventsPage = () => {
   } else {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -49,6 +51,9 @@ const EventsPage = () => {
       );
     }
   }, [events, isEventsPending, setTotalPages]);
+
+  console.log('events', events);
+  console.log('eventsIsPending', isEventsPending);
 
   return (
     <Wrapper>
@@ -67,27 +72,33 @@ const EventsPage = () => {
           </div>
         </div>
         <EventFilters />
-        {isEventCategoriesPending || isEventsPending ? (
-          <Skeleton className={'h-[20px] w-[220px]'}/>
-          ) : (
-          <span className={'text-muted-foreground text-sm'}>
-          Найдено {events?.metadata.totalElements} из{' '}
-            {eventCategories?.reduce(
-              (acc, category) => acc + category.eventCount,
-              0,
-            )}{' '}
-            мероприятий
-        </span>
+        {!isEventsPending && events?.content.length === 0 ? (
+          <EventsNotFound />
+        ) : (
+          <>
+            {isEventCategoriesPending || isEventsPending ? (
+              <Skeleton className={'h-[20px] w-[220px]'} />
+            ) : (
+              <span className={'text-muted-foreground text-sm'}>
+                Найдено {events?.metadata.totalElements} из{' '}
+                {eventCategories?.reduce(
+                  (acc, category) => acc + category.eventCount,
+                  0,
+                )}{' '}
+                мероприятий
+              </span>
+            )}
+            <EventGroup
+              isLoading={isEventsPending}
+              events={events?.content || []}
+            />
+            <EventsPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </>
         )}
-        <EventGroup
-          isLoading={isEventsPending}
-          events={events?.content || []}
-        />
-        <EventsPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
       </div>
     </Wrapper>
   );
