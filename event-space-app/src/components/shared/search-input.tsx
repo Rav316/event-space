@@ -11,6 +11,7 @@ interface Props
 export const SearchInput: React.FC<Props> = ({
   placeholder,
   value,
+  onChange,
   ...rest
 }) => {
   return (
@@ -19,6 +20,7 @@ export const SearchInput: React.FC<Props> = ({
       <Input
         {...rest}
         value={value}
+        onChange={onChange || (() => {})}
         placeholder={placeholder}
         className="pl-9"
       />

@@ -73,10 +73,12 @@ export const Header = () => {
               </div>
             ) : (
               <>
-                <Button className={'h-[30px]'}>
-                  <Plus />
-                  <span className={'max-[500px]:hidden'}>Создать</span>
-                </Button>
+                <Link to={'/events/create'}>
+                  <Button className={'h-[30px]'}>
+                    <Plus />
+                    <span className={'max-[500px]:hidden'}>Создать</span>
+                  </Button>
+                </Link>
                 <ProfileMenu />
                 <NavigationMenu className={'hidden max-[1200px]:block'} />
               </>
