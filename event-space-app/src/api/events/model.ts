@@ -13,10 +13,18 @@ export interface EventCreateDto {
   shortDescription: string;
   description: string;
   category: number;
-  steps?: EventStep[];
+  steps?: EventStepCreateDto[];
+}
+
+export interface EventStepCreateDto {
+  name: string;
+  startTime: string;
+  endTime: string;
+  description?: string;
 }
 
 export interface EventStep {
+  id: number;
   name: string;
   startTime: string;
   endTime: string;

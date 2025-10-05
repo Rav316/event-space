@@ -10,11 +10,11 @@ import { Clock, Plus } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { ProgramStep } from '@/components/shared';
 import { FormProvider, type useForm } from 'react-hook-form';
-import type { EventStep } from '@/api/events/model.ts';
+import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
 
 interface Props {
-  form: ReturnType<typeof useForm<EventStep>>;
+  form: ReturnType<typeof useForm<EventStepCreateDto>>;
 }
 
 export const EventProgramStep: React.FC<Props> = ({ form }) => {
@@ -29,7 +29,7 @@ export const EventProgramStep: React.FC<Props> = ({ form }) => {
   );
   const event = useEventCreationStore((state) => state.event);
 
-  const onClickAddEventStep = (data: EventStep) => {
+  const onClickAddEventStep = (data: EventStepCreateDto) => {
     const startTime =
       eventSteps.length === 0
         ? event.startTime

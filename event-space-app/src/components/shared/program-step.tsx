@@ -7,16 +7,16 @@ import {
 } from '@/components/ui';
 import React from 'react';
 import { Trash2 } from 'lucide-react';
-import type { EventStep } from '@/api/events/model.ts';
+import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
 
 interface Props {
-  step: EventStep;
+  step: EventStepCreateDto;
   index: number;
   onStepDelete: () => void;
-  updateStep: (index: number, data: Partial<EventStep>) => void;
+  updateStep: (index: number, data: Partial<EventStepCreateDto>) => void;
   isLastStep: boolean;
 }
 

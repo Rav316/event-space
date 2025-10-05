@@ -1,4 +1,4 @@
-import type { EventCreateDto, EventStep } from '@/api/events/model.ts';
+import type { EventCreateDto, EventStepCreateDto } from '@/api/events/model.ts';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -6,10 +6,10 @@ import { getTodayDate } from '@/utils/get-today-date.ts';
 
 interface EventCreationState {
   event: EventCreateDto;
-  eventSteps: EventStep[];
+  eventSteps: EventStepCreateDto[];
   setEventData: (event: Partial<EventCreateDto>) => void;
-  setEventSteps: (steps: EventStep[]) => void;
-  addEventStep: (step: EventStep) => void;
+  setEventSteps: (steps: EventStepCreateDto[]) => void;
+  addEventStep: (step: EventStepCreateDto) => void;
   removeEventStep: (index: number) => void;
   resetEvent: () => void;
   resetEventSteps: () => void;
@@ -82,7 +82,7 @@ export const useEventCreationStore = create<EventCreationState>()(
           false,
           'resetEventSteps',
         ),
-      updateEventStep: (index: number, data: Partial<EventStep>) =>
+      updateEventStep: (index: number, data: Partial<EventStepCreateDto>) =>
         set(
           (state) => {
             state.eventSteps[index] = { ...state.eventSteps[index], ...data };

@@ -9,13 +9,17 @@ interface Props {
   caption: string;
 }
 
-export const EventBadge: React.FC<Props> = ({Icon, text, caption}) => {
+export const EventBadge: React.FC<Props> = ({ Icon, text, caption }) => {
   return (
-    <div className={'flex items-center gap-4 bg-[#F4F2F7] p-3 rounded-2xl flex-1'}>
-      <Icon/>
-      <div className={'flex flex-col'}>
-        <span className={'font-medium'}>{text}</span>
-        <span className={'text-muted-foreground'}>{caption}</span>
+    <div className={'flex items-center gap-4 bg-[#F4F2F7] p-3 rounded-2xl flex-1 min-w-0'}>
+      <Icon className='shrink-0' />
+      <div className={'flex flex-col min-w-0'}>
+        <span className={'font-medium whitespace-nowrap overflow-hidden text-ellipsis'}>
+          {text}
+        </span>
+        <span className={'text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis'}>
+          {caption}
+        </span>
       </div>
     </div>
   )

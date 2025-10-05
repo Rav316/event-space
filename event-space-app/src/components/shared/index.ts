@@ -25,4 +25,8 @@ export {SpacesNotFound} from './spaces-not-found';
 export {CategoryCheckbox} from './category-checkbox';
 export {EventsNotFound} from './events-not-found';
 export {EventBadge} from './event-badge';
+export {EventDescription} from './event-description';
+export {EventProgram} from './event-program';
+export {EventRegistrationBlock} from './event-registration-block';
+export {EventShareBlock} from './event-share-block';
 export * as toastLogout from './toast-logout';

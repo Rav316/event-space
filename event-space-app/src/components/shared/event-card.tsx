@@ -86,7 +86,7 @@ export const EventCard: React.FC<Props> = ({
             className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
             src={
               imageUrl
-                ? `${staticUrl}/${imageUrl}`
+                ? `${staticUrl}${imageUrl}`
                 : `https://placehold.co/142?text=${title}`
             }
             alt={title}

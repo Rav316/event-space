@@ -9,7 +9,7 @@ import {
   type EventDateTime,
   eventDateTimeSchema,
 } from '@/schemas/event-date-time-schema.ts';
-import type { EventStep } from '@/api/events/model.ts';
+import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
 import { type EventLocationData, eventLocationSchema } from '@/schemas/event-location-schema.ts';
 
@@ -36,7 +36,7 @@ export const useEventCreateForms = () => {
     },
   });
 
-  const eventStepForm = useForm<EventStep>({
+  const eventStepForm = useForm<EventStepCreateDto>({
     resolver: zodResolver(eventStepSchema),
     defaultValues: {
       name: '',
