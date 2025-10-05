@@ -1,9 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
+import React from 'react';
+import { cn } from '@/lib/utils.ts';
 
-export const EventOrganizerBlock = () => {
+interface Props {
+  className?: string;
+}
+
+export const EventOrganizerBlock: React.FC<Props> = ({ className }) => {
   return (
     <div
-      className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5'}
+      className={cn(
+        'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5',
+        className,
+      )}
     >
       <span className={'font-medium text-xl'}>Организатор</span>
       <div className={'flex items-center gap-3'}>

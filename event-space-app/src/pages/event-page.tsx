@@ -66,7 +66,7 @@ const EventPage = () => {
             <span>Назад</span>
           </Button>
         </div>
-        <div className={'flex gap-5'}>
+        <div className={'flex gap-5 max-[980px]:flex-col'}>
           <div className={'flex flex-col gap-5 flex-7'}>
             <div className={'group relative rounded-2xl'}>
               <img
@@ -97,14 +97,15 @@ const EventPage = () => {
               </div>
             </div>
             <h3 className={'text-3xl font-bold'}>Хакатон AI Challenge 2025</h3>
-            <div className={'flex items-center gap-2'}>
+            <div className={'flex flex-wrap items-center gap-2'}>
               <Badge variant={'outline'}>AI</Badge>
               <Badge variant={'outline'}>Машинное обучение</Badge>
               <Badge variant={'outline'}>Python</Badge>
               <Badge variant={'outline'}>JavaScript</Badge>
               <Badge variant={'outline'}>Хакатон</Badge>
             </div>
-            <div className={'flex items-center gap-2 w-full'}>
+
+            <div className={'flex items-center gap-2 w-full max-[650px]:flex-col'}>
               <EventBadge
                 Icon={Calendar}
                 text={'15 января 2024'}
@@ -160,10 +161,18 @@ const EventPage = () => {
             />
             <EventProgram steps={steps} />
           </div>
-          <div className={'flex-3 flex flex-col gap-4'}>
-            <EventRegistrationBlock registered={156} quantity={200} />
-            <EventOrganizerBlock />
-            <EventShareBlock />
+          <div className={'lex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row'}>
+            <EventRegistrationBlock
+              registered={156}
+              quantity={200}
+              className={'max-[980px]:flex-1 max-[900px]:flex-none'}
+            />
+            <EventOrganizerBlock
+              className={'max-[980px]:flex-1 max-[900px]:flex-none'}
+            />
+            <EventShareBlock
+              className={'max-[980px]:flex-1 max-[900px]:flex-none'}
+            />
           </div>
         </div>
       </div>

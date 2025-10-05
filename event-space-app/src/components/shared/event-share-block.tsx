@@ -1,10 +1,19 @@
 import { Button } from '@/components/ui';
 import { Download, Share2 } from 'lucide-react';
+import React from 'react';
+import { cn } from '@/lib/utils.ts';
 
-export const EventShareBlock = () => {
+interface Props {
+  className?: string;
+}
+
+export const EventShareBlock: React.FC<Props> = ({ className }) => {
   return (
     <div
-      className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5'}
+      className={cn(
+        'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5',
+        className,
+      )}
     >
       <span className={'font-medium text-xl'}>Поделиться</span>
       <div className={'flex flex-col gap-2'}>
