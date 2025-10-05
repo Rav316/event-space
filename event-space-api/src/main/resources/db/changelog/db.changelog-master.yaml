@@ -49,3 +49,5 @@ databaseChangeLog:
       file: db/changelog/db-update-building-table-1.0.sql
   - include:
       file: db/changelog/db-update-event-table-1.4.sql
+  - include:
+      file: db/changelog/db-update-event-table-1.5.sql

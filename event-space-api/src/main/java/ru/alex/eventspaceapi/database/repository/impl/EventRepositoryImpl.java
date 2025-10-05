@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
@@ -27,6 +29,7 @@ import static ru.alex.eventspaceapi.database.entity.QUser.user;
 @RequiredArgsConstructor
 public class EventRepositoryImpl implements EventRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     public Page<Event> findAllEventsByFilter(EventFilter filter) {
@@ -51,6 +54,33 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .where(predicate)
                 .fetchOne();
         return new PageImpl<>(events, PageRequest.of(page, pageSize), Objects.requireNonNull(total));
+    }
+
+    @Override
+    public void registerUserForEvent(Integer eventId, Integer userId) {
+        String sql = """
+                INSERT INTO event_user (event_id, user_id)
+                VALUES (:eventId, :userId);
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("eventId", eventId)
+                .addValue("userId", userId);
+
+        jdbcTemplate.update(sql, params);
+    }
+
+    @Override
+    public void unregisterFromEvent(Integer eventId, Integer userId) {
+        String sql = """
+                DELETE FROM event_user
+                WHERE event_id = :eventId AND user_id = :userId
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("eventId", eventId)
+                .addValue("userId", userId);
+
+        jdbcTemplate.update(sql, params);
     }
 
     private BooleanExpression buildPredicate(EventFilter filter) {

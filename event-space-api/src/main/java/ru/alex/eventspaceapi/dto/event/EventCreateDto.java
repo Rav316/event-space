@@ -20,6 +20,7 @@ public record EventCreateDto (
         LocalTime startTime,
         @NotNull
         LocalTime endTime,
+        LocalDate deadline,
         @NotNull
         Integer space,
         @Size(max = 130)

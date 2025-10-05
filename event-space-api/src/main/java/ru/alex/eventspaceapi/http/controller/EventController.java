@@ -14,6 +14,7 @@ import ru.alex.eventspaceapi.service.EventService;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/api/events")
@@ -43,5 +44,17 @@ public class EventController {
     ) {
         eventService.create(eventCreateDto, image);
         return new ResponseEntity<>(CREATED);
+    }
+
+    @PostMapping("/{id}/register")
+    public ResponseEntity<Void> registerForEvent(@PathVariable("id") Integer id) {
+        eventService.registerForEvent(id);
+        return new ResponseEntity<>(CREATED);
+    }
+
+    @DeleteMapping("/{id}/unregister")
+    public ResponseEntity<Void> unregisterFromEvent(@PathVariable("id") Integer id) {
+        eventService.unregisterFromEvent(id);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }

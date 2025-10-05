@@ -10,6 +10,7 @@ import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.entity.EventStep;
 import ru.alex.eventspaceapi.database.entity.EventCategory;
 import ru.alex.eventspaceapi.database.entity.Space;
+import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventStepRepository;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
@@ -20,14 +21,17 @@ import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
+import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
 import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
-import ru.alex.eventspaceapi.util.AuthUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
+
+import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
 @Service
 @Transactional(readOnly = true)
@@ -79,12 +83,13 @@ public class EventService {
         }
         event.setStartTime(eventCreateDto.startTime());
         event.setEndTime(eventCreateDto.endTime());
+        event.setDeadline(eventCreateDto.deadline());
         Space space = spaceRepository.findById(eventCreateDto.space())
                 .orElseThrow(() -> new SpaceNotFoundException(eventCreateDto.space()));
         event.setSpace(space);
         event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
-        UserDetailsDto authorizedUser = AuthUtils.getAuthorizedUser();
+        UserDetailsDto authorizedUser = getAuthorizedUser();
         event.setAuthor(authorizedUser.firstName() + " " + authorizedUser.lastName());
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
@@ -93,8 +98,10 @@ public class EventService {
 
         validateEventSteps(eventCreateDto);
 
-        String imageUrl = fileService.saveFile(eventImage);
-        event.setImageUrl(imageUrl);
+        if(eventImage != null && !eventImage.isEmpty()) {
+            String imageUrl = fileService.saveFile(eventImage);
+            event.setImageUrl(imageUrl);
+        }
 
         Event savedEvent = eventRepository.save(event);
 
@@ -106,6 +113,35 @@ public class EventService {
 
         eventStepRepository.insertEventStepsBatch(eventSteps);
 
+    }
+
+    @Transactional
+    public void registerForEvent(Integer id) {
+        Event event = eventRepository.findByIdWithUser(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        if(event.getDeadline() != null && LocalDate.now().isAfter(event.getDeadline())) {
+            throw new IllegalStateException("the registration deadline for the events has expired");
+        }
+        Set<User> eventUsers = event.getUsers();
+        Integer authorizedUserId = getAuthorizedUser().id();
+
+        eventUsers.forEach(user -> {
+            if(user.getId().equals(authorizedUserId)) {
+                throw new IllegalStateException("you are already registered for this event");
+            }
+        });
+        if(eventUsers.size() > event.getSpace().getCapacity() - 1) {
+            throw new IllegalStateException("unable to register for events: no seats available");
+        }
+
+        eventRepository.registerUserForEvent(id, authorizedUserId);
+    }
+
+    @Transactional
+    public void unregisterFromEvent(Integer id) {
+        Event event = eventRepository.findByIdWithUser(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        eventRepository.unregisterFromEvent(event.getId(), getAuthorizedUser().id());
     }
 
     private void validateEventSteps(EventCreateDto event) {

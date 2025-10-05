@@ -40,6 +40,8 @@ public class Event {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    private LocalDate deadline;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
     private Space space;
