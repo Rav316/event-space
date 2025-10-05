@@ -14,8 +14,10 @@ import { categoryColors } from '@/constants/category-colors.ts';
 import type { EventCategory } from '@/api/event-categories/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
+import { Link } from 'react-router';
 
 interface Props {
+  id: number;
   imageUrl?: string;
   title: string;
   description: string;
@@ -30,6 +32,7 @@ interface Props {
 }
 
 export const EventCard: React.FC<Props> = ({
+  id,
   imageUrl,
   title,
   description,
@@ -78,15 +81,17 @@ export const EventCard: React.FC<Props> = ({
       </div>
 
       <div className="overflow-hidden rounded-t-2xl">
-        <img
-          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-          src={
-            imageUrl
-              ? `${staticUrl}/${imageUrl}`
-              : `https://placehold.co/142?text=${title}`
-          }
-          alt="event example image"
-        />
+        <Link to={`/events/${id}`}>
+          <img
+            className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+            src={
+              imageUrl
+                ? `${staticUrl}/${imageUrl}`
+                : `https://placehold.co/142?text=${title}`
+            }
+            alt={title}
+          />
+        </Link>
       </div>
 
       <div className={'flex flex-col p-[21px]'}>

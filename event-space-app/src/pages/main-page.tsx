@@ -38,11 +38,13 @@ const MainPage = () => {
               Самые актуальные события этой недели
             </span>
           </div>
-          <Button variant={'outline'} className={'flex items-center gap-4'}>
-            <Calendar />
-            <span className={'font-medium'}>Все мероприятия</span>
-            <ArrowRight />
-          </Button>
+          <Link to={'/events'}>
+            <Button variant={'outline'} className={'flex items-center gap-4'}>
+              <Calendar />
+              <span className={'font-medium'}>Все мероприятия</span>
+              <ArrowRight />
+            </Button>
+          </Link>
         </div>
         <EventGroup isLoading={isPending} events={data || []} />
         {!isPending && data?.length && (

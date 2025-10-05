@@ -24,4 +24,5 @@ export {SpaceItem} from './space-item';
 export {SpacesNotFound} from './spaces-not-found';
 export {CategoryCheckbox} from './category-checkbox';
 export {EventsNotFound} from './events-not-found';
+export {EventBadge} from './event-badge';
 export * as toastLogout from './toast-logout';

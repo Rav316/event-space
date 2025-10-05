@@ -34,6 +34,7 @@ export const EventGroup: React.FC<Props> = ({
           {events.map((event) => (
             <EventCard
               key={event.id}
+              id={event.id}
               imageUrl={event.imageUrl}
               title={event.name}
               description={event.shortDescription}
