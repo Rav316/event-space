@@ -57,7 +57,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         BooleanExpression predicate = Expressions.TRUE.isTrue();
 
         if (filter.name() != null && !filter.name().isBlank()) {
-            predicate = predicate.and(event.name.eq(filter.name()));
+            predicate = predicate.and(event.name.containsIgnoreCase(filter.name()));
         }
 
         if (filter.categories() != null && !filter.categories().isEmpty()) {
