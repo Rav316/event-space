@@ -1,16 +1,24 @@
 import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input.tsx';
 import * as React from 'react';
+import type { InputHTMLAttributes } from 'react';
+import { Input } from '@/components/ui';
 
-interface Props {
-  placeholder: string;
+interface Props
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
+  value: string;
 }
 
-export const SearchInput: React.FC<Props> = ({ placeholder }) => {
+export const SearchInput: React.FC<Props> = ({
+  placeholder,
+  value,
+  ...rest
+}) => {
   return (
-    <div>
+    <div className="relative">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
+        {...rest}
+        value={value}
         placeholder={placeholder}
         className="pl-9"
       />

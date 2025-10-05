@@ -20,6 +20,7 @@ import {
 } from '@/components/shared';
 import type { EventStep } from '@/api/events/model.ts';
 import { EventOrganizerBlock } from '@/components/shared/event-organizer-block.tsx';
+import { useNavigate } from 'react-router';
 
 const steps: EventStep[] = [
   {
@@ -57,11 +58,13 @@ const steps: EventStep[] = [
 ];
 
 const EventPage = () => {
+  const navigate = useNavigate();
+
   return (
     <Wrapper className={'max-w-[1400px]'}>
       <div className={'flex flex-col gap-5 max-w-[1400px] mt-[20px]'}>
         <div>
-          <Button variant={'outline'}>
+          <Button variant={'outline'} onClick={() => navigate('/')}>
             <ArrowLeft />
             <span>Назад</span>
           </Button>
@@ -105,7 +108,9 @@ const EventPage = () => {
               <Badge variant={'outline'}>Хакатон</Badge>
             </div>
 
-            <div className={'flex items-center gap-2 w-full max-[650px]:flex-col'}>
+            <div
+              className={'flex items-center gap-2 w-full max-[650px]:flex-col'}
+            >
               <EventBadge
                 Icon={Calendar}
                 text={'15 января 2024'}
@@ -161,7 +166,11 @@ const EventPage = () => {
             />
             <EventProgram steps={steps} />
           </div>
-          <div className={'lex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row'}>
+          <div
+            className={
+              'lex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row'
+            }
+          >
             <EventRegistrationBlock
               registered={156}
               quantity={200}

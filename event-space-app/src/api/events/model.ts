@@ -51,7 +51,7 @@ export interface EventListDto {
 }
 
 export interface EventFilter {
-  name?: string;
+  name: string;
   categories: number[];
   tags: string[];
   hasPlaces?: boolean;

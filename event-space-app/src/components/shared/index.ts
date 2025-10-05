@@ -29,4 +29,5 @@ export {EventDescription} from './event-description';
 export {EventProgram} from './event-program';
 export {EventRegistrationBlock} from './event-registration-block';
 export {EventShareBlock} from './event-share-block';
+export {EventSearch} from './event-search';
 export * as toastLogout from './toast-logout';

@@ -2,9 +2,9 @@ import { Wrapper } from '@/components/hoc';
 import {
   EventCategories,
   EventGroup,
+  EventSearch,
   EventsNotFound,
   EventsPagination,
-  SearchInput,
 } from '@/components/shared';
 import { EventFilters } from '@/components/shared/event-filters.tsx';
 import { useEventsByFilter } from '@/api/events/hooks.ts';
@@ -67,9 +67,7 @@ const EventsPage = () => {
           <span className={'font-medium'}>
             Поиск мероприятий по названию, описанию или автору...
           </span>
-          <div className={'relative w-full'}>
-            <SearchInput placeholder={'Введите текст...'} />
-          </div>
+          <EventSearch />
         </div>
         <EventFilters />
         {!isEventsPending && events?.content.length === 0 ? (

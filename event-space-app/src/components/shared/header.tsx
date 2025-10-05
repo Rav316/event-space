@@ -54,7 +54,7 @@ export const Header = () => {
         </div>
         <div className={'w-[400px]'}>
           <div className="relative w-full max-w-sm">
-            <SearchInput placeholder={'Поиск...'} />
+            <SearchInput placeholder={'Поиск...'} value={''} />
           </div>
         </div>
         {!isFetching && !data ? (
