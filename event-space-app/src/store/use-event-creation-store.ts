@@ -58,8 +58,8 @@ export const useEventCreationStore = create<EventCreationState>()(
         ),
       resetEvent: () =>
         set(
-          (state) =>
-            (state.event = {
+          (state) => {
+            state.event = {
               name: '',
               tags: [],
               eventDate: getTodayDate(),
@@ -70,7 +70,8 @@ export const useEventCreationStore = create<EventCreationState>()(
               description: '',
               category: 0,
               deadline: getTodayDate(),
-            }),
+            };
+          },
           false,
           'resetEvent',
         ),
@@ -89,7 +90,7 @@ export const useEventCreationStore = create<EventCreationState>()(
           },
           false,
           'updateEventStep',
-        )
+        ),
     })),
     {
       name: 'eventCreationStore',

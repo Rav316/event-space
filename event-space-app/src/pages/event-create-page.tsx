@@ -19,7 +19,6 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useEventCreate } from '@/api/events/hooks.ts';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
-import { useEffect } from 'react';
 
 const EventCreatePage = () => {
   const { currentStep, back, next } = useStepper(eventCreateSteps.length);
@@ -36,15 +35,8 @@ const EventCreatePage = () => {
     eventDateTimeForm,
     eventStepForm,
     eventLocationForm,
-    resetForms,
   } = useEventCreateForms();
   const eventCreateMutation = useEventCreate();
-
-  useEffect(() => {
-    if(eventCreateMutation.isSuccess) {
-      resetForms();
-    }
-  }, [eventCreateMutation.isSuccess, resetForms]);
 
   const onStepNext = () => {
     switch (currentStep) {

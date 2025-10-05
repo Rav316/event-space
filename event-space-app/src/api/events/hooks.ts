@@ -19,11 +19,12 @@ export const useEventCreate = () => {
   return useMutation({
     mutationFn: Api.events.create,
     onSuccess: () => {
-      toast.success('Вы успешно создали мероприятие');
-      navigate('/')
       resetEvent();
       resetEventSteps();
       clearImage();
+
+      toast.success('Вы успешно создали мероприятие');
+      setTimeout(() => navigate('/'), 0);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
