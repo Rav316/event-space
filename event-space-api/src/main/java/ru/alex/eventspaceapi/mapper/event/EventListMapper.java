@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import ru.alex.eventspaceapi.database.entity.Event;
-import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryReadMapper;
@@ -31,15 +30,7 @@ public interface EventListMapper {
 
     @Named("mapIsRegistered")
     default Boolean mapIsRegistered(Event event) {
-        UserDetailsDto authorizedUser = getAuthorizedUser();
-        Integer userId = authorizedUser != null ? authorizedUser.id() : null;
-        if(userId != null) {
-            for(User user: event.getUsers()) {
-                if(user.getId().equals(userId)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        UserDetailsDto user = getAuthorizedUser();
+        return user != null && event.getUsers().stream().anyMatch(u -> u.getId().equals(user.id()));
     }
 }

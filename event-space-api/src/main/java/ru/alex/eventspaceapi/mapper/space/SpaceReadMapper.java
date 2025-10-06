@@ -10,5 +10,5 @@ import ru.alex.eventspaceapi.mapper.building.BuildingReadMapper;
         uses = {BuildingReadMapper.class}
 )
 public interface SpaceReadMapper {
-    SpaceReadDto todDto(Space space);
+    SpaceReadDto toDto(Space space);
 }
