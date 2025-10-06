@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared';
+import { CheckCircle } from 'lucide-react';
 
 interface Props {
   registered: number;
@@ -17,7 +18,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
-
+  const [isRegistered, setIsRegistered] = useState(false);
 
   return (
     <div
@@ -39,7 +40,22 @@ export const EventRegistrationBlock: React.FC<Props> = ({
           {quantity - registered} мест осталось
         </span>
       </div>
-      <EventRegistrationButton eventId={eventId}/>
+      {isRegistered && (
+        <div
+          className={
+            'flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3'
+          }
+        >
+          <CheckCircle />
+          <span>Вы зарегистрированы!</span>
+        </div>
+      )}
+      <EventRegistrationButton
+        eventId={eventId}
+        isUserRegistered={false}
+        isDestructive={true}
+        onToggleRegistration={setIsRegistered}
+      />
     </div>
   );
 };
