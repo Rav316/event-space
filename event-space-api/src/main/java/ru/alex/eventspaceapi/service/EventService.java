@@ -29,9 +29,11 @@ import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -46,8 +48,8 @@ public class EventService {
     private final EventListMapper eventListMapper;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
-        return eventRepository.findAllEventsByFilter(filter)
-                .map(eventListMapper::toDto);
+        UserDetailsDto authorizedUser = getAuthorizedUser();
+        return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null, filter);
     }
 
     public List<EventListDto> getActualEvents() {
@@ -90,7 +92,7 @@ public class EventService {
         event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
         UserDetailsDto authorizedUser = getAuthorizedUser();
-        event.setAuthor(authorizedUser.firstName() + " " + authorizedUser.lastName());
+        event.setAuthor(Objects.requireNonNull(authorizedUser).firstName() + " " + authorizedUser.lastName());
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
                 .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
@@ -123,7 +125,7 @@ public class EventService {
             throw new IllegalStateException("the registration deadline for the events has expired");
         }
         Set<User> eventUsers = event.getUsers();
-        Integer authorizedUserId = getAuthorizedUser().id();
+        Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
 
         eventUsers.forEach(user -> {
             if(user.getId().equals(authorizedUserId)) {
@@ -141,7 +143,7 @@ public class EventService {
     public void unregisterFromEvent(Integer id) {
         Event event = eventRepository.findByIdWithUser(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
-        eventRepository.unregisterFromEvent(event.getId(), getAuthorizedUser().id());
+        eventRepository.unregisterFromEvent(event.getId(), Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
     private void validateEventSteps(EventCreateDto event) {

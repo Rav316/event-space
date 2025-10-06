@@ -34,6 +34,12 @@ public class JwtFilter extends FilterBase {
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
     ) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
+        if(authHeader == null) {
+            if(request.getMethod().equalsIgnoreCase("GET") && request.getRequestURI().startsWith("/api/events")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
 
         try {
             String jwt = getJwtFromAuthHeader(authHeader);

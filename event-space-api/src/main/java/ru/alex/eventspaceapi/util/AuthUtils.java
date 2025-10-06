@@ -19,7 +19,11 @@ public class AuthUtils {
         return jwt;
     }
 
-    public UserDetailsDto getAuthorizedUser() {
-        return (UserDetailsDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static UserDetailsDto getAuthorizedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetailsDto userDetailsDto) {
+            return userDetailsDto;
+        }
+        return null;
     }
 }

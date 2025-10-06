@@ -1,8 +1,11 @@
 package ru.alex.eventspaceapi.database.repository.impl;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,9 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
+import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.building.BuildingReadDto;
+import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
+import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +28,8 @@ import java.util.Objects;
 import static ru.alex.eventspaceapi.database.entity.QBuilding.building;
 import static ru.alex.eventspaceapi.database.entity.QEvent.event;
 import static ru.alex.eventspaceapi.database.entity.QEventCategory.eventCategory;
+import static ru.alex.eventspaceapi.database.entity.QEventUser.eventUser;
 import static ru.alex.eventspaceapi.database.entity.QSpace.space;
-import static ru.alex.eventspaceapi.database.entity.QUser.user;
 
 @Component
 @RequiredArgsConstructor
@@ -32,16 +38,49 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public Page<Event> findAllEventsByFilter(EventFilter filter) {
+    public Page<EventListDto> findAllEventsByFilter(Integer userId, EventFilter filter) {
         BooleanExpression predicate = buildPredicate(filter);
         int pageSize = 9;
         int page = filter.page() != null ? filter.page() : 0;
-        List<Event> events = queryFactory.select(event)
+        Expression<Boolean> isRegisteredExpr = (userId != null)
+                ? JPAExpressions.selectOne()
+                .from(eventUser)
+                .where(eventUser.id.eventId.eq(event.id)
+                        .and(eventUser.id.userId.eq(userId)))
+                .exists()
+                : Expressions.asBoolean(false);
+
+        List<EventListDto> events = queryFactory
+                .select(Projections.constructor(EventListDto.class,
+                        event.id,
+                        event.name,
+                        Projections.constructor(EventCategoryReadDto.class,
+                                eventCategory.id,
+                                eventCategory.name
+                        ),
+                        event.shortDescription,
+                        event.imageUrl,
+                        event.eventDate,
+                        event.startTime,
+                        event.endTime,
+                        Projections.constructor(SpaceReadDto.class,
+                                space.id,
+                                space.name,
+                                space.capacity,
+                                Projections.constructor(BuildingReadDto.class,
+                                        building.id,
+                                        building.name,
+                                        building.address
+                                )
+                        ),
+                        event.users.size().as("participantQuantity"),
+                        event.author,
+                        isRegisteredExpr
+                ))
                 .from(event)
-                .leftJoin(event.users, user).fetchJoin()
-                .leftJoin(event.category, eventCategory).fetchJoin()
-                .leftJoin(event.space, space).fetchJoin()
-                .leftJoin(space.building, building).fetchJoin()
+                .leftJoin(event.category, eventCategory)
+                .leftJoin(event.space, space)
+                .leftJoin(space.building, building)
                 .where(predicate)
                 .orderBy(getSortOrder(filter))
                 .limit(pageSize)
@@ -53,6 +92,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .from(event)
                 .where(predicate)
                 .fetchOne();
+
         return new PageImpl<>(events, PageRequest.of(page, pageSize), Objects.requireNonNull(total));
     }
 
