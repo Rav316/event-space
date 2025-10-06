@@ -2,7 +2,7 @@ import type { EventRequestData } from '@/api/events/model.ts';
 
 export const EVENTS_KEYS = {
   all: ['events'] as const,
-  actual: ['actual-events'] as const,
+  actual: ['events', 'actual'] as const,
   filters: (eventRequestData: EventRequestData) =>
     [
       ...EVENTS_KEYS.all,

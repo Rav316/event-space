@@ -9,7 +9,7 @@ import {
 import { EventFilters } from '@/components/shared/event-filters.tsx';
 import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { usePaginationStore } from '@/store/use-pagination-store.ts';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
 import { Skeleton } from '@/components/ui';
@@ -27,18 +27,6 @@ const EventsPage = () => {
     filter: { ...eventFilter },
     page: currentPage,
   });
-
-  const isFirstRender = useRef(true);
-
-  if (isFirstRender.current) {
-    window.scrollTo(0, 0);
-    isFirstRender.current = false;
-  } else {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

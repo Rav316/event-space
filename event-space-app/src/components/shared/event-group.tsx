@@ -46,6 +46,7 @@ export const EventGroup: React.FC<Props> = ({
               participants={event.space.capacity}
               author={event.author}
               category={event.category}
+              isRegistered={event.isRegistered}
             />
           ))}
         </>

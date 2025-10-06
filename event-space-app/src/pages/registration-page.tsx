@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
+  CardHeader, Spinner
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
@@ -126,7 +126,7 @@ const RegistrationPage = () => {
                 <>
                   {registrationMutation.isPending ? (
                     <Button>
-                      <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
+                      <Spinner/>
                       <span>Регистрируем...</span>
                     </Button>
                   ) : (

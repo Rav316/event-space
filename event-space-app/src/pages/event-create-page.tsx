@@ -9,7 +9,7 @@ import {
 } from '@/components/shared/event-create';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStepper } from '@/hooks/use-stepper.ts';
-import { Button } from '@/components/ui';
+import { Button, Spinner } from '@/components/ui';
 import { eventCreateSteps } from '@/constants/event-create-steps.ts';
 import { EventLocationStep } from '@/components/shared/event-create/event-location-step.tsx';
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
@@ -122,7 +122,7 @@ const EventCreatePage = () => {
         <Button onClick={onStepNext}>
           {eventCreateMutation.isPending ? (
             <div className={'flex items-center justify-center gap-x-2'}>
-              <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
+              <Spinner/>
               <span>Создание...</span>
             </div>
           ) : (

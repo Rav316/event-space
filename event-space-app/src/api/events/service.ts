@@ -42,3 +42,13 @@ export const findTagsStartWith = async (prefix: string): Promise<string[]> => {
   const response = await axiosInstance.get<string[]>(`${ApiRoutes.EVENTS}/tags/${prefix}`);
   return response.data;
 }
+
+export const registerForEvent = async (eventId: number): Promise<void> => {
+  const response = await axiosInstance.post<void>(`${ApiRoutes.EVENTS}/${eventId}/register`);
+  return response.data;
+}
+
+export const unregisterFromEvent = async (eventId: number): Promise<void> => {
+  const response = await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}/unregister`);
+  return response.data;
+}

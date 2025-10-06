@@ -5,7 +5,7 @@ import {
   DialogTitle,
   FormErrorMessage,
   Input,
-  Label,
+  Label, Spinner
 } from '@/components/ui';
 import { LogIn, Mail } from 'lucide-react';
 import { PasswordInput } from '@/components/shared';
@@ -94,7 +94,7 @@ export const LoginModal = () => {
             >
               {loginMutation.isPending ? (
                 <div className="flex items-center justify-center gap-x-2">
-                  <div className="animate-spin h-4 w-4 border-2 border-current border-r-transparent rounded-full" />
+                  <Spinner/>
                   <span>Вход...</span>
                 </div>
               ) : (

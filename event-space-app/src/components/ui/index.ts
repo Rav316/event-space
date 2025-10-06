@@ -9,6 +9,7 @@ export {FormErrorMessage} from './form-error-message';
 export {Progress} from './progress';
 export {Textarea} from './textarea';
 export {RequiredMark} from './required-mark';
+export {Spinner} from './spinner';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';

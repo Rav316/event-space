@@ -48,6 +48,7 @@ export interface EventListDto {
   space: Space;
   participantQuantity: number;
   author?: string;
+  isRegistered: boolean;
 }
 
 export interface EventFilter {

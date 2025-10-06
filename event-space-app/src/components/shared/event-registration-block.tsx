@@ -1,9 +1,8 @@
 import React from 'react';
-import { Button, Progress } from '@/components/ui';
-import { useMe } from '@/api/auth/hooks.ts';
-import { Lock } from 'lucide-react';
-import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
+import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
+import { useParams } from 'react-router';
+import { EventRegistrationButton } from '@/components/shared';
 
 interface Props {
   registered: number;
@@ -16,15 +15,9 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   quantity,
   className,
 }) => {
-  const { data } = useMe();
+  const params = useParams();
+  const eventId = Number(params.eventId);
 
-  const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
-
-  const handleRegistrationClick = () => {
-    if (!data) {
-      setAuthModalOpen(true);
-    }
-  };
 
   return (
     <div
@@ -46,16 +39,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
           {quantity - registered} мест осталось
         </span>
       </div>
-      <Button onClick={handleRegistrationClick}>
-        {data ? (
-          <span>Зарегистрироваться</span>
-        ) : (
-          <>
-            <Lock />
-            <span>Войти для регистрации</span>
-          </>
-        )}
-      </Button>
+      <EventRegistrationButton eventId={eventId}/>
     </div>
   );
 };

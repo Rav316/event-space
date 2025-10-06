@@ -2,7 +2,6 @@ import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
 import {
   Calendar,
   Clock4,
-  Lock,
   MapPin,
   QrCode,
   Share2,
@@ -12,9 +11,8 @@ import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import type { EventCategory } from '@/api/event-categories/model.ts';
-import { useMe } from '@/api/auth/hooks.ts';
-import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 import { Link } from 'react-router';
+import { EventRegistrationButton } from '@/components/shared/event-registration-button.tsx';
 
 interface Props {
   id: number;
@@ -29,6 +27,7 @@ interface Props {
   participants: number;
   author?: string;
   category: EventCategory;
+  isRegistered?: boolean;
 }
 
 export const EventCard: React.FC<Props> = ({
@@ -44,10 +43,9 @@ export const EventCard: React.FC<Props> = ({
   participants,
   author,
   category,
+  isRegistered
 }) => {
   const staticUrl = import.meta.env.VITE_STATIC_URL;
-  const { data } = useMe();
-  const setIsOpenAuthModal = useAuthModalStore((state) => state.setIsOpen);
 
   return (
     <div
@@ -131,14 +129,7 @@ export const EventCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        {data ? (
-          <Button>Зарегистрироваться</Button>
-        ) : (
-          <Button variant={'outline'} onClick={() => setIsOpenAuthModal(true)}>
-            <Lock />
-            Войти для регистрации
-          </Button>
-        )}
+        <EventRegistrationButton eventId={id} isUserRegistered={isRegistered} />
       </div>
     </div>
   );
