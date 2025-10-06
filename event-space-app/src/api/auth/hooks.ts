@@ -46,11 +46,14 @@ export const useLogin = () => {
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
   return useMutation({
     mutationFn: Api.auth.login,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setAuthModalOpen(false);
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'events',
+      });
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -79,9 +82,12 @@ export const useLogout = () => {
       if (context?.toastId) toast.dismiss(context.toastId);
 
       navigate('/', { replace: true });
-      setTimeout(() => {
+      setTimeout(async () => {
         removeToken();
-        queryClient.clear();
+        queryClient.removeQueries({ queryKey: AUTH_KEYS.me });
+        await queryClient.invalidateQueries({
+          predicate: (query) => query.queryKey[0] === 'events',
+        });
       }, 100);
 
       showLogoutSuccess();
