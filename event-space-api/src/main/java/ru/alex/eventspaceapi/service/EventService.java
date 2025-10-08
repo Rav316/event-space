@@ -128,20 +128,21 @@ public class EventService {
 
     @Transactional
     public void registerForEvent(Integer id) {
-        Event event = eventRepository.findByIdWithUser(id)
+        Event event = eventRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
-        if(event.getDeadline() != null && LocalDate.now().isAfter(event.getDeadline())) {
+
+        if (event.getDeadline() != null && LocalDate.now().isAfter(event.getDeadline())) {
             throw new IllegalStateException("the registration deadline for the events has expired");
         }
+
         Set<User> eventUsers = event.getUsers();
         Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
 
-        eventUsers.forEach(user -> {
-            if(user.getId().equals(authorizedUserId)) {
-                throw new IllegalStateException("you are already registered for this event");
-            }
-        });
-        if(eventUsers.size() > event.getSpace().getCapacity() - 1) {
+        if (eventUsers.stream().anyMatch(u -> u.getId().equals(authorizedUserId))) {
+            throw new IllegalStateException("you are already registered for this event");
+        }
+
+        if (eventUsers.size() >= event.getSpace().getCapacity()) {
             throw new IllegalStateException("unable to register for events: no seats available");
         }
 
@@ -150,7 +151,7 @@ public class EventService {
 
     @Transactional
     public void unregisterFromEvent(Integer id) {
-        Event event = eventRepository.findByIdWithUser(id)
+        Event event = eventRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
         eventRepository.unregisterFromEvent(event.getId(), Objects.requireNonNull(getAuthorizedUser()).id());
     }

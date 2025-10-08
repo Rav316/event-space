@@ -1,7 +1,9 @@
 package ru.alex.eventspaceapi.database.repository;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.Event;
@@ -36,10 +38,10 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
     @Query("""
         SELECT e
         FROM Event e
-        LEFT JOIN FETCH e.users
         WHERE e.id = :id
         """)
-    Optional<Event> findByIdWithUser(Integer id);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Event> findByIdForUpdate(Integer id);
 
     @Query(value = """
         SELECT DISTINCT t
