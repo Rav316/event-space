@@ -1,6 +1,6 @@
 import type {
   EventCreateData,
-  EventListDto, EventRequestData
+  EventListDto, EventReadDto, EventRequestData
 } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
@@ -37,6 +37,11 @@ export const getActualEvents = async (): Promise<EventListDto[]> => {
   );
   return response.data;
 };
+
+export const findById = async (id: number): Promise<EventReadDto> => {
+  const response = await axiosInstance.get<EventReadDto>(`${ApiRoutes.EVENTS}/${id}`);
+  return response.data;
+}
 
 export const findTagsStartWith = async (prefix: string): Promise<string[]> => {
   const response = await axiosInstance.get<string[]>(`${ApiRoutes.EVENTS}/tags/${prefix}`);

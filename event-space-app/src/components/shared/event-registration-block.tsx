@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
@@ -6,19 +6,35 @@ import { EventRegistrationButton } from '@/components/shared';
 import { CheckCircle } from 'lucide-react';
 
 interface Props {
-  registered: number;
+  participantsQuantity: number;
   quantity: number;
+  isRegistered?: boolean;
   className?: string;
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
-  registered,
+  participantsQuantity,
   quantity,
   className,
+  isRegistered,
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
-  const [isRegistered, setIsRegistered] = useState(false);
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const prevRegistered = useRef(isRegistered);
+
+  useEffect(() => {
+    if (!prevRegistered.current && isRegistered) {
+      setShowSuccess(true);
+    }
+
+    if (prevRegistered.current && !isRegistered) {
+      setShowSuccess(false);
+    }
+
+    prevRegistered.current = isRegistered;
+  }, [isRegistered]);
 
   return (
     <div
@@ -27,34 +43,32 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         className,
       )}
     >
-      <span className={'font-medium text-xl'}>Регистрация</span>
-      <div className={'flex flex-col gap-1'}>
-        <div className={'flex justify-between'}>
+      <span className="font-medium text-xl">Регистрация</span>
+
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between">
           <span>Зарегистрировано</span>
           <span>
-            {registered}/{quantity}
+            {participantsQuantity}/{quantity}
           </span>
         </div>
-        <Progress value={(registered / quantity) * 100} />
-        <span className={'text-muted-foreground text-sm'}>
-          {quantity - registered} мест осталось
+        <Progress value={(participantsQuantity / quantity) * 100} />
+        <span className="text-muted-foreground text-sm">
+          {quantity - participantsQuantity} мест осталось
         </span>
       </div>
-      {isRegistered && (
-        <div
-          className={
-            'flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3'
-          }
-        >
+
+      {showSuccess && (
+        <div className="flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3 transition-all duration-300">
           <CheckCircle />
           <span>Вы зарегистрированы!</span>
         </div>
       )}
+
       <EventRegistrationButton
         eventId={eventId}
-        isUserRegistered={false}
+        isUserRegistered={!!isRegistered}
         isDestructive={true}
-        onToggleRegistration={setIsRegistered}
       />
     </div>
   );

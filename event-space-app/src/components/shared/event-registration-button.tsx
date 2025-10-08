@@ -12,14 +12,12 @@ interface Props {
   eventId: number;
   isUserRegistered?: boolean;
   isDestructive?: boolean;
-  onToggleRegistration?: (value: boolean) => void;
 }
 
 export const EventRegistrationButton: React.FC<Props> = ({
   eventId,
   isUserRegistered,
-  isDestructive,
-  onToggleRegistration
+  isDestructive
 }) => {
   const { data, isFetching } = useMe();
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
@@ -33,17 +31,9 @@ export const EventRegistrationButton: React.FC<Props> = ({
       return;
     }
     if (isUserRegistered) {
-      unregisterFromEventMutation.mutate(undefined, {
-        onSuccess: () => {
-          onToggleRegistration?.(false);
-        },
-      });
+      unregisterFromEventMutation.mutate();
     } else {
-      registerForEventMutation.mutate(undefined, {
-        onSuccess: () => {
-          onToggleRegistration?.(true);
-        },
-      });
+      registerForEventMutation.mutate();
     }
   };
 

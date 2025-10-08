@@ -13,6 +13,7 @@ import { categoryColors } from '@/constants/category-colors.ts';
 import type { EventCategory } from '@/api/event-categories/model.ts';
 import { Link } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event-registration-button.tsx';
+import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 
 interface Props {
   id: number;
@@ -45,7 +46,6 @@ export const EventCard: React.FC<Props> = ({
   category,
   isRegistered
 }) => {
-  const staticUrl = import.meta.env.VITE_STATIC_URL;
 
   return (
     <div
@@ -82,11 +82,7 @@ export const EventCard: React.FC<Props> = ({
         <Link to={`/events/${id}`}>
           <img
             className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-            src={
-              imageUrl
-                ? `${staticUrl}${imageUrl}`
-                : `https://placehold.co/142?text=${title}`
-            }
+            src={getEventImageUrl(title, imageUrl)}
             alt={title}
           />
         </Link>

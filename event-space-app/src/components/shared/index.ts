@@ -31,4 +31,5 @@ export {EventRegistrationBlock} from './event-registration-block';
 export {EventShareBlock} from './event-share-block';
 export {EventSearch} from './event-search';
 export {EventRegistrationButton} from './event-registration-button';
+export {EventSkeleton} from './event-skeleton';
 export * as toastLogout from './toast-logout';

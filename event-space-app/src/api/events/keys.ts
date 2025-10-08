@@ -9,5 +9,6 @@ export const EVENTS_KEYS = {
       eventRequestData.filter,
       eventRequestData.page,
     ] as const,
-  tags: (prefix: string) => ['tags', prefix] as const
+  tags: (prefix: string) => ['tags', prefix] as const,
+  event: (eventId: number) => [...EVENTS_KEYS.all, eventId] as const,
 };

@@ -51,6 +51,23 @@ export interface EventListDto {
   isRegistered: boolean;
 }
 
+export interface EventReadDto {
+  id: number;
+  name: string;
+  category: EventCategory;
+  description: string;
+  tags: string[];
+  imageUrl?: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  space: Space;
+  participantQuantity: number;
+  author?: string;
+  isRegistered: boolean;
+  steps: EventStep[];
+}
+
 export interface EventFilter {
   name: string;
   categories: number[];

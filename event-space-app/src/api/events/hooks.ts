@@ -59,6 +59,13 @@ export const useTagsStartWith = (prefix: string) => {
   });
 };
 
+export const useEventById = (eventId: number) => {
+  return useQuery({
+    queryFn: () => Api.events.findById(eventId),
+    queryKey: EVENTS_KEYS.event(eventId),
+  });
+};
+
 export const useRegisterForEvent = (eventId: number) => {
   return useMutation({
     mutationFn: () => Api.events.registerForEvent(eventId),
