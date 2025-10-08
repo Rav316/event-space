@@ -23,6 +23,16 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
     List<Event> getActualEvents(Pageable pageable);
 
     @Query("""
+        SELECT e FROM Event e
+        LEFT JOIN FETCH e.category c
+        LEFT JOIN FETCH e.space s
+        LEFT JOIN FETCH s.building b
+        LEFT JOIN FETCH e.users u
+        WHERE e.id = :id
+        """)
+    Optional<Event> findByIdWithLoadedEntities(Integer id);
+
+    @Query("""
         SELECT e
         FROM Event e
         LEFT JOIN FETCH e.users

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
+import ru.alex.eventspaceapi.dto.event.EventReadDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
 import ru.alex.eventspaceapi.service.EventService;
@@ -35,6 +36,11 @@ public class EventController {
     @GetMapping("/tags/{prefix}")
     public List<String> findTagsStartWith(@PathVariable("prefix") String prefix) {
         return eventService.findTagsStartWith(prefix);
+    }
+
+    @GetMapping("/{id}")
+    public EventReadDto findById(@PathVariable("id") Integer id) {
+        return eventService.findById(id);
     }
 
     @PostMapping

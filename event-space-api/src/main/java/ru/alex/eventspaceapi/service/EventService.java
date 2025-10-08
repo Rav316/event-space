@@ -17,6 +17,7 @@ import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
 import ru.alex.eventspaceapi.database.repository.SpaceRepository;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
+import ru.alex.eventspaceapi.dto.event.EventReadDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
@@ -24,6 +25,7 @@ import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
 import ru.alex.eventspaceapi.mapper.event.EventListMapper;
+import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
 import java.time.LocalDate;
@@ -46,6 +48,7 @@ public class EventService {
     private final EventCategoryRepository eventCategoryRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
     private final EventListMapper eventListMapper;
+    private final EventReadMapper eventReadMapper;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
@@ -61,6 +64,12 @@ public class EventService {
 
     public List<String> findTagsStartWith(String prefix) {
         return eventRepository.findTagsStartWith(prefix);
+    }
+
+    public EventReadDto findById(Integer id) {
+        return eventRepository.findByIdWithLoadedEntities(id)
+                .map(eventReadMapper::toDto)
+                .orElseThrow(() -> new EventNotFoundException(id));
     }
 
     @Transactional
