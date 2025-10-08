@@ -12,13 +12,19 @@ interface Props {
   eventId: number;
   isUserRegistered?: boolean;
   isDestructive?: boolean;
+  participantsQuantity: number;
+  capacity: number;
 }
 
 export const EventRegistrationButton: React.FC<Props> = ({
   eventId,
   isUserRegistered,
-  isDestructive
+  isDestructive,
+  participantsQuantity,
+  capacity
 }) => {
+  const hasPlaces = participantsQuantity < capacity;
+
   const { data, isFetching } = useMe();
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
 
@@ -39,6 +45,7 @@ export const EventRegistrationButton: React.FC<Props> = ({
 
   return (
     <Button
+      disabled={!isUserRegistered && !hasPlaces}
       onClick={handleRegistrationClick}
       variant={
         isUserRegistered

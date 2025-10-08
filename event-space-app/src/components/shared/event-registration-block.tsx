@@ -69,6 +69,8 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         eventId={eventId}
         isUserRegistered={!!isRegistered}
         isDestructive={true}
+        participantsQuantity={participantsQuantity}
+        capacity={quantity}
       />
     </div>
   );

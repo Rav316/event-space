@@ -1,12 +1,5 @@
 import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import {
-  Calendar,
-  Clock4,
-  MapPin,
-  QrCode,
-  Share2,
-  Users,
-} from 'lucide-react';
+import { Calendar, Clock4, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
@@ -44,9 +37,8 @@ export const EventCard: React.FC<Props> = ({
   participants,
   author,
   category,
-  isRegistered
+  isRegistered,
 }) => {
-
   return (
     <div
       className={
@@ -125,7 +117,12 @@ export const EventCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        <EventRegistrationButton eventId={id} isUserRegistered={isRegistered} />
+        <EventRegistrationButton
+          eventId={id}
+          isUserRegistered={isRegistered}
+          participantsQuantity={registered}
+          capacity={participants}
+        />
       </div>
     </div>
   );
