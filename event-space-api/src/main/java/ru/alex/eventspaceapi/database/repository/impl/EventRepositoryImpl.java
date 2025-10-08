@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.dto.building.BuildingReadDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;

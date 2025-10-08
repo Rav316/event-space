@@ -5,8 +5,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryCountDto;
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryCountDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryCountMapper;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryReadMapper;
 

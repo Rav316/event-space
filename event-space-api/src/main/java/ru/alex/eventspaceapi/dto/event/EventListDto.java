@@ -1,6 +1,6 @@
 package ru.alex.eventspaceapi.dto.event;
 
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
 
 import java.time.LocalDate;

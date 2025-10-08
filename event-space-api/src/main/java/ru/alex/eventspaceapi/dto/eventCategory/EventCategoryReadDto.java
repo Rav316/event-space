@@ -1,4 +1,4 @@
-package ru.alex.eventspaceapi.dto.EventCategory;
+package ru.alex.eventspaceapi.dto.eventCategory;
 
 public record EventCategoryReadDto(
         Integer id,

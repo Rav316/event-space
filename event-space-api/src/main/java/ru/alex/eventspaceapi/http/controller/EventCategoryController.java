@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryCountDto;
-import ru.alex.eventspaceapi.dto.EventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryCountDto;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.service.EventCategoryService;
 
 import java.util.List;
