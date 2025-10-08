@@ -12,32 +12,62 @@ import java.util.UUID;
 
 @Service
 public class FileService {
+
     @Value("${app.static-content.path}")
     private String staticContentPath;
 
     public String saveFile(MultipartFile file) {
-        if(file.isEmpty()) {
+        if (file.isEmpty()) {
             throw new IllegalArgumentException("file is empty");
         }
+
         String originalFileName = file.getOriginalFilename();
         String extension = "";
-        if(originalFileName != null && originalFileName.contains(".")) {
-            extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        if (originalFileName != null && originalFileName.contains(".")) {
+            extension = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
         }
 
         String randomFileName = UUID.randomUUID() + extension;
+        Path dirPath = Paths.get(staticContentPath, "events");
 
-        Path dirPath = Paths.get(staticContentPath + "/events");
         try {
-            if(!Files.exists(dirPath)) {
+            if (!Files.exists(dirPath)) {
                 Files.createDirectories(dirPath);
             }
-            Path filePath = dirPath.resolve(randomFileName);
-            file.transferTo(filePath.toFile());
-            return "/events/" + randomFileName;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
+            Path filePath = dirPath.resolve(randomFileName);
+
+            file.transferTo(filePath);
+
+            if (isImage(extension)) {
+                compressWithMagick(filePath);
+            }
+
+            return "/events/" + randomFileName;
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Failed to save file", e);
+        }
+    }
+
+    private boolean isImage(String ext) {
+        return ext.endsWith(".jpg") || ext.endsWith(".jpeg") || ext.endsWith(".png");
+    }
+
+    private void compressWithMagick(Path filePath) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder(
+                "magick", filePath.toString(),
+                "-resize", "1920x1080>",
+                "-quality", "75",
+                filePath.toString()
+        );
+
+        pb.redirectErrorStream(true);
+        Process process = pb.start();
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new RuntimeException("ImageMagick compression failed, exit code = " + exitCode);
+        }
     }
 }

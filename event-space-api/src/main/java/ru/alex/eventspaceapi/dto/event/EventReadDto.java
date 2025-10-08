@@ -13,6 +13,7 @@ public record EventReadDto(
         String name,
         EventCategoryReadDto category,
         String description,
+        String[] tags,
         String imageUrl,
         LocalDate eventDate,
         LocalTime startTime,
