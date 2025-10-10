@@ -10,6 +10,7 @@ export {Progress} from './progress';
 export {Textarea} from './textarea';
 export {RequiredMark} from './required-mark';
 export {Spinner} from './spinner';
+export {Separator} from './separator';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';

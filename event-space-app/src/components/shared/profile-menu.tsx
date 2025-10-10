@@ -11,6 +11,7 @@ import {
 import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
 import { useLogout, useMe } from '@/api/auth/hooks.ts';
+import { Link } from 'react-router';
 
 interface Props {
   className?: string;
@@ -40,10 +41,12 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <User/>
-            Профиль
-          </DropdownMenuItem>
+          <Link to={'/profile'}>
+            <DropdownMenuItem>
+              <User/>
+              Профиль
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             <Settings/>
             Настройки

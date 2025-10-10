@@ -10,7 +10,6 @@ import { eventSortCategories } from '@/constants/event-sort-categories.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 
 export const DateFilter = () => {
-  // const [sortBy, setSortBy] = useState(eventSortCategories[0].value);
   const filter = useEventFilterStore((state) => state.filter);
   const setFilter = useEventFilterStore((state) => state.setFilter);
 

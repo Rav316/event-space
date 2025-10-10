@@ -8,6 +8,7 @@ import { RequireAuth } from '@/components/hoc/require-auth.tsx';
 import EventCreatePage from '@/pages/event-create-page.tsx';
 import { LoginModal } from '@/components/modal';
 import EventPage from '@/pages/event-page.tsx';
+import ProfilePage from '@/pages/profile-page.tsx';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             }
           />
           <Route path={'/events/:eventId'} element={<EventPage />} />
+          <Route path={'/profile'} element={<ProfilePage />} />
           <Route path="*" element={<Page404 />} />
         </Route>
       </Routes>
