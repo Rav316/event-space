@@ -1,26 +1,31 @@
 import { Wrapper } from '@/components/hoc';
-import { Button } from '@/components/ui';
-import { SquarePen } from 'lucide-react';
-import { AnimatedTabs, UserMainInfoBlock } from '@/components/shared';
+import { AnimatedTabs, ProfileHeader, UserMainInfoBlock } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
+import {useState} from "react";
+import {UserInfo} from "@/components/shared/user-profile";
 
 const ProfilePage = () => {
+  const [profileActiveTab, setProfileActiveTab] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+
+  const renderProfileTab = () => {
+    switch (profileActiveTab) {
+      case 0:
+        return <UserInfo editMode={editMode}/>
+    }
+  }
+
   return (
     <Wrapper>
       <div className={'flex flex-col gap-5 mt-[20px]'}>
-        <div className={'flex justify-between'}>
-          <h1 className={'text-3xl font-bold'}>Мой профиль</h1>
-          <Button>
-            <SquarePen/>
-            <span>Редактировать</span>
-          </Button>
-        </div>
+        <ProfileHeader setEditMode={setEditMode} editMode={editMode}/>
         <div className={'flex gap-5'}>
           <div className={'flex flex-col gap-5 flex-3'}>
-            <UserMainInfoBlock/>
+            <UserMainInfoBlock editMode={editMode}/>
           </div>
           <div className={'flex flex-col gap-5 flex-7'}>
-            <AnimatedTabs tabs={profileTabs}/>
+            <AnimatedTabs tabs={profileTabs} activeIndex={profileActiveTab} setActiveIndex={setProfileActiveTab}/>
+            {renderProfileTab()}
           </div>
         </div>
       </div>

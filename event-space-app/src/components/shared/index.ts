@@ -35,4 +35,5 @@ export {EventSkeleton} from './event-skeleton';
 export {EventQrCodeDialog} from './event-qr-code-dialog';
 export {UserMainInfoBlock} from './user-main-info-block';
 export {AnimatedTabs} from './animated-tabs.tsx';
+export {ProfileHeader} from './profile-header';
 export * as toastLogout from './toast-logout';
