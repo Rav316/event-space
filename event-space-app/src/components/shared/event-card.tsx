@@ -77,6 +77,7 @@ export const EventCard: React.FC<Props> = ({
             src={getEventImageUrl(title, imageUrl)}
             alt={title}
           />
+
         </Link>
       </div>
 

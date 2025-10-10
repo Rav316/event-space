@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
-import { EventRegistrationButton } from '@/components/shared';
+import { EventQrCodeDialog, EventRegistrationButton } from '@/components/shared';
 import { CheckCircle } from 'lucide-react';
 
 interface Props {
@@ -59,10 +59,16 @@ export const EventRegistrationBlock: React.FC<Props> = ({
       </div>
 
       {showSuccess && (
-        <div className="flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3 transition-all duration-300">
-          <CheckCircle />
-          <span>Вы зарегистрированы!</span>
-        </div>
+        <>
+          <div className="flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3 transition-all duration-300">
+            <CheckCircle />
+            <span>Вы зарегистрированы!</span>
+          </div>
+        </>
+      )}
+
+      {isRegistered && (
+        <EventQrCodeDialog/>
       )}
 
       <EventRegistrationButton

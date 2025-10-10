@@ -21,7 +21,7 @@ import { useEventCreate } from '@/api/events/hooks.ts';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
 
 const EventCreatePage = () => {
-  const { currentStep, back, next } = useStepper(eventCreateSteps.length);
+  const { currentStep, back, next, goToStep } = useStepper(eventCreateSteps.length);
   const event = useEventCreationStore((state) => state.event);
   const eventSteps = useEventCreationStore((state) => state.eventSteps);
   const eventImage = useEventImageStore((state) => state.file);
@@ -29,14 +29,26 @@ const EventCreatePage = () => {
   const resetEventSteps = useEventCreationStore(
     (state) => state.resetEventSteps,
   );
+  const resetEvent = useEventCreationStore((state) => state.resetEvent);
+  const clearImage = useEventImageStore((state) => state.clearImage);
 
   const {
     mainInfoForm,
     eventDateTimeForm,
     eventStepForm,
     eventLocationForm,
+    resetForms
   } = useEventCreateForms();
   const eventCreateMutation = useEventCreate();
+
+  const onClearClick = () => {
+    resetEvent();
+    resetEventSteps();
+    clearImage();
+    resetForms();
+    goToStep(0);
+    toast.success('Вы успешно очистили форму создания мероприятия');
+  }
 
   const onStepNext = () => {
     switch (currentStep) {
@@ -105,7 +117,7 @@ const EventCreatePage = () => {
   return (
     <Wrapper>
       <div className={'flex flex-col py-5 gap-y-5'}>
-        <EventCreateHeader />
+        <EventCreateHeader onClearClick={onClearClick} />
         <EventCreateStepper currentStep={currentStep} />
         <EventCreateWrapper
           Icon={eventCreateSteps[currentStep].Icon}

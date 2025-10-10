@@ -32,4 +32,5 @@ export {EventShareBlock} from './event-share-block';
 export {EventSearch} from './event-search';
 export {EventRegistrationButton} from './event-registration-button';
 export {EventSkeleton} from './event-skeleton';
+export {EventQrCodeDialog} from './event-qr-code-dialog';
 export * as toastLogout from './toast-logout';

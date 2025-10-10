@@ -14,5 +14,9 @@ export const useStepper = (totalSteps: number) => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  return { currentStep, next, back };
+  const goToStep = (step: number) => {
+    setCurrentStep(step);
+  };
+
+  return { currentStep, next, back, goToStep };
 };

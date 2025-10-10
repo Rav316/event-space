@@ -1,9 +1,25 @@
 import { Button } from '@/components/ui';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Eye, Save, Trash } from 'lucide-react';
+import { ArrowLeft, Trash } from 'lucide-react';
+import React from 'react';
 
-export const EventCreateHeader = () => {
+interface Props {
+  onClearClick: () => void
+}
+
+export const EventCreateHeader: React.FC<Props> = ({onClearClick}) => {
   const navigate = useNavigate();
+  // const resetEvent = useEventCreationStore((state) => state.resetEvent);
+  // const resetEventSteps = useEventCreationStore(
+  //   (state) => state.resetEventSteps,
+  // );
+  // const clearImage = useEventImageStore((state) => state.clearImage);
+  //
+  // const onClearClick = () => {
+  //   resetEvent();
+  //   resetEventSteps();
+  //   clearImage();
+  // }
 
   return (
     <div
@@ -30,19 +46,7 @@ export const EventCreateHeader = () => {
         </div>
       </div>
       <div className={'flex items-center gap-2 max-[570px]:justify-center'}>
-        <Button variant="outline" className="max-[455px]:flex-1">
-          <Save className={'max-[400px]:hidden'} />
-          <span className="max-[570px]:w-full hidden max-[570px]:block max-[445px]:text-xs min-[885px]:block">
-            Сохранить
-          </span>
-        </Button>
-        <Button variant="outline" className="max-[455px]:flex-1">
-          <Eye className={'max-[400px]:hidden'} />
-          <span className="max-[570px]:w-full hidden max-[570px]:block max-[445px]:text-xs min-[885px]:block">
-            Предпросмотр
-          </span>
-        </Button>
-        <Button variant="outline" className="max-[455px]:flex-1">
+        <Button variant="outline" className="max-[455px]:flex-1" onClick={onClearClick}>
           <Trash className={'max-[400px]:hidden'} />
           <span className="max-[570px]:w-full hidden max-[570px]:block max-[445px]:text-xs min-[885px]:block">
             Очистить
