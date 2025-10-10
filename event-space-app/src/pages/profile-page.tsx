@@ -1,11 +1,16 @@
 import { Wrapper } from '@/components/hoc';
 import {
   AnimatedTabs,
-  ProfileHeader, UserMainInfoBlock
+  ProfileHeader,
+  UserMainInfoBlock,
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
 import { useState } from 'react';
-import { UserInfo, UserStatistics } from '@/components/shared/user-profile';
+import {
+  UserInfo,
+  UserSettings,
+  UserStatistics,
+} from '@/components/shared/user-profile';
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -16,7 +21,9 @@ const ProfilePage = () => {
       case 0:
         return <UserInfo editMode={editMode} />;
       case 1:
-        return <UserStatistics/>
+        return <UserStatistics />;
+      case 2:
+        return <UserSettings />;
     }
   };
 

@@ -32,7 +32,6 @@ export {EventShareBlock} from './event-share-block';
 export {EventSearch} from './event-search';
 export {EventRegistrationButton} from './event-registration-button';
 export {EventSkeleton} from './event-skeleton';
-export {EventQrCodeDialog} from './event-qr-code-dialog';
 export {UserMainInfoBlock} from './user-main-info-block';
 export {AnimatedTabs} from './animated-tabs';
 export {ProfileHeader} from './profile-header';

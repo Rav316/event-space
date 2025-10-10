@@ -11,6 +11,7 @@ export {Textarea} from './textarea';
 export {RequiredMark} from './required-mark';
 export {Spinner} from './spinner';
 export {Separator} from './separator';
+export {Switch} from './switch';
 export * from './avatar';
 export * from './dropdown-menu';
 export * from './popover';
