@@ -1,8 +1,19 @@
-import { Input, Label, Textarea } from '@/components/ui';
+import {
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Skeleton,
+  Textarea,
+} from '@/components/ui';
 import React from 'react';
 import { FormProvider, type useForm } from 'react-hook-form';
 import type { UserProfileData } from '@/schemas/user-profile-schema.ts';
 import { useHookFormMask } from 'use-mask-input';
+import { useFaculties } from '@/api/faculties/hooks.ts';
 
 interface Props {
   editMode?: boolean;
@@ -11,6 +22,7 @@ interface Props {
 
 export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
   const registerWithMask = useHookFormMask(form.register);
+  const { data: faculties, isPending: isFacultiesPending } = useFaculties();
 
   return (
     <FormProvider {...form}>
@@ -47,11 +59,32 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="faculty">Факультет</Label>
-              <Input
-                id="faculty"
-                placeholder="Введите факультет"
-                disabled={!editMode}
-              />
+              {isFacultiesPending ? (
+                <Skeleton className={'w-full h-8'} />
+              ) : (
+                <Select
+                  value={
+                    form.watch('faculty')?.toString() === '0'
+                      ? undefined
+                      : form.watch('faculty')?.toString()
+                  }
+                  onValueChange={(value) =>
+                    form.setValue('faculty', Number(value))
+                  }
+                  disabled={!editMode}
+                >
+                  <SelectTrigger id={'faculty'} className={'w-full'}>
+                    <SelectValue placeholder={'Выберите факультет'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {faculties?.map((faculty) => (
+                      <SelectItem key={faculty.id} value={String(faculty.id)}>
+                        {faculty.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="course">Курс</Label>
@@ -68,11 +101,9 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 id="phone"
                 placeholder="Введите номер телефона"
                 disabled={!editMode}
-                {...registerWithMask('phone', [
-                  '+7 999 999-99-99',
-                ], {
+                {...registerWithMask('phone', ['+7 999 999-99-99'], {
                   required: true,
-                  showMaskOnHover: false
+                  showMaskOnHover: false,
                 })}
               />
             </div>
