@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Avatar,
+  Avatar, AvatarFallback,
   AvatarImage,
   DropdownMenu,
   DropdownMenuContent, DropdownMenuItem,
@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
 import { useLogout, useMe } from '@/api/auth/hooks.ts';
 import { Link } from 'react-router';
+import { userRoles } from '@/constants/user-roles.ts';
 
 interface Props {
   className?: string;
@@ -20,23 +21,33 @@ interface Props {
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
   const {data} = useMe();
   const logoutMutation = useLogout();
+  if(!data) {
+    return;
+  }
+  const user = data.user;
 
   return (
     <div className={cn(className, 'flex items-center')}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage
-              src={'https://avatars.githubusercontent.com/u/118563959?v=4'}
-            />
+            {user.avatarUrl ? (
+              <AvatarImage src={user.avatarUrl} />
+            ) : (
+              <AvatarFallback>
+                {user.firstName && user.lastName
+                  ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+                  : '??'}
+              </AvatarFallback>
+            )}
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className={'w-[200px]'} collisionPadding={20}>
           <DropdownMenuLabel>
             <div className={'flex flex-col gap-y-0.5'}>
-              <span>{`${data?.user.firstName} ${data?.user.lastName}`}</span>
+              <span>{`${user.firstName} ${user.lastName}`}</span>
               <span className={'text-xs text-muted-foreground'}>
-                Участник, {data?.user.faculty.name}, {data?.user.course} курс
+                {userRoles[user.role]}, {user.faculty.name}, {user.course} курс
               </span>
             </div>
           </DropdownMenuLabel>

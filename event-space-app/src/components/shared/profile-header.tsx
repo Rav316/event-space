@@ -5,10 +5,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 interface Props {
   editMode?: boolean;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
+  onCancelClick?: () => void
+  onEditClick?: () => void
 }
 
-export const ProfileHeader: React.FC<Props> = ({ editMode, setEditMode }) => {
+export const ProfileHeader: React.FC<Props> = ({ editMode, onCancelClick, onEditClick }) => {
   return (
     <div className='flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start'>
       <h1 className='text-3xl font-bold'>Мой профиль</h1>
@@ -27,7 +28,7 @@ export const ProfileHeader: React.FC<Props> = ({ editMode, setEditMode }) => {
                 ease: 'easeInOut',
               }}
             >
-              <Button onClick={() => setEditMode(true)}>
+              <Button onClick={onEditClick}>
                 <SquarePen />
                 <span>Редактировать</span>
               </Button>
@@ -45,7 +46,7 @@ export const ProfileHeader: React.FC<Props> = ({ editMode, setEditMode }) => {
                 ease: 'easeInOut',
               }}
             >
-              <Button variant='outline' onClick={() => setEditMode(false)}>
+              <Button variant='outline' onClick={onCancelClick}>
                 <X />
                 <span>Отмена</span>
               </Button>
