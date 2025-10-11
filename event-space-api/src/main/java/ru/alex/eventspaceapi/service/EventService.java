@@ -110,7 +110,7 @@ public class EventService {
         validateEventSteps(eventCreateDto);
 
         if(eventImage != null && !eventImage.isEmpty()) {
-            String imageUrl = fileService.saveFile(eventImage);
+            String imageUrl = fileService.saveFile(eventImage, "events");
             event.setImageUrl(imageUrl);
         }
 

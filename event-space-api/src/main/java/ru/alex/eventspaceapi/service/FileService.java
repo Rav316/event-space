@@ -16,19 +16,11 @@ public class FileService {
     @Value("${app.static-content.path}")
     private String staticContentPath;
 
-    public String saveFile(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("file is empty");
-        }
-
-        String originalFileName = file.getOriginalFilename();
-        String extension = "";
-        if (originalFileName != null && originalFileName.contains(".")) {
-            extension = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
-        }
+    public String saveFile(MultipartFile file, String subDir) {
+        String extension = getFileExtension(file, subDir);
 
         String randomFileName = UUID.randomUUID() + extension;
-        Path dirPath = Paths.get(staticContentPath, "events");
+        Path dirPath = Paths.get(staticContentPath, subDir);
 
         try {
             if (!Files.exists(dirPath)) {
@@ -43,10 +35,41 @@ public class FileService {
                 compressWithMagick(filePath);
             }
 
-            return "/events/" + randomFileName;
+            return "/" + subDir + "/" + randomFileName;
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Failed to save file", e);
+        }
+    }
+
+    private static String getFileExtension(MultipartFile file, String subDir) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("file is empty");
+        }
+
+        if (subDir == null || subDir.isBlank()) {
+            throw new IllegalArgumentException("subDir must not be empty");
+        }
+
+        String originalFileName = file.getOriginalFilename();
+        String extension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            extension = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
+        }
+        return extension;
+    }
+
+    public void deleteFileByUrl(String fileUrl) {
+        if (fileUrl == null || fileUrl.isBlank()) {
+            throw new IllegalArgumentException("fileUrl is empty");
+        }
+
+        Path filePath = Paths.get(staticContentPath, fileUrl.startsWith("/") ? fileUrl.substring(1) : fileUrl);
+
+        try {
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file: " + filePath, e);
         }
     }
 

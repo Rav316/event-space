@@ -2,10 +2,11 @@ package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.alex.eventspaceapi.dto.user.UserEditDto;
+import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.UserService;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -19,5 +20,14 @@ public class UserController {
     @GetMapping("/exists-by-email")
     public ResponseEntity<Boolean> existsByEmail(@RequestParam("email") String email) {
         return new ResponseEntity<>(userService.existsByEmail(email), OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserReadDto> update(
+            @PathVariable("id") Integer id,
+            @Validated @RequestPart("user") UserEditDto userEditDto,
+            @RequestPart(value = "avatar", required = false) MultipartFile avatar
+            ) {
+        return new ResponseEntity<>(userService.update(id, userEditDto, avatar), OK);
     }
 }

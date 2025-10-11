@@ -20,7 +20,7 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
         LEFT JOIN FETCH s.building b
         LEFT JOIN FETCH e.users u
         WHERE (e.eventDate, e.startTime) > (CURRENT_DATE, CURRENT_TIME)
-        ORDER BY e.eventDate ASC , e.startTime DESC
+        ORDER BY e.eventDate ASC , e.startTime DESC, e.id DESC
         """)
     List<Event> getActualEvents(Pageable pageable);
 
