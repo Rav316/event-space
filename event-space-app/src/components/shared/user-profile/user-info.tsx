@@ -2,6 +2,7 @@ import { Input, Label, Textarea } from '@/components/ui';
 import React from 'react';
 import { FormProvider, type useForm } from 'react-hook-form';
 import type { UserProfileData } from '@/schemas/user-profile-schema.ts';
+import { useHookFormMask } from 'use-mask-input';
 
 interface Props {
   editMode?: boolean;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
+  const registerWithMask = useHookFormMask(form.register);
+
   return (
     <FormProvider {...form}>
       <form className="flex flex-col gap-5">
@@ -65,7 +68,12 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 id="phone"
                 placeholder="Введите номер телефона"
                 disabled={!editMode}
-                {...form.register('phone')}
+                {...registerWithMask('phone', [
+                  '+7 999 999-99-99',
+                ], {
+                  required: true,
+                  showMaskOnHover: false
+                })}
               />
             </div>
           </div>
