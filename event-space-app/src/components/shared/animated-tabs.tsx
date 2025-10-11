@@ -22,7 +22,7 @@ export const AnimatedTabs: React.FC<Props> = ({ tabs, activeIndex, setActiveInde
               key={tab.text}
               onClick={() => setActiveIndex(i)}
               className={cn(
-                'relative z-10 px-5 py-1.5 text-sm font-medium rounded-2xl transition-colors duration-200 flex-1 flex items-center justify-center gap-2',
+                'relative z-10 px-5 py-1.5 text-sm font-medium rounded-2xl transition-colors duration-200 flex-1 flex items-center justify-center gap-2 max-[500px]:text-xs',
                 isActive
                   ? 'text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
@@ -39,7 +39,7 @@ export const AnimatedTabs: React.FC<Props> = ({ tabs, activeIndex, setActiveInde
                   }}
                 />
               )}
-              <tab.Icon className='w-4 h-4 z-10' />
+              <tab.Icon className='w-4 h-4 z-10 max-[500px]:hidden' />
               <span className='relative z-10'>{tab.text}</span>
             </button>
           )

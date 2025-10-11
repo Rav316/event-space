@@ -10,7 +10,7 @@ interface Props {
 
 export const ProfileHeader: React.FC<Props> = ({ editMode, setEditMode }) => {
   return (
-    <div className='flex justify-between items-center'>
+    <div className='flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start'>
       <h1 className='text-3xl font-bold'>Мой профиль</h1>
 
       <div className='relative'>

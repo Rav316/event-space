@@ -10,7 +10,7 @@ export const UserInfo: React.FC<Props> = ({ editMode }) => {
     <form className='flex flex-col gap-5'>
       <div className='flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'>
         <h3 className={'font-medium text-xl'}>Основная информация</h3>
-        <div className='grid grid-cols-2 gap-5'>
+        <div className='grid grid-cols-2 gap-5 max-[500px]:grid-cols-1'>
           <div className='flex flex-col gap-1'>
             <Label htmlFor='name'>Имя</Label>
             <Input id='name' placeholder='Введите имя' disabled={!editMode} />
@@ -40,7 +40,7 @@ export const UserInfo: React.FC<Props> = ({ editMode }) => {
 
       <div className='flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'>
         <span>Социальные сети</span>
-        <div className='flex gap-5'>
+        <div className='flex gap-5 max-[600px]:flex-col'>
           <div className='flex flex-col gap-1 flex-1'>
             <Label htmlFor='telegram'>Telegram</Label>
             <Input id='telegram' placeholder='@username' disabled={!editMode} />

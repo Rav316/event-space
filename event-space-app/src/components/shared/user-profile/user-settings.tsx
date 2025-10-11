@@ -2,8 +2,13 @@ import { ProfileSetting } from '@/components/shared/profile-setting.tsx';
 import { Button, Separator } from '@/components/ui';
 import { X } from 'lucide-react';
 import { ChangePasswordDialog } from '@/components/modal';
+import React from 'react';
 
-export const UserSettings = () => {
+interface Props {
+  editMode?: boolean;
+}
+
+export const UserSettings: React.FC<Props> = ({editMode}) => {
   return (
     <div className={'flex flex-col gap-5'}>
       <div
@@ -13,14 +18,17 @@ export const UserSettings = () => {
       >
         <h3 className={'font-medium text-xl'}>Уведомления</h3>
         <ProfileSetting
+          editMode={editMode}
           title={'Email уведомления'}
           description={'Получать уведомления на email'}
         />
         <ProfileSetting
+          editMode={editMode}
           title={'Напоминания о событиях'}
           description={'Напоминания перед началом мероприятий'}
         />
         <ProfileSetting
+          editMode={editMode}
           title={'Новые мероприятия'}
           description={'Уведомления о новых мероприятиях'}
         />
@@ -32,10 +40,12 @@ export const UserSettings = () => {
       >
         <h3 className={'font-medium text-xl'}>Приватность</h3>
         <ProfileSetting
+          editMode={editMode}
           title={'Показывать email'}
           description={'Другие пользователи смогут увидеть ваш email'}
         />
         <ProfileSetting
+          editMode={editMode}
           title={'Показывать телефон'}
           description={'Другие пользователи смогут увидеть ваш email'}
         />

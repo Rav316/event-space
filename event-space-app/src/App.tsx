@@ -34,7 +34,14 @@ const App = () => {
             }
           />
           <Route path={'/events/:eventId'} element={<EventPage />} />
-          <Route path={'/profile'} element={<ProfilePage />} />
+          <Route
+            path={'/profile'}
+            element={
+              <RequireAuth>
+                <ProfilePage />
+              </RequireAuth>
+            }
+          />
           <Route path="*" element={<Page404 />} />
         </Route>
       </Routes>

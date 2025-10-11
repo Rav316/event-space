@@ -23,7 +23,7 @@ const ProfilePage = () => {
       case 1:
         return <UserStatistics />;
       case 2:
-        return <UserSettings />;
+        return <UserSettings editMode={editMode} />;
     }
   };
 
@@ -31,7 +31,7 @@ const ProfilePage = () => {
     <Wrapper>
       <div className={'flex flex-col gap-5 mt-[20px]'}>
         <ProfileHeader setEditMode={setEditMode} editMode={editMode} />
-        <div className={'flex gap-5'}>
+        <div className={'flex gap-5 max-[800px]:flex-col'}>
           <div className={'flex flex-col gap-5 flex-3'}>
             <UserMainInfoBlock editMode={editMode} />
           </div>
@@ -41,7 +41,9 @@ const ProfilePage = () => {
               activeIndex={profileActiveTab}
               setActiveIndex={setProfileActiveTab}
             />
-            {renderProfileTab()}
+            <div className='min-h-[400px] transition-all duration-300'>
+              {renderProfileTab()}
+            </div>
           </div>
         </div>
       </div>
