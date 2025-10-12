@@ -56,19 +56,28 @@ public class UserService implements UserDetailsService {
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        if(!authorizedUser.id().equals(id) && authorizedUser.role() != Role.ADMIN) {
+        if (!authorizedUser.id().equals(id) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         userEditMapper.updateFromEntity(userEditDto, user);
-        if(userEditDto.faculty() != null) {
+        if (userEditDto.faculty() != null) {
             Faculty faculty = facultyRepository.findById(userEditDto.faculty())
                     .orElseThrow(() -> new FacultyNotFoundException(userEditDto.faculty()));
             user.setFaculty(faculty);
         }
-        if(avatar != null && !avatar.isEmpty()) {
-            fileService.deleteFileByUrl(user.getAvatarUrl());
-            String avatarUrl = fileService.saveFile(avatar, "avatars");
-            user.setAvatarUrl(avatarUrl);
+        if (avatar != null) {
+            if (avatar.isEmpty()) {
+                if (user.getAvatarUrl() != null) {
+                    fileService.deleteFileByUrl(user.getAvatarUrl());
+                    user.setAvatarUrl(null);
+                }
+            } else {
+                if (user.getAvatarUrl() != null) {
+                    fileService.deleteFileByUrl(user.getAvatarUrl());
+                }
+                String avatarUrl = fileService.saveFile(avatar, "avatars");
+                user.setAvatarUrl(avatarUrl);
+            }
         }
         return userReadMapper.toDto(user);
     }
