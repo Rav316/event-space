@@ -1,9 +1,11 @@
 package ru.alex.eventspaceapi.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.alex.eventspaceapi.dto.faculty.FacultyListDto;
 
 import java.time.LocalDate;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserReadDto(
         Integer id,
         String firstName,
