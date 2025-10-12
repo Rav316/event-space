@@ -10,7 +10,7 @@ export const userProfileSchema = z.object({
     .min(2, { message: 'Фамилия должна содержать не менее 2 символов' })
     .max(64, { message: 'Фамилия должна содержать не более 64 символов' }),
   email: z.email({ message: 'Некорректный email' }),
-  phone: z.string(),
+  phone: z.string().optional(),
   faculty: z.number().min(1, { message: 'Выберите факультет' }),
   course: z.number().optional(),
   description: z.string().optional(),

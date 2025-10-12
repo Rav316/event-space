@@ -33,7 +33,7 @@ export interface UserEditDto {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phone?: string;
   faculty: number;
   course?: number;
   description?: string;

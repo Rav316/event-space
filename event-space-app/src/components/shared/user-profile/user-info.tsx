@@ -110,6 +110,11 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 disabled={!editMode}
                 {...form.register('course')}
               />
+              {form.formState.errors.course && (
+                <FormErrorMessage>
+                  {form.formState.errors.course.message}
+                </FormErrorMessage>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="phone">Номер телефона</Label>
@@ -122,17 +127,27 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                   showMaskOnHover: false,
                 })}
               />
+              {form.formState.errors.phone && (
+                <FormErrorMessage>
+                  {form.formState.errors.phone.message}
+                </FormErrorMessage>
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="about">О себе</Label>
+            <Label htmlFor="description">О себе</Label>
             <Textarea
-              id="about"
+              id="description"
               className="resize-none"
               placeholder="Расскажите о себе"
               disabled={!editMode}
               {...form.register('description')}
             />
+            {form.formState.errors.description && (
+              <FormErrorMessage>
+                {form.formState.errors.description.message}
+              </FormErrorMessage>
+            )}
           </div>
         </div>
 

@@ -17,6 +17,7 @@ import { userProfileSchema } from '@/schemas/user-profile-schema.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import type { UserEditDto } from '@/api/users/model.ts';
 import { useEditUser } from '@/api/users/hooks.ts';
+import {deepEqual} from "@/utils/deep-equal.ts";
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -28,19 +29,22 @@ const ProfilePage = () => {
   const user = data?.user;
   const editUserMutation = useEditUser();
 
+  const defaultValues = {
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+    faculty: user?.faculty.id || 0,
+    course: user?.course,
+    description: user?.description || '',
+    phone: user?.phone || '',
+    tgUsername: user?.tgUsername || '',
+    vkUrl: user?.vkUrl || '',
+    githubUrl: user?.githubUrl || '',
+  }
+
   const userProfileForm = useForm<UserEditDto>({
     resolver: zodResolver(userProfileSchema),
-    defaultValues: {
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      email: user?.email || '',
-      faculty: user?.faculty.id || 0,
-      course: user?.course,
-      description: user?.description,
-      tgUsername: user?.tgUsername,
-      vkUrl: user?.vkUrl,
-      githubUrl: user?.githubUrl,
-    },
+    defaultValues,
   });
 
   const renderProfileTab = () => {
@@ -62,6 +66,12 @@ const ProfilePage = () => {
   };
 
   const onSubmit = userProfileForm.handleSubmit((data) => {
+    const isChanged = !deepEqual(data, defaultValues);
+    if (!isChanged && !selectedFile) {
+      setEditMode(false);
+      return;
+    }
+
     editUserMutation.mutate({
       user: { ...data },
       userId: user?.id || 0,
