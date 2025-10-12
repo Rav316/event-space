@@ -16,8 +16,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { userProfileSchema } from '@/schemas/user-profile-schema.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import type { UserEditDto } from '@/api/users/model.ts';
-import { useEditUser } from '@/api/users/hooks.ts';
-import {deepEqual} from "@/utils/deep-equal.ts";
+import { useCheckEmail, useEditUser } from '@/api/users/hooks.ts';
+import { deepEqual } from '@/utils/deep-equal.ts';
+import { queryClient } from '@/api/query-client.ts';
+import {validateEmailUnique} from "@/utils/validation.ts";
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -28,6 +30,7 @@ const ProfilePage = () => {
   const { data } = useMe();
   const user = data?.user;
   const editUserMutation = useEditUser();
+  const checkEmailMutation = useCheckEmail();
 
   const defaultValues = {
     firstName: user?.firstName || '',
@@ -40,7 +43,7 @@ const ProfilePage = () => {
     tgUsername: user?.tgUsername || '',
     vkUrl: user?.vkUrl || '',
     githubUrl: user?.githubUrl || '',
-  }
+  };
 
   const userProfileForm = useForm<UserEditDto>({
     resolver: zodResolver(userProfileSchema),
@@ -65,23 +68,36 @@ const ProfilePage = () => {
     userProfileForm.reset();
   };
 
-  const onSubmit = userProfileForm.handleSubmit((data) => {
+  const onSubmit = userProfileForm.handleSubmit(async (data) => {
     const isChanged = !deepEqual(data, defaultValues);
     if (!isChanged && !selectedFile) {
       setEditMode(false);
       return;
     }
 
-    editUserMutation.mutate({
-      user: { ...data },
-      userId: user?.id || 0,
-      avatar: selectedFile,
-    }, {
-      onSuccess: () => {
-        userProfileForm.reset(data);
-        setEditMode(false);
-      }
+    const emailOk = await validateEmailUnique({
+      email: data.email,
+      defaultEmail: defaultValues.email,
+      queryClient,
+      checkEmailMutation,
+      form: userProfileForm,
     });
+
+    if (!emailOk) return;
+
+    editUserMutation.mutate(
+      {
+        user: { ...data },
+        userId: user?.id || 0,
+        avatar: selectedFile,
+      },
+      {
+        onSuccess: () => {
+          userProfileForm.reset(data);
+          setEditMode(false);
+        },
+      },
+    );
   });
 
   return (

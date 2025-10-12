@@ -14,7 +14,7 @@ export const useEditUser = () => {
         if (!prevData) return prevData;
         return {
           ...prevData,
-          user: updatedUser
+          user: updatedUser,
         };
       });
       toast.success('Данные успешно обновлены');
@@ -23,6 +23,15 @@ export const useEditUser = () => {
       if (error instanceof AxiosError) {
         toast.error('Произошла ошибка при обновлении данных');
       }
+    },
+  });
+};
+
+export const useCheckEmail = () => {
+  return useMutation({
+    mutationFn: Api.users.existsByEmail,
+    onSuccess: (exists, email) => {
+      queryClient.setQueryData(['emailExists', email], exists);
     },
   });
 };

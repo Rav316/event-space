@@ -18,6 +18,9 @@ import { useStepper } from '@/hooks/use-stepper.ts';
 import { useRegistrationForms } from '@/hooks/use-registration-forms.ts';
 import { useRegistration } from '@/api/auth/hooks.ts';
 import { RegistrationStepper } from '@/components/shared';
+import { validateEmailUnique } from '@/utils/validation.ts';
+import { queryClient } from '@/api/query-client.ts';
+import { useCheckEmail } from '@/api/users/hooks.ts';
 
 const RegistrationPage = () => {
   const { currentStep, next, back } = useStepper(3);
@@ -31,6 +34,7 @@ const RegistrationPage = () => {
   );
 
   const registrationMutation = useRegistration();
+  const checkEmailMutation = useCheckEmail();
 
   const { personalDataForm, roleStatusForm, passwordCreateForm } =
     useRegistrationForms();
@@ -48,11 +52,25 @@ const RegistrationPage = () => {
     }
   };
 
-  const onStepNext = () => {
+  const onStepNext = async () => {
     switch (currentStep) {
-      case 0:
-        setRegistrationData(personalDataForm.getValues());
+      case 0: {
+        const data = personalDataForm.getValues();
+
+        const isValid = await personalDataForm.trigger();
+        if (!isValid) return;
+
+        const emailOk = await validateEmailUnique({
+          email: data.email,
+          queryClient,
+          checkEmailMutation,
+          form: personalDataForm,
+        });
+        if (!emailOk) return;
+
+        setRegistrationData(data);
         break;
+      }
       case 1:
         setRegistrationData(roleStatusForm.getValues());
         break;
