@@ -5,21 +5,27 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 interface Props {
   editMode?: boolean;
-  onCancelClick?: () => void
-  onEditClick?: () => void
+  onCancelClick?: () => void;
+  onEditClick?: () => void;
+  onSaveClick?: () => void;
 }
 
-export const ProfileHeader: React.FC<Props> = ({ editMode, onCancelClick, onEditClick }) => {
+export const ProfileHeader: React.FC<Props> = ({
+  editMode,
+  onCancelClick,
+  onEditClick,
+  onSaveClick,
+}) => {
   return (
-    <div className='flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start'>
-      <h1 className='text-3xl font-bold'>Мой профиль</h1>
+    <div className="flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start">
+      <h1 className="text-3xl font-bold">Мой профиль</h1>
 
-      <div className='relative'>
-        <AnimatePresence mode='popLayout'>
+      <div className="relative">
+        <AnimatePresence mode="popLayout">
           {!editMode ? (
             <motion.div
-              key='edit'
-              layoutId='actionButtons'
+              key="edit"
+              layoutId="actionButtons"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -35,9 +41,9 @@ export const ProfileHeader: React.FC<Props> = ({ editMode, onCancelClick, onEdit
             </motion.div>
           ) : (
             <motion.div
-              key='actions'
-              layoutId='actionButtons'
-              className='flex gap-3'
+              key="actions"
+              layoutId="actionButtons"
+              className="flex gap-3"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -46,11 +52,11 @@ export const ProfileHeader: React.FC<Props> = ({ editMode, onCancelClick, onEdit
                 ease: 'easeInOut',
               }}
             >
-              <Button variant='outline' onClick={onCancelClick}>
+              <Button variant="outline" onClick={onCancelClick}>
                 <X />
                 <span>Отмена</span>
               </Button>
-              <Button>
+              <Button onClick={onSaveClick}>
                 <Save />
                 <span>Сохранить</span>
               </Button>
@@ -59,5 +65,5 @@ export const ProfileHeader: React.FC<Props> = ({ editMode, onCancelClick, onEdit
         </AnimatePresence>
       </div>
     </div>
-  )
-}
+  );
+};

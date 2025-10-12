@@ -1,5 +1,6 @@
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
+import type { UserEditData, UserReadDto } from '@/api/users/model.ts';
 
 export const existsByEmail = async (email: string): Promise<boolean> => {
   const response = await axiosInstance.get<boolean>(
@@ -10,5 +11,26 @@ export const existsByEmail = async (email: string): Promise<boolean> => {
       },
     },
   );
+  return response.data;
+};
+
+export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
+  const formData = new FormData();
+  formData.append(
+    'user',
+    new Blob([JSON.stringify(data.user)], { type: 'application/json' }),
+  );
+  if (data.avatar) {
+    formData.append('avatar', data.avatar);
+  }
+
+  const response = await axiosInstance.put<UserReadDto>(
+    `${ApiRoutes.USERS}/${data.userId}`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+
   return response.data;
 };

@@ -1,4 +1,5 @@
 import {
+  FormErrorMessage,
   Input,
   Label,
   Select,
@@ -7,17 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-  Textarea,
+  Textarea
 } from '@/components/ui';
 import React from 'react';
 import { FormProvider, type useForm } from 'react-hook-form';
-import type { UserProfileData } from '@/schemas/user-profile-schema.ts';
 import { useHookFormMask } from 'use-mask-input';
 import { useFaculties } from '@/api/faculties/hooks.ts';
+import type { UserEditDto } from '@/api/users/model.ts';
 
 interface Props {
   editMode?: boolean;
-  form: ReturnType<typeof useForm<UserProfileData>>;
+  form: ReturnType<typeof useForm<UserEditDto>>;
 }
 
 export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
@@ -38,6 +39,11 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 disabled={!editMode}
                 {...form.register('firstName')}
               />
+              {form.formState.errors.firstName && (
+                <FormErrorMessage>
+                  {form.formState.errors.firstName.message}
+                </FormErrorMessage>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="last-name">Фамилия</Label>
@@ -47,6 +53,11 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 disabled={!editMode}
                 {...form.register('lastName')}
               />
+              {form.formState.errors.lastName && (
+                <FormErrorMessage>
+                  {form.formState.errors.lastName.message}
+                </FormErrorMessage>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="email">Email</Label>
@@ -56,6 +67,11 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
                 disabled={!editMode}
                 {...form.register('email')}
               />
+              {form.formState.errors.email && (
+                <FormErrorMessage>
+                  {form.formState.errors.email.message}
+                </FormErrorMessage>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="faculty">Факультет</Label>

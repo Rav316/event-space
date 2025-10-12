@@ -18,5 +18,3 @@ export const userProfileSchema = z.object({
   vkUrl: z.string().optional(),
   githubUrl: z.string().optional(),
 });
-
-export type UserProfileData = z.infer<typeof userProfileSchema>;

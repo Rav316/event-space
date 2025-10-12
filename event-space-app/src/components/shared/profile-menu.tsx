@@ -26,13 +26,15 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
   }
   const user = data.user;
 
+  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
+
   return (
     <div className={cn(className, 'flex items-center')}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
             {user.avatarUrl ? (
-              <AvatarImage src={user.avatarUrl} />
+              <AvatarImage src={`${staticContentUrl}${user.avatarUrl}`} />
             ) : (
               <AvatarFallback>
                 {user.firstName && user.lastName

@@ -1,7 +1,18 @@
-import { Avatar, AvatarFallback, AvatarImage, Badge, Label, Separator } from '@/components/ui';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Badge,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Label,
+  Separator,
+} from '@/components/ui';
 import { motion, AnimatePresence } from 'framer-motion';
-import React from 'react';
-import { Upload } from 'lucide-react';
+import React, { useState } from 'react';
+import { Pencil, Trash2, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { userRoles } from '@/constants/user-roles.ts';
@@ -20,11 +31,11 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   setPreviewUrl,
 }) => {
   const { data } = useMe();
-
+  const [avatarRemoved, setAvatarRemoved] = useState(false);
   if (!data) {
     return;
   }
-
+  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
   const user = data.user;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +43,20 @@ export const UserMainInfoBlock: React.FC<Props> = ({
     if (file) {
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
+      setAvatarRemoved(false);
     }
   };
 
+  const handleFileRemove = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setAvatarRemoved(true);
+  };
+
   const avatarSrc =
-    previewUrl ||
-    user.avatarUrl || undefined;
+    !avatarRemoved &&
+    (previewUrl ??
+      (user.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : undefined));
 
   return (
     <div
@@ -45,6 +64,7 @@ export const UserMainInfoBlock: React.FC<Props> = ({
         'flex flex-col items-center gap-3 border border-[#E5E5E5] rounded-2xl p-5'
       }
     >
+      {/*TODO добавить функционал удаления аватара*/}
       <div className="relative">
         <Avatar key={avatarSrc || 'fallback'} className="h-20 w-20">
           {avatarSrc ? (
@@ -61,7 +81,7 @@ export const UserMainInfoBlock: React.FC<Props> = ({
         <AnimatePresence>
           {editMode && (
             <motion.div
-              key="avatar-upload"
+              key="avatar-actions"
               initial={{ scale: 0, opacity: 0, y: 10 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0, opacity: 0, y: 10 }}
@@ -72,18 +92,45 @@ export const UserMainInfoBlock: React.FC<Props> = ({
               }}
               className="absolute bottom-0 right-0"
             >
-              <Label htmlFor="avatar-upload" className="cursor-pointer">
-                <div className="bg-primary text-primary-foreground p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors">
-                  <Upload className="h-3 w-3" />
-                </div>
-                <input
-                  id="avatar-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="bg-primary text-primary-foreground p-1.5 rounded-full shadow-lg hover:bg-primary/90 transition-colors">
+                    <Pencil className="h-3.5 w-3.5" />
+                  </button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  align="start"
+                  sideOffset={5}
+                  className="w-44 whitespace-nowrap"
+                  side={'bottom'}
+                >
+                  <DropdownMenuItem asChild>
+                    <Label
+                      htmlFor="avatar-upload"
+                      className="flex items-center gap-2 cursor-pointer w-full select-none"
+                    >
+                      <Upload className="h-4 w-4 shrink-0" />
+                      <span>Изменить аватар</span>
+                      <input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                    </Label>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={handleFileRemove}
+                    className="flex items-center gap-2 text-destructive focus:text-destructive select-none"
+                  >
+                    <Trash2 className="h-4 w-4 shrink-0" />
+                    <span>Удалить аватар</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </motion.div>
           )}
         </AnimatePresence>
@@ -94,7 +141,7 @@ export const UserMainInfoBlock: React.FC<Props> = ({
         </span>
 
         <span className={'text-muted-foreground'}>{user.email}</span>
-      {/*  TODO добавить проверку занятности почты при отправке формы*/}
+        {/*  TODO добавить проверку занятности почты при отправке формы*/}
       </div>
       <Badge variant={'outline'}>{userRoles[user.role]}</Badge>
       <Separator />

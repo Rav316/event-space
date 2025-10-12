@@ -13,11 +13,10 @@ import {
 } from '@/components/shared/user-profile';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  type UserProfileData,
-  userProfileSchema,
-} from '@/schemas/user-profile-schema.ts';
+import { userProfileSchema } from '@/schemas/user-profile-schema.ts';
 import { useMe } from '@/api/auth/hooks.ts';
+import type { UserEditDto } from '@/api/users/model.ts';
+import { useEditUser } from '@/api/users/hooks.ts';
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -27,19 +26,20 @@ const ProfilePage = () => {
 
   const { data } = useMe();
   const user = data?.user;
+  const editUserMutation = useEditUser();
 
-  const userProfileForm = useForm<UserProfileData>({
+  const userProfileForm = useForm<UserEditDto>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       email: user?.email || '',
       faculty: user?.faculty.id || 0,
-      course: user?.course || 0,
-      description: user?.description || '',
-      tgUsername: user?.tgUsername || '',
-      vkUrl: user?.vkUrl || '',
-      githubUrl: user?.githubUrl || '',
+      course: user?.course,
+      description: user?.description,
+      tgUsername: user?.tgUsername,
+      vkUrl: user?.vkUrl,
+      githubUrl: user?.githubUrl,
     },
   });
 
@@ -57,9 +57,20 @@ const ProfilePage = () => {
   const onCancelClick = () => {
     setEditMode(false);
     setSelectedFile(null);
-    setPreviewUrl(null)
+    setPreviewUrl(null);
     userProfileForm.reset();
   };
+
+  const onSubmit = userProfileForm.handleSubmit((data) => {
+    editUserMutation.mutate({
+      user: { ...data },
+      userId: user?.id || 0,
+      avatar: selectedFile,
+    });
+
+    userProfileForm.reset(data);
+    setEditMode(false);
+  });
 
   return (
     <Wrapper>
@@ -68,6 +79,7 @@ const ProfilePage = () => {
           onEditClick={() => setEditMode(true)}
           onCancelClick={onCancelClick}
           editMode={editMode}
+          onSaveClick={onSubmit}
         />
         <div className={'flex gap-5 max-[800px]:flex-col'}>
           <div className={'flex flex-col gap-5 flex-3'}>

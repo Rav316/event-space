@@ -13,6 +13,7 @@ interface EventCreationState {
   removeEventStep: (index: number) => void;
   resetEvent: () => void;
   resetEventSteps: () => void;
+  updateEventStep: (index: number, data: Partial<EventStepCreateDto>) => void;
 }
 
 export const useEventCreationStore = create<EventCreationState>()(
