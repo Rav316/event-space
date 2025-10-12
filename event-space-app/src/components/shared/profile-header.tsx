@@ -8,6 +8,7 @@ interface Props {
   onCancelClick?: () => void;
   onEditClick?: () => void;
   onSaveClick?: () => void;
+  isLoading?: boolean;
 }
 
 export const ProfileHeader: React.FC<Props> = ({
@@ -15,6 +16,7 @@ export const ProfileHeader: React.FC<Props> = ({
   onCancelClick,
   onEditClick,
   onSaveClick,
+  isLoading,
 }) => {
   return (
     <div className="flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start">
@@ -52,13 +54,21 @@ export const ProfileHeader: React.FC<Props> = ({
                 ease: 'easeInOut',
               }}
             >
-              <Button variant="outline" onClick={onCancelClick}>
+              <Button
+                disabled={isLoading}
+                variant="outline"
+                onClick={onCancelClick}
+              >
                 <X />
                 <span>Отмена</span>
               </Button>
-              <Button onClick={onSaveClick}>
+              <Button disabled={isLoading} onClick={onSaveClick}>
                 <Save />
-                <span>Сохранить</span>
+                {isLoading ? (
+                  <span>Сохранение...</span>
+                ) : (
+                  <span>Сохранить</span>
+                )}
               </Button>
             </motion.div>
           )}

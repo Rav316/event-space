@@ -66,10 +66,12 @@ const ProfilePage = () => {
       user: { ...data },
       userId: user?.id || 0,
       avatar: selectedFile,
+    }, {
+      onSuccess: () => {
+        userProfileForm.reset(data);
+        setEditMode(false);
+      }
     });
-
-    userProfileForm.reset(data);
-    setEditMode(false);
   });
 
   return (
@@ -80,6 +82,7 @@ const ProfilePage = () => {
           onCancelClick={onCancelClick}
           editMode={editMode}
           onSaveClick={onSubmit}
+          isLoading={editUserMutation.isPending}
         />
         <div className={'flex gap-5 max-[800px]:flex-col'}>
           <div className={'flex flex-col gap-5 flex-3'}>
