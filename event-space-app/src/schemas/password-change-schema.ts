@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-export const passwordCreateSchema = z
+export const passwordChangeSchema = z
   .object({
-    password: z
+    currentPassword: z.string(),
+    newPassword: z
       .string()
       .min(8, { message: 'Пароль должен содержать не менее 8 символов' })
       .regex(/^(?=.*\d)(?=.*[a-zA-Z]).+$/, {
@@ -11,9 +12,7 @@ export const passwordCreateSchema = z
       }),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     path: ['confirmPassword'],
     message: 'Пароли не совпадают',
   });
-
-export type PasswordCreateData = z.infer<typeof passwordCreateSchema>;

@@ -14,10 +14,9 @@ export const PasswordInput = ({
     <div className="relative">
       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
-        id={props.id || 'password'}
         type={showPassword ? 'text' : 'password'}
         placeholder="Введите пароль"
-        className={cn('pl-10 pr-10', className)}
+        className={cn('pl-10 pr-10 text-foreground', className)}
         {...props}
       />
       <button

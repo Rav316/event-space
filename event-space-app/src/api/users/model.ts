@@ -47,3 +47,9 @@ export interface UserEditData {
   user: UserEditDto;
   avatar: File | null;
 }
+
+export interface UserPasswordChangeDto {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
