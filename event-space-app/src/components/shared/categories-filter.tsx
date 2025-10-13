@@ -14,7 +14,7 @@ export const CategoriesFilter = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={'outline'} className={'max-[563px]:flex-1'}>
+        <Button variant={'outline'} className={'max-[703px]:flex-1'}>
           <Funnel />
           <span>Категории</span>
           <ChevronDown />

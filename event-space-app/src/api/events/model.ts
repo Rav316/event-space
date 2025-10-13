@@ -1,6 +1,7 @@
 import type { EventCategory } from '@/api/event-categories/model.ts';
 import type { Space } from '@/api/spaces/model.ts';
 import type { EventSortCategory } from '@/constants/event-sort-categories.ts';
+import type { EventPeriod } from '@/constants/event-periods.ts';
 
 export interface EventCreateDto {
   name: string;
@@ -74,6 +75,7 @@ export interface EventFilter {
   tags: string[];
   hasPlaces?: boolean;
   sort?: EventSortCategory;
+  period: EventPeriod;
   page?: number;
 }
 

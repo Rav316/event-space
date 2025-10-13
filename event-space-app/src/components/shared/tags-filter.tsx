@@ -59,7 +59,7 @@ export const TagsFilter = () => {
   return (
     <Popover modal={true}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="max-[563px]:flex-1">
+        <Button variant="outline" className="max-[703px]:flex-1">
           <Plus />
           <span>Теги</span>
         </Button>

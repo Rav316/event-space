@@ -20,7 +20,8 @@ export const useEventFilterStore = create<EventFilterState>()(
         categories: [],
         tags: [],
         page: 0,
-        sort: 'date'
+        sort: 'date',
+        period: 'all'
       },
       setFilter: (filterData) =>
         set((state) => {

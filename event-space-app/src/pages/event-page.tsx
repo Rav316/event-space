@@ -34,7 +34,7 @@ const EventPage = () => {
     <Wrapper className={'max-w-[1400px]'}>
       <div className={'flex flex-col gap-5 max-w-[1400px] mt-[20px]'}>
         <div>
-          <Button variant={'outline'} onClick={() => navigate('/')}>
+          <Button variant={'outline'} onClick={() => navigate(-1)}>
             <ArrowLeft />
             <span>Назад</span>
           </Button>
