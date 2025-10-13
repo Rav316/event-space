@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,18 +15,24 @@ import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
+import ru.alex.eventspaceapi.dto.user.UserPasswordUpdateDto;
 import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
 import ru.alex.eventspaceapi.exception.FacultyNotFoundException;
+import ru.alex.eventspaceapi.exception.UserNotFoundException;
 import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
 import ru.alex.eventspaceapi.mapper.user.UserRegisterMapper;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.util.Objects;
+
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
+    private final CacheManager cacheManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -63,6 +70,25 @@ public class AuthService {
                 userReadMapper.toDto(user),
                 jwtService.generateAccessToken(user.getEmail())
         );
+    }
+
+
+    @Transactional
+    public void changePassword(UserPasswordUpdateDto userPasswordUpdateDto) {
+        Integer id = Objects.requireNonNull(getAuthorizedUser()).id();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                userPasswordUpdateDto.currentPassword()
+        );
+        authenticationManager.authenticate(authInputToken);
+        if(!userPasswordUpdateDto.newPassword().equals(userPasswordUpdateDto.confirmPassword())) {
+            throw new IllegalArgumentException("newPassword and confirmPassword do not match");
+        }
+        String password = passwordEncoder.encode(userPasswordUpdateDto.confirmPassword());
+        user.setPassword(password);
+        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
     }
 
     public AuthResponse refreshAccessToken(String refreshToken) {

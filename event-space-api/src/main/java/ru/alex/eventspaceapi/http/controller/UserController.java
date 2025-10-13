@@ -6,7 +6,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
+import ru.alex.eventspaceapi.dto.user.UserPasswordUpdateDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
+import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -15,6 +17,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
+    private final AuthService authService;
     private final UserService userService;
 
     @GetMapping("/exists-by-email")
@@ -29,5 +32,13 @@ public class UserController {
             @RequestPart(value = "avatar", required = false) MultipartFile avatar
             ) {
         return new ResponseEntity<>(userService.update(id, userEditDto, avatar), OK);
+    }
+
+    @PatchMapping("/profile/change-password")
+    public ResponseEntity<Void> changePassword(
+            @Validated @RequestBody UserPasswordUpdateDto userPasswordUpdateDto
+    ) {
+        authService.changePassword(userPasswordUpdateDto);
+        return new ResponseEntity<>(OK);
     }
 }

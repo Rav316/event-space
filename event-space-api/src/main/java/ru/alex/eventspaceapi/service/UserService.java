@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,6 +53,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @CacheEvict(value = "users", key = "#result.email()")
     public UserReadDto update(Integer id, UserEditDto userEditDto, MultipartFile avatar) {
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
         User user = userRepository.findById(id)
