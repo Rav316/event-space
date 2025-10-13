@@ -21,6 +21,8 @@ import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -145,6 +147,25 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         }
         if (filter.hasPlaces() != null && filter.hasPlaces()) {
             predicate = predicate.and(event.users.size().lt(event.space.capacity));
+        }
+
+        if(filter.period() != null) {
+            LocalDate today = LocalDate.now();
+            LocalTime now = LocalTime.now();
+            predicate = switch (filter.period()) {
+                case "past" -> {
+                    BooleanExpression passedEvents = event.eventDate.before(today)
+                            .or(event.eventDate.eq(today)
+                                    .and(event.endTime.before(now)));
+                    yield predicate.and(passedEvents);
+                }
+                case "future" -> {
+                    BooleanExpression upcomingEvents = event.eventDate.after(today)
+                            .or(event.eventDate.eq(today).and(event.endTime.goe(now)));
+                    yield predicate.and(upcomingEvents);
+                }
+                default -> predicate;
+            };
         }
 
         return predicate;

@@ -8,6 +8,7 @@ public record EventFilter (
         List<String> tags,
         Boolean hasPlaces,
         String sort,
+        String period,
         Integer page
 ) {
 }
