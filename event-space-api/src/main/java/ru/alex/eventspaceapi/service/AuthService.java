@@ -15,7 +15,7 @@ import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
-import ru.alex.eventspaceapi.dto.user.UserPasswordUpdateDto;
+import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
 import ru.alex.eventspaceapi.exception.FacultyNotFoundException;
 import ru.alex.eventspaceapi.exception.UserNotFoundException;
@@ -74,19 +74,19 @@ public class AuthService {
 
 
     @Transactional
-    public void changePassword(UserPasswordUpdateDto userPasswordUpdateDto) {
+    public void changePassword(UserPasswordChangeDto userPasswordChangeDto) {
         Integer id = Objects.requireNonNull(getAuthorizedUser()).id();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
                 user.getEmail(),
-                userPasswordUpdateDto.currentPassword()
+                userPasswordChangeDto.currentPassword()
         );
         authenticationManager.authenticate(authInputToken);
-        if(!userPasswordUpdateDto.newPassword().equals(userPasswordUpdateDto.confirmPassword())) {
+        if(!userPasswordChangeDto.newPassword().equals(userPasswordChangeDto.confirmPassword())) {
             throw new IllegalArgumentException("newPassword and confirmPassword do not match");
         }
-        String password = passwordEncoder.encode(userPasswordUpdateDto.confirmPassword());
+        String password = passwordEncoder.encode(userPasswordChangeDto.confirmPassword());
         user.setPassword(password);
         Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
     }

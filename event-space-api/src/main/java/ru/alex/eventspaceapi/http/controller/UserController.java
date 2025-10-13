@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
-import ru.alex.eventspaceapi.dto.user.UserPasswordUpdateDto;
+import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
@@ -36,9 +36,9 @@ public class UserController {
 
     @PatchMapping("/profile/change-password")
     public ResponseEntity<Void> changePassword(
-            @Validated @RequestBody UserPasswordUpdateDto userPasswordUpdateDto
+            @Validated @RequestBody UserPasswordChangeDto userPasswordChangeDto
     ) {
-        authService.changePassword(userPasswordUpdateDto);
+        authService.changePassword(userPasswordChangeDto);
         return new ResponseEntity<>(OK);
     }
 }

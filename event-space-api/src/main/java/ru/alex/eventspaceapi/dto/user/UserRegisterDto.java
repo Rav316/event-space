@@ -23,6 +23,7 @@ public record UserRegisterDto(
         @Max(4)
         Short course,
         @NotNull
+        @Size(min = 8)
         String password
 ) {
 }
