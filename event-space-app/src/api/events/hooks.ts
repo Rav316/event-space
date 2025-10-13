@@ -63,6 +63,7 @@ export const useEventById = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.findById(eventId),
     queryKey: EVENTS_KEYS.event(eventId),
+    retry: false
   });
 };
 
