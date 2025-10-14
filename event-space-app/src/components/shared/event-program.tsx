@@ -13,7 +13,7 @@ export const EventProgram: React.FC<Props> = ({ steps }) => {
         {steps.map((step, index) => (
           <div key={index} className="flex items-start gap-6">
             <span className="font-semibold w-16 shrink-0 text-right">
-              {step.startTime}
+              {step.startTime.slice(0, 5)}
             </span>
 
             <div className="flex flex-col gap-1">

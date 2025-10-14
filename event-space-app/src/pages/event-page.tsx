@@ -13,9 +13,9 @@ import {
   EventBadge,
   EventDescription,
   EventProgram,
-  EventRegistrationBlock,
+  EventRegistrationBlock, EventReviews,
   EventShareBlock,
-  EventSkeleton,
+  EventSkeleton
 } from '@/components/shared';
 import { EventOrganizerBlock } from '@/components/shared/event-organizer-block.tsx';
 import { useNavigate, useParams } from 'react-router';
@@ -55,7 +55,7 @@ const EventPage = () => {
 
   return (
     <Wrapper className="max-w-[1400px]">
-      <div className="flex flex-col gap-5 max-w-[1400px] mt-[20px]">
+      <div className="flex flex-col gap-5 mt-[20px]">
         <div>
           <Button variant="outline" onClick={() => navigate(-1)}>
             <ArrowLeft />
@@ -147,6 +147,7 @@ const EventPage = () => {
             <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
           </div>
         </div>
+        <EventReviews/>
       </div>
     </Wrapper>
   );
