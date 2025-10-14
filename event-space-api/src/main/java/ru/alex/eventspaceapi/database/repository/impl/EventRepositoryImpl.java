@@ -32,6 +32,7 @@ import static ru.alex.eventspaceapi.database.entity.QEvent.event;
 import static ru.alex.eventspaceapi.database.entity.QEventCategory.eventCategory;
 import static ru.alex.eventspaceapi.database.entity.QEventUser.eventUser;
 import static ru.alex.eventspaceapi.database.entity.QSpace.space;
+import static ru.alex.eventspaceapi.database.entity.QUser.user;
 
 @Component
 @RequiredArgsConstructor
@@ -76,13 +77,14 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                                 )
                         ),
                         event.users.size().as("participantQuantity"),
-                        event.author,
+                        event.author.firstName.concat(" ").concat(event.author.lastName),
                         isRegisteredExpr
                 ))
                 .from(event)
                 .leftJoin(event.category, eventCategory)
                 .leftJoin(event.space, space)
                 .leftJoin(space.building, building)
+                .leftJoin(event.author, user)
                 .where(predicate)
                 .orderBy(getSortOrder(filter))
                 .limit(pageSize)

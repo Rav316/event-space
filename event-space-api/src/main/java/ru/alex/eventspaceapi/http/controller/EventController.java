@@ -46,7 +46,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity<Void> create(
             @Validated @RequestPart("event")  EventCreateDto eventCreateDto,
-            @RequestPart("image") MultipartFile image
+            @RequestPart(value = "image", required = false) MultipartFile image
     ) {
         eventService.create(eventCreateDto, image);
         return new ResponseEntity<>(CREATED);

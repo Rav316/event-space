@@ -52,7 +52,13 @@ public class Event {
     @Column(name = "image_url")
     private String imageUrl;
 
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_category_id", referencedColumnName = "id")
+    private EventCategory category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author", referencedColumnName = "id")
+    private User author;
 
     @ManyToMany
     @JoinTable(
@@ -61,10 +67,6 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_category_id", referencedColumnName = "id")
-    private EventCategory category;
 
     @OneToMany(mappedBy = "event")
     private List<EventStep> steps;

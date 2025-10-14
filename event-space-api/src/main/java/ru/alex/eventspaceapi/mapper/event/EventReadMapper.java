@@ -9,6 +9,7 @@ import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepReadMapper;
 import ru.alex.eventspaceapi.mapper.space.SpaceReadMapper;
+import ru.alex.eventspaceapi.mapper.user.UserAuthorMapper;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
@@ -17,7 +18,8 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
         uses = {
                 EventCategoryReadMapper.class,
                 SpaceReadMapper.class,
-                EventStepReadMapper.class
+                EventStepReadMapper.class,
+                UserAuthorMapper.class
         }
 )
 public interface EventReadMapper {

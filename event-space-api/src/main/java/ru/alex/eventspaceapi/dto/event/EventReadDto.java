@@ -3,6 +3,7 @@ package ru.alex.eventspaceapi.dto.event;
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
+import ru.alex.eventspaceapi.dto.user.UserAuthorDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +21,7 @@ public record EventReadDto(
         LocalTime endTime,
         SpaceReadDto space,
         Integer participantQuantity,
-        String author,
+        UserAuthorDto author,
         Boolean isRegistered,
         List<EventStepReadDto> steps
 ) {

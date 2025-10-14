@@ -101,7 +101,7 @@ public class EventService {
         event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
         UserDetailsDto authorizedUser = getAuthorizedUser();
-        event.setAuthor(Objects.requireNonNull(authorizedUser).firstName() + " " + authorizedUser.lastName());
+        event.setAuthor(User.builder().id(Objects.requireNonNull(authorizedUser).id()).build());
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
                 .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
