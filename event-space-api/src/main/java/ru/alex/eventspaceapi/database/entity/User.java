@@ -7,6 +7,7 @@ import ru.alex.eventspaceapi.model.Role;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "faculty")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +51,7 @@ public class User {
     private String githubUrl;
 
     @Column(name = "isActive")
+    @Builder.Default
     private boolean active = true;
 
     @Column(name = "register_date")
@@ -60,5 +63,9 @@ public class User {
     private Faculty faculty;
 
     @ManyToMany(mappedBy = "users")
+    @Builder.Default
     private Set<Event> events = new HashSet<>();
+
+    @OneToMany(mappedBy = "author")
+    private List<Event> createdEvents;
 }
