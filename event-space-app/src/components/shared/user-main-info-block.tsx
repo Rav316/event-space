@@ -1,7 +1,4 @@
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Badge,
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +12,7 @@ import { Pencil, Trash2, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { userRoles } from '@/constants/user-roles.ts';
+import { UserAvatar } from '@/components/shared/user-avatar.tsx';
 
 interface Props {
   editMode?: boolean;
@@ -39,7 +37,6 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   const user = data.user;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handle file change');
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
@@ -50,8 +47,7 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   };
 
   const handleFileRemove = () => {
-    // setSelectedFile(null);
-    setSelectedFile(new File([], 'empty'))
+    setSelectedFile(new File([], 'empty'));
     setPreviewUrl(null);
     setAvatarRemoved(true);
   };
@@ -68,17 +64,13 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   return (
     <div className="flex flex-col items-center gap-3 border border-[#E5E5E5] rounded-2xl p-5">
       <div className="relative">
-        <Avatar key={avatarSrc || 'fallback'} className="h-20 w-20">
-          {avatarSrc ? (
-            <AvatarImage src={avatarSrc} />
-          ) : (
-            <AvatarFallback className="text-2xl font-semibold bg-muted">
-              {user.firstName && user.lastName
-                ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-                : '??'}
-            </AvatarFallback>
-          )}
-        </Avatar>
+        <UserAvatar
+          avatarUrl={avatarSrc}
+          firstName={user.firstName}
+          lastName={user.lastName}
+          className={'h-20 w-20'}
+          avatarFallbackClassName={'text-2xl font-semibold bg-muted'}
+        />
 
         <AnimatePresence>
           {editMode && (

@@ -43,8 +43,8 @@ const EventPage = () => {
 
   if (isEventPending) {
     return (
-      <Wrapper>
-        <EventSkeleton />;
+      <Wrapper className="max-w-[1400px]">
+        <EventSkeleton />
       </Wrapper>
     );
   }
@@ -137,6 +137,10 @@ const EventPage = () => {
             />
             {event.author && (
               <EventOrganizerBlock
+                firstName={event.author.firstName}
+                lastName={event.author.lastName}
+                faculty={event.author.faculty}
+                avatarUrl={event.author.avatarUrl}
                 className={'max-[980px]:flex-1 max-[900px]:flex-none'}
               />
             )}

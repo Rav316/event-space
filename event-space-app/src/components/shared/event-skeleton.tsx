@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui';
 
 export const EventSkeleton = () => {
   return (
-    <div className={'flex gap-5 max-[980px]:flex-col'}>
+    <div className={'flex gap-5 max-[980px]:flex-col mt-[70px]'}>
       <div className={'flex flex-col gap-5 flex-[7.7]'}>
         <div className={'group relative rounded-2xl'}>
           <Skeleton className={'h-[336px] w-full rounded-2xl'}/>

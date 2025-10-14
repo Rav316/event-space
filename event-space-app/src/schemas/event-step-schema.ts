@@ -25,8 +25,6 @@ export const eventStepSchema = z
     (data) => {
       const [sh, sm] = data.startTime.split(":").map(Number);
       const [eh, em] = data.endTime.split(":").map(Number);
-      console.log('start time', data.startTime);
-      console.log('end time', data.endTime);
       return sh * 60 + sm < eh * 60 + em;
     },
     {

@@ -53,3 +53,11 @@ export interface UserPasswordChangeDto {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface UserAuthorDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  faculty: string;
+  avatarUrl: string;
+}

@@ -40,9 +40,6 @@ const EventsPage = () => {
     }
   }, [events, isEventsPending, setTotalPages]);
 
-  console.log('events', events);
-  console.log('eventsIsPending', isEventsPending);
-
   return (
     <Wrapper>
       <div className={'flex flex-col py-5 gap-y-5'}>

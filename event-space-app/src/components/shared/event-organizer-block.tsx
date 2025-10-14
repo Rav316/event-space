@@ -1,12 +1,27 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
+import { UserAvatar } from '@/components/shared/user-avatar.tsx';
 
 interface Props {
   className?: string;
+  firstName: string;
+  lastName: string;
+  faculty: string;
+  avatarUrl?: string | false;
 }
 
-export const EventOrganizerBlock: React.FC<Props> = ({ className }) => {
+export const EventOrganizerBlock: React.FC<Props> = ({
+  className,
+  firstName,
+  lastName,
+  faculty,
+  avatarUrl,
+}) => {
+  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
+
+  const avatarUrlFinal = avatarUrl
+    ? `${staticContentUrl}${avatarUrl}`
+    : false;
   return (
     <div
       className={cn(
@@ -16,16 +31,16 @@ export const EventOrganizerBlock: React.FC<Props> = ({ className }) => {
     >
       <span className={'font-medium text-xl'}>Организатор</span>
       <div className={'flex items-center gap-3'}>
-        <Avatar className={'h-12 w-12'}>
-          <AvatarImage
-            src="https://avatars.githubusercontent.com/u/118563959?v=4"
-            alt="avatar"
-          />
-          <AvatarFallback>ИИ</AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          className={'h-12 w-12'}
+          firstName={firstName}
+          lastName={lastName}
+          avatarUrl={avatarUrlFinal}
+          avatarFallbackClassName={'text-xl bg-muted'}
+        />
         <div className={'flex flex-col gap-0.5'}>
-          <span className={'font-medium text-lg'}>Иванов Иван Иванович</span>
-          <span className={'text-muted-foreground'}>Участник</span>
+          <span className={'font-medium text-lg'}>{`${firstName} ${lastName}`}</span>
+          <span className={'text-muted-foreground'}>{faculty}</span>
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@ import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 
 export const findAll = async (): Promise<SpaceType[]> => {
-  console.log('space types find all');
   const response = await axiosInstance.get<SpaceType[]>(ApiRoutes.SPACE_TYPES);
   return response.data;
 }

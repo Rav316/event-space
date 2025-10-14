@@ -38,4 +38,5 @@ export {ProfileHeader} from './profile-header';
 export {UserStatisticsBlock} from './user-statistics-block';
 export {UserActivity} from './user-activity';
 export {EventPeriodSelect} from './event-period-select';
+export {UserAvatar} from './user-avatar';
 export * as toastLogout from './toast-logout';

@@ -2,6 +2,7 @@ import type { EventCategory } from '@/api/event-categories/model.ts';
 import type { Space } from '@/api/spaces/model.ts';
 import type { EventSortCategory } from '@/constants/event-sort-categories.ts';
 import type { EventPeriod } from '@/constants/event-periods.ts';
+import type { UserAuthorDto } from '@/api/users/model.ts';
 
 export interface EventCreateDto {
   name: string;
@@ -64,7 +65,7 @@ export interface EventReadDto {
   endTime: string;
   space: Space;
   participantQuantity: number;
-  author?: string;
+  author?: UserAuthorDto;
   isRegistered: boolean;
   steps: EventStep[];
 }
