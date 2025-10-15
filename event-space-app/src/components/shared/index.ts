@@ -41,4 +41,5 @@ export {EventPeriodSelect} from './event-period-select';
 export {UserAvatar} from './user-avatar';
 export {EventReviews} from './event-reviews';
 export {ReviewProgressBar} from './review-progress-bar';
+export {ReviewFilters} from './review-filters';
 export * as toastLogout from './toast-logout';

@@ -1,6 +1,8 @@
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Star } from 'lucide-react';
 import { StarRating } from '@/components/shared/star-rating.tsx';
 import { ReviewProgressBar } from '@/components/shared/review-progress-bar.tsx';
+import { Button } from '@/components/ui';
+import { ReviewFilters } from '@/components/shared/review-filters.tsx';
 
 export const EventReviews = () => {
   return (
@@ -27,6 +29,11 @@ export const EventReviews = () => {
           <ReviewProgressBar rating={1} count={0} total={14} />
         </div>
       </div>
+      <Button>
+        <Star/>
+        <span>Оставить отзыв</span>
+      </Button>
+      <ReviewFilters/>
     </div>
   );
 }
