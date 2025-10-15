@@ -23,6 +23,8 @@ public record EventReadDto(
         Integer participantQuantity,
         UserAuthorDto author,
         Boolean isRegistered,
+        Boolean canRegister,
+        Boolean canUnregister,
         List<EventStepReadDto> steps
 ) {
 }

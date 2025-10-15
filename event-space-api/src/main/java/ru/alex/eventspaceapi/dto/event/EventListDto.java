@@ -18,6 +18,8 @@ public record EventListDto(
         SpaceReadDto space,
         Integer participantQuantity,
         String author,
-        Boolean isRegistered
+        Boolean isRegistered,
+        Boolean canRegister,
+        Boolean canUnregister
 ) {
 }

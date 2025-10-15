@@ -130,8 +130,11 @@ public class EventService {
     public void registerForEvent(Integer id) {
         Event event = eventRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
+        if(isEventStarted(event)) {
+            throw new IllegalStateException("the event has already started, you cannot register on it");
+        }
 
-        if (event.getDeadline() != null && LocalDate.now().isAfter(event.getDeadline())) {
+        if (event.getDeadline() != null && event.getDeadline().isAfter(LocalDate.now())) {
             throw new IllegalStateException("the registration deadline for the events has expired");
         }
 
@@ -153,6 +156,9 @@ public class EventService {
     public void unregisterFromEvent(Integer id) {
         Event event = eventRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
+        if(isEventPassed(event)) {
+            throw new IllegalStateException("the event has already passed, you cannot cancel your registration");
+        }
         eventRepository.unregisterFromEvent(event.getId(), Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
@@ -189,5 +195,16 @@ public class EventService {
                 );
             }
         }
+    }
+
+    private boolean isEventPassed(Event event) {
+        LocalDate now = LocalDate.now();
+        return event.getEventDate().isBefore(now) ||
+                (event.getEventDate().isEqual(now) && event.getEndTime().isBefore(LocalTime.now()));
+    }
+
+    private boolean isEventStarted(Event event) {
+        LocalDate now = LocalDate.now();
+        return (event.getEventDate().isEqual(now) && event.getStartTime().isBefore(LocalTime.now()));
     }
 }

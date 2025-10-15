@@ -53,6 +53,15 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .exists()
                 : Expressions.asBoolean(false);
 
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+        BooleanExpression canRegisterExpr =
+                event.eventDate.after(dateNow)
+                        .or(event.eventDate.eq(dateNow).and(event.startTime.after(timeNow)));
+        BooleanExpression canUnregisterExpr =
+                event.eventDate.after(dateNow)
+                        .or(event.eventDate.eq(dateNow).and(event.endTime.after(timeNow)));
+
         List<EventListDto> events = queryFactory
                 .select(Projections.constructor(EventListDto.class,
                         event.id,
@@ -78,7 +87,9 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                         ),
                         event.users.size().as("participantQuantity"),
                         event.author.firstName.concat(" ").concat(event.author.lastName),
-                        isRegisteredExpr
+                        isRegisteredExpr,
+                        canRegisterExpr,
+                        canUnregisterExpr
                 ))
                 .from(event)
                 .leftJoin(event.category, eventCategory)
@@ -163,7 +174,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 }
                 case "future" -> {
                     BooleanExpression upcomingEvents = event.eventDate.after(today)
-                            .or(event.eventDate.eq(today).and(event.endTime.goe(now)));
+                            .or(event.eventDate.eq(today).and(event.startTime.goe(now)));
                     yield predicate.and(upcomingEvents);
                 }
                 default -> predicate;
@@ -179,7 +190,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         if (filter.sort() != null) {
             switch (filter.sort()) {
                 case "date":
-                    orderSpecifiers.add(event.eventDate.asc());
+                    orderSpecifiers.add(event.eventDate.desc());
                     orderSpecifiers.add(event.startTime.asc());
                     break;
                 case "popularity":
