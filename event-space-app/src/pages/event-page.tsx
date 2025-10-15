@@ -1,11 +1,12 @@
-import { Badge, Button } from '@/components/ui';
+import { Badge, Button, Skeleton } from '@/components/ui';
 import {
   ArrowLeft,
-  Calendar, Flame,
+  Calendar,
+  Flame,
   MapPin,
   QrCode,
   Share2,
-  Users
+  Users,
 } from 'lucide-react';
 import { Wrapper } from '@/components/hoc';
 import { categoryColors } from '@/constants/category-colors.ts';
@@ -13,17 +14,18 @@ import {
   EventBadge,
   EventDescription,
   EventProgram,
-  EventRegistrationBlock, EventReviews,
+  EventRegistrationBlock,
+  EventReviews,
   EventShareBlock,
-  EventSkeleton
+  EventSkeleton,
 } from '@/components/shared';
 import { EventOrganizerBlock } from '@/components/shared/event-organizer-block.tsx';
 import { useNavigate, useParams } from 'react-router';
-import { useEventById } from '@/api/events/hooks.ts';
+import { useEventById, useStepsByEvent } from '@/api/events/hooks.ts';
 import { formatDate } from '@/utils/format-date.ts';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import Page404 from '@/pages/page-404.tsx';
-import type { AxiosError } from 'axios';
+import axios, { type AxiosError } from 'axios';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 
 const EventPage = () => {
@@ -38,6 +40,9 @@ const EventPage = () => {
     error,
   } = useEventById(eventId);
 
+  const { data: eventSteps, isPending: isStepsPending } =
+    useStepsByEvent(eventId);
+
   if (isError && (error as AxiosError)?.response?.status === 404) {
     return <Page404 />;
   }
@@ -50,8 +55,25 @@ const EventPage = () => {
     );
   }
 
+  if (isError) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        return <Page404 />;
+      }
+    }
+    return (
+      <Wrapper className="max-w-[1400px]">
+        <EventSkeleton />
+      </Wrapper>
+    );
+  }
+
   if (!event) {
-    return <Page404 />;
+    return (
+      <Wrapper className="max-w-[1400px]">
+        <EventSkeleton />
+      </Wrapper>
+    );
   }
 
   return (
@@ -123,7 +145,9 @@ const EventPage = () => {
               />
               <EventBadge
                 Icon={Flame}
-                text={event.deadline ? formatDateToRuFormat(event.deadline) : '---'}
+                text={
+                  event.deadline ? formatDateToRuFormat(event.deadline) : '---'
+                }
                 caption="дедлайн регистрации"
               />
             </div>
@@ -131,7 +155,17 @@ const EventPage = () => {
             {event.description && (
               <EventDescription description={event.description} />
             )}
-            {event.steps.length > 0 && <EventProgram steps={event.steps} />}
+            {isStepsPending || !eventSteps ? (
+              <div className={'flex flex-col gap-4'}>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton className="h-10 w-full" key={index} />
+                ))}
+              </div>
+            ) : (
+              <>
+                {eventSteps.length > 0 && <EventProgram steps={eventSteps} />}
+              </>
+            )}
           </div>
 
           <div className="flex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row">
@@ -155,7 +189,7 @@ const EventPage = () => {
             <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
           </div>
         </div>
-        <EventReviews/>
+        <EventReviews />
       </div>
     </Wrapper>
   );

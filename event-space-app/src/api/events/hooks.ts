@@ -67,6 +67,14 @@ export const useEventById = (eventId: number) => {
   });
 };
 
+export const useStepsByEvent = (eventId: number) => {
+  return useQuery({
+    queryFn: () => Api.events.getStepsByEvent(eventId),
+    queryKey: EVENTS_KEYS.steps(eventId),
+    retry: false
+  });
+};
+
 export const useRegisterForEvent = (eventId: number) => {
   return useMutation({
     mutationFn: () => Api.events.registerForEvent(eventId),

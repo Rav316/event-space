@@ -73,7 +73,6 @@ export interface EventReadDto {
   canRegister: boolean;
   canUnregister: boolean;
   isRegistered: boolean;
-  steps: EventStep[];
 }
 
 export interface EventFilter {
