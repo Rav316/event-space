@@ -1,5 +1,5 @@
 import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import { Calendar, Clock4, MapPin, QrCode, Share2, Users } from 'lucide-react';
+import { Calendar, Clock4, Flame, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event-registration-button.tsx';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import type { EventListDto } from '@/api/events/model.ts';
+import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 
 interface Props {
   event: EventListDto;
@@ -68,14 +69,23 @@ export const EventCard: React.FC<Props> = ({ event }) => {
             >
               <EventCardLabel
                 Icon={Calendar}
-                text={new Date(event.eventDate).toLocaleDateString('ru-RU')}
+                text={formatDateToRuFormat(event.eventDate)}
               />
               <EventCardLabel
                 Icon={Clock4}
                 text={`${event.startTime.slice(0, 5)} - ${event.endTime.slice(0, 5)}`}
               />
             </div>
-            <EventCardLabel Icon={MapPin} text={event.space.name} />
+            <div
+              className={
+                'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
+              }
+            >
+              {event.deadline && (
+                <EventCardLabel Icon={Flame} text={formatDateToRuFormat(event.deadline)} />
+              )}
+              <EventCardLabel Icon={MapPin} text={event.space.name} />
+            </div>
             <div
               className={
                 'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
@@ -86,7 +96,9 @@ export const EventCard: React.FC<Props> = ({ event }) => {
                 text={`${event.participantQuantity}/${event.space.capacity} участников`}
               />
               {event.author && (
-                <span className={'text-muted-foreground'}>Автор: {event.author}</span>
+                <span className={'text-muted-foreground'}>
+                  Автор: {event.author}
+                </span>
               )}
             </div>
           </div>

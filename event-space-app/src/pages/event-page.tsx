@@ -1,11 +1,11 @@
 import { Badge, Button } from '@/components/ui';
 import {
   ArrowLeft,
-  Calendar,
+  Calendar, Flame,
   MapPin,
   QrCode,
   Share2,
-  Users,
+  Users
 } from 'lucide-react';
 import { Wrapper } from '@/components/hoc';
 import { categoryColors } from '@/constants/category-colors.ts';
@@ -24,6 +24,7 @@ import { formatDate } from '@/utils/format-date.ts';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import Page404 from '@/pages/page-404.tsx';
 import type { AxiosError } from 'axios';
+import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 
 const EventPage = () => {
   const navigate = useNavigate();
@@ -104,7 +105,7 @@ const EventPage = () => {
               ))}
             </div>
 
-            <div className="flex items-center gap-2 w-full max-[650px]:flex-col">
+            <div className="grid grid-cols-2 max-[550px]:grid-cols-1 items-center gap-2 w-full">
               <EventBadge
                 Icon={Calendar}
                 text={formatDate(event.eventDate)}
@@ -119,6 +120,11 @@ const EventPage = () => {
                 Icon={Users}
                 text={`${event.participantQuantity}/${event.space.capacity}`}
                 caption="участников"
+              />
+              <EventBadge
+                Icon={Flame}
+                text={event.deadline ? formatDateToRuFormat(event.deadline) : '---'}
+                caption="дедлайн регистрации"
               />
             </div>
 

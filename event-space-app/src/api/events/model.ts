@@ -47,6 +47,7 @@ export interface EventListDto {
   eventDate: string;
   startTime: string;
   endTime: string;
+  deadline?: string;
   space: Space;
   participantQuantity: number;
   author?: string;
@@ -65,6 +66,7 @@ export interface EventReadDto {
   eventDate: string;
   startTime: string;
   endTime: string;
+  deadline?: string;
   space: Space;
   participantQuantity: number;
   author?: UserAuthorDto;
