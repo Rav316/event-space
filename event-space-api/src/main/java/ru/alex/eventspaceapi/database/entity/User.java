@@ -6,9 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ru.alex.eventspaceapi.model.Role;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -62,9 +60,8 @@ public class User {
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     private Faculty faculty;
 
-    @ManyToMany(mappedBy = "users")
-    @Builder.Default
-    private Set<Event> events = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private List<EventUser> eventUsers;
 
     @OneToMany(mappedBy = "author")
     private List<Event> createdEvents;

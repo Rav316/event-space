@@ -7,9 +7,7 @@ import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -60,13 +58,8 @@ public class Event {
     @JoinColumn(name = "author", referencedColumnName = "id")
     private User author;
 
-    @ManyToMany
-    @JoinTable(
-            name = "event_user",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "event")
+    private List<EventUser> eventUsers;
 
     @OneToMany(mappedBy = "event")
     private List<EventStep> steps;

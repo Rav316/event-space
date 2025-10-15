@@ -6,15 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.alex.eventspaceapi.database.entity.Event;
-import ru.alex.eventspaceapi.database.entity.EventStep;
-import ru.alex.eventspaceapi.database.entity.EventCategory;
-import ru.alex.eventspaceapi.database.entity.Space;
-import ru.alex.eventspaceapi.database.entity.User;
-import ru.alex.eventspaceapi.database.repository.EventRepository;
-import ru.alex.eventspaceapi.database.repository.EventStepRepository;
-import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
-import ru.alex.eventspaceapi.database.repository.SpaceRepository;
+import ru.alex.eventspaceapi.database.entity.*;
+import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
@@ -32,7 +25,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
@@ -46,6 +38,7 @@ public class EventService {
     private final EventStepRepository eventStepRepository;
     private final SpaceRepository spaceRepository;
     private final EventCategoryRepository eventCategoryRepository;
+    private final EventUserRepository eventUserRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
     private final EventListMapper eventListMapper;
     private final EventReadMapper eventReadMapper;
@@ -138,10 +131,11 @@ public class EventService {
             throw new IllegalStateException("the registration deadline for the events has expired");
         }
 
-        Set<User> eventUsers = event.getUsers();
+
+        List<EventUser> eventUsers = eventUserRepository.findAllByEvent(event.getId());
         Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
 
-        if (eventUsers.stream().anyMatch(u -> u.getId().equals(authorizedUserId))) {
+        if (eventUsers.stream().anyMatch(eu -> eu.getEvent().getId().equals(authorizedUserId))) {
             throw new IllegalStateException("you are already registered for this event");
         }
 

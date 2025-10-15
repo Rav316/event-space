@@ -8,9 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
+import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
 import ru.alex.eventspaceapi.service.EventService;
+import ru.alex.eventspaceapi.service.EventStepService;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final EventStepService eventStepService;
 
     @GetMapping
     public PageResponse<EventListDto> findAllByFilter(@ModelAttribute EventFilter filter) {
@@ -41,6 +44,11 @@ public class EventController {
     @GetMapping("/{id}")
     public EventReadDto findById(@PathVariable("id") Integer id) {
         return eventService.findById(id);
+    }
+
+    @GetMapping("/{id}/steps")
+    public List<EventStepReadDto> getEventStepsByEvent(@PathVariable("id") Integer id) {
+        return eventStepService.findAllStepsByEvent(id);
     }
 
     @PostMapping

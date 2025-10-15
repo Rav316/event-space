@@ -18,7 +18,7 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
         LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
-        LEFT JOIN FETCH e.users u
+        LEFT JOIN FETCH e.eventUsers eu
         LEFT JOIN FETCH e.author a
         WHERE (e.eventDate, e.startTime) > (CURRENT_DATE, CURRENT_TIME)
         ORDER BY e.eventDate ASC , e.startTime DESC, e.id DESC
@@ -30,9 +30,8 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
         LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
-        LEFT JOIN FETCH e.users u
+        LEFT JOIN FETCH e.eventUsers eu
         LEFT JOIN FETCH e.author a
-        LEFT JOIN FETCH e.steps es
         WHERE e.id = :id
         """)
     Optional<Event> findByIdWithLoadedEntities(Integer id);

@@ -1,13 +1,11 @@
 package ru.alex.eventspaceapi.dto.event;
 
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
-import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
 import ru.alex.eventspaceapi.dto.user.UserAuthorDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 public record EventReadDto(
         Integer id,
@@ -25,7 +23,6 @@ public record EventReadDto(
         UserAuthorDto author,
         Boolean isRegistered,
         Boolean canRegister,
-        Boolean canUnregister,
-        List<EventStepReadDto> steps
+        Boolean canUnregister
 ) {
 }

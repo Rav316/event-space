@@ -1,7 +1,10 @@
 package ru.alex.eventspaceapi.database.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "event_user")
@@ -9,22 +12,18 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class EventUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @EmbeddedId
-    private EventUserId id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    private Event event;
 
-    @Embeddable
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class EventUserId implements java.io.Serializable {
-        @Column(name = "event_id")
-        private Integer eventId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-        @Column(name = "user_id")
-        private Integer userId;
-    }
+    private Boolean attended = false;
 }

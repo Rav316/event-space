@@ -48,8 +48,8 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         Expression<Boolean> isRegisteredExpr = (userId != null)
                 ? JPAExpressions.selectOne()
                 .from(eventUser)
-                .where(eventUser.id.eventId.eq(event.id)
-                        .and(eventUser.id.userId.eq(userId)))
+                .where(eventUser.event.id.eq(event.id)
+                        .and(eventUser.user.id.eq(userId)))
                 .exists()
                 : Expressions.asBoolean(false);
 
@@ -86,7 +86,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                                         building.address
                                 )
                         ),
-                        event.users.size().as("participantQuantity"),
+                        event.eventUsers.size().as("participantQuantity"),
                         event.author.firstName.concat(" ").concat(event.author.lastName),
                         isRegisteredExpr,
                         canRegisterExpr,
@@ -160,7 +160,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             predicate = predicate.and(tagsContainsAll);
         }
         if (filter.hasPlaces() != null && filter.hasPlaces()) {
-            predicate = predicate.and(event.users.size().lt(event.space.capacity));
+            predicate = predicate.and(event.eventUsers.size().lt(event.space.capacity));
         }
 
         if(filter.period() != null) {
@@ -195,10 +195,10 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                     orderSpecifiers.add(event.startTime.asc());
                     break;
                 case "popularity":
-                    orderSpecifiers.add(event.users.size().asc());
+                    orderSpecifiers.add(event.eventUsers.size().asc());
                     break;
                 case "availability":
-                    orderSpecifiers.add(event.users.size().desc());
+                    orderSpecifiers.add(event.eventUsers.size().desc());
                     break;
                 case "alphabet":
                     orderSpecifiers.add(event.name.asc());

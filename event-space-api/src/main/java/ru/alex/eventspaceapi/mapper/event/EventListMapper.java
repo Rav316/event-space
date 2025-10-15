@@ -32,13 +32,13 @@ public interface EventListMapper {
 
     @Named("mapParticipantsQuantity")
     default Integer mapParticipantsQuantity(Event event) {
-        return event.getUsers().size();
+        return event.getEventUsers().size();
     }
 
     @Named("mapIsRegistered")
     default Boolean mapIsRegistered(Event event) {
         UserDetailsDto user = getAuthorizedUser();
-        return user != null && event.getUsers().stream().anyMatch(u -> u.getId().equals(user.id()));
+        return user != null && event.getEventUsers().stream().anyMatch(eu -> eu.getUser().getId().equals(user.id()));
     }
 
     @Named("mapAuthor")
