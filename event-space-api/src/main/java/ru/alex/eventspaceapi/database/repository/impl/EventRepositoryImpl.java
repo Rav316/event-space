@@ -75,6 +75,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                         event.eventDate,
                         event.startTime,
                         event.endTime,
+                        event.deadline,
                         Projections.constructor(SpaceReadDto.class,
                                 space.id,
                                 space.name,
