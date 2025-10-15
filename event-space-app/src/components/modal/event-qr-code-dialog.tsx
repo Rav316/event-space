@@ -4,7 +4,7 @@ import { QrCode } from 'lucide-react';
 export const EventQrCodeDialog = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild={true}>
         <Button variant={'outline'} className={'w-full'}>
           <QrCode />
           <span>Показать QR-код</span>

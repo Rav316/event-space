@@ -51,6 +51,8 @@ export interface EventListDto {
   participantQuantity: number;
   author?: string;
   isRegistered: boolean;
+  canRegister: boolean;
+  canUnregister: boolean;
 }
 
 export interface EventReadDto {
@@ -66,6 +68,8 @@ export interface EventReadDto {
   space: Space;
   participantQuantity: number;
   author?: UserAuthorDto;
+  canRegister: boolean;
+  canUnregister: boolean;
   isRegistered: boolean;
   steps: EventStep[];
 }

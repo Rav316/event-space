@@ -15,7 +15,6 @@ export const EventGroup: React.FC<Props> = ({
   events,
   isLoading,
 }) => {
-
   return (
     <div
       className={cn(
@@ -32,22 +31,7 @@ export const EventGroup: React.FC<Props> = ({
       ) : (
         <>
           {events.map((event) => (
-            <EventCard
-              key={event.id}
-              id={event.id}
-              imageUrl={event.imageUrl}
-              title={event.name}
-              description={event.shortDescription}
-              date={event.eventDate}
-              startTime={event.startTime}
-              endTime={event.endTime}
-              location={`${event.space.building.name}, ${event.space.name}`}
-              registered={event.participantQuantity}
-              participants={event.space.capacity}
-              author={event.author}
-              category={event.category}
-              isRegistered={event.isRegistered}
-            />
+            <EventCard key={event.id} event={event} />
           ))}
         </>
       )}

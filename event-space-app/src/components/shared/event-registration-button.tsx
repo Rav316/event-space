@@ -11,6 +11,8 @@ import {
 interface Props {
   eventId: number;
   isUserRegistered?: boolean;
+  canRegister: boolean;
+  canUnregister: boolean;
   isDestructive?: boolean;
   participantsQuantity: number;
   capacity: number;
@@ -19,9 +21,11 @@ interface Props {
 export const EventRegistrationButton: React.FC<Props> = ({
   eventId,
   isUserRegistered,
+  canRegister,
+  canUnregister,
   isDestructive,
   participantsQuantity,
-  capacity
+  capacity,
 }) => {
   const hasPlaces = participantsQuantity < capacity;
 
@@ -43,9 +47,21 @@ export const EventRegistrationButton: React.FC<Props> = ({
     }
   };
 
+  const isButtonEnabled = isUserRegistered
+    ? canUnregister
+    : canRegister && hasPlaces;
+
+  if(eventId === 10) {
+    console.log('isButtonEnabled', isButtonEnabled);
+    console.log('isUserRegistered', isUserRegistered);
+    console.log('hasPlaces', hasPlaces);
+    console.log('canRegister', canRegister);
+    console.log('canUnregister', canUnregister);
+  }
+
   return (
     <Button
-      disabled={!isUserRegistered && !hasPlaces}
+      disabled={!isButtonEnabled}
       onClick={handleRegistrationClick}
       variant={
         isUserRegistered

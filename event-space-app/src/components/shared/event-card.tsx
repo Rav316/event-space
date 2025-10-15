@@ -3,42 +3,16 @@ import { Calendar, Clock4, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
-import type { EventCategory } from '@/api/event-categories/model.ts';
 import { Link } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event-registration-button.tsx';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
+import type { EventListDto } from '@/api/events/model.ts';
 
 interface Props {
-  id: number;
-  imageUrl?: string;
-  title: string;
-  description: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  registered: number;
-  participants: number;
-  author?: string;
-  category: EventCategory;
-  isRegistered?: boolean;
+  event: EventListDto;
 }
 
-export const EventCard: React.FC<Props> = ({
-  id,
-  imageUrl,
-  title,
-  description,
-  date,
-  startTime,
-  endTime,
-  location,
-  registered,
-  participants,
-  author,
-  category,
-  isRegistered,
-}) => {
+export const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <div
       className={
@@ -46,8 +20,8 @@ export const EventCard: React.FC<Props> = ({
       }
     >
       <div className="absolute z-10 top-3 left-3">
-        <Badge className={categoryColors[category.id - 1]}>
-          {category.name}
+        <Badge className={categoryColors[event.category.id - 1]}>
+          {event.category.name}
         </Badge>
       </div>
 
@@ -71,21 +45,20 @@ export const EventCard: React.FC<Props> = ({
       </div>
 
       <div className="overflow-hidden rounded-t-2xl">
-        <Link to={`/events/${id}`}>
+        <Link to={`/events/${event.id}`}>
           <img
             className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-            src={getEventImageUrl(title, imageUrl)}
-            alt={title}
+            src={getEventImageUrl(event.name, event.imageUrl)}
+            alt={event.name}
           />
-
         </Link>
       </div>
 
       <div className={'flex flex-col p-[21px]'}>
         <div className={'pb-[21px] flex flex-col gap-y-3'}>
-          <span className={'font-medium'}>{title}</span>
+          <span className={'font-medium'}>{event.name}</span>
           <p className={'text-muted-foreground line-clamp-2 min-h-[48px]'}>
-            {description}
+            {event.shortDescription}
           </p>
           <div className={'flex flex-col gap-y-2'}>
             <div
@@ -95,14 +68,14 @@ export const EventCard: React.FC<Props> = ({
             >
               <EventCardLabel
                 Icon={Calendar}
-                text={new Date(date).toLocaleDateString('ru-RU')}
+                text={new Date(event.eventDate).toLocaleDateString('ru-RU')}
               />
               <EventCardLabel
                 Icon={Clock4}
-                text={`${startTime.slice(0, 5)} - ${endTime.slice(0, 5)}`}
+                text={`${event.startTime.slice(0, 5)} - ${event.endTime.slice(0, 5)}`}
               />
             </div>
-            <EventCardLabel Icon={MapPin} text={location} />
+            <EventCardLabel Icon={MapPin} text={event.space.name} />
             <div
               className={
                 'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
@@ -110,19 +83,21 @@ export const EventCard: React.FC<Props> = ({
             >
               <EventCardLabel
                 Icon={Users}
-                text={`${registered}/${participants} участников`}
+                text={`${event.participantQuantity}/${event.space.capacity} участников`}
               />
-              {author && (
-                <span className={'text-muted-foreground'}>Автор: {author}</span>
+              {event.author && (
+                <span className={'text-muted-foreground'}>Автор: {event.author}</span>
               )}
             </div>
           </div>
         </div>
         <EventRegistrationButton
-          eventId={id}
-          isUserRegistered={isRegistered}
-          participantsQuantity={registered}
-          capacity={participants}
+          eventId={event.id}
+          isUserRegistered={event.isRegistered}
+          canRegister={event.canRegister}
+          canUnregister={event.canUnregister}
+          participantsQuantity={event.participantQuantity}
+          capacity={event.space.capacity}
         />
       </div>
     </div>

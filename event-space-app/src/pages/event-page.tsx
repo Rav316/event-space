@@ -134,6 +134,8 @@ const EventPage = () => {
               isRegistered={event.isRegistered}
               quantity={event.space.capacity}
               className="max-[980px]:flex-1 max-[900px]:flex-none"
+              canRegister={event.canRegister}
+              canUnregister={event.canUnregister}
             />
             {event.author && (
               <EventOrganizerBlock

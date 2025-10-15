@@ -11,6 +11,8 @@ interface Props {
   quantity: number;
   isRegistered?: boolean;
   className?: string;
+  canRegister: boolean;
+  canUnregister: boolean;
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
@@ -18,6 +20,8 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   quantity,
   className,
   isRegistered,
+  canRegister,
+  canUnregister
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
@@ -76,6 +80,8 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         isDestructive={true}
         participantsQuantity={participantsQuantity}
         capacity={quantity}
+        canRegister={canRegister}
+        canUnregister={canUnregister}
       />
     </div>
   );
