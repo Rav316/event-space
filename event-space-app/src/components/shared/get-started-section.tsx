@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
 import * as React from 'react';
 import { cn } from '@/lib/utils.ts';
 
@@ -27,7 +27,8 @@ export const GetStartedSection: React.FC<Props> = ({ className }) => {
         }
       >
         <Button className={'h-[40px]'}>
-          <span className={'font-medium'}>Создать мероприятие</span>
+          <Calendar />
+          <span className={'font-medium'}>Смотреть все мероприятия</span>
           <ArrowRight />
         </Button>
         <Button variant={'outline'} className={'h-[40px]'}>

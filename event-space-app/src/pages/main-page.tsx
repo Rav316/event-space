@@ -2,10 +2,10 @@ import { Wrapper } from '@/components/hoc';
 import {
   EventGroup,
   GetStartedSection,
-  HeroSection,
+  HeroSection, NoActualEventsBlock
 } from '@/components/shared';
 import { Button } from '@/components/ui';
-import { ArrowRight, BellPlus, Calendar } from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
 import { useActualEvents } from '@/api/events/hooks.ts';
 import { Link } from 'react-router';
 
@@ -46,32 +46,25 @@ const MainPage = () => {
             </Button>
           </Link>
         </div>
-        <EventGroup isLoading={isPending} events={data || []} />
-        {!isPending && data?.length && (
-          <div className={'flex justify-center my-5'}>
-            <span className={'text-muted-foreground text-center'}>
-              Показано {data?.length} ближайших мероприятий
-            </span>
-          </div>
-        )}
-        <div
-          className={
-            'flex justify-center min-[528px]:items-center max-[528px]:flex-col gap-4 my-5'
-          }
-        >
-          <Link to={'/events'}>
-            <Button className={'h-[40px]'}>
-              <Calendar />
-              <span className={'font-medium'}>Смотреть все мероприятия</span>
-              <ArrowRight />
-            </Button>
-          </Link>
-          <Button variant={'outline'} className={'h-[40px]'}>
-            <BellPlus />
-            <span>Подписаться на уведомления</span>
-          </Button>
+        <div className={'flex flex-col gap-5'}>
+          {isPending || (data?.length ?? 0) > 0 ? (
+            <>
+              <EventGroup isLoading={isPending} events={data || []} />
+
+              {!isPending && (data?.length ?? 0) > 0 && (
+                <div className="flex justify-center my-5">
+                <span className="text-muted-foreground text-center">
+                  Показано {data?.length ?? 0} ближайших мероприятий
+                </span>
+                </div>
+              )}
+            </>
+          ) : (
+            <NoActualEventsBlock/>
+          )}
+
+          <GetStartedSection className={'mb-5'} />
         </div>
-        <GetStartedSection className={'mb-5'} />
       </Wrapper>
     </>
   );
