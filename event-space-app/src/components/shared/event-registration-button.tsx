@@ -1,8 +1,16 @@
-import { Button, Spinner } from '@/components/ui';
+import React, { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { Lock } from 'lucide-react';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
-import React from 'react';
 import {
   useRegisterForEvent,
   useUnregisterFromEvent,
@@ -27,6 +35,8 @@ export const EventRegistrationButton: React.FC<Props> = ({
   participantsQuantity,
   capacity,
 }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const hasPlaces = participantsQuantity < capacity;
 
   const { data, isFetching } = useMe();
@@ -40,62 +50,89 @@ export const EventRegistrationButton: React.FC<Props> = ({
       setAuthModalOpen(true);
       return;
     }
+
     if (isUserRegistered) {
+      // Показываем диалог, если зарегистрироваться нельзя, а отменить можно
+      if (!canRegister && canUnregister) {
+        setIsDialogOpen(true);
+        return;
+      }
+
       unregisterFromEventMutation.mutate();
     } else {
       registerForEventMutation.mutate();
     }
   };
 
+  const handleConfirmUnregister = () => {
+    unregisterFromEventMutation.mutate();
+    setIsDialogOpen(false);
+  };
+
   const isButtonEnabled = isUserRegistered
     ? canUnregister
     : canRegister && hasPlaces;
 
-  if(eventId === 10) {
-    console.log('isButtonEnabled', isButtonEnabled);
-    console.log('isUserRegistered', isUserRegistered);
-    console.log('hasPlaces', hasPlaces);
-    console.log('canRegister', canRegister);
-    console.log('canUnregister', canUnregister);
-  }
-
   return (
-    <Button
-      disabled={!isButtonEnabled}
-      onClick={handleRegistrationClick}
-      variant={
-        isUserRegistered
-          ? isDestructive
-            ? 'destructive'
-            : 'outline'
-          : 'default'
-      }
-    >
-      {isFetching ||
-      registerForEventMutation.isPending ||
-      unregisterFromEventMutation.isPending ? (
-        <>
-          <Spinner />
-          <span>Загрузка...</span>
-        </>
-      ) : (
-        <>
-          {data ? (
-            <>
-              {isUserRegistered ? (
-                <span>Отменить регистрацию</span>
-              ) : (
-                <span>Зарегистрироваться</span>
-              )}
-            </>
-          ) : (
-            <>
-              <Lock />
-              <span>Войти для регистрации</span>
-            </>
-          )}
-        </>
-      )}
-    </Button>
+    <>
+      <Button
+        disabled={!isButtonEnabled}
+        onClick={handleRegistrationClick}
+        variant={
+          isUserRegistered
+            ? isDestructive
+              ? 'destructive'
+              : 'outline'
+            : 'default'
+        }
+      >
+        {isFetching ||
+        registerForEventMutation.isPending ||
+        unregisterFromEventMutation.isPending ? (
+          <>
+            <Spinner />
+            <span>Загрузка...</span>
+          </>
+        ) : (
+          <>
+            {data ? (
+              <>
+                {isUserRegistered ? (
+                  <span>Отменить регистрацию</span>
+                ) : (
+                  <span>Зарегистрироваться</span>
+                )}
+              </>
+            ) : (
+              <>
+                <Lock />
+                <span>Войти для регистрации</span>
+              </>
+            )}
+          </>
+        )}
+      </Button>
+
+      {/* Диалог подтверждения */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Подтвердите отмену</DialogTitle>
+          </DialogHeader>
+          <p>
+            Вы уверены, что хотите отменить регистрацию? Мероприятие уже
+            началось, зарегистрироваться на него больше не получится.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              Отмена
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmUnregister}>
+              Подтвердить
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
