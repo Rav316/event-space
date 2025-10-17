@@ -54,6 +54,7 @@ export interface EventListDto {
   isRegistered: boolean;
   canRegister: boolean;
   canUnregister: boolean;
+  isAttended: boolean;
 }
 
 export interface EventReadDto {
@@ -73,6 +74,7 @@ export interface EventReadDto {
   canRegister: boolean;
   canUnregister: boolean;
   isRegistered: boolean;
+  isAttended: boolean;
 }
 
 export interface EventFilter {

@@ -2,7 +2,9 @@ import { Badge, Button, Skeleton } from '@/components/ui';
 import {
   ArrowLeft,
   Calendar,
+  CircleCheck,
   Flame,
+  Info,
   MapPin,
   QrCode,
   Share2,
@@ -27,6 +29,7 @@ import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import Page404 from '@/pages/page-404.tsx';
 import axios, { type AxiosError } from 'axios';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
+import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 const EventPage = () => {
   const navigate = useNavigate();
@@ -85,6 +88,19 @@ const EventPage = () => {
             <span>Назад</span>
           </Button>
         </div>
+        {compareWithCurrentTime(event.eventDate, event.endTime) === 1 && (
+          <div
+            className={
+              'flex gap-5 bg-[#F4F2F7] p-3 rounded-lg border border-[#E5E5E5]'
+            }
+          >
+            <Info className={'text-muted-foreground'} />
+            <span className={'text-muted-foreground'}>
+              Это мероприятие завершилось {formatDate(event.eventDate)}, в{' '}
+              {event.endTime.slice(0, 5)}
+            </span>
+          </div>
+        )}
 
         <div className="flex gap-5 max-[980px]:flex-col">
           <div className="flex flex-col gap-5 flex-7">
@@ -169,6 +185,29 @@ const EventPage = () => {
           </div>
 
           <div className="flex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row">
+            {event.isAttended && (
+              <div
+                className={
+                  'flex gap-4 items-center rounded-2xl border border-green-300 bg-green-50 p-5'
+                }
+              >
+                <div
+                  className={
+                    'rounded-full w-10 h-10 bg-green-600 flex justify-center items-center'
+                  }
+                >
+                  <CircleCheck className={'text-white'} />
+                </div>
+                <div className={'flex flex-col gap-0.5'}>
+                  <span className={'font-medium text-green-600'}>
+                    Вы посетили это мероприятие
+                  </span>
+                  <span className={'text-green-600 text-sm'}>
+                    Спасибо за участие
+                  </span>
+                </div>
+              </div>
+            )}
             <EventRegistrationBlock
               participantsQuantity={event.participantQuantity}
               isRegistered={event.isRegistered}

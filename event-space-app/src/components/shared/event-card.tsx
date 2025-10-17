@@ -1,5 +1,5 @@
 import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import { Calendar, Clock4, Flame, MapPin, QrCode, Share2, Users } from 'lucide-react';
+import { Calendar, Check, Clock4, Flame, MapPin, QrCode, Share2, Users } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
@@ -20,10 +20,16 @@ export const EventCard: React.FC<Props> = ({ event }) => {
         'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md hover:translate-y-[-3px] transition-all duration-300 hover:shadow-lg'
       }
     >
-      <div className="absolute z-10 top-3 left-3">
+      <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">
         <Badge className={categoryColors[event.category.id - 1]}>
           {event.category.name}
         </Badge>
+        {event.isAttended && (
+          <Badge className={'bg-green-500'}>
+            <Check/>
+            <span>Посещено</span>
+          </Badge>
+        )}
       </div>
 
       <div className={'absolute z-10 top-3 right-3 flex space-x-2'}>
