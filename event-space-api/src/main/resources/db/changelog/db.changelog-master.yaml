@@ -59,3 +59,5 @@ databaseChangeLog:
       file: db/changelog/db-update-event-user-table-2.1.sql
   - include:
       file: db/changelog/db-update-event-user-table-2.2.sql
+  - include:
+      file: db/changelog/db-create-event-review-table-1.0.sql
