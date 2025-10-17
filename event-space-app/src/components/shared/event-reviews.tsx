@@ -3,6 +3,7 @@ import { StarRating } from '@/components/shared/star-rating.tsx';
 import { ReviewProgressBar } from '@/components/shared/review-progress-bar.tsx';
 import { Button } from '@/components/ui';
 import { ReviewFilters } from '@/components/shared/review-filters.tsx';
+import { EventReview } from '@/components/shared/event-review.tsx';
 
 export const EventReviews = () => {
   return (
@@ -34,6 +35,11 @@ export const EventReviews = () => {
         <span>Оставить отзыв</span>
       </Button>
       <ReviewFilters/>
+      <div className={'flex flex-col gap-4'}>
+        <EventReview/>
+        <EventReview/>
+        <EventReview/>
+      </div>
     </div>
   );
 }

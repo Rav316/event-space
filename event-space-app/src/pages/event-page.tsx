@@ -91,10 +91,10 @@ const EventPage = () => {
         {compareWithCurrentTime(event.eventDate, event.endTime) === 1 && (
           <div
             className={
-              'flex gap-5 bg-[#F4F2F7] p-3 rounded-lg border border-[#E5E5E5]'
+              'flex items-center gap-3 bg-[#F4F2F7] p-3 rounded-lg border border-[#E5E5E5]'
             }
           >
-            <Info className={'text-muted-foreground'} />
+            <Info className="text-muted-foreground shrink-0"  />
             <span className={'text-muted-foreground'}>
               Это мероприятие завершилось {formatDate(event.eventDate)}, в{' '}
               {event.endTime.slice(0, 5)}
