@@ -23,6 +23,7 @@ public record EventReadDto(
         UserAuthorDto author,
         Boolean isRegistered,
         Boolean canRegister,
-        Boolean canUnregister
+        Boolean canUnregister,
+        Boolean isAttended
 ) {
 }

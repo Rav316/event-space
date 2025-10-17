@@ -21,6 +21,7 @@ public record EventListDto(
         String author,
         Boolean isRegistered,
         Boolean canRegister,
-        Boolean canUnregister
+        Boolean canUnregister,
+        Boolean isAttended
 ) {
 }

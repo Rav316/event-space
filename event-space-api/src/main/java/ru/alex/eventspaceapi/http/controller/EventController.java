@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +17,7 @@ import ru.alex.eventspaceapi.service.EventStepService;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/events")
@@ -49,6 +49,16 @@ public class EventController {
     @GetMapping("/{id}/steps")
     public List<EventStepReadDto> getEventStepsByEvent(@PathVariable("id") Integer id) {
         return eventStepService.findAllStepsByEvent(id);
+    }
+
+    @PostMapping("/{id}/confirm-attendance")
+    @PreAuthorize("hasAuthority('VERIFIER')")
+    public ResponseEntity<Void> confirmParticipantAttendance(
+            @PathVariable("id") Integer id,
+            @RequestParam("token") String token
+    ) {
+        eventService.confirmParticipantAttendance(id, token);
+        return new ResponseEntity<>(OK);
     }
 
     @PostMapping

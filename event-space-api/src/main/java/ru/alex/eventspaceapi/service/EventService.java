@@ -1,11 +1,14 @@
 package ru.alex.eventspaceapi.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.*;
 import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
@@ -21,10 +24,12 @@ import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
@@ -143,7 +148,12 @@ public class EventService {
             throw new IllegalStateException("unable to register for events: no seats available");
         }
 
-        eventRepository.registerUserForEvent(id, authorizedUserId);
+        EventUser eventUser = EventUser.builder()
+                .event(event)
+                .user(User.builder().id(authorizedUserId).build())
+                .qrToken(UUID.randomUUID())
+                .build();
+        eventUserRepository.save(eventUser);
     }
 
     @Transactional
@@ -153,7 +163,27 @@ public class EventService {
         if(isEventPassed(event)) {
             throw new IllegalStateException("the event has already passed, you cannot cancel your registration");
         }
-        eventRepository.unregisterFromEvent(event.getId(), Objects.requireNonNull(getAuthorizedUser()).id());
+        EventUser eventUser = eventUserRepository.findByEventAndUser(event.getId(), Objects.requireNonNull(getAuthorizedUser()).id())
+                .orElseThrow(() -> new EntityNotFoundException("unable to cancel registration: you are not registered for event 1"));
+        if(eventUser.getAttended()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you cannot cancel your registration after your attendance has been marked");
+        }
+        eventUserRepository.deleteById(eventUser.getId());
+    }
+
+    @Transactional
+    public void confirmParticipantAttendance(Integer id, String token) {
+        if(!isValidUUID(token)) {
+            throw new IllegalArgumentException("token is not valid");
+        }
+        EventUser eventUser = eventUserRepository.findByQrToken(UUID.fromString(token))
+                .orElseThrow(() -> new EntityNotFoundException("no information found with the passed token"));
+        if(!eventUser.getEvent().getId().equals(id)) {
+            throw new IllegalArgumentException("inappropriate token for this event");
+        }
+        eventUser.setAttended(true);
+        eventUser.setConfirmedBy(User.builder().id(Objects.requireNonNull(getAuthorizedUser()).id()).build());
+        eventUser.setConfirmedAt(Instant.now());
     }
 
     private void validateEventSteps(EventCreateDto event) {
@@ -200,5 +230,14 @@ public class EventService {
     private boolean isEventStarted(Event event) {
         LocalDate now = LocalDate.now();
         return (event.getEventDate().isEqual(now) && event.getStartTime().isBefore(LocalTime.now()));
+    }
+
+    private boolean isValidUUID(String token) {
+        try {
+            UUID.fromString(token);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

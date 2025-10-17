@@ -1,10 +1,10 @@
 package ru.alex.eventspaceapi.database.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "event_user")
@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class EventUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +26,15 @@ public class EventUser {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Builder.Default
     private Boolean attended = false;
+
+    private UUID qrToken;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "confirmed_by", referencedColumnName = "id")
+    private User confirmedBy;
+
+    @Column(name = "confirmed_at")
+    private Instant confirmedAt;
 }

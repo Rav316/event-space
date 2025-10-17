@@ -6,8 +6,4 @@ import ru.alex.eventspaceapi.dto.filter.EventFilter;
 
 public interface EventRepositoryCustom {
     Page<EventListDto> findAllEventsByFilter(Integer userId, EventFilter filter);
-
-    void registerUserForEvent(Integer eventId, Integer userId);
-
-    void unregisterFromEvent(Integer eventId, Integer userId);
 }
