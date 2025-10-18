@@ -9,13 +9,14 @@ public record SliceResponse<T>(
         Metadata metadata
 ) {
     public static <T> SliceResponse<T> of(Slice<T> slice) {
-        Metadata metadata = new Metadata(slice.getNumber(), slice.getSize());
+        Metadata metadata = new Metadata(slice.getNumber(), slice.getSize(), slice.hasNext());
         return new SliceResponse<>(slice.getContent(), metadata);
     }
 
     public record Metadata (
             int page,
-            int size
+            int size,
+            boolean hasNext
     ) {
 
     }
