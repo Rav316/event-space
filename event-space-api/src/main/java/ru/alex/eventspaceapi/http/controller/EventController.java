@@ -9,9 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
+import ru.alex.eventspaceapi.service.EventReviewService;
 import ru.alex.eventspaceapi.service.EventService;
 import ru.alex.eventspaceapi.service.EventStepService;
 
@@ -25,6 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 public class EventController {
     private final EventService eventService;
     private final EventStepService eventStepService;
+    private final EventReviewService eventReviewService;
 
     @GetMapping
     public PageResponse<EventListDto> findAllByFilter(@ModelAttribute EventFilter filter) {
@@ -51,7 +55,7 @@ public class EventController {
         return eventStepService.findAllStepsByEvent(id);
     }
 
-    @GetMapping("/{id}/confirm-attendance")
+    @PostMapping("/{id}/confirm-attendance")
     @PreAuthorize("hasAuthority('VERIFIER')")
     public ResponseEntity<Void> confirmParticipantAttendance(
             @PathVariable("id") Integer id,
@@ -59,6 +63,14 @@ public class EventController {
     ) {
         eventService.confirmParticipantAttendance(id, token);
         return new ResponseEntity<>(OK);
+    }
+
+    @PostMapping("/{id}/add-review")
+    public ResponseEntity<EventReviewReadDto> addReviewForEvent(
+            @PathVariable("id") Integer id,
+            @Validated @RequestBody EventReviewCreateDto eventReviewCreateDto
+            ) {
+        return new ResponseEntity<>(eventReviewService.addReviewForEvent(id, eventReviewCreateDto), CREATED);
     }
 
     @PostMapping

@@ -1,0 +1,55 @@
+package ru.alex.eventspaceapi.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import ru.alex.eventspaceapi.database.entity.Event;
+import ru.alex.eventspaceapi.database.entity.EventReview;
+import ru.alex.eventspaceapi.database.entity.EventUser;
+import ru.alex.eventspaceapi.database.repository.EventRepository;
+import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
+import ru.alex.eventspaceapi.database.repository.EventUserRepository;
+import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
+import ru.alex.eventspaceapi.exception.EventNotFoundException;
+import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
+import ru.alex.eventspaceapi.mapper.eventReview.EventReviewReadMapper;
+import ru.alex.eventspaceapi.util.AuthUtils;
+
+import java.time.Instant;
+import java.util.Objects;
+
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class EventReviewService {
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final EventUserRepository eventUserRepository;
+    private final EventReviewRepository eventReviewRepository;
+    private final EventReviewReadMapper eventReviewReadMapper;
+    private final EventReviewCreateMapper eventReviewCreateMapper;
+
+    @Transactional
+    public EventReviewReadDto addReviewForEvent(Integer eventId, EventReviewCreateDto eventReviewCreateDto) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+        Integer authorizedUserId = Objects.requireNonNull(AuthUtils.getAuthorizedUser()).id();
+        EventUser eventUser = eventUserRepository.findByEventAndUser(event.getId(), authorizedUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not registered for this event"));
+        if(!eventUser.getAttended()) {
+            throw new IllegalStateException("you cannot leave a review for an event without confirming your attendance");
+        }
+        if(eventReviewRepository.existsByEventAndUser(event.getId(), authorizedUserId)) {
+            throw new IllegalStateException("you already have a review for this event");
+        }
+        EventReview review = eventReviewCreateMapper.toEntity(eventReviewCreateDto);
+        review.setEvent(event);
+        review.setAuthor(userRepository.getReferenceById(authorizedUserId));
+        review.setCreatedAt(Instant.now());
+        return eventReviewReadMapper.toDto(eventReviewRepository.save(review));
+    }
+}

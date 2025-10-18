@@ -10,7 +10,7 @@ import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepReadMapper;
 import ru.alex.eventspaceapi.mapper.space.SpaceReadMapper;
-import ru.alex.eventspaceapi.mapper.user.UserAuthorMapper;
+import ru.alex.eventspaceapi.mapper.user.UserEventAuthorMapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,7 +23,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
                 EventCategoryReadMapper.class,
                 SpaceReadMapper.class,
                 EventStepReadMapper.class,
-                UserAuthorMapper.class
+                UserEventAuthorMapper.class
         }
 )
 public interface EventReadMapper {
