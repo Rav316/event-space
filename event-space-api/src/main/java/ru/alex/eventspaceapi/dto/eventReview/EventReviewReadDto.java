@@ -5,6 +5,7 @@ import ru.alex.eventspaceapi.dto.user.UserAuthorDto;
 import java.time.Instant;
 
 public record EventReviewReadDto (
+        Integer id,
         UserAuthorDto author,
         Integer event,
         String title,
