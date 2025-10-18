@@ -7,7 +7,8 @@ import type {
 } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
-import type { PageResponse } from '@/api/model.ts';
+import type { PageResponse, SliceResponse } from '@/api/model.ts';
+import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
 
 export const create = async (data: EventCreateData): Promise<void> => {
   const formData = new FormData();
@@ -53,6 +54,15 @@ export const getStepsByEvent = async (
 ): Promise<EventStep[]> => {
   const response = await axiosInstance.get<EventStep[]>(
     `${ApiRoutes.EVENTS}/${eventId}/steps`,
+  );
+  return response.data;
+};
+
+export const getEventReviews = async (
+  eventId: number,
+): Promise<SliceResponse<EventReviewReadDto>> => {
+  const response = await axiosInstance.get<SliceResponse<EventReviewReadDto>>(
+    `${ApiRoutes.EVENTS}/${eventId}/reviews`,
   );
   return response.data;
 };

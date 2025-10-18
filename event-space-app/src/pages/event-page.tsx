@@ -94,7 +94,7 @@ const EventPage = () => {
               'flex items-center gap-3 bg-[#F4F2F7] p-3 rounded-lg border border-[#E5E5E5]'
             }
           >
-            <Info className="text-muted-foreground shrink-0"  />
+            <Info className="text-muted-foreground shrink-0" />
             <span className={'text-muted-foreground'}>
               Это мероприятие завершилось {formatDate(event.eventDate)}, в{' '}
               {event.endTime.slice(0, 5)}
@@ -229,7 +229,7 @@ const EventPage = () => {
             <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
           </div>
         </div>
-        <EventReviews />
+        <EventReviews eventId={eventId} />
       </div>
     </Wrapper>
   );

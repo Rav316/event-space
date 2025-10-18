@@ -12,4 +12,5 @@ export const EVENTS_KEYS = {
   tags: (prefix: string) => ['tags', prefix] as const,
   event: (eventId: number) => [...EVENTS_KEYS.all, eventId] as const,
   steps: (eventId: number) => [eventId, 'steps'] as const,
+  reviews: (eventId: number) => [eventId, 'reviews'] as const
 };

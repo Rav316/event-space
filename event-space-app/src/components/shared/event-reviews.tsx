@@ -1,11 +1,20 @@
 import { MessageSquare, Star } from 'lucide-react';
 import { StarRating } from '@/components/shared/star-rating.tsx';
 import { ReviewProgressBar } from '@/components/shared/review-progress-bar.tsx';
-import { Button } from '@/components/ui';
+import { Button, Skeleton } from '@/components/ui';
 import { ReviewFilters } from '@/components/shared/review-filters.tsx';
 import { EventReview } from '@/components/shared/event-review.tsx';
+import React from 'react';
+import { useEventReviews } from '@/api/events/hooks.ts';
 
-export const EventReviews = () => {
+interface Props {
+  eventId: number;
+}
+
+export const EventReviews: React.FC<Props> = ({ eventId }) => {
+  const { data: reviews, isPending: isReviewsPending } =
+    useEventReviews(eventId);
+
   return (
     <div
       className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5'}
@@ -31,15 +40,23 @@ export const EventReviews = () => {
         </div>
       </div>
       <Button>
-        <Star/>
+        <Star />
         <span>Оставить отзыв</span>
       </Button>
-      <ReviewFilters/>
+      <ReviewFilters />
       <div className={'flex flex-col gap-4'}>
-        <EventReview/>
-        <EventReview/>
-        <EventReview/>
+        {isReviewsPending || !reviews ? (
+          <div className={'flex flex-col gap-4'}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <Skeleton key={index} className={'w-full h-[200px]'} />
+            ))}
+          </div>
+        ) : (
+          reviews.content.map((review) => (
+            <EventReview key={review.id} review={review} />
+          ))
+        )}
       </div>
     </div>
   );
-}
+};

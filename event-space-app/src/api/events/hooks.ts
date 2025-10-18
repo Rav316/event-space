@@ -75,6 +75,13 @@ export const useStepsByEvent = (eventId: number) => {
   });
 };
 
+export const useEventReviews = (eventId: number) => {
+  return useQuery({
+    queryFn: () => Api.events.getEventReviews(eventId),
+    queryKey: EVENTS_KEYS.reviews(eventId)
+  })
+}
+
 export const useRegisterForEvent = (eventId: number) => {
   return useMutation({
     mutationFn: () => Api.events.registerForEvent(eventId),

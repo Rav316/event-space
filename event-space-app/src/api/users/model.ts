@@ -58,6 +58,9 @@ export interface UserAuthorDto {
   id: number;
   firstName: string;
   lastName: string;
-  faculty: string;
   avatarUrl: string;
+}
+
+export interface UserEventAuthorDto extends UserAuthorDto{
+  faculty: string;
 }
