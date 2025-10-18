@@ -1,7 +1,16 @@
 import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui';
 import { QrCode } from 'lucide-react';
+import { QRCodeCanvas } from 'qrcode.react';
+import React from 'react';
 
-export const EventQrCodeDialog = () => {
+interface Props {
+  eventId: number;
+  value: string;
+}
+
+export const EventQrCodeDialog: React.FC<Props> = ({eventId, value}) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const confirmAttendanceUrl = `${apiUrl}/events/${eventId}/confirm-attendance?token=${value}`;
   return (
     <Dialog>
       <DialogTrigger asChild={true}>
@@ -14,7 +23,7 @@ export const EventQrCodeDialog = () => {
         <DialogTitle>QR-код для входа</DialogTitle>
         <div className={'flex flex-col gap-4 items-center'}>
           <div className={'w-48 h-48 bg-muted rounded-lg flex items-center justify-center'}>
-            <QrCode className={'w-24 h-24 text-muted-foreground'}/>
+            <QRCodeCanvas value={confirmAttendanceUrl} />
           </div>
           <span className={'text-center text-muted-foreground'}>Покажите этот QR-код организаторам для прохода на мероприятие</span>
         </div>

@@ -215,6 +215,7 @@ const EventPage = () => {
               className="max-[980px]:flex-1 max-[900px]:flex-none"
               canRegister={event.canRegister}
               canUnregister={event.canUnregister}
+              qrToken={event.qrToken}
             />
             {event.author && (
               <EventOrganizerBlock
