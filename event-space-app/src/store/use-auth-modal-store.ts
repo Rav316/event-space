@@ -22,7 +22,8 @@ export const useAuthModalStore = create<AuthModalState>()(
       },
     })),
     {
-      store: 'auth-modal',
+      name: 'authModalStore',
+      store: 'auth-modal-store',
     },
   ),
 );

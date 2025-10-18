@@ -9,3 +9,8 @@ export interface EventReviewReadDto {
   rating: number;
   createdAt: string;
 }
+
+export interface EventReviewFilter {
+  rating?: number;
+  sort?: number;
+}

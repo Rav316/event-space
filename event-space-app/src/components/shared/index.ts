@@ -44,4 +44,5 @@ export {ReviewProgressBar} from './review-progress-bar';
 export {ReviewFilters} from './review-filters';
 export {NoActualEventsBlock} from './no-actual-events-block';
 export {EventReview} from './event-review';
+export {EventReviewsList} from './event-reviews-list';
 export * as toastLogout from './toast-logout';

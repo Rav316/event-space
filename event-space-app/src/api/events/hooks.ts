@@ -1,5 +1,5 @@
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { Api } from '@/api/api-client.ts';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
@@ -8,6 +8,7 @@ import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
 import type { EventRequestData } from '@/api/events/model.ts';
 import { queryClient } from '@/api/query-client.ts';
+import type { EventReviewFilter } from '@/api/event-reviews/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -75,10 +76,17 @@ export const useStepsByEvent = (eventId: number) => {
   });
 };
 
-export const useEventReviews = (eventId: number) => {
-  return useQuery({
-    queryFn: () => Api.events.getEventReviews(eventId),
-    queryKey: EVENTS_KEYS.reviews(eventId)
+export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
+  return useInfiniteQuery({
+    queryKey: EVENTS_KEYS.reviews(eventId),
+    queryFn: ({ pageParam = 0 }) => Api.events.getEventReviews(eventId, filter, pageParam),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.metadata.hasNext) {
+        return lastPage.metadata.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 0
   })
 }
 

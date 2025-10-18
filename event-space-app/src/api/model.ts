@@ -5,12 +5,16 @@ export interface PageResponse<T> {
 
 export interface SliceResponse<T> {
   content: T[];
-  metadata: Metadata;
+  metadata: SliceMetadata;
 }
 
 export interface Metadata {
   page: number;
   size: number;
+}
+
+export interface SliceMetadata extends Metadata {
+  hasNext: boolean;
 }
 
 export interface PageMetadata extends Metadata {
