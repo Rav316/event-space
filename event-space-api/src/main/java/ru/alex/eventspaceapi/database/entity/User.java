@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "faculty")
-@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +48,6 @@ public class User {
     private String githubUrl;
 
     @Column(name = "isActive")
-    @Builder.Default
     private boolean active = true;
 
     @Column(name = "register_date")

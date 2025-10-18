@@ -39,6 +39,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 @RequiredArgsConstructor
 public class EventService {
     private final FileService fileService;
+    private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final EventStepRepository eventStepRepository;
     private final SpaceRepository spaceRepository;
@@ -100,7 +101,7 @@ public class EventService {
         event.setShortDescription(eventCreateDto.shortDescription());
         event.setDescription(eventCreateDto.description());
         UserDetailsDto authorizedUser = getAuthorizedUser();
-        event.setAuthor(User.builder().id(Objects.requireNonNull(authorizedUser).id()).build());
+        event.setAuthor(userRepository.getReferenceById(Objects.requireNonNull(authorizedUser).id()));
 
         EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
                 .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
@@ -151,7 +152,7 @@ public class EventService {
 
         EventUser eventUser = EventUser.builder()
                 .event(event)
-                .user(User.builder().id(authorizedUserId).build())
+                .user(userRepository.getReferenceById(authorizedUserId))
                 .qrToken(UUID.randomUUID())
                 .build();
         eventUserRepository.save(eventUser);
@@ -183,7 +184,7 @@ public class EventService {
             throw new IllegalArgumentException("inappropriate token for this event");
         }
         eventUser.setAttended(true);
-        eventUser.setConfirmedBy(User.builder().id(Objects.requireNonNull(getAuthorizedUser()).id()).build());
+        eventUser.setConfirmedBy(userRepository.getReferenceById(Objects.requireNonNull(getAuthorizedUser()).id()));
         eventUser.setConfirmedAt(Instant.now());
     }
 
