@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.EventReview;
 
 @Repository
-public interface EventReviewRepository extends JpaRepository<EventReview, Integer> {
-    @Query("SELECT EXISTS (SELECT 1 FROM EventUser eu WHERE eu.event.id = :eventId AND eu.user.id = :userId)")
+public interface EventReviewRepository extends JpaRepository<EventReview, Integer>, EventReviewRepositoryCustom {
+    @Query("SELECT EXISTS (SELECT 1 FROM EventUser er WHERE er.event.id = :eventId AND er.user.id = :userId)")
     boolean existsByEventAndUser(Integer eventId, Integer userId);
 }

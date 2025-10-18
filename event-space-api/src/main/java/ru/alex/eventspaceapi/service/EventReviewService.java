@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
+import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewReadMapper;
@@ -32,6 +34,11 @@ public class EventReviewService {
     private final EventReviewRepository eventReviewRepository;
     private final EventReviewReadMapper eventReviewReadMapper;
     private final EventReviewCreateMapper eventReviewCreateMapper;
+
+    public Slice<EventReviewReadDto> findAllReviewsByEvent(Integer eventId, EventReviewFilter filter) {
+        return eventReviewRepository.findAllByEventWithFilter(eventId, filter)
+                .map(eventReviewReadMapper::toDto);
+    }
 
     @Transactional
     public EventReviewReadDto addReviewForEvent(Integer eventId, EventReviewCreateDto eventReviewCreateDto) {

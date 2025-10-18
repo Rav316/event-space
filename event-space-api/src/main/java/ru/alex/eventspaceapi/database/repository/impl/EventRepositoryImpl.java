@@ -1,7 +1,6 @@
 package ru.alex.eventspaceapi.database.repository.impl;
 
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,13 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import ru.alex.eventspaceapi.database.entity.QEventUser;
+import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
-import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
-import ru.alex.eventspaceapi.dto.building.BuildingReadDto;
-import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
-import ru.alex.eventspaceapi.dto.space.SpaceReadDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +22,7 @@ import java.util.Objects;
 import static ru.alex.eventspaceapi.database.entity.QBuilding.building;
 import static ru.alex.eventspaceapi.database.entity.QEvent.event;
 import static ru.alex.eventspaceapi.database.entity.QEventCategory.eventCategory;
+import static ru.alex.eventspaceapi.database.entity.QEventUser.eventUser;
 import static ru.alex.eventspaceapi.database.entity.QSpace.space;
 import static ru.alex.eventspaceapi.database.entity.QUser.user;
 
@@ -36,85 +32,23 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<EventListDto> findAllEventsByFilter(Integer userId, EventFilter filter) {
+    public Page<Event> findAllEventsByFilter(Integer userId, EventFilter filter) {
         BooleanExpression predicate = buildPredicate(filter);
         int pageSize = 9;
         int page = filter.page() != null ? filter.page() : 0;
 
-        QEventUser eventUserForJoin = new QEventUser("eventUserForJoin");
-
-        LocalDate dateNow = LocalDate.now();
-        LocalTime timeNow = LocalTime.now();
-
-        BooleanExpression joinCondition = eventUserForJoin.event.id.eq(event.id);
-        if (userId != null) {
-            joinCondition = joinCondition.and(eventUserForJoin.user.id.eq(userId));
-        }
-
-        BooleanExpression canRegisterExpr;
-        BooleanExpression canUnregisterExpr;
-
-        if (userId == null) {
-            canRegisterExpr = Expressions.FALSE.isTrue();
-            canUnregisterExpr = Expressions.FALSE.isTrue();
-        } else {
-            canRegisterExpr = event.eventDate.after(dateNow)
-                    .or(event.eventDate.eq(dateNow).and(event.startTime.after(timeNow)));
-
-            canUnregisterExpr = eventUserForJoin.attended.isFalse().and(
-                            event.eventDate.after(dateNow)
-                            .or(event.eventDate.eq(dateNow).and(event.endTime.after(timeNow)))
-            );
-        }
-
-        List<EventListDto> events = queryFactory
-                .select(Projections.constructor(EventListDto.class,
-                        event.id,
-                        event.name,
-                        Projections.constructor(EventCategoryReadDto.class,
-                                eventCategory.id,
-                                eventCategory.name
-                        ),
-                        event.shortDescription,
-                        event.imageUrl,
-                        event.eventDate,
-                        event.startTime,
-                        event.endTime,
-                        event.deadline,
-                        Projections.constructor(SpaceReadDto.class,
-                                space.id,
-                                space.name,
-                                space.capacity,
-                                Projections.constructor(BuildingReadDto.class,
-                                        building.id,
-                                        building.name,
-                                        building.address
-                                )
-                        ),
-                        event.eventUsers.size().as("participantQuantity"),
-                        event.author.firstName.concat(" ").concat(event.author.lastName),
-                        userId == null ? Expressions.FALSE.isTrue() : eventUserForJoin.id.isNotNull(),
-                        canRegisterExpr,
-                        canUnregisterExpr,
-                        userId == null
-                                ? Expressions.FALSE.isTrue()
-                                : Expressions.booleanTemplate(
-                                "COALESCE({0}.attended, FALSE)",
-                                eventUserForJoin
-                        )
-                ))
-                .from(event)
-                .leftJoin(event.category, eventCategory)
-                .leftJoin(event.space, space)
-                .leftJoin(space.building, building)
-                .leftJoin(event.author, user)
-                .leftJoin(eventUserForJoin).on(joinCondition)
+        List<Event> events = queryFactory
+                .selectFrom(event)
+                .leftJoin(event.category, eventCategory).fetchJoin()
+                .leftJoin(event.space, space).fetchJoin()
+                .leftJoin(space.building, building).fetchJoin()
+                .leftJoin(event.author, user).fetchJoin()
+                .leftJoin(event.eventUsers, eventUser).fetchJoin()
                 .where(predicate)
                 .orderBy(getSortOrder(filter))
                 .limit(pageSize)
                 .offset((long) page * pageSize)
                 .fetch();
-
 
         Long total = queryFactory
                 .select(event.count())
@@ -124,6 +58,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
         return new PageImpl<>(events, PageRequest.of(page, pageSize), Objects.requireNonNull(total));
     }
+
 
 
 

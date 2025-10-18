@@ -50,7 +50,8 @@ public class EventService {
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
-        return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null, filter);
+        return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null, filter)
+                .map(eventListMapper::toDto);
     }
 
     public List<EventListDto> getActualEvents() {

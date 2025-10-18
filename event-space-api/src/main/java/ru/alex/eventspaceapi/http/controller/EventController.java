@@ -13,7 +13,9 @@ import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
+import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
+import ru.alex.eventspaceapi.dto.response.SliceResponse;
 import ru.alex.eventspaceapi.service.EventReviewService;
 import ru.alex.eventspaceapi.service.EventService;
 import ru.alex.eventspaceapi.service.EventStepService;
@@ -53,6 +55,14 @@ public class EventController {
     @GetMapping("/{id}/steps")
     public List<EventStepReadDto> getEventStepsByEvent(@PathVariable("id") Integer id) {
         return eventStepService.findAllStepsByEvent(id);
+    }
+
+    @GetMapping("/{id}/reviews")
+    public SliceResponse<EventReviewReadDto> findAllByEvent(
+            @PathVariable("id") Integer id,
+            @Validated @ModelAttribute EventReviewFilter filter
+    ) {
+        return SliceResponse.of(eventReviewService.findAllReviewsByEvent(id, filter));
     }
 
     @PostMapping("/{id}/confirm-attendance")
