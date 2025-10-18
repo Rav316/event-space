@@ -32,6 +32,7 @@ public interface EventReadMapper {
     @Mapping(target = "canRegister", source = "event", qualifiedByName = "mapCanRegister")
     @Mapping(target = "canUnregister", source = "event", qualifiedByName = "mapCanUnregister")
     @Mapping(target = "isAttended", source = "event", qualifiedByName = "mapIsAttended")
+    @Mapping(target = "qrToken", source = "event", qualifiedByName = "mapQrToken")
     EventReadDto toDto(Event event);
 
     @Named("mapParticipantsQuantity")
@@ -90,5 +91,16 @@ public interface EventReadMapper {
                 .findFirst()
                 .map(eu -> !eu.getAttended())
                 .orElse(false);
+    }
+
+    @Named("mapQrToken")
+    default String mapQrToken(Event event) {
+        UserDetailsDto user = getAuthorizedUser();
+        if (user == null) return null;
+        return event.getEventUsers().stream()
+                .filter(eu -> eu.getUser().getId().equals(user.id()))
+                .findFirst()
+                .map(eu -> eu.getQrToken().toString())
+                .orElse(null);
     }
 }

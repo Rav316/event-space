@@ -51,7 +51,7 @@ public class EventController {
         return eventStepService.findAllStepsByEvent(id);
     }
 
-    @PostMapping("/{id}/confirm-attendance")
+    @GetMapping("/{id}/confirm-attendance")
     @PreAuthorize("hasAuthority('VERIFIER')")
     public ResponseEntity<Void> confirmParticipantAttendance(
             @PathVariable("id") Integer id,

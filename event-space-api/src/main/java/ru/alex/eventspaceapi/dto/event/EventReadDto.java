@@ -24,6 +24,7 @@ public record EventReadDto(
         Boolean isRegistered,
         Boolean canRegister,
         Boolean canUnregister,
-        Boolean isAttended
+        Boolean isAttended,
+        String qrToken
 ) {
 }

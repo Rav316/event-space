@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -35,10 +36,13 @@ public class SecurityConfig {
         http.headers(
                 headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling(
-                configurer -> configurer.accessDeniedHandler(accessDeniedHandler())
+                configurer -> configurer
+                        .authenticationEntryPoint(authenticationEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
         );
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
@@ -51,5 +55,11 @@ public class SecurityConfig {
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) ->
                 errorResponseHandler.writeErrorResponse(response, HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.toString());
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return ((request, response, authException) ->
+                errorResponseHandler.writeErrorResponse(response, HttpStatus.FORBIDDEN, authException.getMessage()));
     }
 }
