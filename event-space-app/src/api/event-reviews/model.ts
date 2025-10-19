@@ -10,6 +10,16 @@ export interface EventReviewReadDto {
   createdAt: string;
 }
 
+export interface EventReviewStatisticsDto {
+  avgRating: number;
+  fiveStars: number;
+  fourStars: number;
+  threeStars: number;
+  twoStars: number;
+  oneStar: number;
+  total: number;
+}
+
 export interface EventReviewFilter {
   rating?: number;
   sort?: number;

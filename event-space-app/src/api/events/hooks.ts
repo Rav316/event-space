@@ -90,6 +90,14 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
   })
 }
 
+export const useEventReviewsStatistics = (eventId: number) => {
+  return useQuery({
+    queryKey: EVENTS_KEYS.reviewsStatistics(eventId),
+    queryFn: () => Api.events.getEventReviewsStatistics(eventId),
+    refetchOnWindowFocus: false
+  })
+}
+
 export const useRegisterForEvent = (eventId: number) => {
   return useMutation({
     mutationFn: () => Api.events.registerForEvent(eventId),

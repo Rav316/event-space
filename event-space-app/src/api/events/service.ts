@@ -1,13 +1,18 @@
 import type {
-  EventCreateData, EventListDto,
+  EventCreateData,
+  EventListDto,
   EventReadDto,
   EventRequestData,
-  EventStep
+  EventStep,
 } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type { PageResponse, SliceResponse } from '@/api/model.ts';
-import type { EventReviewFilter, EventReviewReadDto } from '@/api/event-reviews/model.ts';
+import type {
+  EventReviewFilter,
+  EventReviewReadDto,
+  EventReviewStatisticsDto,
+} from '@/api/event-reviews/model.ts';
 
 export const create = async (data: EventCreateData): Promise<void> => {
   const formData = new FormData();
@@ -65,6 +70,15 @@ export const getEventReviews = async (
   const response = await axiosInstance.get<SliceResponse<EventReviewReadDto>>(
     `${ApiRoutes.EVENTS}/${eventId}/reviews`,
     { params: { ...filter, page } },
+  );
+  return response.data;
+};
+
+export const getEventReviewsStatistics = async (
+  eventId: number,
+): Promise<EventReviewStatisticsDto> => {
+  const response = await axiosInstance.get<EventReviewStatisticsDto>(
+    `${ApiRoutes.EVENTS}/${eventId}/reviews/statistics`,
   );
   return response.data;
 };

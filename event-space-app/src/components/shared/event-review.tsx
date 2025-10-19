@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui';
-import { Flag, Star, ThumbsUp } from 'lucide-react';
+import { Flag, ThumbsUp } from 'lucide-react';
 import React from 'react';
 import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
 import { UserAvatar } from '@/components/shared/user-avatar.tsx';
+import { StarRating } from '@/components/shared/star-rating.tsx';
 
 interface Props {
   review: EventReviewReadDto;
@@ -42,11 +43,7 @@ export const EventReview: React.FC<Props> = ({ review }) => {
           <span className="font-medium">{`${review.author.firstName} ${review.author.lastName}`}</span>
           <div className="flex items-center gap-2 max-[410px]:flex-col max-[410px]:items-start max-[410px]:gap-0.5">
             <div className="flex items-center gap-0.5">
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
+              <StarRating rating={review.rating} />
             </div>
             <span className={'text-muted-foreground max-[410px]:text-sm'}>{formattedDate}</span>
           </div>
