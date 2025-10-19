@@ -3,8 +3,7 @@ import * as React from 'react';
 import type { InputHTMLAttributes } from 'react';
 import { Input } from '@/components/ui';
 
-interface Props
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
   value: string;
 }
 

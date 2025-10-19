@@ -3,7 +3,8 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader, Spinner
+  CardHeader,
+  Spinner,
 } from '@/components/ui';
 import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
@@ -75,7 +76,7 @@ const RegistrationPage = () => {
         setRegistrationData(roleStatusForm.getValues());
         break;
       case 2:
-        setRegistrationData(passwordCreateForm.getValues())
+        setRegistrationData(passwordCreateForm.getValues());
         registrationMutation.mutate({
           ...registrationData,
           password: passwordCreateForm.getValues().password,
@@ -144,7 +145,7 @@ const RegistrationPage = () => {
                 <>
                   {registrationMutation.isPending ? (
                     <Button>
-                      <Spinner/>
+                      <Spinner />
                       <span>Регистрируем...</span>
                     </Button>
                   ) : (

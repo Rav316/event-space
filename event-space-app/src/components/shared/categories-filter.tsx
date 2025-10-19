@@ -2,11 +2,12 @@ import {
   Button,
   Popover,
   PopoverContent,
-  PopoverTrigger, Skeleton
+  PopoverTrigger,
+  Skeleton,
 } from '@/components/ui';
 import { ChevronDown, Funnel } from 'lucide-react';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
-import { CategoryCheckbox } from '@/components/shared/category-checkbox.tsx';
+import { CategoryCheckbox } from '@/components/shared';
 
 export const CategoriesFilter = () => {
   const { data, isPending } = useEventCategoriesWithEventCount();

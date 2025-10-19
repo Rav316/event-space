@@ -6,5 +6,5 @@ export const ApiRoutes = {
   EVENT_CATEGORIES: '/event-categories',
   SPACES: '/spaces',
   BUILDINGS: '/buildings',
-  SPACE_TYPES: '/space-types'
-}
+  SPACE_TYPES: '/space-types',
+};

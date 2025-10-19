@@ -1,13 +1,24 @@
-import { EventCardLabel } from '@/components/shared/event-card-label.tsx';
-import { Calendar, Check, Clock4, Flame, MapPin, QrCode, Share2, Users } from 'lucide-react';
+import {
+  Calendar,
+  Check,
+  Clock4,
+  Flame,
+  MapPin,
+  QrCode,
+  Share2,
+  Users,
+} from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import { Link } from 'react-router';
-import { EventRegistrationButton } from '@/components/shared/event-registration-button.tsx';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import type { EventListDto } from '@/api/events/model.ts';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
+import {
+  EventCardLabel,
+  EventRegistrationButton,
+} from '@/components/shared/event';
 
 interface Props {
   event: EventListDto;
@@ -26,7 +37,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
         </Badge>
         {event.isAttended && (
           <Badge className={'bg-green-500'}>
-            <Check/>
+            <Check />
             <span>Посещено</span>
           </Badge>
         )}
@@ -88,7 +99,10 @@ export const EventCard: React.FC<Props> = ({ event }) => {
               }
             >
               {event.deadline && (
-                <EventCardLabel Icon={Flame} text={formatDateToRuFormat(event.deadline)} />
+                <EventCardLabel
+                  Icon={Flame}
+                  text={formatDateToRuFormat(event.deadline)}
+                />
               )}
               <EventCardLabel Icon={MapPin} text={event.space.name} />
             </div>

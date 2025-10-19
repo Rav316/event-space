@@ -9,7 +9,11 @@ type CategoryCheckboxProps = {
   count: number;
 };
 
-export const CategoryCheckbox: React.FC<CategoryCheckboxProps> = ({ id, name, count }) => {
+export const CategoryCheckbox: React.FC<CategoryCheckboxProps> = ({
+  id,
+  name,
+  count,
+}) => {
   const filter = useEventFilterStore((state) => state.filter);
   const addCategory = useEventFilterStore((state) => state.addCategory);
   const removeCategory = useEventFilterStore((state) => state.removeCategory);
@@ -26,7 +30,11 @@ export const CategoryCheckbox: React.FC<CategoryCheckboxProps> = ({ id, name, co
     <div className={'flex items-center justify-between'}>
       <div className={'flex justify-between items-center gap-2 w-full'}>
         <div className={'flex items-center gap-2'}>
-          <Checkbox id={name} checked={localSelected} onCheckedChange={toggle} />
+          <Checkbox
+            id={name}
+            checked={localSelected}
+            onCheckedChange={toggle}
+          />
           <Label htmlFor={name}>{name}</Label>
         </div>
         <Badge variant={'outline'} className={'text-xs'}>

@@ -14,7 +14,9 @@ export const EventCreateWrapper: React.FC<PropsWithChildren<Props>> = ({
   text,
 }) => {
   return (
-    <div className={'flex flex-col gap-4 p-5 border border-[#E5E5E5] rounded-md'}>
+    <div
+      className={'flex flex-col gap-4 p-5 border border-[#E5E5E5] rounded-md'}
+    >
       <div className={'flex items-center gap-2 mb-4'}>
         <Icon className={'w-5 h-5'} />
         <span className={'font-medium'}>{text}</span>

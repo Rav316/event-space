@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
-import { EventRegistrationButton } from '@/components/shared';
+import { EventRegistrationButton } from '@/components/shared/event';
 import { CheckCircle } from 'lucide-react';
 import { EventQrCodeDialog } from '@/components/modal';
 

@@ -6,6 +6,6 @@ export const useSpaceTypes = () => {
   return useQuery({
     queryFn: Api.spaceTypes.findAll,
     queryKey: SPACE_TYPES_KEYS.all,
-    staleTime: Infinity
-  })
-}
+    staleTime: Infinity,
+  });
+};

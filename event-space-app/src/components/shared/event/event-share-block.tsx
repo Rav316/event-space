@@ -10,30 +10,29 @@ interface Props {
 
 export const EventShareBlock: React.FC<Props> = ({ className }) => {
   const handleCopy = () => {
-    const textToCopy = window.location.href
+    const textToCopy = window.location.href;
 
     // создаём временный textarea
-    const textarea = document.createElement('textarea')
-    textarea.value = textToCopy
-    document.body.appendChild(textarea)
-    textarea.select()
-    textarea.setSelectionRange(0, 99999) // для мобильных
+    const textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // для мобильных
 
     try {
-      const successful = document.execCommand('copy')
+      const successful = document.execCommand('copy');
       if (successful) {
-        toast.success('Ссылка скопирована в буфер обмена')
+        toast.success('Ссылка скопирована в буфер обмена');
       } else {
-        toast.error('Не удалось скопировать ссылку')
+        toast.error('Не удалось скопировать ссылку');
       }
     } catch (err) {
-      console.error(err)
-      toast.error('Произошла ошибка при копировании')
+      console.error(err);
+      toast.error('Произошла ошибка при копировании');
     }
 
-    document.body.removeChild(textarea)
-  }
-
+    document.body.removeChild(textarea);
+  };
 
   return (
     <div

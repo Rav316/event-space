@@ -11,31 +11,42 @@ import {
 } from '@/schemas/event-date-time-schema.ts';
 import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
-import { type EventLocationData, eventLocationSchema } from '@/schemas/event-location-schema.ts';
+import {
+  type EventLocationData,
+  eventLocationSchema,
+} from '@/schemas/event-location-schema.ts';
 import { useMemo } from 'react';
-
 
 export const useEventCreateForms = () => {
   const eventCreateDto = useEventCreationStore((state) => state.event);
 
-  const mainInfoDefaults = useMemo(() => ({
-    name: eventCreateDto.name,
-    shortDescription: eventCreateDto.shortDescription,
-    description: eventCreateDto.description,
-    tags: eventCreateDto.tags,
-    category: eventCreateDto.category,
-  }), [eventCreateDto]);
+  const mainInfoDefaults = useMemo(
+    () => ({
+      name: eventCreateDto.name,
+      shortDescription: eventCreateDto.shortDescription,
+      description: eventCreateDto.description,
+      tags: eventCreateDto.tags,
+      category: eventCreateDto.category,
+    }),
+    [eventCreateDto],
+  );
 
-  const eventDateTimeDefaults = useMemo(() => ({
-    eventDate: eventCreateDto.eventDate,
-    startTime: eventCreateDto.startTime,
-    endTime: eventCreateDto.endTime,
-    deadline: eventCreateDto.deadline,
-  }), [eventCreateDto]);
+  const eventDateTimeDefaults = useMemo(
+    () => ({
+      eventDate: eventCreateDto.eventDate,
+      startTime: eventCreateDto.startTime,
+      endTime: eventCreateDto.endTime,
+      deadline: eventCreateDto.deadline,
+    }),
+    [eventCreateDto],
+  );
 
-  const eventLocationDefaults = useMemo(() => ({
-    space: eventCreateDto.space,
-  }), [eventCreateDto]);
+  const eventLocationDefaults = useMemo(
+    () => ({
+      space: eventCreateDto.space,
+    }),
+    [eventCreateDto],
+  );
 
   const mainInfoForm = useForm<EventMainInfo>({
     resolver: zodResolver(eventMainInfoSchema),
@@ -53,8 +64,8 @@ export const useEventCreateForms = () => {
       name: '',
       startTime: '',
       endTime: '',
-      description: ''
-    }
+      description: '',
+    },
   });
 
   const eventLocationForm = useForm<EventLocationData>({
@@ -68,5 +79,11 @@ export const useEventCreateForms = () => {
     eventLocationForm.reset();
   };
 
-  return { mainInfoForm, eventDateTimeForm, eventStepForm, eventLocationForm, resetForms };
+  return {
+    mainInfoForm,
+    eventDateTimeForm,
+    eventStepForm,
+    eventLocationForm,
+    resetForms,
+  };
 };

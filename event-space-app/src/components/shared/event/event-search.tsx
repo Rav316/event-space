@@ -1,7 +1,7 @@
-import { SearchInput } from '@/components/shared/search-input.tsx';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import { SearchInput } from '@/components/shared';
 
 export const EventSearch = () => {
   const eventFilter = useEventFilterStore((state) => state.filter);

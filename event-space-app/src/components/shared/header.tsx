@@ -1,9 +1,11 @@
 import { Calendar, ChartColumn, History, Plus, Users } from 'lucide-react';
-import { HeaderItem } from '@/components/shared/header-item.tsx';
-import { SearchInput } from '@/components/shared/search-input.tsx';
+import {
+  HeaderItem,
+  NavigationMenu,
+  ProfileMenu,
+  SearchInput,
+} from '@/components/shared';
 import { Button, Skeleton } from '@/components/ui';
-import { ProfileMenu } from '@/components/shared/profile-menu.tsx';
-import { NavigationMenu } from '@/components/shared/navigation-menu.tsx';
 import { Link } from 'react-router';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useEffect } from 'react';
@@ -40,7 +42,11 @@ export const Header = () => {
             </h1>
           </div>
         </Link>
-        <div className={'flex items-center gap-x-4 max-[1200px]:hidden min-w-[500px]'}>
+        <div
+          className={
+            'flex items-center gap-x-4 max-[1200px]:hidden min-w-[500px]'
+          }
+        >
           <Link to={'/events'}>
             <HeaderItem Icon={Calendar} text={'Мероприятия'} />
           </Link>

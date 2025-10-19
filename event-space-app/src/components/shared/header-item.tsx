@@ -1,9 +1,9 @@
-import * as React from "react";
-import type { LucideProps } from "lucide-react";
+import * as React from 'react';
+import type { LucideProps } from 'lucide-react';
 
 interface Props {
   Icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+    Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
   text: string;
 }

@@ -13,7 +13,7 @@ export const useEventReviewFilterStore = create<UseEventReviewFilterState>()(
   devtools(
     immer((set) => ({
       filter: {
-        sort: reviewSortValues[0].value
+        sort: reviewSortValues[0].value,
       },
       setFilter: (filterData) =>
         set(

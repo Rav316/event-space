@@ -15,5 +15,5 @@ export const Api = {
   eventCategories,
   spaces,
   buildings,
-  spaceTypes
-}
+  spaceTypes,
+};

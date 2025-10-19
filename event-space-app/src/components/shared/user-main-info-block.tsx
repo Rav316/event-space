@@ -12,7 +12,7 @@ import { Pencil, Trash2, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { userRoles } from '@/constants/user-roles.ts';
-import { UserAvatar } from '@/components/shared/user-avatar.tsx';
+import { UserAvatar } from '@/components/shared';
 
 interface Props {
   editMode?: boolean;

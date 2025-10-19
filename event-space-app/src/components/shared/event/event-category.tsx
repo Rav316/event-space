@@ -12,7 +12,12 @@ interface Props {
   isResult?: boolean;
 }
 
-export const EventCategory: React.FC<Props> = ({ id, text, count, isResult }) => {
+export const EventCategory: React.FC<Props> = ({
+  id,
+  text,
+  count,
+  isResult,
+}) => {
   const clickable = !isResult;
 
   const filter = useEventFilterStore((state) => state.filter);
@@ -40,7 +45,7 @@ export const EventCategory: React.FC<Props> = ({ id, text, count, isResult }) =>
             clickable && localSelected,
 
           'bg-[#F4F2F7] border border-[#E5E5E5] shadow-none cursor-default':
-          isResult,
+            isResult,
         },
       )}
     >
@@ -52,7 +57,9 @@ export const EventCategory: React.FC<Props> = ({ id, text, count, isResult }) =>
         <span className={'max-[460px]:text-xs'}>{text}</span>
       </Badge>
       <span className="font-medium text-2xl max-[460px]:text-lg">{count}</span>
-      <span className="text-muted-foreground max-[460px]:text-sm">мероприятий</span>
+      <span className="text-muted-foreground max-[460px]:text-sm">
+        мероприятий
+      </span>
     </div>
   );
 };

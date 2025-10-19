@@ -1,4 +1,4 @@
-import { ProfileSetting } from '@/components/shared/profile-setting.tsx';
+import { ProfileSetting } from '@/components/shared';
 import { Button, Separator } from '@/components/ui';
 import { X } from 'lucide-react';
 import { ChangePasswordDialog } from '@/components/modal';
@@ -8,7 +8,7 @@ interface Props {
   editMode?: boolean;
 }
 
-export const UserSettings: React.FC<Props> = ({editMode}) => {
+export const UserSettings: React.FC<Props> = ({ editMode }) => {
   return (
     <div className={'flex flex-col gap-5'}>
       <div
@@ -56,10 +56,10 @@ export const UserSettings: React.FC<Props> = ({editMode}) => {
         }
       >
         <h3 className={'font-medium text-xl'}>Безопасность</h3>
-        <ChangePasswordDialog/>
-        <Separator/>
+        <ChangePasswordDialog />
+        <Separator />
         <Button variant={'destructive'} className={'justify-start'}>
-          <X/>
+          <X />
           <span>Удалить аккаунт</span>
         </Button>
       </div>

@@ -8,6 +8,6 @@ export const useSpaces = (filter: SpaceFilter) => {
     queryFn: () => Api.spaces.findAllByFilter(filter),
     queryKey: [SPACES_KEYS.filters(filter)],
     enabled: filter.building !== 0,
-    staleTime: Infinity
-  })
-}
+    staleTime: Infinity,
+  });
+};

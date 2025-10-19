@@ -1,9 +1,8 @@
 import { Building2 } from 'lucide-react';
-import { SpaceItem } from '@/components/shared/space-item.tsx';
 import { ScrollArea, Skeleton } from '@/components/ui';
 import React from 'react';
 import type { SpaceListDto } from '@/api/spaces/model.ts';
-import { SpacesNotFound } from '@/components/shared';
+import { SpaceItem, SpacesNotFound } from '@/components/shared';
 
 interface Props {
   spaces: SpaceListDto[];
@@ -35,7 +34,7 @@ export const SpaceList: React.FC<Props> = ({
           ) : (
             <>
               {spaces.length === 0 ? (
-                <SpacesNotFound/>
+                <SpacesNotFound />
               ) : (
                 <>
                   {spaces.map((space) => (

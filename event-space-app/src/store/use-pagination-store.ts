@@ -9,10 +9,7 @@ interface PaginationState {
 
   setPage: (page: number) => void;
   setTotalPages: (totalPages: number) => void;
-  setResponse: (metadata: {
-    page: number;
-    totalElements: number;
-  }) => void;
+  setResponse: (metadata: { page: number; totalElements: number }) => void;
 }
 
 export const usePaginationStore = create<PaginationState>()(
@@ -23,14 +20,22 @@ export const usePaginationStore = create<PaginationState>()(
       totalPages: 0,
 
       setPage: (page) =>
-        set((state) => {
-          state.page = page;
-        }, false, 'setPage'),
+        set(
+          (state) => {
+            state.page = page;
+          },
+          false,
+          'setPage',
+        ),
 
       setTotalPages: (totalPages) =>
-        set((state) => {
-          state.totalPages = totalPages;
-        }, false, 'setTotalPages'),
+        set(
+          (state) => {
+            state.totalPages = totalPages;
+          },
+          false,
+          'setTotalPages',
+        ),
 
       setResponse: (metadata) =>
         set((state) => {

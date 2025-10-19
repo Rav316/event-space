@@ -25,7 +25,7 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="password">
-            Пароль <RequiredMark/>
+            Пароль <RequiredMark />
           </Label>
           <PasswordInput {...form.register('password')} />
           {form.formState.errors.password && (
@@ -37,7 +37,7 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="confirmPassword">
-            Подтвердите пароль <RequiredMark/>
+            Подтвердите пароль <RequiredMark />
           </Label>
           <PasswordInput
             id={'confirmPassword'}

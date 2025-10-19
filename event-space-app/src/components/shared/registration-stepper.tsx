@@ -13,10 +13,7 @@ interface StepperProps {
   currentStep: number;
 }
 
-export const RegistrationStepper = ({
-  steps,
-  currentStep
-}: StepperProps) => {
+export const RegistrationStepper = ({ steps, currentStep }: StepperProps) => {
   return (
     <div className="flex justify-center mb-8 w-full">
       <div className="flex items-center w-full justify-between">
@@ -51,9 +48,7 @@ export const RegistrationStepper = ({
               <div
                 className={cn(
                   'flex-1 h-px mx-1 sm:mx-2 transition-all',
-                  currentStep > step.number
-                    ? 'bg-primary'
-                    : 'bg-border',
+                  currentStep > step.number ? 'bg-primary' : 'bg-border',
                 )}
               />
             )}

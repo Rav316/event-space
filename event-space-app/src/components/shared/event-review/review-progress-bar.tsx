@@ -8,7 +8,11 @@ interface Props {
   total: number;
 }
 
-export const ReviewProgressBar: React.FC<Props> = ({ rating, count, total }) => {
+export const ReviewProgressBar: React.FC<Props> = ({
+  rating,
+  count,
+  total,
+}) => {
   const progress = total > 0 ? (count / total) * 100 : 0;
 
   return (
@@ -17,7 +21,10 @@ export const ReviewProgressBar: React.FC<Props> = ({ rating, count, total }) => 
 
       <div className="flex items-center flex-1 gap-2">
         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 shrink-0" />
-        <Progress className="flex-1 [&>div]:bg-yellow-400 h-2" value={progress} />
+        <Progress
+          className="flex-1 [&>div]:bg-yellow-400 h-2"
+          value={progress}
+        />
       </div>
 
       <span className="text-muted-foreground text-right">{count}</span>

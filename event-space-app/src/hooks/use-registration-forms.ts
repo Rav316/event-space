@@ -25,7 +25,7 @@ export const useRegistrationForms = () => {
       email: registrationData.email,
     },
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit'
+    reValidateMode: 'onSubmit',
   });
 
   const roleStatusForm = useForm<RoleStatusData>({

@@ -62,7 +62,9 @@ export const SpaceFilters = () => {
           <Select
             defaultValue={spaceFilter.type ? String(spaceFilter.type) : 'all'}
             onValueChange={(value) =>
-              setSpaceFilter({ type: value === 'all' ? undefined : Number(value) })
+              setSpaceFilter({
+                type: value === 'all' ? undefined : Number(value),
+              })
             }
           >
             <SelectTrigger
@@ -72,7 +74,8 @@ export const SpaceFilters = () => {
               <SelectValue placeholder="Выберите тип помещения" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Все</SelectItem> {/* значение для "Все" */}
+              <SelectItem value="all">Все</SelectItem>{' '}
+              {/* значение для "Все" */}
               {spaceTypes?.map((spaceType) => (
                 <SelectItem key={spaceType.id} value={String(spaceType.id)}>
                   {spaceType.name}
@@ -89,10 +92,13 @@ export const SpaceFilters = () => {
           Вместимость
         </Label>
         <Select
-          defaultValue={capacityValues.findIndex(
-            (capacity) =>
-              capacity.minCapacity === spaceFilter.minCapacity &&
-              capacity.maxCapacity === spaceFilter.maxCapacity).toString()}
+          defaultValue={capacityValues
+            .findIndex(
+              (capacity) =>
+                capacity.minCapacity === spaceFilter.minCapacity &&
+                capacity.maxCapacity === spaceFilter.maxCapacity,
+            )
+            .toString()}
           onValueChange={(value) => onCapacityChange(Number(value))}
         >
           <SelectTrigger
@@ -103,7 +109,9 @@ export const SpaceFilters = () => {
           </SelectTrigger>
           <SelectContent>
             {capacityValues.map((capacity, index) => (
-              <SelectItem key={index} value={String(index)}>{capacity.label}</SelectItem>
+              <SelectItem key={index} value={String(index)}>
+                {capacity.label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

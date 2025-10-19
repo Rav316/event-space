@@ -5,4 +5,4 @@ export const getTodayDate = () => {
   const day = String(now.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`; // 'YYYY-MM-DD'
-}
+};

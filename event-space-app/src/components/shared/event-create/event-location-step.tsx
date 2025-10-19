@@ -70,8 +70,8 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
               </h3>
               <span className={'text-muted-foreground text-sm'}>
                 Выберите кабинет в корпусе "
-                {buildings?.find((b) => b.id === spaceFilter.building)?.name}
-                " ({spaces?.length} кабинетов доступно)
+                {buildings?.find((b) => b.id === spaceFilter.building)?.name}" (
+                {spaces?.length} кабинетов доступно)
               </span>
             </div>
             <SpaceFilters />

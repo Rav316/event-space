@@ -3,6 +3,7 @@ import {
   DateTimeStep,
   EventCreateHeader,
   EventCreateStepper,
+  EventLocationStep,
   EventProgramStep,
   MainInfoStep,
   MediaSettingsStep,
@@ -11,7 +12,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStepper } from '@/hooks/use-stepper.ts';
 import { Button, Spinner } from '@/components/ui';
 import { eventCreateSteps } from '@/constants/event-create-steps.ts';
-import { EventLocationStep } from '@/components/shared/event-create/event-location-step.tsx';
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
 import { useEventCreateForms } from '@/hooks/use-event-create-forms.ts';
 import { eventStepsGlobalSchema } from '@/schemas/event-steps-global-schema.ts';
@@ -21,7 +21,9 @@ import { useEventCreate } from '@/api/events/hooks.ts';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
 
 const EventCreatePage = () => {
-  const { currentStep, back, next, goToStep } = useStepper(eventCreateSteps.length);
+  const { currentStep, back, next, goToStep } = useStepper(
+    eventCreateSteps.length,
+  );
   const event = useEventCreationStore((state) => state.event);
   const eventSteps = useEventCreationStore((state) => state.eventSteps);
   const eventImage = useEventImageStore((state) => state.file);
@@ -37,7 +39,7 @@ const EventCreatePage = () => {
     eventDateTimeForm,
     eventStepForm,
     eventLocationForm,
-    resetForms
+    resetForms,
   } = useEventCreateForms();
   const eventCreateMutation = useEventCreate();
 
@@ -48,7 +50,7 @@ const EventCreatePage = () => {
     resetForms();
     goToStep(0);
     toast.success('Вы успешно очистили форму создания мероприятия');
-  }
+  };
 
   const onStepNext = () => {
     switch (currentStep) {
@@ -134,7 +136,7 @@ const EventCreatePage = () => {
         <Button onClick={onStepNext}>
           {eventCreateMutation.isPending ? (
             <div className={'flex items-center justify-center gap-x-2'}>
-              <Spinner/>
+              <Spinner />
               <span>Создание...</span>
             </div>
           ) : (

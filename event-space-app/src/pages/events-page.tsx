@@ -1,18 +1,18 @@
 import { Wrapper } from '@/components/hoc';
-import {
-  EventCategories,
-  EventGroup,
-  EventSearch,
-  EventsNotFound,
-  EventsPagination,
-} from '@/components/shared';
-import { EventFilters } from '@/components/shared/event-filters.tsx';
 import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 import { useEffect } from 'react';
 import { usePaginationStore } from '@/store/use-pagination-store.ts';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
 import { Skeleton } from '@/components/ui';
+import {
+  EventCategories,
+  EventFilters,
+  EventGroup,
+  EventSearch,
+  EventsNotFound,
+  EventsPagination
+} from '@/components/shared/event';
 
 const EventsPage = () => {
   const eventFilter = useEventFilterStore((state) => state.filter);

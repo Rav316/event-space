@@ -6,11 +6,6 @@ import {
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
 import { useState } from 'react';
-import {
-  UserInfo,
-  UserSettings,
-  UserStatistics,
-} from '@/components/shared/user-profile';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userProfileSchema } from '@/schemas/user-profile-schema.ts';
@@ -19,7 +14,12 @@ import type { UserEditDto } from '@/api/users/model.ts';
 import { useCheckEmail, useEditUser } from '@/api/users/hooks.ts';
 import { deepEqual } from '@/utils/deep-equal.ts';
 import { queryClient } from '@/api/query-client.ts';
-import {validateEmailUnique} from "@/utils/validation.ts";
+import { validateEmailUnique } from '@/utils/validation.ts';
+import {
+  UserInfo,
+  UserSettings,
+  UserStatistics,
+} from '@/components/shared/profile-tabs';
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);

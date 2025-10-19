@@ -6,6 +6,6 @@ export const useBuildings = () => {
   return useQuery({
     queryFn: Api.buildings.findAll,
     queryKey: BUILDINGS_KEYS.all,
-    staleTime: Infinity
-  })
-}
+    staleTime: Infinity,
+  });
+};

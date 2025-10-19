@@ -24,12 +24,16 @@ export const UserStatistics = () => {
           caption={'за всё время'}
         />
       </div>
-      <div className={'flex flex-col border border-[#E5E5E5] rounded-2xl p-5 gap-3 max-[500px]:p-3'}>
+      <div
+        className={
+          'flex flex-col border border-[#E5E5E5] rounded-2xl p-5 gap-3 max-[500px]:p-3'
+        }
+      >
         <span>Последняя активность</span>
-        <UserActivity/>
-        <UserActivity/>
-        <UserActivity/>
+        <UserActivity />
+        <UserActivity />
+        <UserActivity />
       </div>
     </div>
   );
-}
+};

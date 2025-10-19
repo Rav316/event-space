@@ -15,28 +15,36 @@ export const useEventImageStore = create<EventImageState>()(
       file: null,
       previewUrl: null,
       setFile: (file) => {
-        if(file) {
+        if (file) {
           const currentPreviewUrl = useEventImageStore.getState().previewUrl;
-          if(currentPreviewUrl) {
+          if (currentPreviewUrl) {
             URL.revokeObjectURL(currentPreviewUrl);
           }
           const previewUrl = URL.createObjectURL(file);
-          set((state) => {
-            state.file = file;
-            state.previewUrl = previewUrl;
-          }, false, 'setFile');
+          set(
+            (state) => {
+              state.file = file;
+              state.previewUrl = previewUrl;
+            },
+            false,
+            'setFile',
+          );
         }
       },
       clearImage: () => {
         const currentPreviewUrl = useEventImageStore.getState().previewUrl;
-        if(currentPreviewUrl) {
+        if (currentPreviewUrl) {
           URL.revokeObjectURL(currentPreviewUrl);
         }
-        set((state) => {
-          state.file = null;
-          state.previewUrl = null;
-        }, false, 'clearImage');
-      }
+        set(
+          (state) => {
+            state.file = null;
+            state.previewUrl = null;
+          },
+          false,
+          'clearImage',
+        );
+      },
     })),
     {
       name: 'eventImageStore',

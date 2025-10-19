@@ -25,7 +25,7 @@ export const ProgramStep: React.FC<Props> = ({
   index,
   onStepDelete,
   updateStep,
-  isLastStep
+  isLastStep,
 }) => {
   const form = useForm({
     defaultValues: step,
@@ -35,7 +35,6 @@ export const ProgramStep: React.FC<Props> = ({
   const handleBlur = form.handleSubmit((data) => {
     updateStep(index, data);
   });
-
 
   return (
     <FormProvider {...form}>
@@ -75,10 +74,12 @@ export const ProgramStep: React.FC<Props> = ({
             <Label>
               Время начала <RequiredMark />
             </Label>
-            <input type="hidden" {...form.register('startTime')} value={step.startTime} />
-            <span
-              className="p-[7px] border rounded-sm bg-gray-100 text-sm"
-            >
+            <input
+              type="hidden"
+              {...form.register('startTime')}
+              value={step.startTime}
+            />
+            <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
               {step.startTime}
             </span>
           </div>
@@ -87,10 +88,12 @@ export const ProgramStep: React.FC<Props> = ({
             <Label htmlFor={`end-time-${index}`}>
               Время окончания <RequiredMark />
             </Label>
-            <input type={'hidden'} {...form.register('endTime')} value={step.endTime} />
-            <span
-              className="p-[7px] border rounded-sm bg-gray-100 text-sm"
-            >
+            <input
+              type={'hidden'}
+              {...form.register('endTime')}
+              value={step.endTime}
+            />
+            <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
               {step.endTime}
             </span>
           </div>

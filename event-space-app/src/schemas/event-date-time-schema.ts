@@ -67,5 +67,4 @@ export const eventDateTimeSchema = z
     }
   });
 
-
 export type EventDateTime = z.infer<typeof eventDateTimeSchema>;

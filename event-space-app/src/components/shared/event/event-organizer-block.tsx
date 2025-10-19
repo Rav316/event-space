@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
-import { UserAvatar } from '@/components/shared/user-avatar.tsx';
+import { UserAvatar } from '@/components/shared';
 
 interface Props {
   className?: string;
@@ -19,9 +19,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
 }) => {
   const staticContentUrl = import.meta.env.VITE_STATIC_URL;
 
-  const avatarUrlFinal = avatarUrl
-    ? `${staticContentUrl}${avatarUrl}`
-    : false;
+  const avatarUrlFinal = avatarUrl ? `${staticContentUrl}${avatarUrl}` : false;
   return (
     <div
       className={cn(
@@ -39,7 +37,9 @@ export const EventOrganizerBlock: React.FC<Props> = ({
           avatarFallbackClassName={'text-xl bg-muted'}
         />
         <div className={'flex flex-col gap-0.5'}>
-          <span className={'font-medium text-lg'}>{`${firstName} ${lastName}`}</span>
+          <span
+            className={'font-medium text-lg'}
+          >{`${firstName} ${lastName}`}</span>
           <span className={'text-muted-foreground'}>{faculty}</span>
         </div>
       </div>

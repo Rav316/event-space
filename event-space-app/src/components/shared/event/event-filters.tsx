@@ -1,10 +1,8 @@
-import { CategoriesFilter } from '@/components/shared/categories-filter.tsx';
-import { TagsFilter } from '@/components/shared/tags-filter.tsx';
 import { Button } from '@/components/ui';
 import { Users } from 'lucide-react';
-import { EventSortSelect } from '@/components/shared/event-sort-select.tsx';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
-import { EventPeriodSelect } from '@/components/shared/event-period-select.tsx';
+import { CategoriesFilter, TagsFilter } from '@/components/shared';
+import { EventPeriodSelect, EventSortSelect } from '@/components/shared/event';
 
 export const EventFilters = () => {
   const filter = useEventFilterStore((state) => state.filter);
@@ -18,7 +16,7 @@ export const EventFilters = () => {
       </div>
       <div className={'flex gap-2'}>
         <EventSortSelect />
-        <EventPeriodSelect/>
+        <EventPeriodSelect />
       </div>
       <Button
         variant={filter.hasPlaces ? 'default' : 'outline'}

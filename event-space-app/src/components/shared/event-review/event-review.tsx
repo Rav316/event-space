@@ -2,8 +2,7 @@ import { Button } from '@/components/ui';
 import { Flag, ThumbsUp } from 'lucide-react';
 import React from 'react';
 import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
-import { UserAvatar } from '@/components/shared/user-avatar.tsx';
-import { StarRating } from '@/components/shared/star-rating.tsx';
+import { UserAvatar, StarRating } from '@/components/shared';
 
 interface Props {
   review: EventReviewReadDto;
@@ -25,7 +24,9 @@ export const EventReview: React.FC<Props> = ({ review }) => {
 
   return (
     <div
-      className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'}
+      className={
+        'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'
+      }
     >
       <div className="flex items-start gap-3">
         <UserAvatar
@@ -45,11 +46,15 @@ export const EventReview: React.FC<Props> = ({ review }) => {
             <div className="flex items-center gap-0.5">
               <StarRating rating={review.rating} />
             </div>
-            <span className={'text-muted-foreground max-[410px]:text-sm'}>{formattedDate}</span>
+            <span className={'text-muted-foreground max-[410px]:text-sm'}>
+              {formattedDate}
+            </span>
           </div>
         </div>
       </div>
-      <span className="font-medium text-lg max-[410px]:text-base">{review.title}</span>
+      <span className="font-medium text-lg max-[410px]:text-base">
+        {review.title}
+      </span>
       <p className={'max-[410px]:leading-5'}>{review.content}</p>
       <div
         className={

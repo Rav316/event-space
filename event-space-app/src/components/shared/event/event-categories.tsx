@@ -1,4 +1,4 @@
-import { EventCategory } from '@/components/shared/event-category.tsx';
+import { EventCategory } from '@/components/shared/event';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
 import { Skeleton } from '@/components/ui';
 

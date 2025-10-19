@@ -5,9 +5,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+} from '@/components/ui/dialog.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { Spinner } from '@/components/ui/spinner.tsx';
 import { Lock } from 'lucide-react';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';

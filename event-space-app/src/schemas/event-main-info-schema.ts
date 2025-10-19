@@ -16,7 +16,10 @@ export const eventMainInfoSchema = z.object({
   description: z.string().max(1000, {
     message: 'Описание должно содержать не более 500 символов',
   }),
-  tags: z.array(z.string()).max(5, { message: 'Выберите не более 5 тегов' }).optional(),
+  tags: z
+    .array(z.string())
+    .max(5, { message: 'Выберите не более 5 тегов' })
+    .optional(),
   category: z.number().min(1, { message: 'Выберите категорию' }),
 });
 

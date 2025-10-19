@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,7 +41,7 @@ html body[data-scroll-locked] {
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: #D4183D;
+  --destructive: #d4183d;
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -59,7 +59,6 @@ html body[data-scroll-locked] {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
-
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -157,7 +156,7 @@ html body[data-scroll-locked] {
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
-  input:-webkit-autofill:active{
+  input:-webkit-autofill:active {
     -webkit-background-clip: text;
     -webkit-text-fill-color: #000000;
     transition: background-color 5000s ease-in-out 0s;

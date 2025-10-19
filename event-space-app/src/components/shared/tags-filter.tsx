@@ -18,7 +18,6 @@ import { useDebounce } from 'use-debounce';
 import { useTagsStartWith } from '@/api/events/hooks.ts';
 
 export const TagsFilter = () => {
-
   const tags = useEventFilterStore((state) => state.filter.tags);
   const addTag = useEventFilterStore((state) => state.addTag);
   const removeTag = useEventFilterStore((state) => state.removeTag);

@@ -17,27 +17,35 @@ export const useRegistrationStore = create<RegistrationState>()(
         lastName: '',
         email: '',
         role: 0,
-        password: ''
+        password: '',
       },
       setRegistrationData: (data) => {
-        set((state) => {
-          state.registrationData = {
-            ...state.registrationData,
-            ...data,
-          };
-        }, false, 'setRegistrationData');
+        set(
+          (state) => {
+            state.registrationData = {
+              ...state.registrationData,
+              ...data,
+            };
+          },
+          false,
+          'setRegistrationData',
+        );
       },
       resetRegistrationData: () => {
-        set((state) => {
-          state.registrationData = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            role: 0,
-            password: ''
-          };
-        }, false, 'resetRegistrationData');
-      }
+        set(
+          (state) => {
+            state.registrationData = {
+              firstName: '',
+              lastName: '',
+              email: '',
+              role: 0,
+              password: '',
+            };
+          },
+          false,
+          'resetRegistrationData',
+        );
+      },
     })),
     {
       store: 'registration-store',

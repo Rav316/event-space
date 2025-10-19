@@ -5,13 +5,17 @@ import {
   DialogTitle,
   FormErrorMessage,
   Input,
-  Label, Spinner
+  Label,
+  Spinner,
 } from '@/components/ui';
 import { LogIn, Mail } from 'lucide-react';
 import { PasswordInput } from '@/components/shared';
 import { useLogin } from '@/api/auth/hooks.ts';
 import { FormProvider, useForm } from 'react-hook-form';
-import { formLoginSchema, type LoginData } from '@/schemas/form-login-schema.ts';
+import {
+  formLoginSchema,
+  type LoginData,
+} from '@/schemas/form-login-schema.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
@@ -35,10 +39,10 @@ export const LoginModal = () => {
 
   const onOpenChange = (open: boolean) => {
     setOpen(open);
-    if(!open) {
+    if (!open) {
       form.reset();
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -94,7 +98,7 @@ export const LoginModal = () => {
             >
               {loginMutation.isPending ? (
                 <div className="flex items-center justify-center gap-x-2">
-                  <Spinner/>
+                  <Spinner />
                   <span>Вход...</span>
                 </div>
               ) : (

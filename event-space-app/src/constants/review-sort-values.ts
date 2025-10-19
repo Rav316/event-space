@@ -1,22 +1,22 @@
 export const reviewSortValues = [
   {
     label: 'Новые',
-    value: 'new'
+    value: 'new',
   },
   {
     label: 'Старые',
-    value: 'old'
+    value: 'old',
   },
   {
     label: 'Высокие оценки',
-    value: 'high-rating'
+    value: 'high-rating',
   },
   {
     label: 'Низкие оценки',
-    value: 'low-rating'
+    value: 'low-rating',
   },
   {
     label: 'Полезные',
-    value: 'useful'
+    value: 'useful',
   },
-]
+];

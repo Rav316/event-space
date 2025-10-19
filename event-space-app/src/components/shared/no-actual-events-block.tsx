@@ -34,7 +34,6 @@ export const NoActualEventsBlock = () => {
         }
       >
         <Link to={'/events'}>
-
           <Button className={'h-[40px]'}>
             <span className={'font-medium'}>Создать мероприятие</span>
             <ArrowRight />

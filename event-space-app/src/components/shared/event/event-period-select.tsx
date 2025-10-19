@@ -16,7 +16,10 @@ export const EventPeriodSelect = () => {
     eventPeriods.find((item) => item.value === filter.period)?.label ?? '';
 
   return (
-    <Select value={filter.period} onValueChange={(value) => setFilter({ period: value })}>
+    <Select
+      value={filter.period}
+      onValueChange={(value) => setFilter({ period: value })}
+    >
       <SelectTrigger className="h-9 min-w-0 max-[703px]:flex-1">
         <ClockArrowUp className="h-4 w-4 mr-2" />
         <span className="font-medium">{currentLabel}</span>

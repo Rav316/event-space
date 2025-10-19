@@ -4,14 +4,14 @@ import type { Tab } from '@/types/tab.ts';
 export const profileTabs: Tab[] = [
   {
     text: 'Информация',
-    Icon: User
+    Icon: User,
   },
   {
     text: 'Статистика',
-    Icon: Activity
+    Icon: Activity,
   },
   {
     text: 'Настройки',
-    Icon: Settings
-  }
-]
+    Icon: Settings,
+  },
+];

@@ -25,7 +25,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
         <div className="grid grid-cols-2 gap-4 max-[600px]:grid-cols-1">
           <div className="space-y-2">
             <Label htmlFor="firstName">
-              Имя <RequiredMark/>
+              Имя <RequiredMark />
             </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
@@ -47,7 +47,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
 
           <div className="space-y-2">
             <Label htmlFor="lastName">
-              Фамилия <RequiredMark/>
+              Фамилия <RequiredMark />
             </Label>
             <div className={'flex flex-col gap-1'}>
               <div className="relative">
@@ -70,7 +70,7 @@ export const StepPersonalData: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-2">
           <Label htmlFor="email">
-            Email адрес <RequiredMark/>
+            Email адрес <RequiredMark />
           </Label>
           <div className={'flex flex-col gap-1'}>
             <div className="relative">

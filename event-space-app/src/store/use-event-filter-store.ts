@@ -21,28 +21,50 @@ export const useEventFilterStore = create<EventFilterState>()(
         tags: [],
         page: 0,
         sort: 'date',
-        period: 'all'
+        period: 'all',
       },
       setFilter: (filterData) =>
-        set((state) => {
-          Object.assign(state.filter, filterData);
-        }, false, 'setFilter'),
+        set(
+          (state) => {
+            Object.assign(state.filter, filterData);
+          },
+          false,
+          'setFilter',
+        ),
       addCategory: (category) =>
-        set((state) => {
-          state.filter.categories?.push(category);
-        }, false, 'addCategory'),
+        set(
+          (state) => {
+            state.filter.categories?.push(category);
+          },
+          false,
+          'addCategory',
+        ),
       removeCategory: (category) =>
-        set((state) => {
-          state.filter.categories = state.filter.categories?.filter((c) => c !== category);
-        }, false, 'removeCategory'),
+        set(
+          (state) => {
+            state.filter.categories = state.filter.categories?.filter(
+              (c) => c !== category,
+            );
+          },
+          false,
+          'removeCategory',
+        ),
       addTag: (tag) =>
-        set((state) => {
-          state.filter.tags?.push(tag);
-        }, false, 'addTag'),
+        set(
+          (state) => {
+            state.filter.tags?.push(tag);
+          },
+          false,
+          'addTag',
+        ),
       removeTag: (tag) =>
-        set((state) => {
-          state.filter.tags = state.filter.tags?.filter((t) => t !== tag);
-        }, false, 'removeTag'),
+        set(
+          (state) => {
+            state.filter.tags = state.filter.tags?.filter((t) => t !== tag);
+          },
+          false,
+          'removeTag',
+        ),
     })),
     { name: 'eventFilterStore' },
   ),

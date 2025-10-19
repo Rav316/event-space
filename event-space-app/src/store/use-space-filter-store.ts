@@ -16,9 +16,13 @@ export const useSpaceFilterStore = create<SpaceFilterState>()(
         building: 0,
       },
       setFilter: (filterData) =>
-        set((state) => {
-          Object.assign(state.filter, filterData);
-        }, false, 'setFilter'),
+        set(
+          (state) => {
+            Object.assign(state.filter, filterData);
+          },
+          false,
+          'setFilter',
+        ),
     })),
     { name: 'spaceFilterStore' },
   ),

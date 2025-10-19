@@ -1,6 +1,10 @@
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
-import type { UserEditData, UserPasswordChangeDto, UserReadDto } from '@/api/users/model.ts';
+import type {
+  UserEditData,
+  UserPasswordChangeDto,
+  UserReadDto,
+} from '@/api/users/model.ts';
 
 export const existsByEmail = async (email: string): Promise<boolean> => {
   const response = await axiosInstance.get<boolean>(
@@ -35,6 +39,11 @@ export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
   return response.data;
 };
 
-export const changePassword = async (data: UserPasswordChangeDto): Promise<void> => {
-  await axiosInstance.patch<void>(`${ApiRoutes.USERS}/profile/change-password`, data);
-}
+export const changePassword = async (
+  data: UserPasswordChangeDto,
+): Promise<void> => {
+  await axiosInstance.patch<void>(
+    `${ApiRoutes.USERS}/profile/change-password`,
+    data,
+  );
+};

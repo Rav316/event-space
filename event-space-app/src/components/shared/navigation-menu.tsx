@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui';
 import { Calendar, ChartColumn, History, Menu, Users } from 'lucide-react';
 import * as React from 'react';
@@ -14,38 +14,36 @@ interface Props {
   className?: string;
 }
 
-export const NavigationMenu: React.FC<Props> = ({className}) => {
+export const NavigationMenu: React.FC<Props> = ({ className }) => {
   return (
     <div className={className}>
       <DropdownMenu>
         <DropdownMenuTrigger className="p-2 rounded hover:bg-gray-200 transition-colors duration-200">
-          <Menu width={20} height={20}/>
+          <Menu width={20} height={20} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className={'min-w-[200px]'} collisionPadding={20}>
-          <DropdownMenuLabel>
-            Навигация
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>Навигация</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <Link to={'/events'}>
             <DropdownMenuItem>
-              <Calendar/>
+              <Calendar />
               Мероприятия
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem>
-            <Users/>
+            <Users />
             Мои регистрации
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <ChartColumn/>
+            <ChartColumn />
             Статистика
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <History/>
+            <History />
             История
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
+  );
+};

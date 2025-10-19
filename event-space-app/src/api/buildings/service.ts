@@ -5,4 +5,4 @@ import { ApiRoutes } from '@/api/api-routes.ts';
 export const findAll = async (): Promise<Building[]> => {
   const response = await axiosInstance.get<Building[]>(ApiRoutes.BUILDINGS);
   return response.data;
-}
+};

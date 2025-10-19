@@ -12,7 +12,7 @@ import { LogOut, Settings, User } from 'lucide-react';
 import { useLogout, useMe } from '@/api/auth/hooks.ts';
 import { Link } from 'react-router';
 import { userRoles } from '@/constants/user-roles.ts';
-import { UserAvatar } from '@/components/shared/user-avatar.tsx';
+import { UserAvatar } from '@/components/shared';
 
 interface Props {
   className?: string;

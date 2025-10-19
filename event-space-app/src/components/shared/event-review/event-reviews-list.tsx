@@ -3,7 +3,7 @@ import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store
 import React, { useEffect, useRef } from 'react';
 import { Skeleton, Spinner } from '@/components/ui';
 import { AnimatePresence, motion } from 'framer-motion';
-import { EventReview } from '@/components/shared/event-review.tsx';
+import { EventReview } from '@/components/shared/event-review';
 
 interface Props {
   eventId: number;

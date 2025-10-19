@@ -12,16 +12,6 @@ import {
 } from 'lucide-react';
 import { Wrapper } from '@/components/hoc';
 import { categoryColors } from '@/constants/category-colors.ts';
-import {
-  EventBadge,
-  EventDescription,
-  EventProgram,
-  EventRegistrationBlock,
-  EventReviews,
-  EventShareBlock,
-  EventSkeleton,
-} from '@/components/shared';
-import { EventOrganizerBlock } from '@/components/shared/event-organizer-block.tsx';
 import { useNavigate, useParams } from 'react-router';
 import { useEventById, useStepsByEvent } from '@/api/events/hooks.ts';
 import { formatDate } from '@/utils/format-date.ts';
@@ -30,6 +20,16 @@ import Page404 from '@/pages/page-404.tsx';
 import axios, { type AxiosError } from 'axios';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
+import { EventReviews } from '@/components/shared/event-review';
+import {
+  EventBadge,
+  EventDescription,
+  EventOrganizerBlock,
+  EventProgram,
+  EventRegistrationBlock,
+  EventShareBlock,
+  EventSkeleton,
+} from '@/components/shared/event';
 
 const EventPage = () => {
   const navigate = useNavigate();

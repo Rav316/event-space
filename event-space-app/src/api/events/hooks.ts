@@ -64,7 +64,7 @@ export const useEventById = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.findById(eventId),
     queryKey: EVENTS_KEYS.event(eventId),
-    retry: false
+    retry: false,
   });
 };
 
@@ -72,31 +72,32 @@ export const useStepsByEvent = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.getStepsByEvent(eventId),
     queryKey: EVENTS_KEYS.steps(eventId),
-    retry: false
+    retry: false,
   });
 };
 
 export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
   return useInfiniteQuery({
     queryKey: EVENTS_KEYS.reviews(eventId, filter),
-    queryFn: ({ pageParam = 0 }) => Api.events.getEventReviews(eventId, filter, pageParam),
+    queryFn: ({ pageParam = 0 }) =>
+      Api.events.getEventReviews(eventId, filter, pageParam),
     getNextPageParam: (lastPage) => {
       if (lastPage.metadata.hasNext) {
         return lastPage.metadata.page + 1;
       }
       return undefined;
     },
-    initialPageParam: 0
-  })
-}
+    initialPageParam: 0,
+  });
+};
 
 export const useEventReviewsStatistics = (eventId: number) => {
   return useQuery({
     queryKey: EVENTS_KEYS.reviewsStatistics(eventId),
     queryFn: () => Api.events.getEventReviewsStatistics(eventId),
-    refetchOnWindowFocus: false
-  })
-}
+    refetchOnWindowFocus: false,
+  });
+};
 
 export const useRegisterForEvent = (eventId: number) => {
   return useMutation({

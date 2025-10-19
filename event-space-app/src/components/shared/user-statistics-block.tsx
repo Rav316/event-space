@@ -18,7 +18,9 @@ export const UserStatisticsBlock: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className={'flex flex-1 flex-col border border-[#E5E5E5] rounded-2xl p-5 gap-3 max-[500px]:p-3'}
+      className={
+        'flex flex-1 flex-col border border-[#E5E5E5] rounded-2xl p-5 gap-3 max-[500px]:p-3'
+      }
     >
       <div className={'flex w-full justify-between items-center gap-4'}>
         <span className={'font-medium'}>{title}</span>

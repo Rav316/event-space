@@ -20,8 +20,8 @@ const Page403 = () => {
         </div>
         <h1 className={'text-5xl font-bold text-[#E3E3E6]'}>403</h1>
         <span className={'text-3xl font-medium text-center'}>
-        Доступ запрещён
-      </span>
+          Доступ запрещён
+        </span>
         <p className={'text-muted-foreground text-lg text-center'}>
           У вас недостаточно прав для просмотра этой страницы
         </p>

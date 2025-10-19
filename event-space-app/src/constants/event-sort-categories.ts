@@ -5,4 +5,4 @@ export const eventSortCategories = [
   { label: 'По алфавиту', value: 'alphabet' },
 ];
 
-export type EventSortCategory = typeof eventSortCategories[number]['value'];
+export type EventSortCategory = (typeof eventSortCategories)[number]['value'];

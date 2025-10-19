@@ -1,12 +1,13 @@
 import {
   FormErrorMessage,
-  Label, RequiredMark,
+  Label,
+  RequiredMark,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Skeleton
+  Skeleton,
 } from '@/components/ui';
 import { BookOpen, Building, GraduationCap, Users } from 'lucide-react';
 import { useFaculties } from '@/api/faculties/hooks.ts';
@@ -84,7 +85,7 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="faculty">
-              Факультет <RequiredMark/>
+              Факультет <RequiredMark />
             </Label>
             {isPending ? (
               <Skeleton className={'h-9 w-[236px]'} />

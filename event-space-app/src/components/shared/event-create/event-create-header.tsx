@@ -4,22 +4,11 @@ import { ArrowLeft, Trash } from 'lucide-react';
 import React from 'react';
 
 interface Props {
-  onClearClick: () => void
+  onClearClick: () => void;
 }
 
-export const EventCreateHeader: React.FC<Props> = ({onClearClick}) => {
+export const EventCreateHeader: React.FC<Props> = ({ onClearClick }) => {
   const navigate = useNavigate();
-  // const resetEvent = useEventCreationStore((state) => state.resetEvent);
-  // const resetEventSteps = useEventCreationStore(
-  //   (state) => state.resetEventSteps,
-  // );
-  // const clearImage = useEventImageStore((state) => state.clearImage);
-  //
-  // const onClearClick = () => {
-  //   resetEvent();
-  //   resetEventSteps();
-  //   clearImage();
-  // }
 
   return (
     <div
@@ -40,13 +29,19 @@ export const EventCreateHeader: React.FC<Props> = ({onClearClick}) => {
           <h1 className={'font-bold text-3xl max-[443px]:text-2xl'}>
             Создать мероприятие
           </h1>
-          <p className={'text-muted-foreground max-[443px]:text-sm text-center'}>
+          <p
+            className={'text-muted-foreground max-[443px]:text-sm text-center'}
+          >
             Заполните информацию о вашем мероприятии
           </p>
         </div>
       </div>
       <div className={'flex items-center gap-2 max-[570px]:justify-center'}>
-        <Button variant="outline" className="max-[455px]:flex-1" onClick={onClearClick}>
+        <Button
+          variant="outline"
+          className="max-[455px]:flex-1"
+          onClick={onClearClick}
+        >
           <Trash className={'max-[400px]:hidden'} />
           <span className="max-[570px]:w-full hidden max-[570px]:block max-[445px]:text-xs min-[885px]:block">
             Очистить

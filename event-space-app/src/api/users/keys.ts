@@ -1,2 +1,1 @@
-export const USERS_KEYS = {
-}
+export const USERS_KEYS = {};

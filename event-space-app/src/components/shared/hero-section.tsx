@@ -1,14 +1,14 @@
 import { ArrowRight, Calendar, Sparkles, Users } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { HeroSectionCard } from '@/components/shared/hero-section-card.tsx';
 import { Link, useNavigate } from 'react-router';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 import { useMe } from '@/api/auth/hooks.ts';
+import { HeroSectionCard } from '@/components/shared';
 
 export const HeroSection = () => {
   const navigate = useNavigate();
-  const {data} = useMe();
-  const setAuthModalAuthModal = useAuthModalStore(state => state.setIsOpen);
+  const { data } = useMe();
+  const setAuthModalAuthModal = useAuthModalStore((state) => state.setIsOpen);
 
   const handleEventCreateClick = () => {
     if (data) {
@@ -44,7 +44,10 @@ export const HeroSection = () => {
           'flex gap-x-3 w-auto justify-center max-[440px]:flex-col max-[440px]:gap-y-3 max-[440px]:w-full'
         }
       >
-        <Button className={'group h-[40px] max-[440px]:w-full'} onClick={handleEventCreateClick}>
+        <Button
+          className={'group h-[40px] max-[440px]:w-full'}
+          onClick={handleEventCreateClick}
+        >
           Создать мероприятие
           <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-[3px] transition-transform" />
         </Button>

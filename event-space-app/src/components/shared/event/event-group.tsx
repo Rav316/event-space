@@ -1,8 +1,8 @@
-import { EventCard } from '@/components/shared/event-card.tsx';
 import * as React from 'react';
 import { cn } from '@/lib/utils.ts';
 import type { EventListDto } from '@/api/events/model.ts';
 import { Skeleton } from '@/components/ui';
+import { EventCard } from '@/components/shared/event';
 
 interface Props {
   className?: string;
