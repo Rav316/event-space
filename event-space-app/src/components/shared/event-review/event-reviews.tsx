@@ -1,7 +1,7 @@
 import { MessageSquare, Star } from 'lucide-react';
 import { Button } from '@/components/ui';
 import React, { useState } from 'react';
-import { useEventReviewsStatistics } from '@/api/events/hooks.ts';
+import { useAddReview, useEventReviewsStatistics } from '@/api/events/hooks.ts';
 import {
   EventReviewsList,
   EventReviewsSkeleton,
@@ -10,6 +10,7 @@ import {
   ReviewProgressBar,
 } from '@/components/shared/event-review';
 import { StarRating } from '@/components/shared';
+import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
 
 interface Props {
   eventId: number;
@@ -17,9 +18,22 @@ interface Props {
 
 export const EventReviews: React.FC<Props> = ({ eventId }) => {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const reviewAddMutation = useAddReview();
 
   const { data: statistics, isPending: isStatisticsPending } =
     useEventReviewsStatistics(eventId);
+
+  const onAddReview = (data: EventReviewCreateDto) => {
+    reviewAddMutation.mutate(
+      { eventId, review: data },
+      {
+        onSuccess: () => {
+          setIsReviewFormOpen(false);
+        },
+      },
+    );
+  };
+
   if (isStatisticsPending || !statistics) {
     return <EventReviewsSkeleton />;
   }
@@ -73,7 +87,13 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
         <Star />
         <span>Оставить отзыв</span>
       </Button>
-      {isReviewFormOpen && <ReviewAddForm />}
+      {isReviewFormOpen && (
+        <ReviewAddForm
+          onCancel={() => setIsReviewFormOpen(false)}
+          onSubmit={onAddReview}
+          isPending={reviewAddMutation.isPending}
+        />
+      )}
 
       <ReviewFilters />
       <EventReviewsList eventId={eventId} />

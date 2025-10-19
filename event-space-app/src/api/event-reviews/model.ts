@@ -10,6 +10,17 @@ export interface EventReviewReadDto {
   createdAt: string;
 }
 
+export interface EventReviewCreateDto {
+  rating: number;
+  title: string;
+  content: string;
+}
+
+export interface EventReviewCreateData {
+  eventId: number;
+  review: EventReviewCreateDto;
+}
+
 export interface EventReviewStatisticsDto {
   avgRating: number;
   fiveStars: number;
