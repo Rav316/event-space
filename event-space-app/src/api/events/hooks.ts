@@ -78,7 +78,7 @@ export const useStepsByEvent = (eventId: number) => {
 
 export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
   return useInfiniteQuery({
-    queryKey: EVENTS_KEYS.reviews(eventId),
+    queryKey: EVENTS_KEYS.reviews(eventId, filter),
     queryFn: ({ pageParam = 0 }) => Api.events.getEventReviews(eventId, filter, pageParam),
     getNextPageParam: (lastPage) => {
       if (lastPage.metadata.hasNext) {

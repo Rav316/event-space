@@ -2,6 +2,7 @@ import type { EventReviewFilter } from '@/api/event-reviews/model';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { reviewSortValues } from '@/constants/review-sort-values.ts';
 
 interface UseEventReviewFilterState {
   filter: EventReviewFilter;
@@ -11,7 +12,9 @@ interface UseEventReviewFilterState {
 export const useEventReviewFilterStore = create<UseEventReviewFilterState>()(
   devtools(
     immer((set) => ({
-      filter: {},
+      filter: {
+        sort: reviewSortValues[0].value
+      },
       setFilter: (filterData) =>
         set(
           (state) => {

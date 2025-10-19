@@ -22,5 +22,5 @@ export interface EventReviewStatisticsDto {
 
 export interface EventReviewFilter {
   rating?: number;
-  sort?: number;
+  sort?: string;
 }
