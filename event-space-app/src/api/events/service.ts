@@ -10,7 +10,7 @@ import { ApiRoutes } from '@/api/api-routes.ts';
 import type { PageResponse, SliceResponse } from '@/api/model.ts';
 import type {
   EventReviewCreateData,
-  EventReviewFilter,
+  EventReviewFilter, EventReviewMyDto,
   EventReviewReadDto,
   EventReviewStatisticsDto
 } from '@/api/event-reviews/model.ts';
@@ -74,6 +74,13 @@ export const getEventReviews = async (
   );
   return response.data;
 };
+
+export const getMyReviewByEvent = async (eventId: number): Promise<EventReviewMyDto> => {
+  const response = await axiosInstance.get<EventReviewMyDto>(
+    `${ApiRoutes.EVENTS}/${eventId}/reviews/my`,
+  );
+  return response.data;
+}
 
 export const addReviewForEvent = async (
   data: EventReviewCreateData

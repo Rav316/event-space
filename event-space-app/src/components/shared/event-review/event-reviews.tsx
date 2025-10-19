@@ -1,10 +1,11 @@
-import { Lock, LogIn, MessageSquare, Star } from 'lucide-react';
+import { Ban, Lock, MessageSquare, Star } from 'lucide-react';
 import { Button } from '@/components/ui';
 import React, { useState } from 'react';
 import {
   useAddReview,
   useEventById,
   useEventReviewsStatistics,
+  useMyReviewByEvent,
 } from '@/api/events/hooks.ts';
 import {
   EventReviewsList,
@@ -16,6 +17,7 @@ import {
 import { StarRating } from '@/components/shared';
 import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
+import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 interface Props {
   eventId: number;
@@ -23,8 +25,10 @@ interface Props {
 
 export const EventReviews: React.FC<Props> = ({ eventId }) => {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
   const { data: me } = useMe();
   const { data: event } = useEventById(eventId);
+  const { data: myReview } = useMyReviewByEvent(eventId, { enabled: !!me });
   const reviewAddMutation = useAddReview();
 
   const { data: statistics, isPending: isStatisticsPending } =
@@ -93,22 +97,23 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
       <Button
         onClick={() => {
           if (!me) {
-            return
+            setAuthModalOpen(true);
+            return;
           }
           if (me && event?.isAttended) {
-            setIsReviewFormOpen(true)
+            setIsReviewFormOpen(true);
           }
         }}
         disabled={me && !event?.isAttended}
       >
         {!me ? (
           <>
-            <LogIn />
+            <Lock />
             <span>Войти, чтобы оставить отзыв</span>
           </>
         ) : !event?.isAttended ? (
           <>
-            <Lock />
+           <Ban/>
             <span>Отзывы доступны только посетителям</span>
           </>
         ) : (

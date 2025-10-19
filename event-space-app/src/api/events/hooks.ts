@@ -1,5 +1,10 @@
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  type UseQueryOptions,
+} from '@tanstack/react-query';
 import { Api } from '@/api/api-client.ts';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
@@ -8,9 +13,7 @@ import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
 import type { EventRequestData } from '@/api/events/model.ts';
 import { queryClient } from '@/api/query-client.ts';
-import type {
-  EventReviewFilter,
-} from '@/api/event-reviews/model.ts';
+import type { EventReviewFilter, EventReviewMyDto } from '@/api/event-reviews/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -90,6 +93,21 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
       return undefined;
     },
     initialPageParam: 0,
+  });
+};
+
+export const useMyReviewByEvent = (
+  eventId: number,
+  options?: Omit<
+    UseQueryOptions<EventReviewMyDto, Error, EventReviewMyDto>,
+    'queryKey' | 'queryFn'
+  >,
+) => {
+  return useQuery({
+    queryKey: EVENTS_KEYS.myReview(eventId),
+    queryFn: () => Api.events.getMyReviewByEvent(eventId),
+    refetchOnWindowFocus: false,
+    ...options,
   });
 };
 

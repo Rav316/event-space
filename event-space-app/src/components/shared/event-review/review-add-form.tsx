@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   Input,
   Label,
-  RequiredMark, Spinner
+  RequiredMark, Spinner, Textarea
 } from '@/components/ui';
 import { ReviewRatingInput } from '@/components/shared/event-review/review-rating-input.tsx';
 import React from 'react';
@@ -79,7 +79,8 @@ export const ReviewAddForm: React.FC<Props> = ({
           <Label>
             Подробный отзыв <RequiredMark />
           </Label>
-          <Input
+          <Textarea
+            className={'resize-none'}
             placeholder={'Поделитесь подробностями'}
             {...reviewAddForm.register('content')}
           />

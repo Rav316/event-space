@@ -10,6 +10,15 @@ export interface EventReviewReadDto {
   createdAt: string;
 }
 
+export interface EventReviewMyDto {
+  id: number;
+  event: number;
+  title: string;
+  content: string;
+  rating: number;
+  createdAt: string;
+}
+
 export interface EventReviewCreateDto {
   rating: number;
   title: string;

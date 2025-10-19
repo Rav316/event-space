@@ -15,6 +15,7 @@ export const EVENTS_KEYS = {
   steps: (eventId: number) => [eventId, 'steps'] as const,
   reviews: (eventId: number, filter: EventReviewFilter) =>
     ['reviews', eventId, filter] as const,
+  myReview: (eventId: number) => ['reviews', eventId, 'my'] as const,
   reviewsStatistics: (eventId: number) =>
     ['reviews', eventId, 'statistics'] as const,
 };
