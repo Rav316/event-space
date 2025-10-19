@@ -15,6 +15,7 @@ import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
@@ -38,6 +39,10 @@ public class EventReviewService {
     public Slice<EventReviewReadDto> findAllReviewsByEvent(Integer eventId, EventReviewFilter filter) {
         return eventReviewRepository.findAllByEventWithFilter(eventId, filter)
                 .map(eventReviewReadMapper::toDto);
+    }
+
+    public EventReviewStatisticsDto getEventReviewsStatistics(Integer eventId) {
+        return eventReviewRepository.getEventReviewStatistics(eventId);
     }
 
     @Transactional
