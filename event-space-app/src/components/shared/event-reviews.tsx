@@ -19,7 +19,6 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
         <span>Отзывы участников</span>
       </div>
 
-      {/* Общая статистика */}
       <div className="flex items-center gap-4">
         <div className="flex flex-col gap-1">
           <span className="font-bold text-3xl text-center">3.5</span>

@@ -3,9 +3,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 export const ReviewFilters = () => {
   return (
     <div className={'flex gap-2 justify-between items-center max-[625px]:flex-col max-[625px]:items-start'}>
-      <div className={'flex items-center gap-2 max-[430px]:flex-col max-[430px]:w-full'}>
+      <div className={'flex items-center gap-2 max-[430px]:w-full max-[370px]:flex-col'}>
         <Select defaultValue='Все оценки'>
-          <SelectTrigger className='max-[430px]:w-full'>
+          <SelectTrigger className='max-[370px]:w-full min-[370px]:max-[430px]:flex-1'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -18,7 +18,7 @@ export const ReviewFilters = () => {
         </Select>
 
         <Select defaultValue='Новые'>
-          <SelectTrigger className='max-[430px]:w-full'>
+          <SelectTrigger className='max-[370px]:w-full min-[370px]:max-[430px]:flex-1'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -30,10 +30,6 @@ export const ReviewFilters = () => {
           </SelectContent>
         </Select>
       </div>
-
-      <span className={'text-muted-foreground max-[625px]:text-sm'}>
-        Показано 11 из 14 отзывов
-      </span>
     </div>
   );
 };

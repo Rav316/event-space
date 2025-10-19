@@ -22,14 +22,13 @@ export const EventReview: React.FC<Props> = ({ review }) => {
     })
     .replace(',', '');
 
-  console.log(formattedDate);
-
   return (
     <div
-      className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5'}
+      className={'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-3">
         <UserAvatar
+          className={'mt-[5px]'}
           firstName={review.author.firstName}
           lastName={review.author.lastName}
           avatarUrl={
@@ -41,7 +40,7 @@ export const EventReview: React.FC<Props> = ({ review }) => {
 
         <div className="flex flex-col gap-0.5">
           <span className="font-medium">{`${review.author.firstName} ${review.author.lastName}`}</span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 max-[410px]:flex-col max-[410px]:items-start max-[410px]:gap-0.5">
             <div className="flex items-center gap-0.5">
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
@@ -49,12 +48,12 @@ export const EventReview: React.FC<Props> = ({ review }) => {
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400 scale-[1.01]" />
             </div>
-            <span className="text-muted-foreground">{formattedDate}</span>
+            <span className={'text-muted-foreground max-[410px]:text-sm'}>{formattedDate}</span>
           </div>
         </div>
       </div>
-      <span className="font-medium text-lg">{review.title}</span>
-      <p>{review.content}</p>
+      <span className="font-medium text-lg max-[410px]:text-base">{review.title}</span>
+      <p className={'max-[410px]:leading-5'}>{review.content}</p>
       <div
         className={
           'flex items-center gap-3 max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2'
