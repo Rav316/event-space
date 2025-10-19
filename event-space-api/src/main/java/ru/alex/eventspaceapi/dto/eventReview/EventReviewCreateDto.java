@@ -12,11 +12,11 @@ public record EventReviewCreateDto(
         Short rating,
 
         @NotNull
-        @Size(max = 100)
+        @Size(min = 5, max = 100)
         String title,
 
         @NotNull
-        @Size(max = 1000)
+        @Size(min = 10, max = 1000)
         String content
 ) {
 }

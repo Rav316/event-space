@@ -81,7 +81,7 @@ public class EventController {
         return new ResponseEntity<>(OK);
     }
 
-    @PostMapping("/{id}/add-review")
+    @PostMapping("/{id}/reviews")
     public ResponseEntity<EventReviewReadDto> addReviewForEvent(
             @PathVariable("id") Integer id,
             @Validated @RequestBody EventReviewCreateDto eventReviewCreateDto
