@@ -14,6 +14,7 @@ import ru.alex.eventspaceapi.mapper.user.UserEventAuthorMapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
@@ -100,7 +101,7 @@ public interface EventReadMapper {
         return event.getEventUsers().stream()
                 .filter(eu -> eu.getUser().getId().equals(user.id()))
                 .findFirst()
-                .map(eu -> eu.getQrToken().toString())
+                .map(eu -> Objects.toString(eu.getQrToken(), null))
                 .orElse(null);
     }
 }
