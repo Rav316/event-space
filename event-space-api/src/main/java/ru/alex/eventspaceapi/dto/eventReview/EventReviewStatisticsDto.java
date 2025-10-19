@@ -7,6 +7,6 @@ public record EventReviewStatisticsDto(
         Integer threeStars,
         Integer twoStars,
         Integer oneStar,
-        Integer totalReviews
+        Integer total
 ) {
 }

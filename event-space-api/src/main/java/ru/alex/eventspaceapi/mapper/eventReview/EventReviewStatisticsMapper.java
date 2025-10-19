@@ -21,7 +21,7 @@ public class EventReviewStatisticsMapper implements RowMapper<EventReviewStatist
                 rs.getInt("three_stars"),
                 rs.getInt("two_stars"),
                 rs.getInt("one_star"),
-                rs.getInt("total_reviews")
+                rs.getInt("total")
         );
     }
 }

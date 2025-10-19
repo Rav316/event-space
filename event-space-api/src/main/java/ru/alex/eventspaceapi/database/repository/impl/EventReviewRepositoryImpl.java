@@ -57,7 +57,7 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
                 COUNT (*) FILTER (WHERE rating = 3) AS three_stars,
                 COUNT (*) FILTER (WHERE rating = 2) AS two_stars,
                 COUNT (*) FILTER (WHERE rating = 1) AS one_star,
-                COUNT(*) as total_reviews
+                COUNT(*) as total
                 FROM event_review
                 WHERE event_id = :eventId
                 """;
