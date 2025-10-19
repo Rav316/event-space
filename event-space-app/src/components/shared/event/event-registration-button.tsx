@@ -52,7 +52,6 @@ export const EventRegistrationButton: React.FC<Props> = ({
     }
 
     if (isUserRegistered) {
-      // Показываем диалог, если зарегистрироваться нельзя, а отменить можно
       if (!canRegister && canUnregister) {
         setIsDialogOpen(true);
         return;
@@ -69,9 +68,11 @@ export const EventRegistrationButton: React.FC<Props> = ({
     setIsDialogOpen(false);
   };
 
-  const isButtonEnabled = isUserRegistered
-    ? canUnregister
-    : canRegister && hasPlaces;
+  const isButtonEnabled = data
+    ? isUserRegistered
+      ? canUnregister
+      : canRegister && hasPlaces
+    : true;
 
   return (
     <>
@@ -113,7 +114,6 @@ export const EventRegistrationButton: React.FC<Props> = ({
         )}
       </Button>
 
-      {/* Диалог подтверждения */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>

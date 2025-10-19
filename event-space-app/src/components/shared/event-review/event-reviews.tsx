@@ -1,7 +1,11 @@
-import { MessageSquare, Star } from 'lucide-react';
+import { Lock, LogIn, MessageSquare, Star } from 'lucide-react';
 import { Button } from '@/components/ui';
 import React, { useState } from 'react';
-import { useAddReview, useEventReviewsStatistics } from '@/api/events/hooks.ts';
+import {
+  useAddReview,
+  useEventById,
+  useEventReviewsStatistics,
+} from '@/api/events/hooks.ts';
 import {
   EventReviewsList,
   EventReviewsSkeleton,
@@ -11,6 +15,7 @@ import {
 } from '@/components/shared/event-review';
 import { StarRating } from '@/components/shared';
 import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
+import { useMe } from '@/api/auth/hooks.ts';
 
 interface Props {
   eventId: number;
@@ -18,6 +23,8 @@ interface Props {
 
 export const EventReviews: React.FC<Props> = ({ eventId }) => {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const { data: me } = useMe();
+  const { data: event } = useEventById(eventId);
   const reviewAddMutation = useAddReview();
 
   const { data: statistics, isPending: isStatisticsPending } =
@@ -83,10 +90,35 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
         </div>
       </div>
 
-      <Button onClick={() => setIsReviewFormOpen(true)}>
-        <Star />
-        <span>Оставить отзыв</span>
+      <Button
+        onClick={() => {
+          if (!me) {
+            return
+          }
+          if (me && event?.isAttended) {
+            setIsReviewFormOpen(true)
+          }
+        }}
+        disabled={me && !event?.isAttended}
+      >
+        {!me ? (
+          <>
+            <LogIn />
+            <span>Войти, чтобы оставить отзыв</span>
+          </>
+        ) : !event?.isAttended ? (
+          <>
+            <Lock />
+            <span>Отзывы доступны только посетителям</span>
+          </>
+        ) : (
+          <>
+            <Star />
+            <span>Оставить отзыв</span>
+          </>
+        )}
       </Button>
+
       {isReviewFormOpen && (
         <ReviewAddForm
           onCancel={() => setIsReviewFormOpen(false)}
