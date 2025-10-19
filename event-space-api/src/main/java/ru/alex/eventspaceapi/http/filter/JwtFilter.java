@@ -35,7 +35,10 @@ public class JwtFilter extends FilterBase {
     ) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if(authHeader == null) {
-            if(request.getMethod().equalsIgnoreCase("GET") && request.getRequestURI().startsWith("/api/events")) {
+            String requestURI = request.getRequestURI();
+            if(request.getMethod().equalsIgnoreCase("GET") &&
+                    requestURI.startsWith("/api/events") &&
+                    !requestURI.matches("^/api/events/\\d+/reviews/my$")) {
                 filterChain.doFilter(request, response);
                 return;
             }

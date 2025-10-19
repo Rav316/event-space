@@ -63,4 +63,7 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<EventStep> steps;
+
+    @OneToMany(mappedBy = "event")
+    private List<EventReview> reviews;
 }

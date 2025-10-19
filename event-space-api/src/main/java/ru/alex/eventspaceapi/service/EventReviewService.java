@@ -14,16 +14,19 @@ import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
+import ru.alex.eventspaceapi.mapper.eventReview.EventReviewMyMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewReadMapper;
-import ru.alex.eventspaceapi.util.AuthUtils;
 
 import java.time.Instant;
 import java.util.Objects;
+
+import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,6 +37,7 @@ public class EventReviewService {
     private final EventUserRepository eventUserRepository;
     private final EventReviewRepository eventReviewRepository;
     private final EventReviewReadMapper eventReviewReadMapper;
+    private final EventReviewMyMapper eventReviewMyMapper;
     private final EventReviewCreateMapper eventReviewCreateMapper;
 
     public Slice<EventReviewReadDto> findAllReviewsByEvent(Integer eventId, EventReviewFilter filter) {
@@ -45,11 +49,17 @@ public class EventReviewService {
         return eventReviewRepository.getEventReviewStatistics(eventId);
     }
 
+    public EventReviewMyDto getUserReviewByEvent(Integer eventId) {
+        return eventReviewRepository.findByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id())
+                .map(eventReviewMyMapper::toDto)
+                .orElse(null);
+    }
+
     @Transactional
     public EventReviewReadDto addReviewForEvent(Integer eventId, EventReviewCreateDto eventReviewCreateDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId));
-        Integer authorizedUserId = Objects.requireNonNull(AuthUtils.getAuthorizedUser()).id();
+        Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
         EventUser eventUser = eventUserRepository.findByEventAndUser(event.getId(), authorizedUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "you are not registered for this event"));
         if(!eventUser.getAttended()) {
