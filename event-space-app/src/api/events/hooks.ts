@@ -69,7 +69,7 @@ export const useEventById = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.findById(eventId),
     queryKey: EVENTS_KEYS.event(eventId),
-    retry: false,
+    refetchOnWindowFocus: false
   });
 };
 
@@ -77,7 +77,7 @@ export const useStepsByEvent = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.getStepsByEvent(eventId),
     queryKey: EVENTS_KEYS.steps(eventId),
-    retry: false,
+    refetchOnWindowFocus: false
   });
 };
 
@@ -93,6 +93,7 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
       return undefined;
     },
     initialPageParam: 0,
+    refetchOnWindowFocus: false
   });
 };
 

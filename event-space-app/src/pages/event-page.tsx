@@ -229,7 +229,7 @@ const EventPage = () => {
             <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
           </div>
         </div>
-        <EventReviews eventId={eventId} />
+        <EventReviews event={event} />
       </div>
     </Wrapper>
   );

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui';
 import React, { useState } from 'react';
 import {
   useAddReview,
-  useEventById,
   useEventReviewsStatistics,
   useMyReviewByEvent,
 } from '@/api/events/hooks.ts';
@@ -18,25 +17,25 @@ import { StarRating } from '@/components/shared';
 import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
+import type { EventReadDto } from '@/api/events/model.ts';
 
 interface Props {
-  eventId: number;
+  event: EventReadDto;
 }
 
-export const EventReviews: React.FC<Props> = ({ eventId }) => {
+export const EventReviews: React.FC<Props> = ({ event }) => {
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
   const { data: me } = useMe();
-  const { data: event } = useEventById(eventId);
-  const { data: myReview } = useMyReviewByEvent(eventId, { enabled: !!me });
+  const { data: myReview } = useMyReviewByEvent(event.id, { enabled: !!me });
   const reviewAddMutation = useAddReview();
 
   const { data: statistics, isPending: isStatisticsPending } =
-    useEventReviewsStatistics(eventId);
+    useEventReviewsStatistics(event.id);
 
   const onAddReview = (data: EventReviewCreateDto) => {
     reviewAddMutation.mutate(
-      { eventId, review: data },
+      { eventId: event.id, review: data },
       {
         onSuccess: () => {
           setIsReviewFormOpen(false);
@@ -113,7 +112,7 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
           </>
         ) : !event?.isAttended ? (
           <>
-           <Ban/>
+            <Ban />
             <span>Отзывы доступны только посетителям</span>
           </>
         ) : (
@@ -133,7 +132,7 @@ export const EventReviews: React.FC<Props> = ({ eventId }) => {
       )}
 
       <ReviewFilters />
-      <EventReviewsList eventId={eventId} />
+      <EventReviewsList eventId={event.id} />
     </div>
   );
 };
