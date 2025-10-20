@@ -5,12 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -40,5 +42,11 @@ public class UserController {
     ) {
         authService.changePassword(userPasswordChangeDto);
         return new ResponseEntity<>(OK);
+    }
+
+    @DeleteMapping("/profile")
+    public ResponseEntity<Void> deleteAccount(@Validated @RequestBody UserDeleteDto userDeleteDto) {
+        authService.deleteAccount(userDeleteDto);
+        return new ResponseEntity<>(NO_CONTENT);
     }
 }

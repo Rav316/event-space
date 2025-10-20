@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
+import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
 import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
@@ -32,6 +34,10 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
+    @Value("${app.account.deletion-confirmation-phrase}")
+    private String deletionConfirmationPhrase;
+
+
     private final CacheManager cacheManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -89,6 +95,26 @@ public class AuthService {
         String password = passwordEncoder.encode(userPasswordChangeDto.confirmPassword());
         user.setPassword(password);
         Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
+    }
+
+    @Transactional
+    public void deleteAccount(UserDeleteDto userDeleteDto) {
+        Integer id = Objects.requireNonNull(getAuthorizedUser()).id();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        if(!userDeleteDto.confirmationPhrase().equals(deletionConfirmationPhrase)) {
+            throw new IllegalArgumentException("confirmation phrase incorrect");
+        }
+
+        UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                userDeleteDto.currentPassword()
+        );
+        authenticationManager.authenticate(authInputToken);
+
+        userRepository.delete(user);
+        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
+
     }
 
     public AuthResponse refreshAccessToken(String refreshToken) {
