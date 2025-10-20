@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
-import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
@@ -67,6 +67,23 @@ public class EventController {
         return SliceResponse.of(eventReviewService.findAllReviewsByEvent(id, filter));
     }
 
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<EventReviewReadDto> addReviewForEvent(
+            @PathVariable("id") Integer id,
+            @Validated @RequestBody EventReviewCreateEditDto eventReviewCreateEditDto
+    ) {
+        return new ResponseEntity<>(eventReviewService.addReviewForEvent(id, eventReviewCreateEditDto), CREATED);
+    }
+
+    @PutMapping("/{id}/reviews")
+    public ResponseEntity<Void> updateEventReview(
+            @PathVariable("id") Integer id,
+            @Validated @RequestBody EventReviewCreateEditDto eventReviewCreateEditDto
+    ) {
+        eventReviewService.updateReviewByEvent(id, eventReviewCreateEditDto);
+        return new ResponseEntity<>(OK);
+    }
+
     @GetMapping("/{id}/reviews/my")
     public ResponseEntity<EventReviewMyDto> getMyReviewForEvent(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(eventReviewService.getUserReviewByEvent(id), OK);
@@ -85,14 +102,6 @@ public class EventController {
     ) {
         eventService.confirmParticipantAttendance(id, token);
         return new ResponseEntity<>(OK);
-    }
-
-    @PostMapping("/{id}/reviews")
-    public ResponseEntity<EventReviewReadDto> addReviewForEvent(
-            @PathVariable("id") Integer id,
-            @Validated @RequestBody EventReviewCreateDto eventReviewCreateDto
-            ) {
-        return new ResponseEntity<>(eventReviewService.addReviewForEvent(id, eventReviewCreateDto), CREATED);
     }
 
     @PostMapping

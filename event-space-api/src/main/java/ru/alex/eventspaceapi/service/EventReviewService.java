@@ -1,5 +1,6 @@
 package ru.alex.eventspaceapi.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -13,13 +14,14 @@ import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
-import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateDto;
+import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
+import ru.alex.eventspaceapi.mapper.eventReview.EventReviewEditMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewMyMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewReadMapper;
 
@@ -39,6 +41,7 @@ public class EventReviewService {
     private final EventReviewReadMapper eventReviewReadMapper;
     private final EventReviewMyMapper eventReviewMyMapper;
     private final EventReviewCreateMapper eventReviewCreateMapper;
+    private final EventReviewEditMapper eventReviewEditMapper;
 
     public Slice<EventReviewReadDto> findAllReviewsByEvent(Integer eventId, EventReviewFilter filter) {
         return eventReviewRepository.findAllByEventWithFilter(eventId, filter)
@@ -56,7 +59,7 @@ public class EventReviewService {
     }
 
     @Transactional
-    public EventReviewReadDto addReviewForEvent(Integer eventId, EventReviewCreateDto eventReviewCreateDto) {
+    public EventReviewReadDto addReviewForEvent(Integer eventId, EventReviewCreateEditDto eventReviewCreateDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId));
         Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
@@ -73,5 +76,12 @@ public class EventReviewService {
         review.setAuthor(userRepository.getReferenceById(authorizedUserId));
         review.setCreatedAt(Instant.now());
         return eventReviewReadMapper.toDto(eventReviewRepository.save(review));
+    }
+
+    @Transactional
+    public void updateReviewByEvent(Integer eventId, EventReviewCreateEditDto eventReviewCreateEditDto) {
+        EventReview eventReview = eventReviewRepository.findByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id())
+                .orElseThrow(() -> new EntityNotFoundException("there are no events or reviews of events"));
+        eventReviewEditMapper.updateFromEntity(eventReviewCreateEditDto, eventReview);
     }
 }
