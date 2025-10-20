@@ -44,7 +44,7 @@ public class UserController {
         return new ResponseEntity<>(OK);
     }
 
-    @DeleteMapping("/profile")
+    @PostMapping("/profile/delete")
     public ResponseEntity<Void> deleteAccount(@Validated @RequestBody UserDeleteDto userDeleteDto) {
         authService.deleteAccount(userDeleteDto);
         return new ResponseEntity<>(NO_CONTENT);
