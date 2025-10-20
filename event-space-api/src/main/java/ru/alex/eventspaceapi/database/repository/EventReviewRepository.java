@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.EventReview;
@@ -14,4 +15,8 @@ public interface EventReviewRepository extends JpaRepository<EventReview, Intege
 
     @Query("SELECT er FROM EventReview er WHERE er.event.id = :eventId AND er.author.id = :userId")
     Optional<EventReview> findByEventAndUser(Integer eventId, Integer userId);
+
+    @Modifying
+    @Query("DELETE FROM EventReview eu WHERE eu.event.id = :eventId AND eu.author.id = :userId")
+    void deleteByEventAndUser(Integer eventId, Integer userId);
 }

@@ -84,4 +84,9 @@ public class EventReviewService {
                 .orElseThrow(() -> new EntityNotFoundException("there are no events or reviews of events"));
         eventReviewEditMapper.updateFromEntity(eventReviewCreateEditDto, eventReview);
     }
+
+    @Transactional
+    public void deleteReviewByEvent(Integer eventId) {
+        eventReviewRepository.deleteByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id());
+    }
 }

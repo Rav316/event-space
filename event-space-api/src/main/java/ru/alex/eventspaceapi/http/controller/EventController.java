@@ -84,6 +84,12 @@ public class EventController {
         return new ResponseEntity<>(OK);
     }
 
+    @DeleteMapping("/{id}/reviews")
+    public ResponseEntity<Void> deleteReviewByEvent(@PathVariable("id") Integer id) {
+        eventReviewService.deleteReviewByEvent(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
+
     @GetMapping("/{id}/reviews/my")
     public ResponseEntity<EventReviewMyDto> getMyReviewForEvent(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(eventReviewService.getUserReviewByEvent(id), OK);
