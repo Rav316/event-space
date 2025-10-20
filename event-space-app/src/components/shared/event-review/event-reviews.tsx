@@ -52,6 +52,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
       {
         onSuccess: () => {
           setIsReviewFormOpen(false);
+          reviewAddForm.reset();
         },
       },
     );

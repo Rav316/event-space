@@ -99,6 +99,10 @@ export const editReviewForEvent = async (data: EventReviewCreateEditData): Promi
   await axiosInstance.put<void>(`${ApiRoutes.EVENTS}/${data.eventId}/reviews`, data.review);
 }
 
+export const deleteReviewForEvent = async (eventId: number): Promise<void> => {
+  await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}/reviews`);
+}
+
 export const getEventReviewsStatistics = async (
   eventId: number,
 ): Promise<EventReviewStatisticsDto> => {

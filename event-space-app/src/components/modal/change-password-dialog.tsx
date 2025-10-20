@@ -46,7 +46,7 @@ export const ChangePasswordDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild={true}>
         <Button variant="outline" className="w-full justify-start">
           <Shield />
           <span>Изменить пароль</span>

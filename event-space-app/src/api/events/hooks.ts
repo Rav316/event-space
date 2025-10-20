@@ -149,6 +149,23 @@ export const useUpdateReview = () => {
   });
 };
 
+export const useDeleteReview = () => {
+  return useMutation({
+    mutationFn: Api.events.deleteReviewForEvent,
+    onSuccess: async () => {
+      toast.success('Отзыв успешно удалён');
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'reviews',
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при удалении отзыва');
+      }
+    },
+  });
+};
+
 export const useEventReviewsStatistics = (eventId: number) => {
   return useQuery({
     queryKey: EVENTS_KEYS.reviewsStatistics(eventId),
