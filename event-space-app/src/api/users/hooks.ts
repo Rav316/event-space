@@ -5,6 +5,8 @@ import { AxiosError } from 'axios';
 import { queryClient } from '@/api/query-client.ts';
 import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import type { AuthResponse } from '@/api/auth/model.ts';
+import { useAuthStore } from '@/store/use-auth-store.ts';
+import { useNavigate } from 'react-router';
 
 export const useEditUser = () => {
   return useMutation({
@@ -53,3 +55,28 @@ export const useChangePassword = () => {
     },
   });
 };
+
+export const useDeleteAccount = () => {
+  const removeToken = useAuthStore((state) => state.removeToken);
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: Api.users.deleteAccount,
+    onSuccess: () => {
+      toast.success('Аккаунт успешно удалён');
+      navigate('/', {replace: true})
+      setTimeout(() => {
+        removeToken();
+        queryClient.clear();
+      }, 100);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if(error.response?.status === 403) {
+          toast.error('Неверный текущий пароль');
+          return;
+        }
+        toast.error('Произошла ошибка при удалении аккаунта');
+      }
+    },
+  })
+}

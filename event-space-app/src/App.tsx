@@ -9,12 +9,15 @@ import EventCreatePage from '@/pages/event-create-page.tsx';
 import { LoginModal } from '@/components/modal';
 import EventPage from '@/pages/event-page.tsx';
 import ProfilePage from '@/pages/profile-page.tsx';
+import { useAuthStore } from '@/store/use-auth-store.ts';
 
 const App = () => {
+  const token = useAuthStore((state) => state.token);
+
   return (
     <>
       <Routes>
-        <Route element={<OutletHeader />}>
+        <Route key={token ? 'auth' : 'guest'} element={<OutletHeader />}>
           <Route path="/" element={<MainPage />} />
           <Route
             path={'/register'}

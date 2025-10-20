@@ -80,11 +80,13 @@ export const EventRegistrationButton: React.FC<Props> = ({
         disabled={!isButtonEnabled}
         onClick={handleRegistrationClick}
         variant={
-          isUserRegistered
-            ? isDestructive
-              ? 'destructive'
-              : 'outline'
-            : 'default'
+          !data
+            ? 'default'
+            : isUserRegistered
+              ? isDestructive
+                ? 'destructive'
+                : 'outline'
+              : 'default'
         }
       >
         {isFetching ||

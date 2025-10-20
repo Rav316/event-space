@@ -82,12 +82,9 @@ export const useLogout = () => {
       if (context?.toastId) toast.dismiss(context.toastId);
 
       navigate('/', { replace: true });
-      setTimeout(async () => {
+      setTimeout(() => {
         removeToken();
-        queryClient.removeQueries({ queryKey: AUTH_KEYS.me });
-        await queryClient.invalidateQueries({
-          predicate: (query) => query.queryKey[0] === 'events',
-        });
+        queryClient.clear();
       }, 100);
 
       showLogoutSuccess();

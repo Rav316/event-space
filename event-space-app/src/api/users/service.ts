@@ -1,9 +1,10 @@
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type {
+  UserDeleteDto,
   UserEditData,
   UserPasswordChangeDto,
-  UserReadDto,
+  UserReadDto
 } from '@/api/users/model.ts';
 
 export const existsByEmail = async (email: string): Promise<boolean> => {
@@ -47,3 +48,7 @@ export const changePassword = async (
     data,
   );
 };
+
+export const deleteAccount = async (data: UserDeleteDto): Promise<void> => {
+  await axiosInstance.post<void>(`${ApiRoutes.USERS}/profile/delete`, data);
+}

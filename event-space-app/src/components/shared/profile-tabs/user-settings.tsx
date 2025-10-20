@@ -1,7 +1,6 @@
 import { ProfileSetting } from '@/components/shared';
-import { Button, Separator } from '@/components/ui';
-import { X } from 'lucide-react';
-import { ChangePasswordDialog } from '@/components/modal';
+import { Separator } from '@/components/ui';
+import { ChangePasswordDialog, DeleteAccountModal } from '@/components/modal';
 import React from 'react';
 
 interface Props {
@@ -58,10 +57,7 @@ export const UserSettings: React.FC<Props> = ({ editMode }) => {
         <h3 className={'font-medium text-xl'}>Безопасность</h3>
         <ChangePasswordDialog />
         <Separator />
-        <Button variant={'destructive'} className={'justify-start'}>
-          <X />
-          <span>Удалить аккаунт</span>
-        </Button>
+        <DeleteAccountModal/>
       </div>
     </div>
   );

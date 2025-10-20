@@ -64,3 +64,8 @@ export interface UserAuthorDto {
 export interface UserEventAuthorDto extends UserAuthorDto {
   faculty: string;
 }
+
+export interface UserDeleteDto {
+  currentPassword: string;
+  confirmationPhrase: string;
+}

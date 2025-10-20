@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event';
-import { CheckCircle } from 'lucide-react';
 import { EventQrCodeDialog } from '@/components/modal';
 
 interface Props {
@@ -28,21 +27,6 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   const params = useParams();
   const eventId = Number(params.eventId);
 
-  const [showSuccess, setShowSuccess] = useState(false);
-  const prevRegistered = useRef(isRegistered);
-
-  useEffect(() => {
-    if (!prevRegistered.current && isRegistered) {
-      setShowSuccess(true);
-    }
-
-    if (prevRegistered.current && !isRegistered) {
-      setShowSuccess(false);
-    }
-
-    prevRegistered.current = isRegistered;
-  }, [isRegistered]);
-
   return (
     <div
       className={cn(
@@ -64,15 +48,6 @@ export const EventRegistrationBlock: React.FC<Props> = ({
           {quantity - participantsQuantity} мест осталось
         </span>
       </div>
-
-      {showSuccess && (
-        <>
-          <div className="flex items-center gap-2 border border-green-800 bg-green-50 text-green-600 rounded-2xl p-3 transition-all duration-300">
-            <CheckCircle />
-            <span>Вы зарегистрированы!</span>
-          </div>
-        </>
-      )}
 
       {isRegistered && qrToken && (
         <EventQrCodeDialog eventId={eventId} value={qrToken} />
