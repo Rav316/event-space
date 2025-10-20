@@ -3,42 +3,35 @@ import {
   FormErrorMessage,
   Input,
   Label,
-  RequiredMark, Spinner, Textarea
+  RequiredMark,
+  Spinner,
+  Textarea,
 } from '@/components/ui';
 import { ReviewRatingInput } from '@/components/shared/event-review/review-rating-input.tsx';
 import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { reviewAddSchema } from '@/schemas/review-add-schema.ts';
 
 interface Props {
   onSubmit: (data: EventReviewCreateDto) => void;
   onCancel: () => void;
   isPending?: boolean;
+  form: ReturnType<typeof useForm<EventReviewCreateDto>>;
 }
 
 export const ReviewAddForm: React.FC<Props> = ({
   onSubmit,
   onCancel,
-  isPending
+  isPending,
+  form,
 }) => {
-  const reviewAddForm = useForm<EventReviewCreateDto>({
-    resolver: zodResolver(reviewAddSchema),
-    defaultValues: {
-      rating: 0,
-      title: '',
-      content: '',
-    },
-  });
-
   return (
-    <FormProvider {...reviewAddForm}>
+    <FormProvider {...form}>
       <form
         className={
           'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'
         }
-        onSubmit={reviewAddForm.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <h3 className={'font-medium text-xl'}>Ваш отзыв о мероприятии</h3>
         <span>
@@ -46,7 +39,7 @@ export const ReviewAddForm: React.FC<Props> = ({
           <div className={'flex flex-col gap-1'}>
             <Controller
               name="rating"
-              control={reviewAddForm.control}
+              control={form.control}
               render={({ field }) => (
                 <ReviewRatingInput
                   value={field.value}
@@ -54,9 +47,9 @@ export const ReviewAddForm: React.FC<Props> = ({
                 />
               )}
             />
-            {reviewAddForm.formState.errors.rating && (
+            {form.formState.errors.rating && (
               <FormErrorMessage>
-                {reviewAddForm.formState.errors.rating.message}
+                {form.formState.errors.rating.message}
               </FormErrorMessage>
             )}
           </div>
@@ -67,11 +60,11 @@ export const ReviewAddForm: React.FC<Props> = ({
           </Label>
           <Input
             placeholder={'Краткое описание впечатлений'}
-            {...reviewAddForm.register('title')}
+            {...form.register('title')}
           />
-          {reviewAddForm.formState.errors.title && (
+          {form.formState.errors.title && (
             <FormErrorMessage>
-              {reviewAddForm.formState.errors.title.message}
+              {form.formState.errors.title.message}
             </FormErrorMessage>
           )}
         </div>
@@ -82,11 +75,11 @@ export const ReviewAddForm: React.FC<Props> = ({
           <Textarea
             className={'resize-none'}
             placeholder={'Поделитесь подробностями'}
-            {...reviewAddForm.register('content')}
+            {...form.register('content')}
           />
-          {reviewAddForm.formState.errors.content && (
+          {form.formState.errors.content && (
             <FormErrorMessage>
-              {reviewAddForm.formState.errors.content.message}
+              {form.formState.errors.content.message}
             </FormErrorMessage>
           )}
         </div>
@@ -101,7 +94,7 @@ export const ReviewAddForm: React.FC<Props> = ({
             ) : (
               <div className={'flex items-center gap-2'}>
                 <span>Публикация...</span>
-                <Spinner/>
+                <Spinner />
               </div>
             )}
           </Button>

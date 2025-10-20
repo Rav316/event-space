@@ -19,6 +19,9 @@ import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 import type { EventReadDto } from '@/api/events/model.ts';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { reviewAddSchema } from '@/schemas/review-add-schema.ts';
 
 interface Props {
   event: EventReadDto;
@@ -33,6 +36,15 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
 
   const { data: statistics, isPending: isStatisticsPending } =
     useEventReviewsStatistics(event.id);
+
+  const reviewAddForm = useForm<EventReviewCreateDto>({
+    resolver: zodResolver(reviewAddSchema),
+    defaultValues: {
+      rating: 0,
+      title: '',
+      content: '',
+    },
+  });
 
   const onAddReview = (data: EventReviewCreateDto) => {
     reviewAddMutation.mutate(
@@ -94,45 +106,49 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
         </div>
       </div>
 
-      <Button
-        onClick={() => {
-          if (!me) {
-            setAuthModalOpen(true);
-            return;
-          }
-          if (me && event?.isAttended) {
-            setIsReviewFormOpen(true);
-          }
-        }}
-        disabled={me && !event?.isAttended}
-      >
-        {!me ? (
-          <>
-            <Lock />
-            <span>Войти, чтобы оставить отзыв</span>
-          </>
-        ) : !event?.isAttended ? (
-          <>
-            <Ban />
-            <span>Отзывы доступны только посетителям</span>
-          </>
-        ) : (
-          <>
-            <Star />
-            <span>Оставить отзыв</span>
-          </>
-        )}
-      </Button>
+      {!myReview && (
+        <Button
+          onClick={() => {
+            if (!me) {
+              setAuthModalOpen(true);
+              return;
+            }
+            if (me && event?.isAttended) {
+              setIsReviewFormOpen(true);
+            }
+          }}
+          disabled={me && !event?.isAttended}
+        >
+          {!me ? (
+            <>
+              <Lock />
+              <span>Войти, чтобы оставить отзыв</span>
+            </>
+          ) : !event?.isAttended ? (
+            <>
+              <Ban />
+              <span>Отзывы доступны только посетителям</span>
+            </>
+          ) : (
+            <>
+              <Star />
+              <span>Оставить отзыв</span>
+            </>
+          )}
+        </Button>
+      )}
+
 
       {isReviewFormOpen && (
         <ReviewAddForm
           onCancel={() => setIsReviewFormOpen(false)}
           onSubmit={onAddReview}
           isPending={reviewAddMutation.isPending}
+          form={reviewAddForm}
         />
       )}
 
-      {myReview && <MyReview />}
+      {myReview && <MyReview review={myReview}/>}
 
       <ReviewFilters />
       <EventReviewsList eventId={event.id} />
