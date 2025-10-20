@@ -184,7 +184,7 @@ const EventPage = () => {
             )}
           </div>
 
-          <div className="flex-3 flex flex-col gap-4 min-[900px]:max-[980px]:flex-row">
+          <div className="flex-3 flex flex-col gap-4">
             {event.isAttended && (
               <div
                 className={
@@ -193,7 +193,7 @@ const EventPage = () => {
               >
                 <div
                   className={
-                    'rounded-full w-10 h-10 bg-green-600 flex justify-center items-center'
+                    'rounded-full w-10 h-10 bg-green-600 flex justify-center items-center flex-shrink-0'
                   }
                 >
                   <CircleCheck className={'text-white'} />
@@ -208,25 +208,29 @@ const EventPage = () => {
                 </div>
               </div>
             )}
-            <EventRegistrationBlock
-              participantsQuantity={event.participantQuantity}
-              isRegistered={event.isRegistered}
-              quantity={event.space.capacity}
-              className="max-[980px]:flex-1 max-[900px]:flex-none"
-              canRegister={event.canRegister}
-              canUnregister={event.canUnregister}
-              qrToken={event.qrToken}
-            />
-            {event.author && (
-              <EventOrganizerBlock
-                firstName={event.author.firstName}
-                lastName={event.author.lastName}
-                faculty={event.author.faculty}
-                avatarUrl={event.author.avatarUrl}
-                className={'max-[980px]:flex-1 max-[900px]:flex-none'}
+            <div
+              className={'flex flex-col gap-4 min-[900px]:max-[980px]:flex-row'}
+            >
+              <EventRegistrationBlock
+                participantsQuantity={event.participantQuantity}
+                isRegistered={event.isRegistered}
+                quantity={event.space.capacity}
+                className="max-[980px]:flex-1 max-[900px]:flex-none"
+                canRegister={event.canRegister}
+                canUnregister={event.canUnregister}
+                qrToken={event.qrToken}
               />
-            )}
-            <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
+              {event.author && (
+                <EventOrganizerBlock
+                  firstName={event.author.firstName}
+                  lastName={event.author.lastName}
+                  faculty={event.author.faculty}
+                  avatarUrl={event.author.avatarUrl}
+                  className={'max-[980px]:flex-1 max-[900px]:flex-none'}
+                />
+              )}
+              <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
+            </div>
           </div>
         </div>
         <EventReviews event={event} />

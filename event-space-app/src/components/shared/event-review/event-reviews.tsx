@@ -9,6 +9,7 @@ import {
 import {
   EventReviewsList,
   EventReviewsSkeleton,
+  MyReview,
   ReviewAddForm,
   ReviewFilters,
   ReviewProgressBar,
@@ -130,6 +131,8 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
           isPending={reviewAddMutation.isPending}
         />
       )}
+
+      {myReview && <MyReview />}
 
       <ReviewFilters />
       <EventReviewsList eventId={event.id} />
