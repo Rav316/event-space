@@ -3,13 +3,14 @@ import { Pencil, ThumbsUp, Trash2 } from 'lucide-react';
 import { StarRating } from '@/components/shared';
 import { useForm } from 'react-hook-form';
 import type {
-  EventReviewCreateDto,
-  EventReviewMyDto,
+  EventReviewCreateEditDto,
+  EventReviewMyDto
 } from '@/api/event-reviews/model.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewAddSchema } from '@/schemas/review-add-schema.ts';
 import React, { useState } from 'react';
-import { ReviewAddForm } from '@/components/shared/event-review/review-add-form.tsx';
+import { ReviewAddEditForm } from '@/components/shared/event-review/review-add-edit-form.tsx';
+import { useUpdateReview } from '@/api/events/hooks.ts';
 
 interface Props {
   review: EventReviewMyDto;
@@ -18,7 +19,7 @@ interface Props {
 export const MyReview: React.FC<Props> = ({ review }) => {
   const [editMode, setEditMode] = useState(false);
 
-  const myReviewForm = useForm<EventReviewCreateDto>({
+  const myReviewForm = useForm<EventReviewCreateEditDto>({
     resolver: zodResolver(reviewAddSchema),
     defaultValues: {
       rating: review.rating,
@@ -27,15 +28,26 @@ export const MyReview: React.FC<Props> = ({ review }) => {
     },
   });
 
+  const updateReviewMutation = useUpdateReview();
+
+  const onSubmit = (data: EventReviewCreateEditDto) => {
+    updateReviewMutation.mutate({eventId: review.event, review: {...data}}, {
+      onSuccess: () => {
+        setEditMode(false);
+      }
+    });
+  }
+
   return (
     <>
       {editMode ? (
-        <ReviewAddForm
-          onSubmit={() => {}}
+        <ReviewAddEditForm
+          onSubmit={onSubmit}
           onCancel={() => {
             setEditMode(false);
           }}
           form={myReviewForm}
+          isEdit={true}
         />
       ) : (
         <div

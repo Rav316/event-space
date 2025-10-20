@@ -10,20 +10,22 @@ import {
 import { ReviewRatingInput } from '@/components/shared/event-review/review-rating-input.tsx';
 import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
+import type { EventReviewCreateEditDto } from '@/api/event-reviews/model.ts';
 
 interface Props {
-  onSubmit: (data: EventReviewCreateDto) => void;
+  onSubmit: (data: EventReviewCreateEditDto) => void;
   onCancel: () => void;
   isPending?: boolean;
-  form: ReturnType<typeof useForm<EventReviewCreateDto>>;
+  form: ReturnType<typeof useForm<EventReviewCreateEditDto>>;
+  isEdit?: boolean;
 }
 
-export const ReviewAddForm: React.FC<Props> = ({
+export const ReviewAddEditForm: React.FC<Props> = ({
   onSubmit,
   onCancel,
   isPending,
   form,
+  isEdit,
 }) => {
   return (
     <FormProvider {...form}>
@@ -90,7 +92,7 @@ export const ReviewAddForm: React.FC<Props> = ({
             className={'max-[500px]:flex-1'}
           >
             {!isPending ? (
-              <span>Опубликовать отзыв</span>
+              <span>{isEdit ? 'Изменить' : 'Опубликовать'}</span>
             ) : (
               <div className={'flex items-center gap-2'}>
                 <span>Публикация...</span>

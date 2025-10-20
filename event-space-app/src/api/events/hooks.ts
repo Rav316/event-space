@@ -13,7 +13,10 @@ import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
 import type { EventRequestData } from '@/api/events/model.ts';
 import { queryClient } from '@/api/query-client.ts';
-import type { EventReviewFilter, EventReviewMyDto } from '@/api/event-reviews/model.ts';
+import type {
+  EventReviewFilter,
+  EventReviewMyDto,
+} from '@/api/event-reviews/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -69,7 +72,7 @@ export const useEventById = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.findById(eventId),
     queryKey: EVENTS_KEYS.event(eventId),
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -77,7 +80,7 @@ export const useStepsByEvent = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.getStepsByEvent(eventId),
     queryKey: EVENTS_KEYS.steps(eventId),
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -93,7 +96,7 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
       return undefined;
     },
     initialPageParam: 0,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -124,6 +127,23 @@ export const useAddReview = () => {
     onError: (error) => {
       if (error instanceof AxiosError) {
         toast.error('Произошла ошибка при добавлении отзыва');
+      }
+    },
+  });
+};
+
+export const useUpdateReview = () => {
+  return useMutation({
+    mutationFn: Api.events.editReviewForEvent,
+    onSuccess: async () => {
+      toast.success('Отзыв успешно изменён');
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'reviews',
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при обновлении отзыва');
       }
     },
   });

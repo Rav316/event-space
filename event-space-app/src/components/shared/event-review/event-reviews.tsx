@@ -10,12 +10,12 @@ import {
   EventReviewsList,
   EventReviewsSkeleton,
   MyReview,
-  ReviewAddForm,
+  ReviewAddEditForm,
   ReviewFilters,
   ReviewProgressBar,
 } from '@/components/shared/event-review';
 import { StarRating } from '@/components/shared';
-import type { EventReviewCreateDto } from '@/api/event-reviews/model.ts';
+import type { EventReviewCreateEditDto } from '@/api/event-reviews/model.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 import type { EventReadDto } from '@/api/events/model.ts';
@@ -37,7 +37,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
   const { data: statistics, isPending: isStatisticsPending } =
     useEventReviewsStatistics(event.id);
 
-  const reviewAddForm = useForm<EventReviewCreateDto>({
+  const reviewAddForm = useForm<EventReviewCreateEditDto>({
     resolver: zodResolver(reviewAddSchema),
     defaultValues: {
       rating: 0,
@@ -46,7 +46,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
     },
   });
 
-  const onAddReview = (data: EventReviewCreateDto) => {
+  const onAddReview = (data: EventReviewCreateEditDto) => {
     reviewAddMutation.mutate(
       { eventId: event.id, review: data },
       {
@@ -140,7 +140,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
 
 
       {isReviewFormOpen && (
-        <ReviewAddForm
+        <ReviewAddEditForm
           onCancel={() => setIsReviewFormOpen(false)}
           onSubmit={onAddReview}
           isPending={reviewAddMutation.isPending}

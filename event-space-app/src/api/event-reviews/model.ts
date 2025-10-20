@@ -19,15 +19,15 @@ export interface EventReviewMyDto {
   createdAt: string;
 }
 
-export interface EventReviewCreateDto {
+export interface EventReviewCreateEditDto {
   rating: number;
   title: string;
   content: string;
 }
 
-export interface EventReviewCreateData {
+export interface EventReviewCreateEditData {
   eventId: number;
-  review: EventReviewCreateDto;
+  review: EventReviewCreateEditDto;
 }
 
 export interface EventReviewStatisticsDto {
