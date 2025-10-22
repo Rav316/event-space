@@ -116,14 +116,15 @@ public class EventService {
 
         Event savedEvent = eventRepository.save(event);
 
-        List<EventStep> eventSteps = eventCreateDto.steps().stream()
-                .map(eventStepCreateMapper::toEntity)
-                .toList();
+        if(eventCreateDto.steps() != null && !eventCreateDto.steps().isEmpty()) {
+            List<EventStep> eventSteps = eventCreateDto.steps().stream()
+                    .map(eventStepCreateMapper::toEntity)
+                    .toList();
 
-        eventSteps.forEach(step -> step.setEvent(savedEvent));
+            eventSteps.forEach(step -> step.setEvent(savedEvent));
 
-        eventStepRepository.insertEventStepsBatch(eventSteps);
-
+            eventStepRepository.insertEventStepsBatch(eventSteps);
+        }
     }
 
     @Transactional

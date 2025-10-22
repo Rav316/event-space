@@ -29,7 +29,6 @@ public record EventCreateDto (
         String description,
         @NotNull
         Integer category,
-        @NotNull
         List<EventStepCreateDto> steps
 ) {
 }
