@@ -44,7 +44,7 @@ export const Header = () => {
         </Link>
         <div
           className={
-            'flex items-center gap-x-4 max-[1200px]:hidden min-w-[500px]'
+            'flex items-center gap-x-4 max-[1350px]:hidden min-w-[500px]'
           }
         >
           <Link to={'/events'}>
@@ -74,7 +74,7 @@ export const Header = () => {
                 <Skeleton className={'h-[30px] w-[103px]'} />
                 <Skeleton className={'rounded-full h-[30px] w-[30px]'} />
                 <Skeleton
-                  className={'hidden max-[1200px]:block h-[30px] w-[35px]'}
+                  className={'hidden max-[1350px]:block h-[30px] w-[35px]'}
                 />
               </div>
             ) : (
@@ -86,7 +86,7 @@ export const Header = () => {
                   </Button>
                 </Link>
                 <ProfileMenu />
-                <NavigationMenu className={'hidden max-[1200px]:block'} />
+                <NavigationMenu className={'hidden max-[1350px]:block'} />
               </>
             )}
           </div>

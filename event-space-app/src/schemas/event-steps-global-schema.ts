@@ -17,11 +17,6 @@ export const eventStepsGlobalSchema = z
     const { steps, eventStartTime, eventEndTime } = data;
 
     if (steps.length === 0) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Должен быть хотя бы один шаг',
-        path: ['steps'],
-      });
       return;
     }
 
