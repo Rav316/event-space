@@ -42,7 +42,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		</svg>`, width, height, bgColor, textColor, fontSize, text)
 
 	w.Header().Set("Content-Type", "image/svg+xml; charset=utf-8")
-	w.Header().Set("Cache-Control", "no-cache")
 	_, _ = w.Write([]byte(svg))
 }
 
