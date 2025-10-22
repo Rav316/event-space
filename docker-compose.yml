@@ -1,0 +1,28 @@
+services:
+  placeholder:
+    build:
+      context: ./placeholder-service
+    container_name: placeholder_service
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - my_network
+
+  nginx-static:
+    image: nginx:1.25-alpine
+    container_name: my_static_server
+    restart: always
+    ports:
+      - "${NGINX_STATIC_PORT:-90}:80"
+    volumes:
+      - ./nginx-static/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx-static/storage:/usr/share/nginx/html/media
+    depends_on:
+      - placeholder
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    name: my_network
