@@ -17,3 +17,5 @@ export {EventSkeleton} from './event-skeleton';
 export {EventSortSelect} from './event-sort-select';
 export {EventsNotFound} from './events-not-found';
 export {EventsPagination} from './events-pagination';
+export {EventList} from './event-list';
+export {EventListItem} from './event-list-item';

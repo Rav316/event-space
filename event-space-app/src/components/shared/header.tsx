@@ -52,7 +52,9 @@ export const Header = () => {
           </Link>
           {data && (
             <>
-              <HeaderItem Icon={Users} text={'Мои регистрации'} />
+              <Link to={'/my-registrations'}>
+                <HeaderItem Icon={Users} text={'Мои регистрации'} />
+              </Link>
               <HeaderItem Icon={ChartColumn} text={'Статистика'} />
               <HeaderItem Icon={History} text={'История'} />
             </>

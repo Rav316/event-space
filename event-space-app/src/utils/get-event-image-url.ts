@@ -1,6 +1,6 @@
-export const getEventImageUrl = (title: string, imageUrl?: string) => {
+export const getEventImageUrl = (name: string, imageUrl?: string) => {
   const staticUrl = import.meta.env.VITE_STATIC_URL;
   return imageUrl
     ? `${staticUrl}${imageUrl}`
-    : `https://placehold.co/142?text=${title}`;
+    : `https://placehold.co/142?text=${name}`;
 };

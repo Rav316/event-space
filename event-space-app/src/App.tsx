@@ -10,6 +10,7 @@ import { LoginModal } from '@/components/modal';
 import EventPage from '@/pages/event-page.tsx';
 import ProfilePage from '@/pages/profile-page.tsx';
 import { useAuthStore } from '@/store/use-auth-store.ts';
+import MyRegistrationsPage from '@/pages/my-registrations-page.tsx';
 
 const App = () => {
   const token = useAuthStore((state) => state.token);
@@ -42,6 +43,14 @@ const App = () => {
             element={
               <RequireAuth>
                 <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={'/my-registrations'}
+            element={
+              <RequireAuth>
+                <MyRegistrationsPage />
               </RequireAuth>
             }
           />

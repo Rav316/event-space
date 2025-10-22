@@ -30,10 +30,12 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
               Мероприятия
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <Users />
-            Мои регистрации
-          </DropdownMenuItem>
+          <Link to={'/my-registrations'}>
+            <DropdownMenuItem>
+              <Users />
+              Мои регистрации
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             <ChartColumn />
             Статистика
