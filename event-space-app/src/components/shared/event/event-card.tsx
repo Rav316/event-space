@@ -104,7 +104,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
                   text={formatDateToRuFormat(event.deadline)}
                 />
               )}
-              <EventCardLabel Icon={MapPin} text={event.space.name} />
+              <EventCardLabel Icon={MapPin} text={`${event.space.building.name}, ${event.space.name}`} />
             </div>
             <div
               className={

@@ -11,10 +11,10 @@ interface Props {
 
 export const EventListItem: React.FC<Props> = ({ event }) => {
   return (
-    <div className='flex gap-4 border border-[#E5E5E5] rounded-2xl overflow-hidden'>
-      <div className='relative w-[450px] flex-shrink-0'>
+    <div className='flex gap-4 border border-[#E5E5E5] rounded-2xl overflow-hidden max-[900px]:flex-col'>
+      <div className='relative w-[450px] flex-shrink-0 max-[900px]:relative max-[900px]:w-full max-[900px]:h-60'>
         <img
-          className='absolute inset-0 w-full h-full object-cover'
+          className='absolute inset-0 w-full h-full object-cover max-[900px]:static max-[900px]:h-full'
           src={getEventImageUrl(event.name, event.imageUrl)}
           alt={event.name}
         />
@@ -36,7 +36,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           <EventCardLabel Icon={MapPin} text={'Главный корпус, аудитория 205'} />
         </div>
 
-        <div className='flex items-center gap-4 justify-between'>
+        <div className='flex items-center gap-4 justify-between max-[1100px]:flex-col max-[1100px]:items-start'>
           <span className='text-muted-foreground text-sm'>
             Зарегистрирован: 12 февраля 2024
           </span>
