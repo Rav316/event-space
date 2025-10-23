@@ -1,6 +1,5 @@
 import { Wrapper } from '@/components/hoc';
 import { AnimatedTabs } from '@/components/shared';
-import { useState } from 'react';
 import { EventList } from '@/components/shared/event';
 import {
   useFinishedEvents,
@@ -10,9 +9,13 @@ import {
 import { Skeleton } from '@/components/ui';
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
+import { useMyRegistrationsStore } from '@/store/use-my-registrations-store.ts';
 
 const MyRegistrationsPage = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const activeTabIndex = useMyRegistrationsStore((state) => state.activeTabIndex);
+  const setActiveTabIndex = useMyRegistrationsStore(
+    (state) => state.setActiveTabIndex,
+  );
   const { data: statistics, isPending: isStatisticsPending } =
     useMyEventStatistics();
 
@@ -22,7 +25,7 @@ const MyRegistrationsPage = () => {
     hasNextPage: hasMoreUpcoming,
     isFetchingNextPage: isFetchingMoreUpcoming,
     isPending: isUpcomingEventsPending,
-  } = useUpcomingEvents({ enabled: activeIndex === 0 });
+  } = useUpcomingEvents({ enabled: activeTabIndex === 0 });
 
   const {
     data: finishedEvents,
@@ -30,7 +33,7 @@ const MyRegistrationsPage = () => {
     hasNextPage: hasMoreFinished,
     isFetchingNextPage: isFetchingMoreFinished,
     isPending: isFinishedEventsPending,
-  } = useFinishedEvents({ enabled: activeIndex === 1 });
+  } = useFinishedEvents({ enabled: activeTabIndex === 1 });
 
   const upcomingRef = useInfiniteScroll<HTMLDivElement>({
     fetchNextPage: fetchNextUpcoming,
@@ -66,14 +69,14 @@ const MyRegistrationsPage = () => {
           ) : (
             <AnimatedTabs
               tabs={tabs}
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
+              activeIndex={activeTabIndex}
+              setActiveIndex={setActiveTabIndex}
             />
           )}
         </div>
       </div>
 
-      {activeIndex === 0 &&
+      {activeTabIndex === 0 &&
         (isUpcomingEventsPending ? (
           <Skeleton className="h-[200px] w-full rounded-2xl" />
         ) : (
@@ -91,7 +94,7 @@ const MyRegistrationsPage = () => {
           </>
         ))}
 
-      {activeIndex === 1 &&
+      {activeTabIndex === 1 &&
         (isFinishedEventsPending ? (
           <Skeleton className="h-[200px] w-full rounded-2xl" />
         ) : (

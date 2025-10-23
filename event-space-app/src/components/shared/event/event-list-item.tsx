@@ -6,6 +6,7 @@ import { EventCardLabel } from '@/components/shared/event/event-card-label.tsx';
 import { Calendar, Clock, MapPin, QrCode } from 'lucide-react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import { formatDate } from '@/utils/format-date.ts';
+import { Link } from 'react-router';
 
 interface Props {
   event: EventListForUserDto;
@@ -15,11 +16,13 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
   return (
     <div className="flex gap-4 border border-[#E5E5E5] rounded-2xl overflow-hidden max-[900px]:flex-col">
       <div className="relative w-[450px] flex-shrink-0 max-[900px]:relative max-[900px]:w-full max-[900px]:h-60">
-        <img
-          className="absolute inset-0 w-full h-full object-cover max-[900px]:static max-[900px]:h-full"
-          src={getEventImageUrl(event.name, event.imageUrl)}
-          alt={event.name}
-        />
+        <Link to={`/events/${event.id}`}>
+          <img
+            className="absolute inset-0 w-full h-full object-cover max-[900px]:static max-[900px]:h-full"
+            src={getEventImageUrl(event.name, event.imageUrl)}
+            alt={event.name}
+          />
+        </Link>
       </div>
 
       <div className="flex flex-col gap-4 p-5 w-full justify-between">
@@ -55,7 +58,9 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
               <QrCode />
               <span>QR-код</span>
             </Button>
-            <Button variant="outline">Подробнее</Button>
+            <Link to={`/events/${event.id}`}>
+              <Button variant="outline">Подробнее</Button>
+            </Link>
           </div>
         </div>
       </div>
