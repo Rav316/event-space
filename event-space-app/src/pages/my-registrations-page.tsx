@@ -16,7 +16,7 @@ const MyRegistrationsPage = () => {
         Управляйте своими регистрациями и отслеживайте предстоящие мероприятия
       </span>
       <div className={'flex items-center justify-between gap-2 w-full max-[550px]:flex-col max-[550px]:items-start'}>
-        <div className={'w-[350px] max-[550px]:w-full'}>
+        <div className={'w-[370px] max-[550px]:w-full'}>
           <AnimatedTabs
             tabs={tabs}
             activeIndex={activeIndex}
