@@ -13,6 +13,7 @@ interface Props {
   canRegister: boolean;
   canUnregister: boolean;
   qrToken?: string;
+  attended?: boolean
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   canRegister,
   canUnregister,
   qrToken,
+  attended = false
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
@@ -50,7 +52,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
       </div>
 
       {isRegistered && qrToken && (
-        <EventQrCodeDialog eventId={eventId} value={qrToken} />
+        <EventQrCodeDialog eventId={eventId} value={qrToken} attended={attended} />
       )}
 
       <EventRegistrationButton

@@ -31,11 +31,11 @@ export const ReviewAddEditForm: React.FC<Props> = ({
     <FormProvider {...form}>
       <form
         className={
-          'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'
+          'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3 '
         }
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <h3 className={'font-medium text-xl'}>Ваш отзыв о мероприятии</h3>
+        <h3 className={'font-medium text-xl text-center'}>Ваш отзыв о мероприятии</h3>
         <span>
           Оценка <RequiredMark />
           <div className={'flex flex-col gap-1'}>

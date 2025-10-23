@@ -52,16 +52,17 @@ export const MyReview: React.FC<Props> = ({ review }) => {
           }}
           form={myReviewForm}
           isEdit={true}
+          isPending={updateReviewMutation.isPending}
         />
       ) : (
         <div
           className={
-            'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5'
+            'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5 max-[410px]:p-3'
           }
         >
           <div
             className={
-              'flex gap-4 justify-between items-center max-[550px]:flex-col max-[550px]:items-start'
+              'flex gap-4 justify-between items-center max-[550px]:flex-col max-[550px]:items-start max-[400px]:items-center'
             }
           >
             <span className={'font-medium text-xl'}>Ваш отзыв о мероприятии</span>
