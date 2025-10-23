@@ -12,8 +12,8 @@ public class EventStatisticsMapper implements RowMapper<EventStatisticsDto> {
     @Override
     public EventStatisticsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new EventStatisticsDto(
-                rs.getInt("finished_events"),
-                rs.getInt("upcoming_events")
+                rs.getInt("upcoming_events"),
+                rs.getInt("finished_events")
         );
     }
 }

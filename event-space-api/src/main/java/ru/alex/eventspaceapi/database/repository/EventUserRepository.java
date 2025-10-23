@@ -23,8 +23,9 @@ public interface EventUserRepository extends JpaRepository<EventUser, Integer>, 
         LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
-        WHERE (e.eventDate, e.startTime) < (CURRENT_DATE, CURRENT_TIME)
+        WHERE (e.eventDate, e.startTime) > (CURRENT_DATE, CURRENT_TIME)
                 AND eu.user.id = :userId
+        ORDER BY e.eventDate DESC, e.startTime DESC
         """)
     Slice<EventUser> findAllUpcomingByUserWithLoadedEntities(Integer userId, Pageable pageable);
 
@@ -35,8 +36,9 @@ public interface EventUserRepository extends JpaRepository<EventUser, Integer>, 
         LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
-        WHERE (e.eventDate, e.startTime) > (CURRENT_DATE, CURRENT_TIME)
+        WHERE (e.eventDate, e.startTime) < (CURRENT_DATE, CURRENT_TIME)
                 AND eu.user.id = :userId
+        ORDER BY e.eventDate DESC, e.startTime DESC
         """)
     Slice<EventUser> findAllFinishedByUserWithLoadedEntities(Integer userId, Pageable pageable);
 
