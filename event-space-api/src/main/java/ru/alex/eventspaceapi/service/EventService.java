@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +14,16 @@ import ru.alex.eventspaceapi.database.entity.*;
 import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
+import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
+import ru.alex.eventspaceapi.dto.event.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
+import ru.alex.eventspaceapi.mapper.event.EventListForUserMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
@@ -38,6 +42,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EventService {
+    private final static Integer USER_EVENTS_PAGE_SIZE = 20;
     private final FileService fileService;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
@@ -48,6 +53,7 @@ public class EventService {
     private final EventStepCreateMapper eventStepCreateMapper;
     private final EventListMapper eventListMapper;
     private final EventReadMapper eventReadMapper;
+    private final EventListForUserMapper eventListForUserMapper;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
@@ -60,6 +66,24 @@ public class EventService {
                 .stream()
                 .map(eventListMapper::toDto)
                 .toList();
+    }
+
+    public Slice<EventListForUserDto> getUpcomingEventsForUser(Integer page) {
+        return eventUserRepository.findAllUpcomingByUserWithLoadedEntities(
+                Objects.requireNonNull(getAuthorizedUser()).id(),
+                        PageRequest.of(page, USER_EVENTS_PAGE_SIZE)
+                ).map(eventListForUserMapper::toDto);
+    }
+
+    public Slice<EventListForUserDto> getFinishedEventsForUser(Integer page) {
+        return eventUserRepository.findAllFinishedByUserWithLoadedEntities(
+                Objects.requireNonNull(getAuthorizedUser()).id(),
+                PageRequest.of(page, USER_EVENTS_PAGE_SIZE)
+        ).map(eventListForUserMapper::toDto);
+    }
+
+    public EventStatisticsDto getUserEventsStatistics() {
+        return eventUserRepository.getUserEventStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
     public List<String> findTagsStartWith(String prefix) {
@@ -155,6 +179,7 @@ public class EventService {
                 .event(event)
                 .user(userRepository.getReferenceById(authorizedUserId))
                 .qrToken(UUID.randomUUID())
+                .registeredAt(Instant.now())
                 .build();
         eventUserRepository.save(eventUser);
     }

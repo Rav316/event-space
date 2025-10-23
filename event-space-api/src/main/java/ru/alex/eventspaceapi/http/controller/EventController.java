@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
+import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
+import ru.alex.eventspaceapi.dto.event.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
@@ -43,7 +45,22 @@ public class EventController {
     public List<EventListDto> getActualEvents() {
         return eventService.getActualEvents();
     }
-    
+
+    @GetMapping("/my/upcoming")
+    public SliceResponse<EventListForUserDto> getUpcomingEventsForUser(@RequestParam("page") Integer page) {
+        return SliceResponse.of(eventService.getUpcomingEventsForUser(page));
+    }
+
+    @GetMapping("/my/finished")
+    public SliceResponse<EventListForUserDto> getFinishedEventsForUser(@RequestParam("page") Integer page) {
+        return SliceResponse.of(eventService.getFinishedEventsForUser(page));
+    }
+
+    @GetMapping("/my/statistics")
+    public EventStatisticsDto getUserStatisticsByEvents() {
+        return eventService.getUserEventsStatistics();
+    }
+
     @GetMapping("/tags/{prefix}")
     public List<String> findTagsStartWith(@PathVariable("prefix") String prefix) {
         return eventService.findTagsStartWith(prefix);

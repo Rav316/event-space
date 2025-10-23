@@ -37,4 +37,7 @@ public class EventUser {
 
     @Column(name = "confirmed_at")
     private Instant confirmedAt;
+
+    @Column(name = "registered_at")
+    private Instant registeredAt;
 }

@@ -38,7 +38,9 @@ public class JwtFilter extends FilterBase {
             String requestURI = request.getRequestURI();
             if(request.getMethod().equalsIgnoreCase("GET") &&
                     requestURI.startsWith("/api/events") &&
-                    !requestURI.matches("^/api/events/\\d+/reviews/my$")) {
+                    !requestURI.matches("^/api/events/\\d+/reviews/my$") &&
+                    !requestURI.startsWith("/api/events/my")
+            ) {
                 filterChain.doFilter(request, response);
                 return;
             }
