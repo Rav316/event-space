@@ -20,6 +20,7 @@ public interface EventUserRepository extends JpaRepository<EventUser, Integer>, 
         SELECT eu
         FROM EventUser eu
         LEFT JOIN FETCH eu.event e
+        LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
         WHERE (e.eventDate, e.startTime) < (CURRENT_DATE, CURRENT_TIME)
@@ -31,6 +32,7 @@ public interface EventUserRepository extends JpaRepository<EventUser, Integer>, 
         SELECT eu
         FROM EventUser eu
         LEFT JOIN FETCH eu.event e
+        LEFT JOIN FETCH e.category c
         LEFT JOIN FETCH e.space s
         LEFT JOIN FETCH s.building b
         WHERE (e.eventDate, e.startTime) > (CURRENT_DATE, CURRENT_TIME)
