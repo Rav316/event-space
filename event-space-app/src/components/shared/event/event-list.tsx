@@ -1,23 +1,29 @@
 import { EventListItem } from '@/components/shared/event/event-list-item.tsx';
-import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
-import { useEventsByFilter } from '@/api/events/hooks.ts';
+import React from 'react';
+import type { EventListForUserDto } from '@/api/events/model.ts';
+import { Skeleton } from '@/components/ui';
 
-export const EventList = () => {
-  const eventFilter = useEventFilterStore((state) => state.filter);
-  const { data, isPending } = useEventsByFilter({
-    filter: eventFilter,
-    page: 1,
-  });
+interface Props {
+  events: EventListForUserDto[];
+  isLoading: boolean;
+}
 
-  if (isPending || !data) {
-    return;
-  }
-
+export const EventList: React.FC<Props> = ({ events, isLoading }) => {
   return (
     <div className={'flex flex-col gap-4'}>
-      {data.content.map((event) => (
-        <EventListItem key={event.id} event={event} />
-      ))}
+      {isLoading ? (
+        <div className={'flex flex-col gap-4'}>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className={'w-full h-[197px] rounded-2xl'} />
+          ))}
+        </div>
+      ) : (
+        <>
+          {events.map((event) => (
+            <EventListItem key={event.id} event={event} />
+          ))}
+        </>
+      )}
     </div>
   );
 };

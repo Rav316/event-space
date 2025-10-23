@@ -51,6 +51,38 @@ export const useActualEvents = () => {
   });
 };
 
+export const useUpcomingEvents = (options?: { enabled?: boolean }) => {
+  return useInfiniteQuery({
+    queryKey: EVENTS_KEYS.upcoming,
+    queryFn: ({ pageParam = 0 }) => Api.events.getMyUpcomingEvents(pageParam),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.metadata.hasNext) {
+        return lastPage.metadata.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 0,
+    refetchOnWindowFocus: false,
+    enabled: options?.enabled ?? true,
+  });
+};
+
+export const useFinishedEvents = (options?: { enabled?: boolean }) => {
+  return useInfiniteQuery({
+    queryKey: EVENTS_KEYS.finished,
+    queryFn: ({ pageParam = 0 }) => Api.events.getMyFinishedEvents(pageParam),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.metadata.hasNext) {
+        return lastPage.metadata.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 0,
+    refetchOnWindowFocus: false,
+    enabled: options?.enabled ?? true,
+  });
+};
+
 export const useEventsByFilter = (eventRequestData: EventRequestData) => {
   return useQuery({
     queryFn: () => Api.events.findAllByFilter(eventRequestData),
@@ -96,6 +128,14 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
       return undefined;
     },
     initialPageParam: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useMyEventStatistics = () => {
+  return useQuery({
+    queryFn: Api.events.getMyEventStatistics,
+    queryKey: EVENTS_KEYS.statistics,
     refetchOnWindowFocus: false,
   });
 };

@@ -1,9 +1,11 @@
 import { useEventReviews } from '@/api/events/hooks.ts';
 import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
-import React, { useEffect, useRef } from 'react';
-import { Skeleton, Spinner } from '@/components/ui';
+import React from 'react';
+import { Skeleton } from '@/components/ui';
 import { AnimatePresence, motion } from 'framer-motion';
 import { EventReview } from '@/components/shared/event-review';
+import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
+import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
 
 interface Props {
   eventId: number;
@@ -20,19 +22,12 @@ export const EventReviewsList: React.FC<Props> = ({ eventId }) => {
     isFetchingNextPage,
   } = useEventReviews(eventId, filter);
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useInfiniteScroll<HTMLDivElement>({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
-  useEffect(() => {
-    if (!hasNextPage) return;
-    const observer = new IntersectionObserver(async (entries) => {
-      if (entries[0].isIntersecting) await fetchNextPage();
-    });
-    const current = loadMoreRef.current;
-    if (current) observer.observe(current);
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [hasNextPage, fetchNextPage]);
   return (
     <div className="flex flex-col gap-4">
       {isReviewsPending || !reviews ? (
@@ -59,12 +54,7 @@ export const EventReviewsList: React.FC<Props> = ({ eventId }) => {
             )}
           </AnimatePresence>
 
-          {isFetchingNextPage && (
-            <div className="flex items-center justify-center gap-2 text-center text-muted-foreground">
-              <span>Загрузка...</span>
-              <Spinner />
-            </div>
-          )}
+          {isFetchingNextPage && <InfinityScrollLoading />}
 
           {hasNextPage && <div ref={loadMoreRef} className="h-10" />}
         </>

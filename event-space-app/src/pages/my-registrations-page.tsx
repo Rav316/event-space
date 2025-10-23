@@ -1,30 +1,113 @@
 import { Wrapper } from '@/components/hoc';
 import { AnimatedTabs } from '@/components/shared';
-import type { Tab } from '@/types/tab.ts';
 import { useState } from 'react';
 import { EventList } from '@/components/shared/event';
-
-const tabs: Tab[] = [{ text: 'Предстоящие (123)' }, { text: 'Завершенные (456)' }];
+import {
+  useFinishedEvents,
+  useMyEventStatistics,
+  useUpcomingEvents,
+} from '@/api/events/hooks.ts';
+import { Skeleton } from '@/components/ui';
+import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
+import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
 
 const MyRegistrationsPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { data: statistics, isPending: isStatisticsPending } =
+    useMyEventStatistics();
+
+  const {
+    data: upcomingEvents,
+    fetchNextPage: fetchNextUpcoming,
+    hasNextPage: hasMoreUpcoming,
+    isFetchingNextPage: isFetchingMoreUpcoming,
+    isPending: isUpcomingEventsPending,
+  } = useUpcomingEvents({ enabled: activeIndex === 0 });
+
+  const {
+    data: finishedEvents,
+    fetchNextPage: fetchNextFinished,
+    hasNextPage: hasMoreFinished,
+    isFetchingNextPage: isFetchingMoreFinished,
+    isPending: isFinishedEventsPending,
+  } = useFinishedEvents({ enabled: activeIndex === 1 });
+
+  const upcomingRef = useInfiniteScroll<HTMLDivElement>({
+    fetchNextPage: fetchNextUpcoming,
+    hasNextPage: hasMoreUpcoming,
+    isFetchingNextPage: isFetchingMoreUpcoming,
+  });
+
+  const finishedRef = useInfiniteScroll<HTMLDivElement>({
+    fetchNextPage: fetchNextFinished,
+    hasNextPage: hasMoreFinished,
+    isFetchingNextPage: isFetchingMoreFinished,
+  });
+
+  const tabs =
+    isStatisticsPending || !statistics
+      ? []
+      : [
+          { text: `Предстоящие (${statistics.upcomingEventsCount})` },
+          { text: `Завершённые (${statistics.finishedEventsCount})` },
+        ];
 
   return (
-    <Wrapper className={'flex flex-col gap-4 my-5'}>
-      <h1 className={'text-3xl font-medium'}>Мои регистрации</h1>
-      <span className={'text-muted-foreground'}>
+    <Wrapper className="flex flex-col gap-4 my-5">
+      <h1 className="text-3xl font-medium">Мои регистрации</h1>
+      <span className="text-muted-foreground">
         Управляйте своими регистрациями и отслеживайте предстоящие мероприятия
       </span>
-      <div className={'flex items-center justify-between gap-2 w-full max-[550px]:flex-col max-[550px]:items-start'}>
-        <div className={'w-[370px] max-[550px]:w-full'}>
-          <AnimatedTabs
-            tabs={tabs}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-          />
+
+      <div className="flex items-center justify-between gap-2 w-full max-[550px]:flex-col max-[550px]:items-start">
+        <div className="w-[370px] max-[550px]:w-full">
+          {tabs.length === 0 ? (
+            <Skeleton className="h-10 w-[370px] rounded-2xl max-[550px]:w-full" />
+          ) : (
+            <AnimatedTabs
+              tabs={tabs}
+              activeIndex={activeIndex}
+              setActiveIndex={setActiveIndex}
+            />
+          )}
         </div>
       </div>
-      <EventList/>
+
+      {activeIndex === 0 &&
+        (isUpcomingEventsPending ? (
+          <Skeleton className="h-[200px] w-full rounded-2xl" />
+        ) : (
+          <>
+            <EventList
+              events={upcomingEvents?.pages.flatMap((p) => p.content) ?? []}
+              isLoading={isUpcomingEventsPending}
+            />
+            <div
+              ref={upcomingRef}
+              className="h-10 flex justify-center items-center"
+            >
+              {isFetchingMoreUpcoming && <InfinityScrollLoading />}
+            </div>
+          </>
+        ))}
+
+      {activeIndex === 1 &&
+        (isFinishedEventsPending ? (
+          <Skeleton className="h-[200px] w-full rounded-2xl" />
+        ) : (
+          <>
+            <EventList
+              events={finishedEvents?.pages.flatMap((p) => p.content) ?? []}
+              isLoading={isFinishedEventsPending}
+            />
+            <div
+              ref={finishedRef}
+              className="h-10 flex justify-center items-center"
+            >
+              {isFetchingMoreFinished && <InfinityScrollLoading />}
+            </div>
+          </>
+        ))}
     </Wrapper>
   );
 };

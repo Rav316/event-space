@@ -1,8 +1,10 @@
 import type {
   EventCreateData,
   EventListDto,
+  EventListForUserDto,
   EventReadDto,
   EventRequestData,
+  EventStatisticsDto,
   EventStep,
 } from '@/api/events/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
@@ -48,6 +50,26 @@ export const getActualEvents = async (): Promise<EventListDto[]> => {
   return response.data;
 };
 
+export const getMyUpcomingEvents = async (
+  page: number,
+): Promise<SliceResponse<EventListForUserDto>> => {
+  const response = await axiosInstance.get<SliceResponse<EventListForUserDto>>(
+    `${ApiRoutes.EVENTS}/my/upcoming`,
+    { params: { page } },
+  );
+  return response.data;
+};
+
+export const getMyFinishedEvents = async (
+  page: number,
+): Promise<SliceResponse<EventListForUserDto>> => {
+  const response = await axiosInstance.get<SliceResponse<EventListForUserDto>>(
+    `${ApiRoutes.EVENTS}/my/finished`,
+    { params: { page } },
+  );
+  return response.data;
+};
+
 export const findById = async (id: number): Promise<EventReadDto> => {
   const response = await axiosInstance.get<EventReadDto>(
     `${ApiRoutes.EVENTS}/${id}`,
@@ -76,6 +98,13 @@ export const getEventReviews = async (
   return response.data;
 };
 
+export const getMyEventStatistics = async (): Promise<EventStatisticsDto> => {
+  const response = await axiosInstance.get<EventStatisticsDto>(
+    `${ApiRoutes.EVENTS}/my/statistics`,
+  );
+  return response.data;
+};
+
 export const getMyReviewByEvent = async (
   eventId: number,
 ): Promise<EventReviewMyDto> => {
@@ -95,13 +124,18 @@ export const addReviewForEvent = async (
   return response.data;
 };
 
-export const editReviewForEvent = async (data: EventReviewCreateEditData): Promise<void> => {
-  await axiosInstance.put<void>(`${ApiRoutes.EVENTS}/${data.eventId}/reviews`, data.review);
-}
+export const editReviewForEvent = async (
+  data: EventReviewCreateEditData,
+): Promise<void> => {
+  await axiosInstance.put<void>(
+    `${ApiRoutes.EVENTS}/${data.eventId}/reviews`,
+    data.review,
+  );
+};
 
 export const deleteReviewForEvent = async (eventId: number): Promise<void> => {
   await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}/reviews`);
-}
+};
 
 export const getEventReviewsStatistics = async (
   eventId: number,

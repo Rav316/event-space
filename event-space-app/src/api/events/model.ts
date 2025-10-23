@@ -92,3 +92,21 @@ export interface EventRequestData {
   filter: EventFilter;
   page: number;
 }
+
+export interface EventStatisticsDto {
+  upcomingEventsCount: number;
+  finishedEventsCount: number;
+}
+
+export interface EventListForUserDto {
+  id: number;
+  name: string;
+  category: EventCategory;
+  imageUrl?: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  space: Space;
+  attended: boolean;
+  registeredAt: string;
+}
