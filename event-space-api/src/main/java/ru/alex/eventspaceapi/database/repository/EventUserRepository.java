@@ -45,5 +45,6 @@ public interface EventUserRepository extends JpaRepository<EventUser, Integer>, 
     @Query("SELECT eu FROM EventUser eu WHERE eu.event.id = :eventId AND eu.user.id = :userId")
     Optional<EventUser> findByEventAndUser(Integer eventId, Integer userId);
 
-    Optional<EventUser> findByQrToken(UUID qrToken);
+    @Query("SELECT eu FROM EventUser eu LEFT JOIN FETCH eu.event e WHERE eu.qrToken = :qrToken")
+    Optional<EventUser> findByQrTokenWithEvent(UUID qrToken);
 }

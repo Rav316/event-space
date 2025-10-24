@@ -16,6 +16,7 @@ public record EventListForUserDto(
         LocalTime startTime,
         LocalTime endTime,
         SpaceReadDto space,
+        String qrToken,
         boolean attended,
         Instant registeredAt
 ) {

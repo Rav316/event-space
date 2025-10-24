@@ -28,9 +28,7 @@ import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -204,11 +202,24 @@ public class EventService {
         if(!isValidUUID(token)) {
             throw new IllegalArgumentException("token is not valid");
         }
-        EventUser eventUser = eventUserRepository.findByQrToken(UUID.fromString(token))
+        EventUser eventUser = eventUserRepository.findByQrTokenWithEvent(UUID.fromString(token))
                 .orElseThrow(() -> new EntityNotFoundException("no information found with the passed token"));
-        if(!eventUser.getEvent().getId().equals(id)) {
+        Event event = eventUser.getEvent();
+        if(!event.getId().equals(id)) {
             throw new IllegalArgumentException("inappropriate token for this event");
         }
+        ZonedDateTime eventStart = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
+        ZonedDateTime eventEnd = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
+        Instant now = Instant.now();
+
+        if (now.isBefore(eventStart.minusHours(24).toInstant())) {
+            throw new IllegalStateException("confirmation is only available 24 hours before the event");
+        }
+
+        if (now.isAfter(eventEnd.toInstant())) {
+            throw new IllegalStateException("It is not possible to confirm participation in an event that has already ended");
+        }
+
         eventUser.setAttended(true);
         eventUser.setConfirmedBy(userRepository.getReferenceById(Objects.requireNonNull(getAuthorizedUser()).id()));
         eventUser.setConfirmedAt(Instant.now());
