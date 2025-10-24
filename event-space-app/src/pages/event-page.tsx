@@ -220,6 +220,8 @@ const EventPage = () => {
                 canUnregister={event.canUnregister}
                 qrToken={event.qrToken}
                 attended={event.isAttended}
+                eventDate={event.eventDate}
+                endTime={event.endTime}
               />
               {event.author && (
                 <EventOrganizerBlock

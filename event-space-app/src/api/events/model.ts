@@ -107,6 +107,7 @@ export interface EventListForUserDto {
   startTime: string;
   endTime: string;
   space: Space;
+  qrToken: string;
   attended: boolean;
   registeredAt: string;
 }

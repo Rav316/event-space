@@ -1,9 +1,11 @@
-import React from 'react';
-import { Progress } from '@/components/ui';
+import React, { useState } from 'react';
+import { Button, Progress } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event';
 import { EventQrCodeDialog } from '@/components/modal';
+import { QrCode } from 'lucide-react';
+import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 interface Props {
   participantsQuantity: number;
@@ -13,7 +15,9 @@ interface Props {
   canRegister: boolean;
   canUnregister: boolean;
   qrToken?: string;
-  attended?: boolean
+  attended?: boolean;
+  eventDate: string;
+  endTime: string;
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
@@ -24,10 +28,13 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   canRegister,
   canUnregister,
   qrToken,
-  attended = false
+  attended = false,
+  eventDate,
+  endTime,
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
+  const [openQr, setOpenQr] = useState(false);
 
   return (
     <div
@@ -52,7 +59,25 @@ export const EventRegistrationBlock: React.FC<Props> = ({
       </div>
 
       {isRegistered && qrToken && (
-        <EventQrCodeDialog eventId={eventId} value={qrToken} attended={attended} />
+        <>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setOpenQr(true)}
+          >
+            <QrCode />
+            <span>Показать QR-код</span>
+          </Button>
+
+          <EventQrCodeDialog
+            eventId={eventId}
+            value={qrToken}
+            attended={attended}
+            open={openQr}
+            onOpenChange={setOpenQr}
+            eventFinished={compareWithCurrentTime(eventDate, endTime) === 1}
+          />
+        </>
       )}
 
       <EventRegistrationButton

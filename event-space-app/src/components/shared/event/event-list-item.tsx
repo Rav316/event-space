@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { EventListForUserDto } from '@/api/events/model.ts';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import { Badge, Button } from '@/components/ui';
@@ -7,12 +7,16 @@ import { Calendar, Clock, MapPin, QrCode } from 'lucide-react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import { formatDate } from '@/utils/format-date.ts';
 import { Link } from 'react-router';
+import { EventQrCodeDialog } from '@/components/modal';
+import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 interface Props {
   event: EventListForUserDto;
 }
 
 export const EventListItem: React.FC<Props> = ({ event }) => {
+  const [openQr, setOpenQr] = useState(false);
+
   return (
     <div className="flex gap-4 border border-[#E5E5E5] rounded-2xl overflow-hidden max-[900px]:flex-col">
       <div className="relative w-[450px] flex-shrink-0 max-[900px]:relative max-[900px]:w-full max-[900px]:h-60">
@@ -54,10 +58,18 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
             Зарегистрирован: {formatDate(event.registeredAt)}
           </span>
           <div className="flex items-center gap-2">
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => setOpenQr(true)}>
               <QrCode />
               <span>QR-код</span>
             </Button>
+            <EventQrCodeDialog
+              eventId={event.id}
+              value={event.qrToken}
+              open={openQr}
+              attended={event.attended}
+              onOpenChange={setOpenQr}
+              eventFinished={compareWithCurrentTime(event.eventDate, event.endTime) === 1}
+            />
             <Link to={`/events/${event.id}`}>
               <Button variant="outline">Подробнее</Button>
             </Link>
