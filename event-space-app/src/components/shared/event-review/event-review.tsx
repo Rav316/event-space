@@ -1,8 +1,14 @@
 import { Button } from '@/components/ui';
-import { Flag, ThumbsUp } from 'lucide-react';
+import { Flag } from 'lucide-react';
 import React from 'react';
 import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
 import { UserAvatar, StarRating } from '@/components/shared';
+import {
+  useMarkReviewAsHelpful,
+  useUnmarkReviewAsHelpful,
+} from '@/api/event-reviews/hooks.ts';
+import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
+import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
 
 interface Props {
   review: EventReviewReadDto;
@@ -21,6 +27,16 @@ export const EventReview: React.FC<Props> = ({ review }) => {
       hour12: false,
     })
     .replace(',', '');
+  const eventReviewFilter = useEventReviewFilterStore((state) => state.filter);
+
+  const markAsHelpfulMutation = useMarkReviewAsHelpful(
+    review.event,
+    eventReviewFilter,
+  );
+  const unmarkAsHelpfulMutation = useUnmarkReviewAsHelpful(
+    review.event,
+    eventReviewFilter,
+  );
 
   return (
     <div
@@ -61,10 +77,12 @@ export const EventReview: React.FC<Props> = ({ review }) => {
           'flex items-center gap-3 max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2'
         }
       >
-        <Button variant={'ghost'}>
-          <ThumbsUp />
-          <span>Полезно (10)</span>
-        </Button>
+        <HelpfulButton
+          review={review}
+          markAsHelpfulMutation={markAsHelpfulMutation}
+          unmarkAsHelpfulMutation={unmarkAsHelpfulMutation}
+        />
+
         <Button variant={'ghost'}>
           <Flag />
           <span>Пожаловаться</span>

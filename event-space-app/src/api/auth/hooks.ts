@@ -51,9 +51,7 @@ export const useLogin = () => {
       toast.success('Вы успешно вошли в систему');
       setToken(data.accessToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);
-      await queryClient.invalidateQueries({
-        predicate: (query) => query.queryKey[0] === 'events',
-      });
+      queryClient.clear();
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
