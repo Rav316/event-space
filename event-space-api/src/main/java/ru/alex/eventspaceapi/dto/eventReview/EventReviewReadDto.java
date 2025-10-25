@@ -11,6 +11,8 @@ public record EventReviewReadDto (
         String title,
         String content,
         Short rating,
+        Integer helpfulMarks,
+        Boolean userMarkedHelpful,
         Instant createdAt
 ) {
 }

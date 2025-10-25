@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.alex.eventspaceapi.database.entity.QEventReview.eventReview;
+import static ru.alex.eventspaceapi.database.entity.QHelpfulMark.helpfulMark;
 import static ru.alex.eventspaceapi.database.entity.QUser.user;
 
 @Component
@@ -38,6 +39,7 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
         List<EventReview> reviews = queryFactory
                 .selectFrom(eventReview)
                 .leftJoin(eventReview.author, user).fetchJoin()
+                .leftJoin(eventReview.helpfulMarks, helpfulMark).fetchJoin()
                 .where(eventReview.event.id.eq(eventId).and(buildPredicate(filter)))
                 .orderBy(getSortOrder(filter))
                 .offset((long) page * pageSize)
