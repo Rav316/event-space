@@ -8,13 +8,12 @@ import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.EventStep;
 import ru.alex.eventspaceapi.database.repository.EventStepRepositoryCustom;
 
-import java.sql.*;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class EventStepRepositoryImpl implements EventStepRepositoryCustom {
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public void insertEventStepsBatch(List<EventStep> steps) {
         String sql = """
@@ -31,6 +30,6 @@ public class EventStepRepositoryImpl implements EventStepRepositoryCustom {
                         .addValue("eventId", step.getEvent().getId()))
                 .toArray(SqlParameterSource[]::new);
 
-        namedParameterJdbcTemplate.batchUpdate(sql, batchParams);
+        jdbcTemplate.batchUpdate(sql, batchParams);
     }
 }

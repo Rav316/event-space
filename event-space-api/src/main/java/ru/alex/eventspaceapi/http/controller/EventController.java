@@ -20,9 +20,7 @@ import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
 import ru.alex.eventspaceapi.dto.response.SliceResponse;
-import ru.alex.eventspaceapi.service.EventReviewService;
-import ru.alex.eventspaceapi.service.EventService;
-import ru.alex.eventspaceapi.service.EventStepService;
+import ru.alex.eventspaceapi.service.*;
 
 import java.util.List;
 
@@ -33,6 +31,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final EventUserService eventUserService;
     private final EventStepService eventStepService;
     private final EventReviewService eventReviewService;
 
@@ -123,7 +122,7 @@ public class EventController {
             @PathVariable("id") Integer id,
             @RequestParam("token") String token
     ) {
-        eventService.confirmParticipantAttendance(id, token);
+        eventUserService.confirmParticipantAttendance(id, token);
         return new ResponseEntity<>(OK);
     }
 
@@ -138,13 +137,13 @@ public class EventController {
 
     @PostMapping("/{id}/register")
     public ResponseEntity<Void> registerForEvent(@PathVariable("id") Integer id) {
-        eventService.registerForEvent(id);
+        eventUserService.registerForEvent(id);
         return new ResponseEntity<>(CREATED);
     }
 
     @DeleteMapping("/{id}/unregister")
     public ResponseEntity<Void> unregisterFromEvent(@PathVariable("id") Integer id) {
-        eventService.unregisterFromEvent(id);
+        eventUserService.unregisterFromEvent(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
 }

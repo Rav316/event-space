@@ -6,35 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
-import java.util.List;
-
 @Entity
-@Table(name = "event_review")
+@Table(name = "helpful_mark")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventReview {
+public class HelpfulMark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User author;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private Event event;
-
-    private String title;
-    private String content;
-    private Short rating;
-
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @OneToMany(mappedBy = "review")
-    private List<HelpfulMark> helpfulMarks;
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
+    private EventReview review;
 }
