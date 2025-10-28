@@ -1,0 +1,1 @@
+export {EventStatisticsBlock} from './event-statistics-block';

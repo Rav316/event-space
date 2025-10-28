@@ -11,6 +11,7 @@ import EventPage from '@/pages/event-page.tsx';
 import ProfilePage from '@/pages/profile-page.tsx';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import MyRegistrationsPage from '@/pages/my-registrations-page.tsx';
+import StatisticsPage from '@/pages/statistics-page.tsx';
 
 const App = () => {
   const token = useAuthStore((state) => state.token);
@@ -51,6 +52,14 @@ const App = () => {
             element={
               <RequireAuth>
                 <MyRegistrationsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={'/statistics'}
+            element={
+              <RequireAuth>
+                <StatisticsPage />
               </RequireAuth>
             }
           />

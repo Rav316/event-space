@@ -55,7 +55,9 @@ export const Header = () => {
               <Link to={'/my-registrations'}>
                 <HeaderItem Icon={Users} text={'Мои регистрации'} />
               </Link>
-              <HeaderItem Icon={ChartColumn} text={'Статистика'} />
+              <Link to={'/statistics'}>
+                <HeaderItem Icon={ChartColumn} text={'Статистика'} />
+              </Link>
               <HeaderItem Icon={History} text={'История'} />
             </>
           )}

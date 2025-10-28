@@ -36,10 +36,12 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
               Мои регистрации
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <ChartColumn />
-            Статистика
-          </DropdownMenuItem>
+          <Link to={'/statistics'}>
+            <DropdownMenuItem>
+              <ChartColumn />
+              Статистика
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem>
             <History />
             История
