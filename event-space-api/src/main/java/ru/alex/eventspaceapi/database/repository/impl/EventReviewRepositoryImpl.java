@@ -99,6 +99,8 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
                 case "low-rating":
                     orderSpecifiers.add(eventReview.rating.asc());
                     break;
+                case "useful":
+                    orderSpecifiers.add(eventReview.helpfulMarks.size().desc());
             }
         }
         orderSpecifiers.add(eventReview.id.desc());
