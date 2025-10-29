@@ -102,8 +102,8 @@ export const OverviewTab = () => {
           />
           <UserActivityItem
             title={'Отзывов на мероприятие'}
-            myActivity={74}
-            avgActivity={42}
+            myActivity={42}
+            avgActivity={74}
             maxActivity={100}
           />
           <UserActivityItem

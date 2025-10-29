@@ -1,5 +1,5 @@
 import { Wrapper } from '@/components/hoc';
-import { AttendanceTab, EventStatisticsBlocks, OverviewTab } from '@/components/shared/event-statistics';
+import { MyReviewsTab, EventStatisticsBlocks, OverviewTab } from '@/components/shared/event-statistics';
 import { AnimatedTabs } from '@/components/shared';
 import { useState } from 'react';
 import { statisticsTabs } from '@/constants/statistics-tabs.ts';
@@ -12,7 +12,7 @@ const StatisticsPage = () => {
       case 0:
         return <OverviewTab/>;
       case 1:
-        return <AttendanceTab/>
+        return <MyReviewsTab/>
     }
   }
 

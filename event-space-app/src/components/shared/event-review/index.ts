@@ -5,5 +5,6 @@ export { EventReviewsSkeleton } from './event-reviews-skeleton';
 export { ReviewAddEditForm } from './review-add-edit-form.tsx';
 export { ReviewFilters } from './review-filters';
 export { ReviewProgressBar } from './review-progress-bar';
-export {ReviewRatingInput} from './review-rating-input';
-export {MyReview} from './my-review.tsx';
+export { ReviewRatingInput } from './review-rating-input';
+export { MyReview } from './my-review.tsx';
+export { ReviewStatItem } from './review-stat-item';
