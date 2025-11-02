@@ -13,7 +13,6 @@ import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
-import ru.alex.eventspaceapi.dto.event.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
@@ -74,10 +73,6 @@ public class EventService {
                 Objects.requireNonNull(getAuthorizedUser()).id(),
                 PageRequest.of(page, USER_EVENTS_PAGE_SIZE)
         ).map(eventListForUserMapper::toDto);
-    }
-
-    public EventStatisticsDto getUserEventsStatistics() {
-        return eventUserRepository.getUserEventStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
     public List<String> findTagsStartWith(String prefix) {

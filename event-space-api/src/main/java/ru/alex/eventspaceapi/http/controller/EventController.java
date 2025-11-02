@@ -10,7 +10,7 @@ import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
-import ru.alex.eventspaceapi.dto.event.EventStatisticsDto;
+import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
@@ -57,7 +57,7 @@ public class EventController {
 
     @GetMapping("/my/statistics")
     public EventStatisticsDto getUserStatisticsByEvents() {
-        return eventService.getUserEventsStatistics();
+        return eventUserService.getUserEventsStatistics();
     }
 
     @GetMapping("/tags/{prefix}")

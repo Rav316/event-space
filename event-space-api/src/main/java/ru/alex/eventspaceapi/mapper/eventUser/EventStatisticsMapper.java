@@ -1,8 +1,8 @@
-package ru.alex.eventspaceapi.mapper.event;
+package ru.alex.eventspaceapi.mapper.eventUser;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.alex.eventspaceapi.dto.event.EventStatisticsDto;
+import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

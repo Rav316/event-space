@@ -1,4 +1,4 @@
-package ru.alex.eventspaceapi.dto.event;
+package ru.alex.eventspaceapi.dto.eventUser;
 
 public record EventStatisticsDto(
         Integer upcomingEventsCount,

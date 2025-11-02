@@ -5,11 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.alex.eventspaceapi.dto.eventUser.UserStatisticsDto;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.AuthService;
+import ru.alex.eventspaceapi.service.EventUserService;
 import ru.alex.eventspaceapi.service.UserService;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -21,6 +23,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
     private final AuthService authService;
     private final UserService userService;
+    private final EventUserService eventUserService;
 
     @GetMapping("/exists-by-email")
     public ResponseEntity<Boolean> existsByEmail(@RequestParam("email") String email) {
@@ -34,6 +37,11 @@ public class UserController {
             @RequestPart(value = "avatar", required = false) MultipartFile avatar
             ) {
         return new ResponseEntity<>(userService.update(id, userEditDto, avatar), OK);
+    }
+
+    @GetMapping("/profile/details-statistics")
+    public ResponseEntity<UserStatisticsDto> getUserStatistics() {
+        return new ResponseEntity<>(eventUserService.getUserStatistics(), OK);
     }
 
     @PatchMapping("/profile/change-password")

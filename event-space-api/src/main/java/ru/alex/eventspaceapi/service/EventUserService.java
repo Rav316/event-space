@@ -11,6 +11,8 @@ import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
+import ru.alex.eventspaceapi.dto.eventUser.UserStatisticsDto;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 
 import java.time.*;
@@ -27,6 +29,14 @@ public class EventUserService {
     private final EventRepository eventRepository;
     private final EventUserRepository eventUserRepository;
     private final UserRepository userRepository;
+
+    public EventStatisticsDto getUserEventsStatistics() {
+        return eventUserRepository.getUserEventStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
+    }
+
+    public UserStatisticsDto getUserStatistics() {
+        return eventUserRepository.getUserStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
+    }
 
     @Transactional
     public void registerForEvent(Integer id) {
