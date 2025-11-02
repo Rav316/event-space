@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui';
-import { ChartBar } from 'lucide-react';
+import { Hash } from 'lucide-react';
 import React from 'react';
 import type { ReviewWord } from '@/types/review-word.ts';
 
@@ -18,8 +18,8 @@ export const TopWordsBlock: React.FC<Props> = ({ words }) => {
     <Card className={'w-full'}>
       <CardHeader>
         <CardTitle className={'flex items-center gap-2'}>
-          <ChartBar className={'w-5 h-5'} />
-          Распределение моих оценок
+          <Hash className={'w-5 h-5'} />
+          Мои топ-слова
         </CardTitle>
       </CardHeader>
       <CardContent className={'w-full'}>

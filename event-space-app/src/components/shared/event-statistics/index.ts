@@ -7,3 +7,6 @@ export {RatingDistributionBlock} from './rating-distribution-block';
 export {RatingDistributionItem} from './rating-distribution-item';
 export {TopWordsBlock} from './top-words-block';
 export {LastReviewsList} from './last-reviews-list';
+export {CategoriesStatisticsTab} from './categories-statistics-tab';
+export {CategoriesDistributionBlock} from './categories-distribution-block';
+export {CategoriesActivityBlock} from './categories-activity-block';
