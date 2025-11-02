@@ -1,5 +1,9 @@
 import { Wrapper } from '@/components/hoc';
-import { AnimatedTabs } from '@/components/shared';
+import {
+  AnimatedTabs,
+  NoFinishedEventsBlock,
+  NoUpcomingEventsBlock,
+} from '@/components/shared';
 import { EventList } from '@/components/shared/event';
 import {
   useFinishedEvents,
@@ -12,7 +16,9 @@ import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loadi
 import { useMyRegistrationsStore } from '@/store/use-my-registrations-store.ts';
 
 const MyRegistrationsPage = () => {
-  const activeTabIndex = useMyRegistrationsStore((state) => state.activeTabIndex);
+  const activeTabIndex = useMyRegistrationsStore(
+    (state) => state.activeTabIndex,
+  );
   const setActiveTabIndex = useMyRegistrationsStore(
     (state) => state.setActiveTabIndex,
   );
@@ -81,16 +87,23 @@ const MyRegistrationsPage = () => {
           <Skeleton className="h-[200px] w-full rounded-2xl" />
         ) : (
           <>
-            <EventList
-              events={upcomingEvents?.pages.flatMap((p) => p.content) ?? []}
-              isLoading={isUpcomingEventsPending}
-            />
-            <div
-              ref={upcomingRef}
-              className="h-10 flex justify-center items-center"
-            >
-              {isFetchingMoreUpcoming && <InfinityScrollLoading />}
-            </div>
+            {!upcomingEvents ||
+            upcomingEvents.pages.flatMap((p) => p.content).length === 0 ? (
+              <NoUpcomingEventsBlock />
+            ) : (
+              <>
+                <EventList
+                  events={upcomingEvents.pages.flatMap((p) => p.content)}
+                  isLoading={isUpcomingEventsPending}
+                />
+                <div
+                  ref={upcomingRef}
+                  className="h-10 flex justify-center items-center"
+                >
+                  {isFetchingMoreUpcoming && <InfinityScrollLoading />}
+                </div>
+              </>
+            )}
           </>
         ))}
 
@@ -99,16 +112,23 @@ const MyRegistrationsPage = () => {
           <Skeleton className="h-[200px] w-full rounded-2xl" />
         ) : (
           <>
-            <EventList
-              events={finishedEvents?.pages.flatMap((p) => p.content) ?? []}
-              isLoading={isFinishedEventsPending}
-            />
-            <div
-              ref={finishedRef}
-              className="h-10 flex justify-center items-center"
-            >
-              {isFetchingMoreFinished && <InfinityScrollLoading />}
-            </div>
+            {!finishedEvents ||
+            finishedEvents.pages.flatMap((p) => p.content).length === 0 ? (
+              <NoFinishedEventsBlock />
+            ) : (
+              <>
+                <EventList
+                  events={finishedEvents.pages.flatMap((p) => p.content)}
+                  isLoading={isFinishedEventsPending}
+                />
+                <div
+                  ref={finishedRef}
+                  className="h-10 flex justify-center items-center"
+                >
+                  {isFetchingMoreFinished && <InfinityScrollLoading />}
+                </div>
+              </>
+            )}
           </>
         ))}
     </Wrapper>

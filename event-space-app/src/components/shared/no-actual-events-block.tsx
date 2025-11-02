@@ -20,7 +20,7 @@ export const NoActualEventsBlock = () => {
           className={'m-auto text-muted-foreground'}
         />
       </div>
-      <span className={'font-medium text-xl'}>
+      <span className={'font-medium text-xl text-center'}>
         Пока нет актуальных мероприятий
       </span>
       <p className={'text-muted-foreground text-center max-w-[600px]'}>
@@ -34,7 +34,7 @@ export const NoActualEventsBlock = () => {
         }
       >
         <Link to={'/events'}>
-          <Button className={'h-[40px]'}>
+          <Button className={'h-[40px] max-[528px]:w-full'}>
             <span className={'font-medium'}>Создать мероприятие</span>
             <ArrowRight />
           </Button>
