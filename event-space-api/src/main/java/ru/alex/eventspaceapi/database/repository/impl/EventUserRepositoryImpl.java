@@ -9,14 +9,14 @@ import ru.alex.eventspaceapi.database.repository.EventUserRepositoryCustom;
 import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventUser.UserStatisticsDto;
 import ru.alex.eventspaceapi.mapper.eventUser.EventStatisticsMapper;
-
-import java.util.Map;
+import ru.alex.eventspaceapi.mapper.eventUser.UserStatisticsMapper;
 
 @Component
 @RequiredArgsConstructor
 public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final EventStatisticsMapper eventStatisticsMapper;
+    private final UserStatisticsMapper userStatisticsMapper;
 
     @Override
     public EventStatisticsDto getUserEventStatistics(Integer userId) {
@@ -110,17 +110,8 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
                 CROSS JOIN reviews_stats r;
                 """;
 
-        return jdbcTemplate.queryForObject(sql, Map.of("userId", userId), (rs, ignored) ->
-                new UserStatisticsDto(
-                        rs.getInt("total_events"),
-                        rs.getInt("reviews_left"),
-                        rs.getDouble("avg_attendance"),
-                        rs.getDouble("avg_review_rating"),
-                        rs.getInt("monthly_events_delta"),
-                        rs.getInt("monthly_reviews_delta"),
-                        rs.getDouble("monthly_attendance_delta"),
-                        rs.getDouble("avg_rating_delta")
-                )
-        );
+        MapSqlParameterSource sqlParams = new MapSqlParameterSource()
+                .addValue("userId", userId);
+        return jdbcTemplate.queryForObject(sql, sqlParams, userStatisticsMapper);
     }
 }
