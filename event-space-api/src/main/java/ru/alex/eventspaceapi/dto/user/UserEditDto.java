@@ -12,6 +12,7 @@ public record UserEditDto(
         @NotNull
         @Email
         String email,
+        String phone,
         @NotNull
         Integer faculty,
         @Min(1)
