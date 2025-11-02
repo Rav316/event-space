@@ -7,8 +7,9 @@ interface Props {
   Icon: React.ForwardRefExoticComponent<
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
-  value: string;
-  percent: number;
+  value: number | string;
+  delta: number;
+  isPercent?: boolean;
   className?: string;
 }
 
@@ -16,12 +17,13 @@ export const EventStatisticsBlock: React.FC<Props> = ({
   title,
   Icon,
   value,
-  percent,
+  delta,
+  isPercent = false,
   className,
 }) => {
-  const isNegative = percent < 0;
-  const isZero = percent === 0;
-  const displayPercent = Math.abs(percent);
+  const isNegative = delta < 0;
+  const isZero = delta === 0;
+  const displayDelta = Math.abs(delta);
 
   const percentColor = isZero
     ? 'text-gray-500'
@@ -45,7 +47,7 @@ export const EventStatisticsBlock: React.FC<Props> = ({
       <span className="text-muted-foreground">
         <span className={percentColor}>
           {sign}
-          {displayPercent}%
+          {!isPercent ? `${displayDelta}` : `${displayDelta * 100}%`}
         </span>{' '}
         к прошлому месяцу
       </span>

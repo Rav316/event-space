@@ -4,8 +4,9 @@ import type {
   UserDeleteDto,
   UserEditData,
   UserPasswordChangeDto,
-  UserReadDto
+  UserReadDto,
 } from '@/api/users/model.ts';
+import type { UserStatisticsDto } from '@/api/event-user/model.ts';
 
 export const existsByEmail = async (email: string): Promise<boolean> => {
   const response = await axiosInstance.get<boolean>(
@@ -18,6 +19,14 @@ export const existsByEmail = async (email: string): Promise<boolean> => {
   );
   return response.data;
 };
+
+export const getUserDetailsStatistics =
+  async (): Promise<UserStatisticsDto> => {
+    const response = await axiosInstance.get<UserStatisticsDto>(
+      `${ApiRoutes.USERS}/profile/details-statistics`,
+    );
+    return response.data;
+  };
 
 export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
   const formData = new FormData();
@@ -51,4 +60,4 @@ export const changePassword = async (
 
 export const deleteAccount = async (data: UserDeleteDto): Promise<void> => {
   await axiosInstance.post<void>(`${ApiRoutes.USERS}/profile/delete`, data);
-}
+};

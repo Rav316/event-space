@@ -93,11 +93,6 @@ export interface EventRequestData {
   page: number;
 }
 
-export interface EventStatisticsDto {
-  upcomingEventsCount: number;
-  finishedEventsCount: number;
-}
-
 export interface EventListForUserDto {
   id: number;
   name: string;

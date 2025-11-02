@@ -1,33 +1,48 @@
 import { EventStatisticsBlock } from '@/components/shared/event-statistics/event-statistics-block.tsx';
-import { Award, Calendar, TrendingUp, Users } from 'lucide-react';
+import { Award, Calendar, MessageSquare, TrendingUp } from 'lucide-react';
+import { useUserStatistics } from '@/api/users/hooks.ts';
+import { Skeleton } from '@/components/ui';
 
 export const EventStatisticsBlocks = () => {
+  const { data, isPending } = useUserStatistics();
+
   return (
     <div className={'flex items-center gap-3'}>
-      <EventStatisticsBlock
-        title={'Всего мероприятий'}
-        Icon={Calendar}
-        value={'148'}
-        percent={12}
-      />
-      <EventStatisticsBlock
-        title={'Общее количество посетителей'}
-        Icon={Users}
-        value={'4,163'}
-        percent={25}
-      />
-      <EventStatisticsBlock
-        title={'Средняя посещаемость'}
-        Icon={TrendingUp}
-        value={'82%'}
-        percent={-15}
-      />
-      <EventStatisticsBlock
-        title={'Средняя оценка отзывов'}
-        Icon={Award}
-        value={'4.7'}
-        percent={0}
-      />
+      {isPending || !data ? (
+        <>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className={'w-full h-[154px]'} />
+          ))}
+        </>
+      ) : (
+        <>
+          <EventStatisticsBlock
+            title={'Всего мероприятий'}
+            Icon={Calendar}
+            value={data.totalEvents}
+            delta={data.monthlyEventsDelta}
+          />
+          <EventStatisticsBlock
+            title={'Оставлено отзывов'}
+            Icon={MessageSquare}
+            value={data.reviewsLeft}
+            delta={data.monthlyReviewsDelta}
+          />
+          <EventStatisticsBlock
+            title={'Средняя посещаемость'}
+            Icon={TrendingUp}
+            value={`${(data.avgAttendance * 100).toFixed(2)}%`}
+            delta={data.monthlyAttendanceDelta}
+            isPercent={true}
+          />
+          <EventStatisticsBlock
+            title={'Средняя оценка отзывов'}
+            Icon={Award}
+            value={data.avgReviewRating}
+            delta={data.avgRatingDelta}
+          />
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
