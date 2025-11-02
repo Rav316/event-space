@@ -22,6 +22,16 @@ const monthlyData = [
   { month: 'Июн', events: 35, attendees: 980 },
 ];
 
+const myWeekdayActivity = [
+  { day: 'Пн', events: 2.5 },
+  { day: 'Вт', events: 3.2 },
+  { day: 'Ср', events: 4.1 },
+  { day: 'Чт', events: 3.8 },
+  { day: 'Пт', events: 2.9 },
+  { day: 'Сб', events: 1.2 },
+  { day: 'Вс', events: 0.8 },
+]
+
 const myReviewsData = [
   { month: 'Янв', reviews: 5, avgRating: 4.5 },
   { month: 'Фев', reviews: 4, avgRating: 4.8 },
@@ -39,7 +49,7 @@ export const OverviewTab = () => {
           <CardHeader>
             <CardTitle className={'flex items-center gap-2'}>
               <BarChart3 className="h-5 w-5" />
-              Мероприятия по месяцам
+              Моя активность по месяцам
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -66,18 +76,18 @@ export const OverviewTab = () => {
           <CardHeader>
             <CardTitle className={'flex items-center gap-2'}>
               <Users className="h-5 w-5" />
-              Участники по месяцам
+              Моя активность по дням недели
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData}>
+                <BarChart data={myWeekdayActivity}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
+                  <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="attendees" fill="#10b981" name="Участники" />
+                  <Bar dataKey="events" fill="#10b981" name="Среднее кол-во мероприятий" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
