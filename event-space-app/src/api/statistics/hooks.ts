@@ -14,6 +14,13 @@ export const useUserStatistics = () => {
   return useQuery({
     queryFn: Api.statistics.getUserStatistics,
     queryKey: STATISTICS_KEYS.detailsStatistics,
-    refetchOnWindowFocus: false
-  })
-}
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useOverviewStatistics = () => {
+  return useQuery({
+    queryFn: Api.statistics.getOverviewStatistics,
+    queryKey: STATISTICS_KEYS.overviewStatistics,
+  });
+};

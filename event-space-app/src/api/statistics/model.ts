@@ -23,6 +23,8 @@ export interface OverviewStatisticsDto {
   avgReviewsPerUserLastMonth: number;
   avgRating: number;
   avgRatingSystem: number;
+  reviewsDynamicStatistics: ReviewsDynamicStatisticsDto[];
+  reviewsAvgRatingStatistics: ReviewsAvgRatingStatisticsDto[];
 }
 
 export interface MontEventStatisticsDto {
@@ -33,4 +35,14 @@ export interface MontEventStatisticsDto {
 export interface DayOfWeekStatisticsDto {
   dayOfWeek: number;
   attendedEventsCount: number;
+}
+
+export interface ReviewsDynamicStatisticsDto {
+  month: number;
+  reviewsCount: number;
+}
+
+export interface ReviewsAvgRatingStatisticsDto {
+  month: number;
+  rating: number;
 }

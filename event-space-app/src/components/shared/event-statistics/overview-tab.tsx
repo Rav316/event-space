@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import {BarChart3, Clock, Star, TrendingUp, Users} from 'lucide-react';
+import { BarChart3, Clock, Star, TrendingUp, Users } from 'lucide-react';
 import {
   Bar,
   BarChart,
@@ -12,36 +12,44 @@ import {
   YAxis,
 } from 'recharts';
 import { UserActivityItem } from '@/components/shared/event-statistics/user-activity-item.tsx';
-
-const monthlyData = [
-  { month: 'Янв', events: 12, attendees: 340 },
-  { month: 'Фев', events: 18, attendees: 520 },
-  { month: 'Мар', events: 24, attendees: 680 },
-  { month: 'Апр', events: 31, attendees: 890 },
-  { month: 'Май', events: 28, attendees: 750 },
-  { month: 'Июн', events: 35, attendees: 980 },
-];
-
-const myWeekdayActivity = [
-  { day: 'Пн', events: 2.5 },
-  { day: 'Вт', events: 3.2 },
-  { day: 'Ср', events: 4.1 },
-  { day: 'Чт', events: 3.8 },
-  { day: 'Пт', events: 2.9 },
-  { day: 'Сб', events: 1.2 },
-  { day: 'Вс', events: 0.8 },
-]
-
-const myReviewsData = [
-  { month: 'Янв', reviews: 5, avgRating: 4.5 },
-  { month: 'Фев', reviews: 4, avgRating: 4.8 },
-  { month: 'Мар', reviews: 2, avgRating: 4.6 },
-  { month: 'Апр', reviews: 6, avgRating: 4.9 },
-  { month: 'Май', reviews: 8, avgRating: 4.7 },
-  { month: 'Июн', reviews: 7, avgRating: 5.0 },
-]
+import { useOverviewStatistics } from '@/api/statistics/hooks.ts';
+import { months } from '@/constants/months.ts';
+import { dayOfWeeks } from '@/constants/dayOfWeeks.ts';
 
 export const OverviewTab = () => {
+  const { data: statistics, isPending: isStatisticsPending } =
+    useOverviewStatistics();
+
+  if (isStatisticsPending || !statistics) {
+    return <div>Loading...</div>;
+  }
+
+  const monthActivityChartData = statistics.monthEventStatistics.map(
+    (item) => ({
+      ...item,
+      month: months[item.month - 1],
+    }),
+  );
+
+  const dayOfWeekChartData = statistics.dayOfWeekStatistics.map((item) => ({
+    ...item,
+    dayOfWeek: dayOfWeeks[item.dayOfWeek - 1],
+  }));
+
+  const reviewsDynamicChartData = statistics.reviewsDynamicStatistics.map(
+    (item) => ({
+      ...item,
+      month: months[item.month - 1],
+    }),
+  );
+
+  const reviewsAvgRatingChartData = statistics.reviewsAvgRatingStatistics.map(
+    (item) => ({
+      ...item,
+      month: months[item.month - 1],
+    }),
+  );
+
   return (
     <div className={'flex flex-col gap-5 w-full'}>
       <div className={'flex items-center gap-5 w-full'}>
@@ -55,14 +63,14 @@ export const OverviewTab = () => {
           <CardContent>
             <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData}>
+                <LineChart data={monthActivityChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip />
                   <Line
                     type="monotone"
-                    dataKey="events"
+                    dataKey="confirmedEventsCount"
                     stroke="#3b82f6"
                     strokeWidth={2}
                     name="Мероприятия"
@@ -82,12 +90,16 @@ export const OverviewTab = () => {
           <CardContent>
             <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={myWeekdayActivity}>
+                <BarChart data={dayOfWeekChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" />
+                  <XAxis dataKey="dayOfWeek" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="events" fill="#10b981" name="Среднее кол-во мероприятий" />
+                  <Bar
+                    dataKey="attendedEventsCount"
+                    fill="#10b981"
+                    name="Среднее кол-во мероприятий"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -106,20 +118,20 @@ export const OverviewTab = () => {
         <div className={'flex items-center gap-6 w-full'}>
           <UserActivityItem
             title={'Мероприятий за месяц'}
-            myActivity={15}
-            avgActivity={3.5}
+            myActivity={statistics.attendedEventsLastMonth}
+            avgActivity={statistics.avgAttendedEventsPerUserLastMonth}
             maxActivity={10}
           />
           <UserActivityItem
-            title={'Отзывов на мероприятие'}
-            myActivity={42}
-            avgActivity={74}
+            title={'Отзывов на мероприятие за последний месяц'}
+            myActivity={statistics.reviewsLastMonth}
+            avgActivity={statistics.avgReviewsPerUserLastMonth}
             maxActivity={100}
           />
           <UserActivityItem
             title={'Средняя оценка'}
-            myActivity={4.7}
-            avgActivity={4.3}
+            myActivity={statistics.avgRating}
+            avgActivity={statistics.avgRatingSystem}
             maxActivity={5}
           />
         </div>
@@ -136,14 +148,15 @@ export const OverviewTab = () => {
           <CardContent>
             <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height={'100%'}>
-                <BarChart data={myReviewsData}>
+                <BarChart data={reviewsDynamicChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis />
+                  <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Bar dataKey="reviews" fill="#8b5cf6" name="Отзывов" />
+                  <Bar dataKey="reviewsCount" fill="#8b5cf6" name="Отзывов" />
                 </BarChart>
               </ResponsiveContainer>
+
             </div>
           </CardContent>
         </Card>
@@ -157,14 +170,14 @@ export const OverviewTab = () => {
           <CardContent>
             <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={myReviewsData}>
+                <LineChart data={reviewsAvgRatingChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis domain={[0, 5]} />
                   <Tooltip />
                   <Line
                     type="monotone"
-                    dataKey="avgRating"
+                    dataKey="rating"
                     stroke="#eab308"
                     strokeWidth={3}
                     name="Средняя оценка"
