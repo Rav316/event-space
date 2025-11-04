@@ -132,14 +132,6 @@ export const useEventReviews = (eventId: number, filter: EventReviewFilter) => {
   });
 };
 
-export const useMyEventStatistics = () => {
-  return useQuery({
-    queryFn: Api.events.getMyEventStatistics,
-    queryKey: EVENTS_KEYS.statistics,
-    refetchOnWindowFocus: false,
-  });
-};
-
 export const useMyReviewByEvent = (
   eventId: number,
   options?: Omit<

@@ -16,7 +16,6 @@ import type {
   EventReviewReadDto,
   EventReviewStatisticsDto,
 } from '@/api/event-reviews/model.ts';
-import type { EventStatisticsDto } from '@/api/event-user/model.ts';
 
 export const create = async (data: EventCreateData): Promise<void> => {
   const formData = new FormData();
@@ -94,13 +93,6 @@ export const getEventReviews = async (
   const response = await axiosInstance.get<SliceResponse<EventReviewReadDto>>(
     `${ApiRoutes.EVENTS}/${eventId}/reviews`,
     { params: { ...filter, page } },
-  );
-  return response.data;
-};
-
-export const getMyEventStatistics = async (): Promise<EventStatisticsDto> => {
-  const response = await axiosInstance.get<EventStatisticsDto>(
-    `${ApiRoutes.EVENTS}/my/statistics`,
   );
   return response.data;
 };

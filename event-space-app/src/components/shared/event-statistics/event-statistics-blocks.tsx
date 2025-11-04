@@ -1,7 +1,7 @@
 import { EventStatisticsBlock } from '@/components/shared/event-statistics/event-statistics-block.tsx';
 import { Award, Calendar, MessageSquare, TrendingUp } from 'lucide-react';
-import { useUserStatistics } from '@/api/users/hooks.ts';
 import { Skeleton } from '@/components/ui';
+import { useUserStatistics } from '@/api/statistics/hooks.ts';
 
 export const EventStatisticsBlocks = () => {
   const { data, isPending } = useUserStatistics();

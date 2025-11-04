@@ -7,13 +7,13 @@ import {
 import { EventList } from '@/components/shared/event';
 import {
   useFinishedEvents,
-  useMyEventStatistics,
   useUpcomingEvents,
 } from '@/api/events/hooks.ts';
 import { Skeleton } from '@/components/ui';
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
 import { useMyRegistrationsStore } from '@/store/use-my-registrations-store.ts';
+import { useMyEventStatistics } from '@/api/statistics/hooks.ts';
 
 const MyRegistrationsPage = () => {
   const activeTabIndex = useMyRegistrationsStore(

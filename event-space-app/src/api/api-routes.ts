@@ -8,4 +8,5 @@ export const ApiRoutes = {
   SPACES: '/spaces',
   BUILDINGS: '/buildings',
   SPACE_TYPES: '/space-types',
+  STATISTICS: '/statistics',
 };
