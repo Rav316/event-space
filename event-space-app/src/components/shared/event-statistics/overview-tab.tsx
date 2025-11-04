@@ -24,6 +24,7 @@ export const OverviewTab = () => {
     return <div>Loading...</div>;
   }
 
+
   const monthActivityChartData = statistics.monthEventStatistics.map(
     (item) => ({
       ...item,

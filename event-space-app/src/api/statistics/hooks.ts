@@ -24,3 +24,11 @@ export const useOverviewStatistics = () => {
     queryKey: STATISTICS_KEYS.overviewStatistics,
   });
 };
+
+export const useUserProfileStatistics = () => {
+  return useQuery({
+    queryFn: Api.statistics.getUserProfileStatistics,
+    queryKey: STATISTICS_KEYS.profileStatistics,
+    refetchOnWindowFocus: false
+  });
+}

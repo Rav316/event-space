@@ -46,3 +46,10 @@ export interface ReviewsAvgRatingStatisticsDto {
   month: number;
   rating: number;
 }
+
+export interface UserProfileStatisticsDto {
+  createdEvents: number;
+  visitedEvents: number;
+  totalEvents: number;
+  upcomingEvents: number;
+}

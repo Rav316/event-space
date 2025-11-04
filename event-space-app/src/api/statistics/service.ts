@@ -3,6 +3,7 @@ import { ApiRoutes } from '@/api/api-routes.ts';
 import type {
   EventStatisticsDto,
   OverviewStatisticsDto,
+  UserProfileStatisticsDto,
   UserStatisticsDto,
 } from '@/api/statistics/model.ts';
 
@@ -24,6 +25,14 @@ export const getOverviewStatistics =
   async (): Promise<OverviewStatisticsDto> => {
     const response = await axiosInstance.get<OverviewStatisticsDto>(
       `${ApiRoutes.STATISTICS}/overview`,
+    );
+    return response.data;
+  };
+
+export const getUserProfileStatistics =
+  async (): Promise<UserProfileStatisticsDto> => {
+    const response = await axiosInstance.get<UserProfileStatisticsDto>(
+      `${ApiRoutes.STATISTICS}/profile`,
     );
     return response.data;
   };

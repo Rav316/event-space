@@ -1,27 +1,35 @@
 import { UserActivity, UserStatisticsBlock } from '@/components/shared';
 import { Calendar, Clock, Trophy } from 'lucide-react';
+import { useUserProfileStatistics } from '@/api/statistics/hooks.ts';
 
 export const UserStatistics = () => {
+  const { data: statistics, isPending: isStatisticsPending } =
+    useUserProfileStatistics();
+
+  if(isStatisticsPending || !statistics) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={'flex flex-col gap-5'}>
       <div className={'flex gap-5 max-[700px]:flex-col max-[700px]:gap-3'}>
         <UserStatisticsBlock
           title={'Создано событий'}
           Icon={Calendar}
-          value={5}
+          value={statistics.createdEvents}
           caption={'за всё время'}
         />
         <UserStatisticsBlock
           title={'Посещено событий'}
           Icon={Trophy}
-          value={23}
-          caption={'из 28 регистраций'}
+          value={statistics.visitedEvents}
+          caption={`из ${statistics.totalEvents} регистраций`}
         />
         <UserStatisticsBlock
           title={'Предстоящие'}
           Icon={Clock}
-          value={3}
-          caption={'за всё время'}
+          value={statistics.upcomingEvents}
+          caption={'в будущем'}
         />
       </div>
       <div
