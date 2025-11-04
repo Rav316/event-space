@@ -125,17 +125,28 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
                 .addValue("userId", userId);
 
         String sqlMonthStats = """
+            WITH last_6_months AS (
+                SELECT
+                    generate_series(
+                        date_trunc('month', CURRENT_DATE) - interval '5 months',
+                        date_trunc('month', CURRENT_DATE),
+                        interval '1 month'
+                    ) AS month_start
+            )
             SELECT
-                EXTRACT(MONTH FROM e.event_date)::int AS month,
-                COUNT(DISTINCT e.id) AS confirmed_events_count
-            FROM event e
-            JOIN event_user eu ON eu.event_id = e.id
-            WHERE eu.confirmed_at IS NOT NULL
-              AND eu.user_id = :userId
-              AND e.event_date >= date_trunc('month', CURRENT_DATE) - interval '5 months'
-            GROUP BY 1
-            ORDER BY 1
+                EXTRACT(MONTH FROM m.month_start)::int AS month,
+                COALESCE(COUNT(DISTINCT e.id), 0) AS confirmed_events_count
+            FROM last_6_months m
+            LEFT JOIN event e
+                ON date_trunc('month', e.event_date) = m.month_start
+            LEFT JOIN event_user eu
+                ON eu.event_id = e.id
+               AND eu.confirmed_at IS NOT NULL
+               AND eu.user_id = :userId
+            GROUP BY m.month_start
+            ORDER BY m.month_start
         """;
+
 
         String sqlDayOfWeekStats = """
             SELECT
@@ -207,6 +218,48 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
             FROM event_review
         """;
 
+        String sqlReviewsDynamicStatistics = """
+                WITH last_6_months AS (
+                    SELECT
+                        generate_series(
+                            date_trunc('month', CURRENT_DATE) - interval '5 months',
+                            date_trunc('month', CURRENT_DATE),
+                            interval '1 month'
+                        ) AS month_start
+                )
+                SELECT
+                    EXTRACT(MONTH FROM m.month_start)::int AS month,
+                    COALESCE(COUNT(r.id), 0) AS reviews_count
+                FROM last_6_months m
+                LEFT JOIN event_review r
+                    ON date_trunc('month', r.created_at) = m.month_start
+                   AND r.user_id = :userId
+                GROUP BY m.month_start
+                ORDER BY m.month_start
+        """;
+
+
+        String sqlReviewsAvgRatingStatistics = """
+                WITH last_6_months AS (
+                    SELECT
+                        generate_series(
+                            date_trunc('month', CURRENT_DATE) - interval '5 months',
+                            date_trunc('month', CURRENT_DATE),
+                            interval '1 month'
+                        ) AS month_start
+                )
+                SELECT
+                    EXTRACT(MONTH FROM m.month_start)::int AS month,
+                    ROUND(AVG(r.rating), 2) AS rating
+                FROM last_6_months m
+                LEFT JOIN event_review r
+                    ON date_trunc('month', r.created_at) = m.month_start
+                   AND r.user_id = :userId
+                GROUP BY m.month_start
+                ORDER BY m.month_start
+        """;
+
+
         List<OverviewStatisticsDto.MonthEventStatisticsDto> monthStats = jdbcTemplate.query(
                 sqlMonthStats,
                 params,
@@ -222,6 +275,24 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
                 (rs, rowNum) -> new OverviewStatisticsDto.DayOfWeekStatisticsDto(
                         rs.getInt("day_of_week"),
                         rs.getInt("attended_events_count")
+                )
+        );
+
+        List<OverviewStatisticsDto.ReviewsDynamicStatisticsDto> reviewsDynamicStats = jdbcTemplate.query(
+                sqlReviewsDynamicStatistics,
+                params,
+                (rs, rowNum) -> new OverviewStatisticsDto.ReviewsDynamicStatisticsDto(
+                        rs.getInt("month"),
+                        rs.getInt("reviews_count")
+                )
+        );
+
+        List<OverviewStatisticsDto.ReviewsAvgRatingStatisticsDto> reviewsAvgRatingStats = jdbcTemplate.query(
+                sqlReviewsAvgRatingStatistics,
+                params,
+                (rs, rowNum) -> new OverviewStatisticsDto.ReviewsAvgRatingStatisticsDto(
+                        rs.getInt("month"),
+                        rs.getDouble("rating")
                 )
         );
 
@@ -257,7 +328,9 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
                 reviewsLastMonth,
                 avgReviewsPerUserLastMonth,
                 avgRating,
-                avgRatingSystem
+                avgRatingSystem,
+                reviewsDynamicStats,
+                reviewsAvgRatingStats
         );
     }
 }

@@ -10,7 +10,9 @@ public record OverviewStatisticsDto(
         Integer reviewsLastMonth,
         Double avgReviewsPerUserLastMonth,
         Double avgRating,
-        Double avgRatingSystem
+        Double avgRatingSystem,
+        List<ReviewsDynamicStatisticsDto> reviewsDynamicStatistics,
+        List<ReviewsAvgRatingStatisticsDto> reviewsAvgRatingStatistics
 ) {
     public record MonthEventStatisticsDto(
             Integer month,
@@ -20,5 +22,15 @@ public record OverviewStatisticsDto(
     public record DayOfWeekStatisticsDto(
             Integer dayOfWeek,
             Integer attendedEventsCount
+    ) {}
+
+    public record ReviewsDynamicStatisticsDto(
+            Integer month,
+            Integer reviewsCount
+    ) {}
+
+    public record ReviewsAvgRatingStatisticsDto(
+            Integer month,
+            Double rating
     ) {}
 }
