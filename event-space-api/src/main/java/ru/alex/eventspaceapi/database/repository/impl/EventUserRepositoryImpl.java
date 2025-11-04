@@ -6,10 +6,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.repository.EventUserRepositoryCustom;
-import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
-import ru.alex.eventspaceapi.dto.eventUser.UserStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.EventStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.OverviewStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.UserStatisticsDto;
 import ru.alex.eventspaceapi.mapper.eventUser.EventStatisticsMapper;
 import ru.alex.eventspaceapi.mapper.eventUser.UserStatisticsMapper;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -113,5 +117,147 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
         MapSqlParameterSource sqlParams = new MapSqlParameterSource()
                 .addValue("userId", userId);
         return jdbcTemplate.queryForObject(sql, sqlParams, userStatisticsMapper);
+    }
+
+    @Override
+    public OverviewStatisticsDto getOverviewStatistics(Integer userId) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId);
+
+        String sqlMonthStats = """
+            SELECT
+                EXTRACT(MONTH FROM e.event_date)::int AS month,
+                COUNT(DISTINCT e.id) AS confirmed_events_count
+            FROM event e
+            JOIN event_user eu ON eu.event_id = e.id
+            WHERE eu.confirmed_at IS NOT NULL
+              AND eu.user_id = :userId
+              AND e.event_date >= date_trunc('month', CURRENT_DATE) - interval '5 months'
+            GROUP BY 1
+            ORDER BY 1
+        """;
+
+        String sqlDayOfWeekStats = """
+            SELECT
+                EXTRACT(ISODOW FROM e.event_date)::int AS day_of_week,
+                COUNT(*) AS attended_events_count
+            FROM event_user eu
+            JOIN event e ON e.id = eu.event_id
+            WHERE eu.user_id = :userId
+              AND eu.attended = true
+            GROUP BY 1
+            ORDER BY 1
+        """;
+
+        String sqlAttendedEventsLastMonth = """
+            SELECT COUNT(DISTINCT e.id) AS attended_events_last_month
+            FROM event_user eu
+            JOIN event e ON e.id = eu.event_id
+            WHERE eu.user_id = :userId
+              AND eu.attended = true
+              AND e.event_date >= date_trunc('month', CURRENT_DATE) - interval '1 month'
+              AND e.event_date < date_trunc('month', CURRENT_DATE)
+        """;
+
+        String sqlAvgAttendedEventsPerUserLastMonth = """
+            SELECT
+                ROUND(AVG(events_per_user), 2) AS avg_attended_events_per_user_last_month
+            FROM (
+                SELECT
+                    COUNT(DISTINCT eu.event_id) AS events_per_user
+                FROM event_user eu
+                JOIN event e ON e.id = eu.event_id
+                WHERE eu.attended = true
+                  AND e.event_date >= date_trunc('month', CURRENT_DATE) - interval '1 month'
+                  AND e.event_date < date_trunc('month', CURRENT_DATE)
+                GROUP BY eu.user_id
+            ) t
+        """;
+
+        String sqlUserReviewsLastMonth = """
+            SELECT COUNT(*) AS user_reviews_last_month
+            FROM event_review
+            WHERE user_id = :userId
+              AND created_at >= date_trunc('month', CURRENT_DATE) - interval '1 month'
+              AND created_at < date_trunc('month', CURRENT_DATE)
+        """;
+
+        String sqlAvgReviewsPerUserLastMonth = """
+            SELECT
+                ROUND(AVG(reviews_per_user), 2) AS avg_reviews_per_user_last_month
+            FROM (
+                SELECT
+                    user_id,
+                    COUNT(*) AS reviews_per_user
+                FROM event_review
+                WHERE created_at >= date_trunc('month', CURRENT_DATE) - interval '1 month'
+                  AND created_at < date_trunc('month', CURRENT_DATE)
+                GROUP BY user_id
+            ) t
+        """;
+
+        String sqlAvgUserRating = """
+            SELECT ROUND(AVG(rating), 2) AS avg_user_rating
+            FROM event_review
+            WHERE user_id = :userId
+        """;
+
+        String sqlAvgSystemRating = """
+            SELECT ROUND(AVG(rating), 2) AS avg_system_rating
+            FROM event_review
+        """;
+
+        List<OverviewStatisticsDto.MonthEventStatisticsDto> monthStats = jdbcTemplate.query(
+                sqlMonthStats,
+                params,
+                (rs, rowNum) -> new OverviewStatisticsDto.MonthEventStatisticsDto(
+                        rs.getInt("month"),
+                        rs.getInt("confirmed_events_count")
+                )
+        );
+
+        List<OverviewStatisticsDto.DayOfWeekStatisticsDto> dayStats = jdbcTemplate.query(
+                sqlDayOfWeekStats,
+                params,
+                (rs, rowNum) -> new OverviewStatisticsDto.DayOfWeekStatisticsDto(
+                        rs.getInt("day_of_week"),
+                        rs.getInt("attended_events_count")
+                )
+        );
+
+        Integer attendedEventsLastMonth = jdbcTemplate.queryForObject(
+                sqlAttendedEventsLastMonth, params, Integer.class
+        );
+
+        Double avgAttendedEventsPerUserLastMonth = jdbcTemplate.queryForObject(
+                sqlAvgAttendedEventsPerUserLastMonth, Map.of(), Double.class
+        );
+
+        Integer reviewsLastMonth = jdbcTemplate.queryForObject(
+                sqlUserReviewsLastMonth, params, Integer.class
+        );
+
+        Double avgReviewsPerUserLastMonth = jdbcTemplate.queryForObject(
+                sqlAvgReviewsPerUserLastMonth, Map.of(), Double.class
+        );
+
+        Double avgRating = jdbcTemplate.queryForObject(
+                sqlAvgUserRating, params, Double.class
+        );
+
+        Double avgRatingSystem = jdbcTemplate.queryForObject(
+                sqlAvgSystemRating, Map.of(), Double.class
+        );
+
+        return new OverviewStatisticsDto(
+                monthStats,
+                dayStats,
+                attendedEventsLastMonth,
+                avgAttendedEventsPerUserLastMonth,
+                reviewsLastMonth,
+                avgReviewsPerUserLastMonth,
+                avgRating,
+                avgRatingSystem
+        );
     }
 }

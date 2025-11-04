@@ -10,7 +10,6 @@ import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
-import ru.alex.eventspaceapi.dto.eventUser.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
@@ -53,11 +52,6 @@ public class EventController {
     @GetMapping("/my/finished")
     public SliceResponse<EventListForUserDto> getFinishedEventsForUser(@RequestParam("page") Integer page) {
         return SliceResponse.of(eventService.getFinishedEventsForUser(page));
-    }
-
-    @GetMapping("/my/statistics")
-    public EventStatisticsDto getUserStatisticsByEvents() {
-        return eventUserService.getUserEventsStatistics();
     }
 
     @GetMapping("/tags/{prefix}")

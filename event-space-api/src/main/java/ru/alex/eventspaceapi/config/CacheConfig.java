@@ -13,17 +13,21 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfig {
     @Bean
-    public Caffeine<Object, Object> caffeineConfig() {
-        return Caffeine.newBuilder()
-                .initialCapacity(100)
-                .maximumSize(1000)
-                .expireAfterWrite(15, TimeUnit.MINUTES);
-    }
-
-    @Bean
-    public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
-        cacheManager.setCaffeine(caffeine);
-        return cacheManager;
+    public CacheManager cacheManager() {
+        return new CaffeineCacheManager() {
+            @Override
+            protected com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache(String name) {
+                if (name.equals("overviewStats")) {
+                    return Caffeine.newBuilder()
+                            .expireAfterWrite(10, TimeUnit.MINUTES)
+                            .maximumSize(1000)
+                            .build();
+                }
+                return Caffeine.newBuilder()
+                        .expireAfterWrite(15, TimeUnit.MINUTES)
+                        .maximumSize(1000)
+                        .build();
+            }
+        };
     }
 }

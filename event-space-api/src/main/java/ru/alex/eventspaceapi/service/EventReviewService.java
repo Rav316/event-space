@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EventReviewService {
+    private final CacheManager cacheManager;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final EventUserRepository eventUserRepository;
@@ -75,18 +77,24 @@ public class EventReviewService {
         review.setEvent(event);
         review.setAuthor(userRepository.getReferenceById(authorizedUserId));
         review.setCreatedAt(Instant.now());
-        return eventReviewReadMapper.toDto(eventReviewRepository.save(review));
+        EventReview savedReview = eventReviewRepository.save(review);
+        Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
+        return eventReviewReadMapper.toDto(savedReview);
     }
 
     @Transactional
     public void updateReviewByEvent(Integer eventId, EventReviewCreateEditDto eventReviewCreateEditDto) {
-        EventReview eventReview = eventReviewRepository.findByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id())
+        Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
+        EventReview eventReview = eventReviewRepository.findByEventAndUser(eventId, authorizedUserId)
                 .orElseThrow(() -> new EntityNotFoundException("there are no events or reviews of events"));
         eventReviewEditMapper.updateFromEntity(eventReviewCreateEditDto, eventReview);
+        Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
     }
 
     @Transactional
     public void deleteReviewByEvent(Integer eventId) {
-        eventReviewRepository.deleteByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id());
+        Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
+        eventReviewRepository.deleteByEventAndUser(eventId, authorizedUserId);
+        Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
     }
 }
