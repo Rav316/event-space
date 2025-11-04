@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.dto.statistics.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.OverviewStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.UserProfileStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.UserStatisticsDto;
 
 import java.util.Objects;
@@ -30,6 +31,12 @@ public class StatisticsService {
     @Cacheable(value = "overviewStats", key = "T(ru.alex.eventspaceapi.util.AuthUtils).getAuthorizedUser().id()")
     public OverviewStatisticsDto getOverviewStatistics() {
         return eventUserRepository.getOverviewStatistics(
+                Objects.requireNonNull(getAuthorizedUser()).id()
+        );
+    }
+
+    public UserProfileStatisticsDto getUserProfileStatistics() {
+        return eventUserRepository.getUserProfileStatistics(
                 Objects.requireNonNull(getAuthorizedUser()).id()
         );
     }

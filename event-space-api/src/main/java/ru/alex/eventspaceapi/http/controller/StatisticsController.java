@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.alex.eventspaceapi.dto.statistics.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.OverviewStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.UserProfileStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.UserStatisticsDto;
 import ru.alex.eventspaceapi.service.StatisticsService;
 
@@ -31,5 +32,10 @@ public class StatisticsController {
     @GetMapping("/overview")
     public OverviewStatisticsDto getOverviewStatistics() {
         return statisticsService.getOverviewStatistics();
+    }
+
+    @GetMapping("/profile")
+    public UserProfileStatisticsDto getUserProfileStatistics() {
+        return statisticsService.getUserProfileStatistics();
     }
 }

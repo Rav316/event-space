@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.repository.EventUserRepositoryCustom;
 import ru.alex.eventspaceapi.dto.statistics.EventStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.OverviewStatisticsDto;
+import ru.alex.eventspaceapi.dto.statistics.UserProfileStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.UserStatisticsDto;
 import ru.alex.eventspaceapi.mapper.eventUser.EventStatisticsMapper;
 import ru.alex.eventspaceapi.mapper.eventUser.UserStatisticsMapper;
@@ -332,5 +333,26 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
                 reviewsDynamicStats,
                 reviewsAvgRatingStats
         );
+    }
+
+    @Override
+    public UserProfileStatisticsDto getUserProfileStatistics(Integer userId) {
+        String sql = """
+                select
+                    count(distinct case when e.author = :userId then e.id end) as created_events,
+                    count(distinct case when eu.user_id = :userId and eu.attended = true then eu.event_id end) as visited_events,
+                    count(distinct case when eu.user_id = :userId then eu.event_id end) as total_events,
+                    count(distinct case when eu.user_id = :userId and e.event_date > current_date then eu.event_id end) as upcoming_events
+                from event e
+                left join event_user eu on e.id = eu.event_id;
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId);
+        return jdbcTemplate.queryForObject(sql, params, (rs, rowNum) -> new UserProfileStatisticsDto(
+                rs.getInt("created_events"),
+                rs.getInt("visited_events"),
+                rs.getInt("total_events"),
+                rs.getInt("upcoming_events")
+        ));
     }
 }
