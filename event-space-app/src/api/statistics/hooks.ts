@@ -29,6 +29,6 @@ export const useUserProfileStatistics = () => {
   return useQuery({
     queryFn: Api.statistics.getUserProfileStatistics,
     queryKey: STATISTICS_KEYS.profileStatistics,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 }

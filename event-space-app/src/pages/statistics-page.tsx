@@ -30,7 +30,7 @@ const StatisticsPage = () => {
         Анализ посещаемости и эффективности мероприятий
       </span>
       <EventStatisticsBlocks />
-      <div className={'max-w-[800px]'}>
+      <div className={'max-w-[800px] max-[900px]:max-w-none'}>
         <AnimatedTabs
           tabs={statisticsTabs}
           activeIndex={activeIndex}

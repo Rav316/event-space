@@ -24,6 +24,7 @@ export const OverviewTab = () => {
     return <div>Loading...</div>;
   }
 
+  // TODO 04.11.2025 21:58:26 Добавить нормальный скелетон
 
   const monthActivityChartData = statistics.monthEventStatistics.map(
     (item) => ({
@@ -53,7 +54,7 @@ export const OverviewTab = () => {
 
   return (
     <div className={'flex flex-col gap-5 w-full'}>
-      <div className={'flex items-center gap-5 w-full'}>
+      <div className={'flex items-center gap-5 w-full max-[900px]:flex-col'}>
         <Card className="w-full">
           <CardHeader>
             <CardTitle className={'flex items-center gap-2'}>
@@ -67,7 +68,7 @@ export const OverviewTab = () => {
                 <LineChart data={monthActivityChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis />
+                  <YAxis width={20} />
                   <Tooltip />
                   <Line
                     type="monotone"
@@ -94,7 +95,7 @@ export const OverviewTab = () => {
                 <BarChart data={dayOfWeekChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="dayOfWeek" />
-                  <YAxis />
+                  <YAxis width={20}/>
                   <Tooltip />
                   <Bar
                     dataKey="attendedEventsCount"
@@ -116,7 +117,7 @@ export const OverviewTab = () => {
           <TrendingUp className={'h-5 w-5'} />
           <span>Ваша активность vs среднее по системе</span>
         </CardTitle>
-        <div className={'flex items-center gap-6 w-full'}>
+        <div className={'flex items-center gap-6 w-full max-[1025px]:flex-col'}>
           <UserActivityItem
             title={'Мероприятий за месяц'}
             myActivity={statistics.attendedEventsLastMonth}
@@ -138,7 +139,7 @@ export const OverviewTab = () => {
         </div>
       </div>
 
-      <div className={'flex items-center gap-5 w-full'}>
+      <div className={'flex items-center gap-5 w-full max-[900px]:flex-col'}>
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -152,7 +153,7 @@ export const OverviewTab = () => {
                 <BarChart data={reviewsDynamicChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} />
+                  <YAxis allowDecimals={false} width={20} />
                   <Tooltip />
                   <Bar dataKey="reviewsCount" fill="#8b5cf6" name="Отзывов" />
                 </BarChart>
@@ -174,7 +175,7 @@ export const OverviewTab = () => {
                 <LineChart data={reviewsAvgRatingChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis domain={[0, 5]} />
+                  <YAxis domain={[0, 5]} width={20} />
                   <Tooltip />
                   <Line
                     type="monotone"

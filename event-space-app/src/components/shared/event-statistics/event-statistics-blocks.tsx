@@ -15,7 +15,7 @@ export const EventStatisticsBlocks = () => {
           ))}
         </>
       ) : (
-        <>
+        <div className={'grid grid-cols-4 items-center gap-3 w-full max-[1300px]:grid-cols-2 max-[680px]:grid-cols-1'}>
           <EventStatisticsBlock
             title={'Всего мероприятий'}
             Icon={Calendar}
@@ -41,7 +41,7 @@ export const EventStatisticsBlocks = () => {
             value={data.avgReviewRating}
             delta={data.avgRatingDelta}
           />
-        </>
+        </div>
       )}
     </div>
   );

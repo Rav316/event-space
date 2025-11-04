@@ -9,6 +9,7 @@ export const UserStatistics = () => {
   if(isStatisticsPending || !statistics) {
     return <div>Loading...</div>;
   }
+  // TODO 04.11.2025 21:58:47 добавить нормальный скелетон
 
   return (
     <div className={'flex flex-col gap-5'}>
