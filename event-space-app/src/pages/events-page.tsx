@@ -2,7 +2,6 @@ import { Wrapper } from '@/components/hoc';
 import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 import { useEffect } from 'react';
-import { usePaginationStore } from '@/store/use-pagination-store.ts';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
 import { Skeleton } from '@/components/ui';
 import {
@@ -16,10 +15,8 @@ import {
 
 const EventsPage = () => {
   const eventFilter = useEventFilterStore((state) => state.filter);
-  const currentPage = usePaginationStore((state) => state.page);
-  const totalPages = usePaginationStore((state) => state.totalPages);
-  const setCurrentPage = usePaginationStore((state) => state.setPage);
-  const setTotalPages = usePaginationStore((state) => state.setTotalPages);
+  const currentPage = useEventFilterStore((state) => state.page);
+  const setCurrentPage = useEventFilterStore((state) => state.setPage);
   const { data: eventCategories, isPending: isEventCategoriesPending } =
     useEventCategoriesWithEventCount();
 
@@ -31,14 +28,6 @@ const EventsPage = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
-
-  useEffect(() => {
-    if (!isEventsPending && events) {
-      setTotalPages(
-        Math.ceil(events.metadata.totalElements / events.metadata.size),
-      );
-    }
-  }, [events, isEventsPending, setTotalPages]);
 
   return (
     <Wrapper>
@@ -75,11 +64,13 @@ const EventsPage = () => {
               isLoading={isEventsPending}
               events={events?.content || []}
             />
-            <EventsPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
+            {events && (
+              <EventsPagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(events.metadata.totalElements / events.metadata.size)}
+                onPageChange={setCurrentPage}
+              />
+            )}
           </>
         )}
       </div>
