@@ -11,117 +11,68 @@ import type { SliceResponse } from '@/api/model.ts';
 export const useMarkReviewAsHelpful = (
   eventId: number,
   filter: EventReviewFilter,
-) => {
-  return useMutation({
+) =>
+  useMutation({
     mutationFn: Api.eventReviews.markReviewAsHelpful,
     onSuccess: (_, reviewId) => {
-      queryClient.setQueryData(
-        EVENTS_KEYS.reviews(eventId, filter),
-        (
-          oldData:
-            | InfiniteData<SliceResponse<EventReviewReadDto>, unknown>
-            | undefined,
-        ) => {
-          if (!oldData) {
-            return oldData;
-          }
-          return {
-            ...oldData,
-            pages: oldData.pages.map((page) => ({
-              ...page,
-              content: page.content.map((review) =>
-                review.id === reviewId
-                  ? {
-                      ...review,
-                      helpfulMarks: review.helpfulMarks + 1,
-                      userMarkedHelpful: true,
-                    }
-                  : review,
-              ),
-            })),
-          };
-        },
-      );
+      const updater = (r: EventReviewReadDto) => ({
+        ...r,
+        helpfulMarks: r.helpfulMarks + 1,
+        userMarkedHelpful: true,
+      });
+
+      updateReviewInList(eventId, filter, reviewId, updater);
+      updateMyReview(eventId, updater);
     },
   });
-};
 
 export const useUnmarkReviewAsHelpful = (
   eventId: number,
   filter: EventReviewFilter,
-) => {
-  return useMutation({
+) =>
+  useMutation({
     mutationFn: Api.eventReviews.unmarkReviewAsHelpful,
     onSuccess: (_, reviewId) => {
-      queryClient.setQueryData(
-        EVENTS_KEYS.reviews(eventId, filter),
-        (
-          oldData:
-            | InfiniteData<SliceResponse<EventReviewReadDto>, unknown>
-            | undefined,
-        ) => {
-          if (!oldData) {
-            return oldData;
-          }
-          return {
+      const updater = (r: EventReviewReadDto) => ({
+        ...r,
+        helpfulMarks: Math.max(0, r.helpfulMarks - 1),
+        userMarkedHelpful: false,
+      });
+
+      updateReviewInList(eventId, filter, reviewId, updater);
+      updateMyReview(eventId, updater);
+    },
+  });
+
+const updateReviewInList = (
+  eventId: number,
+  filter: EventReviewFilter,
+  reviewId: number,
+  updater: (r: EventReviewReadDto) => EventReviewReadDto,
+) => {
+  queryClient.setQueryData(
+    EVENTS_KEYS.reviews(eventId, filter),
+    (oldData?: InfiniteData<SliceResponse<EventReviewReadDto>>) =>
+      oldData
+        ? {
             ...oldData,
             pages: oldData.pages.map((page) => ({
               ...page,
               content: page.content.map((review) =>
-                review.id === reviewId
-                  ? {
-                      ...review,
-                      helpfulMarks: Math.max(0, review.helpfulMarks - 1),
-                      userMarkedHelpful: false,
-                    }
-                  : review,
+                review.id === reviewId ? updater(review) : review,
               ),
             })),
-          };
-        },
-      );
-    },
-  });
+          }
+        : oldData,
+  );
 };
 
-export const useMarkMyReviewAsHelpful = (eventId: number) => {
-  return useMutation({
-    mutationFn: Api.eventReviews.markReviewAsHelpful,
-    onSuccess: async () => {
-      queryClient.setQueryData(
-        EVENTS_KEYS.myReview(eventId),
-        (oldData: EventReviewReadDto | undefined) => {
-          if(!oldData) {
-            return oldData;
-          }
-          return {
-            ...oldData,
-            helpfulMarks: oldData.helpfulMarks + 1,
-            userMarkedHelpful: true
-          }
-        }
-      )
-    }
-  })
-}
-
-export const useUnmarkMyReviewAsHelpful = (eventId: number) => {
-  return useMutation({
-    mutationFn: Api.eventReviews.unmarkReviewAsHelpful,
-    onSuccess: async () => {
-      queryClient.setQueryData(
-        EVENTS_KEYS.myReview(eventId),
-        (oldData: EventReviewReadDto | undefined) => {
-          if(!oldData) {
-            return oldData;
-          }
-          return {
-            ...oldData,
-            helpfulMarks: oldData.helpfulMarks - 1,
-            userMarkedHelpful: false
-          }
-        }
-      )
-    }
-  })
-}
+const updateMyReview = (
+  eventId: number,
+  updater: (r: EventReviewReadDto) => EventReviewReadDto,
+) => {
+  queryClient.setQueryData(
+    EVENTS_KEYS.myReview(eventId),
+    (oldData?: EventReviewReadDto) => (oldData ? updater(oldData) : oldData),
+  );
+};

@@ -10,6 +10,7 @@ import {
   EventReviewsList,
   EventReviewsSkeleton,
   MyReview,
+  NoReviewsBlock,
   ReviewAddEditForm,
   ReviewFilters,
   ReviewProgressBar,
@@ -139,7 +140,6 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
         </Button>
       )}
 
-
       {isReviewFormOpen && (
         <ReviewAddEditForm
           onCancel={() => setIsReviewFormOpen(false)}
@@ -149,10 +149,16 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
         />
       )}
 
-      {myReview && <MyReview review={myReview}/>}
+      {myReview && <MyReview review={myReview} />}
 
-      <ReviewFilters />
-      <EventReviewsList eventId={event.id} />
+      {statistics.total > 0 && (
+        <ReviewFilters />
+      )}
+      {statistics.total > 0 ? (
+        <EventReviewsList eventId={event.id} />
+      ) : (
+        <NoReviewsBlock />
+      )}
     </div>
   );
 };

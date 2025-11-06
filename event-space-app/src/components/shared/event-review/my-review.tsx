@@ -12,11 +12,12 @@ import React, { useState } from 'react';
 import { ReviewAddEditForm } from '@/components/shared/event-review/review-add-edit-form.tsx';
 import { useUpdateReview } from '@/api/events/hooks.ts';
 import { ConfirmReviewDeletionDialog } from '@/components/modal';
-import {
-  useMarkMyReviewAsHelpful,
-  useUnmarkMyReviewAsHelpful,
-} from '@/api/event-reviews/hooks.ts';
 import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
+import {
+  useMarkReviewAsHelpful,
+  useUnmarkReviewAsHelpful,
+} from '@/api/event-reviews/hooks.ts';
+import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
 
 interface Props {
   review: EventReviewMyDto;
@@ -47,26 +48,16 @@ export const MyReview: React.FC<Props> = ({ review }) => {
     );
   };
 
-  const markMyReviewAsHelpfulMutation = useMarkMyReviewAsHelpful(review.event);
-  const unmarkMyReviewAsHelpfulMutation = useUnmarkMyReviewAsHelpful(
+  const reviewFilter = useEventReviewFilterStore((state) => state.filter);
+
+  const markReviewAsHelpfulMutation = useMarkReviewAsHelpful(
     review.event,
+    reviewFilter,
   );
-  //
-  // const handleHelpfulClick = () => {
-  //   if (clickLocked) return;
-  //   setClickLocked(true);
-  //   setTimeout(() => setClickLocked(false), 300);
-  //   if (review.userMarkedHelpful) {
-  //     unmarkMyReviewAsHelpfulMutation.mutate(review.id);
-  //   } else {
-  //     markMyReviewAsHelpfulMutation.mutate(review.id);
-  //   }
-  // };
-  //
-  // const helpfulButtonDisabled =
-  //   updateReviewMutation.isPending ||
-  //   unmarkMyReviewAsHelpfulMutation.isPending ||
-  //   clickLocked;
+  const unmarkReviewAsHelpfulMutation = useUnmarkReviewAsHelpful(
+    review.event,
+    reviewFilter,
+  );
 
   return (
     <>
@@ -122,8 +113,8 @@ export const MyReview: React.FC<Props> = ({ review }) => {
               reviewId={review.id}
               userMarkedHelpful={review.userMarkedHelpful}
               helpfulMarks={review.helpfulMarks}
-              markAsHelpfulMutation={markMyReviewAsHelpfulMutation}
-              unmarkAsHelpfulMutation={unmarkMyReviewAsHelpfulMutation}
+              markAsHelpfulMutation={markReviewAsHelpfulMutation}
+              unmarkAsHelpfulMutation={unmarkReviewAsHelpfulMutation}
             />
           </div>
         </div>
