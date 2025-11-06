@@ -83,3 +83,45 @@ export const useUnmarkReviewAsHelpful = (
     },
   });
 };
+
+export const useMarkMyReviewAsHelpful = (eventId: number) => {
+  return useMutation({
+    mutationFn: Api.eventReviews.markReviewAsHelpful,
+    onSuccess: async () => {
+      queryClient.setQueryData(
+        EVENTS_KEYS.myReview(eventId),
+        (oldData: EventReviewReadDto | undefined) => {
+          if(!oldData) {
+            return oldData;
+          }
+          return {
+            ...oldData,
+            helpfulMarks: oldData.helpfulMarks + 1,
+            userMarkedHelpful: true
+          }
+        }
+      )
+    }
+  })
+}
+
+export const useUnmarkMyReviewAsHelpful = (eventId: number) => {
+  return useMutation({
+    mutationFn: Api.eventReviews.unmarkReviewAsHelpful,
+    onSuccess: async () => {
+      queryClient.setQueryData(
+        EVENTS_KEYS.myReview(eventId),
+        (oldData: EventReviewReadDto | undefined) => {
+          if(!oldData) {
+            return oldData;
+          }
+          return {
+            ...oldData,
+            helpfulMarks: oldData.helpfulMarks - 1,
+            userMarkedHelpful: false
+          }
+        }
+      )
+    }
+  })
+}

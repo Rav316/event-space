@@ -1,20 +1,24 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
 import type { UseMutationResult } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 import { useMe } from '@/api/auth/hooks.ts';
+import { cn } from '@/lib/utils.ts';
 
 interface Props {
-  review: EventReviewReadDto;
-  markAsHelpfulMutation: UseMutationResult<void, Error, number, unknown>;
-  unmarkAsHelpfulMutation: UseMutationResult<void, Error, number, unknown>;
+  reviewId: number;
+  userMarkedHelpful: boolean;
+  helpfulMarks: number;
+  markAsHelpfulMutation: UseMutationResult<void, Error, number>;
+  unmarkAsHelpfulMutation: UseMutationResult<void, Error, number>;
 }
 
 export const HelpfulButton: React.FC<Props> = ({
-  review,
+  reviewId,
+  userMarkedHelpful,
+  helpfulMarks,
   markAsHelpfulMutation,
   unmarkAsHelpfulMutation,
 }) => {
@@ -32,10 +36,10 @@ export const HelpfulButton: React.FC<Props> = ({
     setClickLocked(true);
     setTimeout(() => setClickLocked(false), 300);
 
-    if (review.userMarkedHelpful) {
-      unmarkAsHelpfulMutation.mutate(review.id);
+    if (userMarkedHelpful) {
+      unmarkAsHelpfulMutation.mutate(reviewId);
     } else {
-      markAsHelpfulMutation.mutate(review.id);
+      markAsHelpfulMutation.mutate(reviewId);
     }
   };
 
@@ -51,33 +55,32 @@ export const HelpfulButton: React.FC<Props> = ({
       className="flex items-center gap-2"
     >
       <motion.div
-        key={review.userMarkedHelpful ? 'liked' : 'unliked'}
+        key={userMarkedHelpful ? 'liked' : 'unliked'}
         initial={{ scale: 0.9, opacity: 0.8 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
       >
         <ThumbsUp
-          className={
-            review.userMarkedHelpful
-              ? 'text-black fill-black'
-              : 'text-muted-foreground'
-          }
+          className={cn(
+            'transition-colors',
+            userMarkedHelpful ? 'text-black' : 'text-muted-foreground'
+          )}
         />
       </motion.div>
 
       <div className="flex items-center">
         <span>Полезно&nbsp;</span>
         <AnimatePresence mode="popLayout">
-          {review.helpfulMarks > 0 && (
+          {helpfulMarks > 0 && (
             <motion.span
-              key={review.helpfulMarks}
+              key={helpfulMarks}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
               transition={{ duration: 0.2 }}
               className="text-sm"
             >
-              ({review.helpfulMarks})
+              ({helpfulMarks})
             </motion.span>
           )}
         </AnimatePresence>

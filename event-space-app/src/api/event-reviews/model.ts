@@ -18,6 +18,8 @@ export interface EventReviewMyDto {
   title: string;
   content: string;
   rating: number;
+  helpfulMarks: number;
+  userMarkedHelpful: boolean;
   createdAt: string;
 }
 

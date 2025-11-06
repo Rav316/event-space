@@ -1,5 +1,5 @@
 import { Button, Separator } from '@/components/ui';
-import { Pencil, ThumbsUp } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { StarRating } from '@/components/shared';
 import { useForm } from 'react-hook-form';
 import type {
@@ -12,6 +12,11 @@ import React, { useState } from 'react';
 import { ReviewAddEditForm } from '@/components/shared/event-review/review-add-edit-form.tsx';
 import { useUpdateReview } from '@/api/events/hooks.ts';
 import { ConfirmReviewDeletionDialog } from '@/components/modal';
+import {
+  useMarkMyReviewAsHelpful,
+  useUnmarkMyReviewAsHelpful,
+} from '@/api/event-reviews/hooks.ts';
+import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
 
 interface Props {
   review: EventReviewMyDto;
@@ -42,6 +47,27 @@ export const MyReview: React.FC<Props> = ({ review }) => {
     );
   };
 
+  const markMyReviewAsHelpfulMutation = useMarkMyReviewAsHelpful(review.event);
+  const unmarkMyReviewAsHelpfulMutation = useUnmarkMyReviewAsHelpful(
+    review.event,
+  );
+  //
+  // const handleHelpfulClick = () => {
+  //   if (clickLocked) return;
+  //   setClickLocked(true);
+  //   setTimeout(() => setClickLocked(false), 300);
+  //   if (review.userMarkedHelpful) {
+  //     unmarkMyReviewAsHelpfulMutation.mutate(review.id);
+  //   } else {
+  //     markMyReviewAsHelpfulMutation.mutate(review.id);
+  //   }
+  // };
+  //
+  // const helpfulButtonDisabled =
+  //   updateReviewMutation.isPending ||
+  //   unmarkMyReviewAsHelpfulMutation.isPending ||
+  //   clickLocked;
+
   return (
     <>
       {editMode ? (
@@ -65,7 +91,9 @@ export const MyReview: React.FC<Props> = ({ review }) => {
               'flex gap-4 justify-between items-center max-[550px]:flex-col max-[550px]:items-start max-[400px]:items-center'
             }
           >
-            <span className={'font-medium text-xl'}>Ваш отзыв о мероприятии</span>
+            <span className={'font-medium text-xl'}>
+              Ваш отзыв о мероприятии
+            </span>
             <div
               className={
                 'flex gap-4 items-center max-[400px]:flex-col max-[400px]:w-full'
@@ -89,9 +117,14 @@ export const MyReview: React.FC<Props> = ({ review }) => {
           <h3 className={'font-medium text-xl'}>{review.title}</h3>
           <p>{review.content}</p>
           <Separator />
-          <div className={'flex gap-4 items-center'}>
-            <ThumbsUp size={24} className={'shrink-0'} />
-            <span>15 человек посчитали этот отзыв полезным</span>
+          <div>
+            <HelpfulButton
+              reviewId={review.id}
+              userMarkedHelpful={review.userMarkedHelpful}
+              helpfulMarks={review.helpfulMarks}
+              markAsHelpfulMutation={markMyReviewAsHelpfulMutation}
+              unmarkAsHelpfulMutation={unmarkMyReviewAsHelpfulMutation}
+            />
           </div>
         </div>
       )}

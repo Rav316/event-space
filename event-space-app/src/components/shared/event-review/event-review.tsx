@@ -78,9 +78,11 @@ export const EventReview: React.FC<Props> = ({ review }) => {
         }
       >
         <HelpfulButton
-          review={review}
           markAsHelpfulMutation={markAsHelpfulMutation}
           unmarkAsHelpfulMutation={unmarkAsHelpfulMutation}
+          reviewId={review.id}
+          userMarkedHelpful={review.userMarkedHelpful}
+          helpfulMarks={review.helpfulMarks}
         />
 
         <Button variant={'ghost'}>
