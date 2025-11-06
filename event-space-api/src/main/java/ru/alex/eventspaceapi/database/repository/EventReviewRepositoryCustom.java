@@ -8,5 +8,7 @@ import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 public interface EventReviewRepositoryCustom {
     Slice<EventReview> findAllByEventWithFilter(Integer eventId, EventReviewFilter filter);
 
-    EventReviewStatisticsDto getEventReviewStatistics(Integer eventId);
+    EventReviewStatisticsDto getEventReviewStatisticsByEvent(Integer eventId);
+
+    EventReviewStatisticsDto getEventReviewStatistics(Integer userId);
 }

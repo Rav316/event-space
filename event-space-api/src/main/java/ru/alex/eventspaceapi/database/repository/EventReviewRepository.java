@@ -16,6 +16,14 @@ public interface EventReviewRepository extends JpaRepository<EventReview, Intege
     @Query("SELECT er FROM EventReview er WHERE er.event.id = :eventId AND er.author.id = :userId")
     Optional<EventReview> findByEventAndUser(Integer eventId, Integer userId);
 
+    @Query("""
+        SELECT er
+        FROM EventReview er
+        LEFT JOIN FETCH er.helpfulMarks hm
+        WHERE er.event.id = :eventId AND er.author.id = :userId
+        """)
+    Optional<EventReview> findByEventAndUserWithHelpfulMarks(Integer eventId, Integer userId);
+
     @Modifying
     @Query("DELETE FROM EventReview eu WHERE eu.event.id = :eventId AND eu.author.id = :userId")
     void deleteByEventAndUser(Integer eventId, Integer userId);

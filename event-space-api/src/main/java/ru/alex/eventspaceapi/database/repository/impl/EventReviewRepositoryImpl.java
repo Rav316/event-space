@@ -56,7 +56,7 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
     }
 
     @Override
-    public EventReviewStatisticsDto getEventReviewStatistics(Integer eventId) {
+    public EventReviewStatisticsDto getEventReviewStatisticsByEvent(Integer eventId) {
         String sql = """
                 SELECT AVG(rating) as avg_rating,
                 COUNT (*) FILTER (WHERE rating = 5) AS five_stars,
@@ -70,6 +70,26 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("eventId", eventId);
+
+        return jdbcTemplate.queryForObject(sql, params, eventReviewStatisticsMapper);
+    }
+
+    @Override
+    public EventReviewStatisticsDto getEventReviewStatistics(Integer userId) {
+        String sql = """
+                SELECT AVG(rating) as avg_rating,
+                COUNT (*) FILTER (WHERE rating = 5) AS five_stars,
+                COUNT (*) FILTER (WHERE rating = 4) AS four_stars,
+                COUNT (*) FILTER (WHERE rating = 3) AS three_stars,
+                COUNT (*) FILTER (WHERE rating = 2) AS two_stars,
+                COUNT (*) FILTER (WHERE rating = 1) AS one_star,
+                COUNT(*) as total
+                FROM event_review
+                WHERE user_id = :userId
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", userId);
 
         return jdbcTemplate.queryForObject(sql, params, eventReviewStatisticsMapper);
     }

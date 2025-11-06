@@ -1,5 +1,6 @@
 package ru.alex.eventspaceapi.config;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,8 +17,8 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         return new CaffeineCacheManager() {
             @Override
-            protected com.github.benmanes.caffeine.cache.Cache<Object, Object> createNativeCaffeineCache(String name) {
-                if (name.equals("overviewStats")) {
+            protected Cache<Object, Object> createNativeCaffeineCache(String name) {
+                if (name.equals("overviewStats") || name.equals("reviewsStats")) {
                     return Caffeine.newBuilder()
                             .expireAfterWrite(10, TimeUnit.MINUTES)
                             .maximumSize(1000)

@@ -51,11 +51,11 @@ public class EventReviewService {
     }
 
     public EventReviewStatisticsDto getEventReviewsStatistics(Integer eventId) {
-        return eventReviewRepository.getEventReviewStatistics(eventId);
+        return eventReviewRepository.getEventReviewStatisticsByEvent(eventId);
     }
 
     public EventReviewMyDto getUserReviewByEvent(Integer eventId) {
-        return eventReviewRepository.findByEventAndUser(eventId, Objects.requireNonNull(getAuthorizedUser()).id())
+        return eventReviewRepository.findByEventAndUserWithHelpfulMarks(eventId, Objects.requireNonNull(getAuthorizedUser()).id())
                 .map(eventReviewMyMapper::toDto)
                 .orElse(null);
     }
@@ -79,6 +79,7 @@ public class EventReviewService {
         review.setCreatedAt(Instant.now());
         EventReview savedReview = eventReviewRepository.save(review);
         Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
+        Objects.requireNonNull(cacheManager.getCache("reviewStats")).evict(authorizedUserId);
         return eventReviewReadMapper.toDto(savedReview);
     }
 
@@ -89,6 +90,7 @@ public class EventReviewService {
                 .orElseThrow(() -> new EntityNotFoundException("there are no events or reviews of events"));
         eventReviewEditMapper.updateFromEntity(eventReviewCreateEditDto, eventReview);
         Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
+        Objects.requireNonNull(cacheManager.getCache("reviewStats")).evict(authorizedUserId);
     }
 
     @Transactional
@@ -96,5 +98,6 @@ public class EventReviewService {
         Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
         eventReviewRepository.deleteByEventAndUser(eventId, authorizedUserId);
         Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
+        Objects.requireNonNull(cacheManager.getCache("reviewStats")).evict(authorizedUserId);
     }
 }
