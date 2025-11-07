@@ -2,10 +2,11 @@ import { useEventReviews } from '@/api/events/hooks.ts';
 import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
 import React from 'react';
 import { Skeleton } from '@/components/ui';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { EventReview } from '@/components/shared/event-review';
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
+import { AnimatedReviewListItem } from '@/components/hoc/animated-review-list-item.tsx';
 
 interface Props {
   eventId: number;
@@ -41,15 +42,9 @@ export const EventReviewsList: React.FC<Props> = ({ eventId }) => {
           <AnimatePresence mode="popLayout">
             {reviews.pages.flatMap((page) =>
               page.content.map((review) => (
-                <motion.div
-                  key={review.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                >
+                <AnimatedReviewListItem key={review.id}>
                   <EventReview review={review} />
-                </motion.div>
+                </AnimatedReviewListItem>
               )),
             )}
           </AnimatePresence>

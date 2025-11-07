@@ -40,14 +40,12 @@ export const UserActivityItem: React.FC<Props> = ({
 
       <Progress value={Math.min(100, (myActivity / maxActivity) * 100)} />
 
-      {diffPercent !== 0 && (
-        <Badge variant="outline">
+      <Badge variant="outline">
           <span className={badgeColor}>
             {diffPercent > 0 ? '+' : ''}
             {diffPercent.toFixed(0)}%
           </span>
-        </Badge>
-      )}
+      </Badge>
     </div>
   );
 };
