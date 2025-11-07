@@ -1,8 +1,31 @@
 import { StarRating } from '@/components/shared';
 import { Badge, Button } from '@/components/ui';
 import { Calendar, ExternalLink, Users } from 'lucide-react';
+import React from 'react';
+import type { EventCategory } from '@/api/event-categories/model.ts';
+import { categoryColors } from '@/constants/category-colors.ts';
+import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
+import { timeAgo } from '@/utils/time-ago.ts';
 
-export const ReviewStatItem = () => {
+interface Props {
+  name: string;
+  category: EventCategory;
+  date: string;
+  participantQuantity: number;
+  rating: number;
+  content: string;
+  createdAt: string;
+}
+
+export const ReviewStatItem: React.FC<Props> = ({
+  name,
+  category,
+  date,
+  participantQuantity,
+  rating,
+  content,
+  createdAt,
+}) => {
   return (
     <div
       className={
@@ -10,45 +33,34 @@ export const ReviewStatItem = () => {
       }
     >
       <div className={'flex items-center gap-2 justify-between'}>
-        <span className={'font-medium'}>Хакатон AI Challenge 2025</span>
-        <StarRating rating={5} starSize={15} className={'gap-1'} />
+        <span className={'font-medium'}>{name}</span>
+        <StarRating rating={rating} starSize={15} className={'gap-1'} />
       </div>
       <div className={'flex items-center gap-2'}>
-        <Badge
-          variant={'outline'}
-          className={'bg-orange-100 text-orange-900 border-orange-100'}
-        >
-          IT-секции
+        <Badge variant={'outline'} className={categoryColors[category.id - 1]}>
+          {category.name}
         </Badge>
         <div className={'flex items-center gap-2'}>
           <Calendar className={'text-muted-foreground'} size={15} />
           <span className={'text-muted-foreground text-sm'}>
-            15 октября 2024
+            {formatDateToRuFormat(date)}
           </span>
         </div>
         <div className={'flex items-center gap-2'}>
           <Users className={'text-muted-foreground'} size={15} />
-          <span className={'text-muted-foreground text-sm'}>45 участников</span>
+          <span className={'text-muted-foreground text-sm'}>
+            {participantQuantity} участников
+          </span>
         </div>
       </div>
-      <p className={'max-[410px]:leading-5'}>
-        {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut erat
-            ullamcorper, ullamcorper lectus sed, consequat purus. Praesent magna
-            orci, blandit vitae porta vitae, condimentum id urna. Donec quis
-            sagittis erat. Mauris ex justo, imperdiet id venenatis vitae, tempus et
-            odio. Pellentesque habitant morbi tristique senectus et netus et
-            malesuada fames ac turpis egestas. Integer sit amet augue quis risus
-            hendrerit convallis. Nulla vitae dui malesuada, hendrerit ex nec, tempus
-            tortor. Aliquam nec auctor lorem, vitae tincidunt ante.`.slice(
-          0,
-          225,
-        ) + '…'}
-      </p>
+      <p className={'max-[410px]:leading-5'}>{content.slice(0, 225) + '…'}</p>
       <div className={'flex items-center gap-2 justify-between'}>
-        <span className={'text-muted-foreground text-sm'}>2 недели назад</span>
+        <span className={'text-muted-foreground text-sm'}>
+          {timeAgo(createdAt)}
+        </span>
         <Button variant={'ghost'}>
           <span className={'text-sm'}>Перейти к событию</span>
-          <ExternalLink size={13}/>
+          <ExternalLink size={13} />
         </Button>
       </div>
     </div>

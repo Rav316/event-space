@@ -1,4 +1,4 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
+import { type InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { Api } from '@/api/api-client.ts';
 import { queryClient } from '@/api/query-client.ts';
 import type {
@@ -7,6 +7,22 @@ import type {
 } from '@/api/event-reviews/model.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
 import type { SliceResponse } from '@/api/model.ts';
+import { EVENT_REVIEWS_KEYS } from '@/api/event-reviews/keys.ts';
+
+export const useReviews = (filter: EventReviewFilter) => {
+  return useInfiniteQuery({
+    queryKey: EVENT_REVIEWS_KEYS.all(filter),
+    queryFn: ({pageParam = 0}) => Api.eventReviews.findAllReviews(filter, pageParam),
+    getNextPageParam: (lastPage) => {
+      if(lastPage.metadata.hasNext) {
+        return lastPage.metadata.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 0,
+    refetchOnWindowFocus: false
+  })
+}
 
 export const useMarkReviewAsHelpful = (
   eventId: number,

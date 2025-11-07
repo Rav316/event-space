@@ -1,27 +1,27 @@
-import type { EventReviewFilter } from '@/api/event-reviews/model';
-import { create } from 'zustand';
+import type { EventReviewFilter } from '@/api/event-reviews/model.ts';
+import { create } from 'zustand/index';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { reviewSortValues } from '@/constants/review-sort-values.ts';
 
-interface EventReviewFilterState {
+interface UserReviewFilterState {
   filter: EventReviewFilter;
-  setFilter: (filter: Partial<EventReviewFilter>) => void;
+  setSort: (sort: string) => void;
 }
 
-export const useEventReviewFilterStore = create<EventReviewFilterState>()(
+export const useUserReviewFilterStore = create<UserReviewFilterState>()(
   devtools(
     immer((set) => ({
       filter: {
         sort: reviewSortValues[0].value,
       },
-      setFilter: (filterData) =>
+      setSort: (sort) =>
         set(
           (state) => {
-            Object.assign(state.filter, filterData);
+            state.filter.sort = sort;
           },
           false,
-          'setFilter',
+          'setSort',
         ),
     })),
     {

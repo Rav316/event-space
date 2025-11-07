@@ -1,4 +1,5 @@
 import type { UserAuthorDto } from '@/api/users/model.ts';
+import type { EventCategory } from '@/api/event-categories/model.ts';
 
 export interface EventReviewReadDto {
   id: number;
@@ -9,6 +10,17 @@ export interface EventReviewReadDto {
   rating: number;
   helpfulMarks: number;
   userMarkedHelpful: boolean;
+  createdAt: string;
+}
+
+export interface EventReviewListDto {
+  eventId: number;
+  eventName: string;
+  eventCategory: EventCategory;
+  eventDate: string;
+  participantQuantity: number;
+  rating: number;
+  content: string;
   createdAt: string;
 }
 
