@@ -9,13 +9,21 @@ export const EventStatisticsBlocks = () => {
   return (
     <div className={'flex items-center gap-3'}>
       {isPending || !data ? (
-        <>
+        <div
+          className={
+            'grid grid-cols-4 items-center gap-3 w-full max-[1300px]:grid-cols-2 max-[680px]:grid-cols-1'
+          }
+        >
           {Array.from({ length: 4 }).map((_, index) => (
             <Skeleton key={index} className={'w-full h-[154px]'} />
           ))}
-        </>
+        </div>
       ) : (
-        <div className={'grid grid-cols-4 items-center gap-3 w-full max-[1300px]:grid-cols-2 max-[680px]:grid-cols-1'}>
+        <div
+          className={
+            'grid grid-cols-4 items-center gap-3 w-full max-[1300px]:grid-cols-2 max-[680px]:grid-cols-1'
+          }
+        >
           <EventStatisticsBlock
             title={'Всего мероприятий'}
             Icon={Calendar}
@@ -38,7 +46,7 @@ export const EventStatisticsBlocks = () => {
           <EventStatisticsBlock
             title={'Средняя оценка отзывов'}
             Icon={Award}
-            value={data.avgReviewRating}
+            value={data.avgReviewRating.toFixed(2)}
             delta={data.avgRatingDelta}
           />
         </div>

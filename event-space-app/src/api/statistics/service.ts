@@ -6,6 +6,7 @@ import type {
   UserProfileStatisticsDto,
   UserStatisticsDto,
 } from '@/api/statistics/model.ts';
+import type { EventReviewStatisticsDto } from '@/api/event-reviews/model.ts';
 
 export const getMyEventStatistics = async (): Promise<EventStatisticsDto> => {
   const response = await axiosInstance.get<EventStatisticsDto>(
@@ -33,6 +34,14 @@ export const getUserProfileStatistics =
   async (): Promise<UserProfileStatisticsDto> => {
     const response = await axiosInstance.get<UserProfileStatisticsDto>(
       `${ApiRoutes.STATISTICS}/profile`,
+    );
+    return response.data;
+  };
+
+export const getReviewStatistics =
+  async (): Promise<EventReviewStatisticsDto> => {
+    const response = await axiosInstance.get<EventReviewStatisticsDto>(
+      `${ApiRoutes.STATISTICS}/reviews`,
     );
     return response.data;
   };

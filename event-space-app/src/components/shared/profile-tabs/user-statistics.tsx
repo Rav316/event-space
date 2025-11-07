@@ -1,4 +1,8 @@
-import { UserActivity, UserStatisticsBlock } from '@/components/shared';
+import {
+  ProfileStatisticsSkeleton,
+  UserActivity,
+  UserStatisticsBlock,
+} from '@/components/shared';
 import { Calendar, Clock, Trophy } from 'lucide-react';
 import { useUserProfileStatistics } from '@/api/statistics/hooks.ts';
 
@@ -6,10 +10,9 @@ export const UserStatistics = () => {
   const { data: statistics, isPending: isStatisticsPending } =
     useUserProfileStatistics();
 
-  if(isStatisticsPending || !statistics) {
-    return <div>Loading...</div>;
+  if (isStatisticsPending || !statistics) {
+    return <ProfileStatisticsSkeleton />;
   }
-  // TODO 04.11.2025 21:58:47 добавить нормальный скелетон
 
   return (
     <div className={'flex flex-col gap-5'}>

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui';
 import React, { useState } from 'react';
 import {
   useAddReview,
-  useEventReviewsStatistics,
+  useReviewsStatisticsByEvent,
   useMyReviewByEvent,
 } from '@/api/events/hooks.ts';
 import {
@@ -36,7 +36,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
   const reviewAddMutation = useAddReview();
 
   const { data: statistics, isPending: isStatisticsPending } =
-    useEventReviewsStatistics(event.id);
+    useReviewsStatisticsByEvent(event.id);
 
   const reviewAddForm = useForm<EventReviewCreateEditDto>({
     resolver: zodResolver(reviewAddSchema),

@@ -198,10 +198,10 @@ export const useDeleteReview = () => {
   });
 };
 
-export const useEventReviewsStatistics = (eventId: number) => {
+export const useReviewsStatisticsByEvent = (eventId: number) => {
   return useQuery({
     queryKey: EVENTS_KEYS.reviewsStatistics(eventId),
-    queryFn: () => Api.events.getEventReviewsStatistics(eventId),
+    queryFn: () => Api.events.getReviewsStatisticsByEvent(eventId),
     refetchOnWindowFocus: false,
   });
 };

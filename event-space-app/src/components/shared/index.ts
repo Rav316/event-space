@@ -27,4 +27,5 @@ export { StarRating } from './star-rating';
 export { ProfileSetting } from './profile-setting';
 export {NoUpcomingEventsBlock} from './no-upcoming-events-block';
 export {NoFinishedEventsBlock} from './no-finished-events-block';
+export {ProfileStatisticsSkeleton} from './profile-statistics-skeleton';
 export * as toastLogout from './toast-logout';

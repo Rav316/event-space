@@ -129,7 +129,7 @@ export const deleteReviewForEvent = async (eventId: number): Promise<void> => {
   await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}/reviews`);
 };
 
-export const getEventReviewsStatistics = async (
+export const getReviewsStatisticsByEvent = async (
   eventId: number,
 ): Promise<EventReviewStatisticsDto> => {
   const response = await axiosInstance.get<EventReviewStatisticsDto>(

@@ -17,7 +17,7 @@ export const RatingDistributionItem: React.FC<Props> = ({
 
   return (
     <div className={'flex items-center gap-2'}>
-      <span>5</span>
+      <span>{rating}</span>
       <div className={'flex items-center gap-1'}>
         {Array.from({ length: rating }).map((_, index) => (
           <Star

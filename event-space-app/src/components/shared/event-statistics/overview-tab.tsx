@@ -15,16 +15,15 @@ import { UserActivityItem } from '@/components/shared/event-statistics/user-acti
 import { useOverviewStatistics } from '@/api/statistics/hooks.ts';
 import { months } from '@/constants/months.ts';
 import { dayOfWeeks } from '@/constants/dayOfWeeks.ts';
+import { OverviewTabSkeleton } from '@/components/shared/event-statistics/overview-tab-skeleton.tsx';
 
 export const OverviewTab = () => {
   const { data: statistics, isPending: isStatisticsPending } =
     useOverviewStatistics();
 
   if (isStatisticsPending || !statistics) {
-    return <div>Loading...</div>;
+    return <OverviewTabSkeleton />;
   }
-
-  // TODO 04.11.2025 21:58:26 Добавить нормальный скелетон
 
   const monthActivityChartData = statistics.monthEventStatistics.map(
     (item) => ({
@@ -95,7 +94,7 @@ export const OverviewTab = () => {
                 <BarChart data={dayOfWeekChartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="dayOfWeek" />
-                  <YAxis width={20}/>
+                  <YAxis width={20} />
                   <Tooltip />
                   <Bar
                     dataKey="attendedEventsCount"
@@ -158,7 +157,6 @@ export const OverviewTab = () => {
                   <Bar dataKey="reviewsCount" fill="#8b5cf6" name="Отзывов" />
                 </BarChart>
               </ResponsiveContainer>
-
             </div>
           </CardContent>
         </Card>

@@ -10,3 +10,5 @@ export {LastReviewsList} from './last-reviews-list';
 export {CategoriesStatisticsTab} from './categories-statistics-tab';
 export {CategoriesDistributionBlock} from './categories-distribution-block';
 export {CategoriesActivityBlock} from './categories-activity-block';
+export {OverviewTabSkeleton} from './overview-tab-skeleton';
+export {ReviewStatisticsSkeleton} from './review-statistics-skeleton';

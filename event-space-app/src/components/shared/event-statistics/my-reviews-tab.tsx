@@ -5,6 +5,8 @@ import { Divide } from 'lucide-react';
 import { TopWordsBlock } from '@/components/shared/event-statistics/top-words-block.tsx';
 import type { ReviewWord } from '@/types/review-word.ts';
 import { LastReviewsList } from '@/components/shared/event-statistics/last-reviews-list.tsx';
+import { useReviewStatistics } from '@/api/statistics/hooks.ts';
+import { ReviewStatisticsSkeleton } from '@/components/shared/event-statistics/review-statistics-skeleton.tsx';
 
 const words: ReviewWord[] = [
   { text: 'профессионально', count: 12 },
@@ -16,6 +18,13 @@ const words: ReviewWord[] = [
 ];
 
 export const MyReviewsTab = () => {
+  const { data: statistics, isPending: isStatisticsPending } =
+    useReviewStatistics();
+
+  if (isStatisticsPending || !statistics) {
+    return <ReviewStatisticsSkeleton />;
+  }
+
   return (
     <div className={'flex flex-col gap-5 w-full'}>
       <div className={'flex items-center gap-5 w-full'}>
@@ -28,16 +37,25 @@ export const MyReviewsTab = () => {
           </CardHeader>
           <CardContent className={'h-full flex items-center justify-center'}>
             <div className="flex flex-col gap-2 w-fit items-center">
-              <h3 className="font-medium text-4xl">4.7</h3>
-              <StarRating rating={4.7} className={'gap-2'} />
-              <span className={'text-muted-foreground'}>из 32 отзывов</span>
+              <h3 className="font-medium text-4xl">{statistics.avgRating.toFixed(2)}</h3>
+              <StarRating rating={statistics.avgRating} className={'gap-2'} />
+              <span className={'text-muted-foreground'}>
+                из {statistics.total} отзывов
+              </span>
             </div>
           </CardContent>
         </Card>
-        <RatingDistributionBlock />
+        <RatingDistributionBlock
+          total={statistics.total}
+          fiveStars={statistics.fiveStars}
+          fourStars={statistics.fourStars}
+          threeStars={statistics.threeStars}
+          twoStars={statistics.twoStars}
+          oneStar={statistics.oneStar}
+        />
         <TopWordsBlock words={words} />
       </div>
-      <LastReviewsList/>
+      <LastReviewsList />
     </div>
   );
 };

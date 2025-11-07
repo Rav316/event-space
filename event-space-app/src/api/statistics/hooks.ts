@@ -32,3 +32,11 @@ export const useUserProfileStatistics = () => {
     refetchOnWindowFocus: false,
   });
 }
+
+export const useReviewStatistics = () => {
+  return useQuery({
+    queryFn: Api.statistics.getReviewStatistics,
+    queryKey: STATISTICS_KEYS.reviewsStatistics,
+    refetchOnWindowFocus: false
+  })
+}
