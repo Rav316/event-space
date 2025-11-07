@@ -6,8 +6,10 @@ import type { EventCategory } from '@/api/event-categories/model.ts';
 import { categoryColors } from '@/constants/category-colors.ts';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import { timeAgo } from '@/utils/time-ago.ts';
+import { useNavigate } from 'react-router';
 
 interface Props {
+  eventId: number;
   name: string;
   category: EventCategory;
   date: string;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 export const ReviewStatItem: React.FC<Props> = ({
+  eventId,
   name,
   category,
   date,
@@ -26,6 +29,8 @@ export const ReviewStatItem: React.FC<Props> = ({
   content,
   createdAt,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div
       className={
@@ -58,7 +63,7 @@ export const ReviewStatItem: React.FC<Props> = ({
         <span className={'text-muted-foreground text-sm'}>
           {timeAgo(createdAt)}
         </span>
-        <Button variant={'ghost'}>
+        <Button variant={'ghost'} onClick={() => navigate(`/events/${eventId}`)}>
           <span className={'text-sm'}>Перейти к событию</span>
           <ExternalLink size={13} />
         </Button>

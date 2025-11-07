@@ -3,7 +3,7 @@ import { useReviews } from '@/api/event-reviews/hooks.ts';
 import { useUserReviewFilterStore } from '@/store/use-user-review-filter-store.ts';
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
-import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 
 export const LastReviewsList = () => {
   const filter = useUserReviewFilterStore((state) => state.filter);
@@ -35,8 +35,15 @@ export const LastReviewsList = () => {
 
       {reviews.pages.flatMap((page) =>
         page.content.map((review) => (
-          <Link key={review.eventId} to={`/events/${review.eventId}`}>
+          <motion.div
+            key={review.eventId}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          >
             <ReviewStatItem
+              eventId={review.eventId}
               name={review.eventName}
               category={review.eventCategory}
               date={review.eventDate}
@@ -45,7 +52,8 @@ export const LastReviewsList = () => {
               content={review.content}
               createdAt={review.createdAt}
             />
-          </Link>
+          </motion.div>
+
         )),
       )}
 
