@@ -10,7 +10,7 @@ public record EventReviewListDto(
         String eventName,
         EventCategoryReadDto eventCategory,
         LocalDate eventDate,
-        Integer eventParticipants,
+        Integer participantQuantity,
         Short rating,
         String content,
         Instant createdAt
