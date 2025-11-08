@@ -9,16 +9,22 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import React from 'react';
+import type { CategoryActivityDto } from '@/api/statistics/model.ts';
 
-const myActivityRadarData = [
-  { category: 'IT', value: 85, fullMark: 100 },
-  { category: 'Учебные', value: 65, fullMark: 100 },
-  { category: 'Культурные', value: 45, fullMark: 100 },
-  { category: 'Спортивные', value: 30, fullMark: 100 },
-  { category: 'Волонтерские', value: 50, fullMark: 100 },
-]
+interface Props {
+  categoriesActivity: CategoryActivityDto[];
+}
 
-export const CategoriesActivityBlock = () => {
+export const CategoriesActivityBlock: React.FC<Props> = ({
+  categoriesActivity,
+}) => {
+  const categoriesActivityRadarData = categoriesActivity.map((item) => ({
+    category: item.category.name,
+    value: item.activityPercent,
+    fullMark: 100,
+  }));
+
   return (
     <Card className={'w-full h-full'}>
       <CardHeader>
@@ -30,7 +36,7 @@ export const CategoriesActivityBlock = () => {
       <CardContent>
         <div className="w-full h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={myActivityRadarData}>
+            <RadarChart data={categoriesActivityRadarData}>
               <PolarGrid />
               <PolarAngleAxis dataKey="category" />
               <PolarRadiusAxis angle={90} domain={[0, 100]} />
@@ -46,10 +52,10 @@ export const CategoriesActivityBlock = () => {
           </ResponsiveContainer>
         </div>
         <p className="text-xs text-muted-foreground text-center mt-4">
-          Показатель активности рассчитывается на основе посещённых мероприятий и оставленных отзывов
+          Показатель активности рассчитывается на основе посещённых мероприятий
+          и оставленных отзывов
         </p>
       </CardContent>
-
     </Card>
   );
 };

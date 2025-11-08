@@ -11,11 +11,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { UserActivityItem } from '@/components/shared/event-statistics/user-activity-item.tsx';
+import { UserActivityItem } from '@/components/shared/statistics/user-activity-item.tsx';
 import { useOverviewStatistics } from '@/api/statistics/hooks.ts';
 import { months } from '@/constants/months.ts';
 import { dayOfWeeks } from '@/constants/dayOfWeeks.ts';
-import { OverviewTabSkeleton } from '@/components/shared/event-statistics/overview-tab-skeleton.tsx';
+import { OverviewTabSkeleton } from '@/components/shared/statistics/overview-tab-skeleton.tsx';
 
 export const OverviewTab = () => {
   const { data: statistics, isPending: isStatisticsPending } =

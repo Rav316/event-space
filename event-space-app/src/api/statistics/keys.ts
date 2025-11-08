@@ -3,5 +3,6 @@ export const STATISTICS_KEYS = {
   detailsStatistics: ['users', 'statistics', 'details'] as const,
   overviewStatistics: ['overview', 'statistics'] as const,
   profileStatistics: ['profile', 'statistics'] as const,
-  reviewsStatistics: ['reviews', 'statistics'] as const
+  reviewsStatistics: ['reviews', 'statistics'] as const,
+  categoryStatistics: ['categories', 'statistics'] as const
 };

@@ -1,6 +1,7 @@
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type {
+  CategoryStatisticsDto,
   EventStatisticsDto,
   OverviewStatisticsDto,
   UserProfileStatisticsDto,
@@ -42,6 +43,14 @@ export const getReviewStatistics =
   async (): Promise<EventReviewStatisticsDto> => {
     const response = await axiosInstance.get<EventReviewStatisticsDto>(
       `${ApiRoutes.STATISTICS}/reviews`,
+    );
+    return response.data;
+  };
+
+export const getCategoryStatistics =
+  async (): Promise<CategoryStatisticsDto> => {
+    const response = await axiosInstance.get<CategoryStatisticsDto>(
+      `${ApiRoutes.STATISTICS}/categories`,
     );
     return response.data;
   };

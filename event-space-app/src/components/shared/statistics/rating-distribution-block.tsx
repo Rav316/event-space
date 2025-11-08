@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { RatingDistributionItem } from '@/components/shared/event-statistics/rating-distribution-item.tsx';
+import { RatingDistributionItem } from '@/components/shared/statistics/rating-distribution-item.tsx';
 import { ChartBar } from 'lucide-react';
 import React from 'react';
 

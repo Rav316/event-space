@@ -1,4 +1,4 @@
-import { EventStatisticsBlock } from '@/components/shared/event-statistics/event-statistics-block.tsx';
+import { EventStatisticsBlock } from '@/components/shared/statistics/event-statistics-block.tsx';
 import { Award, Calendar, MessageSquare, TrendingUp } from 'lucide-react';
 import { Skeleton } from '@/components/ui';
 import { useUserStatistics } from '@/api/statistics/hooks.ts';

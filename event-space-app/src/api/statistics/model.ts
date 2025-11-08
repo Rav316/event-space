@@ -1,3 +1,5 @@
+import type { EventCategory } from '@/api/event-categories/model.ts';
+
 export interface UserStatisticsDto {
   totalEvents: number;
   reviewsLeft: number;
@@ -52,4 +54,19 @@ export interface UserProfileStatisticsDto {
   visitedEvents: number;
   totalEvents: number;
   upcomingEvents: number;
+}
+
+export interface CategoryStatisticsDto {
+  categoriesDistribution: CategoryDistributionDto[];
+  categoriesActivity: CategoryActivityDto[];
+}
+
+export interface CategoryDistributionDto {
+  category: EventCategory;
+  count: number;
+}
+
+export interface CategoryActivityDto {
+  category: EventCategory;
+  activityPercent: number;
 }

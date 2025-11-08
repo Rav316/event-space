@@ -12,3 +12,4 @@ export {CategoriesDistributionBlock} from './categories-distribution-block';
 export {CategoriesActivityBlock} from './categories-activity-block';
 export {OverviewTabSkeleton} from './overview-tab-skeleton';
 export {ReviewStatisticsSkeleton} from './review-statistics-skeleton';
+export {CategoriesStatisticsSkeleton} from './categories-statistics-skeleton';

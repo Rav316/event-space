@@ -40,3 +40,11 @@ export const useReviewStatistics = () => {
     refetchOnWindowFocus: false
   })
 }
+
+export const useCategoryStatistics = () => {
+  return useQuery({
+    queryFn: Api.statistics.getCategoryStatistics,
+    queryKey: STATISTICS_KEYS.categoryStatistics,
+    refetchOnWindowFocus: false
+  })
+}
