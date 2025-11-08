@@ -8,8 +8,6 @@ import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.*;
 import ru.alex.eventspaceapi.service.StatisticsService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/statistics")
 @RequiredArgsConstructor
@@ -42,7 +40,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/categories")
-    public List<CategoryStatisticsDto> getCategoryStatistics() {
+    public CategoryStatisticsDto getCategoryStatistics() {
         return statisticsService.getCategoryStatistics();
     }
 }

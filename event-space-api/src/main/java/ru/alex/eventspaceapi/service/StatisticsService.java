@@ -10,7 +10,6 @@ import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.*;
 
-import java.util.List;
 import java.util.Objects;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
@@ -49,7 +48,7 @@ public class StatisticsService {
         return eventReviewRepository.getEventReviewStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
-    public List<CategoryStatisticsDto> getCategoryStatistics() {
+    public CategoryStatisticsDto getCategoryStatistics() {
         return eventCategoryRepository.getCategoryStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
