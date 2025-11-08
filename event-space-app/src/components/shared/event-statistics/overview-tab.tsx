@@ -62,23 +62,21 @@ export const OverviewTab = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthActivityChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis width={20} />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="confirmedEventsCount"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    name="Мероприятия"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={monthActivityChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis width={20} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="confirmedEventsCount"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  name="Мероприятия"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
         <Card className="w-full">
@@ -89,21 +87,19 @@ export const OverviewTab = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={dayOfWeekChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="dayOfWeek" />
-                  <YAxis width={20} />
-                  <Tooltip />
-                  <Bar
-                    dataKey="attendedEventsCount"
-                    fill="#10b981"
-                    name="Среднее кол-во мероприятий"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={dayOfWeekChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="dayOfWeek" />
+                <YAxis width={20} />
+                <Tooltip />
+                <Bar
+                  dataKey="attendedEventsCount"
+                  fill="#10b981"
+                  name="Среднее кол-во мероприятий"
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
@@ -147,17 +143,15 @@ export const OverviewTab = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer width="100%" height={'100%'}>
-                <BarChart data={reviewsDynamicChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} width={20} />
-                  <Tooltip />
-                  <Bar dataKey="reviewsCount" fill="#8b5cf6" name="Отзывов" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={reviewsDynamicChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis allowDecimals={false} width={20} />
+                <Tooltip />
+                <Bar dataKey="reviewsCount" fill="#8b5cf6" name="Отзывов" />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
         <Card className="w-full">
@@ -168,23 +162,21 @@ export const OverviewTab = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={reviewsAvgRatingChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[0, 5]} width={20} />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="rating"
-                    stroke="#eab308"
-                    strokeWidth={3}
-                    name="Средняя оценка"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={reviewsAvgRatingChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis domain={[0, 5]} width={20} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="rating"
+                  stroke="#eab308"
+                  strokeWidth={3}
+                  name="Средняя оценка"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
