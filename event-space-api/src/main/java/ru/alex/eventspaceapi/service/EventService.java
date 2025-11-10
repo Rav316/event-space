@@ -120,6 +120,11 @@ public class EventService {
                 .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
         event.setCategory(eventCategory);
 
+        if(eventCreateDto.participantQuantity() > space.getCapacity()) {
+            throw new IllegalArgumentException("the number of participants cannot be greater than the capacity of the space");
+        }
+        event.setParticipantQuantity(eventCreateDto.participantQuantity());
+
         validateEventSteps(eventCreateDto);
 
         if(eventImage != null && !eventImage.isEmpty()) {

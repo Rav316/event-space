@@ -50,6 +50,9 @@ public class Event {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "participant_quantity")
+    private Integer participantQuantity;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_category_id", referencedColumnName = "id")
     private EventCategory category;
