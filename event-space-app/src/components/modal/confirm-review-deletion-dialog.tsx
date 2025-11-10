@@ -41,13 +41,13 @@ export const ConfirmReviewDeletionDialog: React.FC<Props> = ({ eventId }) => {
           <Button
             onClick={() => setOpen(false)}
           >
-            Нет, отмена
+            Отмена
           </Button>
           <Button
             className="bg-red-500 hover:bg-red-600 text-white"
             onClick={onDelete}
           >
-            Да, удалить
+            Удалить
           </Button>
         </DialogFooter>
       </DialogContent>

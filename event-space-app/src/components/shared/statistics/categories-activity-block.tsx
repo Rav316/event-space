@@ -9,16 +9,25 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CategoryActivityDto } from '@/api/statistics/model.ts';
 
 interface Props {
   categoriesActivity: CategoryActivityDto[];
 }
 
-export const CategoriesActivityBlock: React.FC<Props> = ({
-  categoriesActivity,
-}) => {
+export const CategoriesActivityBlock: React.FC<Props> = ({ categoriesActivity }) => {
+  const [chartHeight, setChartHeight] = useState(300);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setChartHeight(window.innerWidth < 550 ? 200 : 300);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
+
   const categoriesActivityRadarData = categoriesActivity.map((item) => ({
     category: item.category.name,
     value: item.activityPercent,
@@ -26,15 +35,15 @@ export const CategoriesActivityBlock: React.FC<Props> = ({
   }));
 
   return (
-    <Card className={'w-full h-full'}>
+    <Card className="w-full h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Target className={'w-5 h-5'} />
+          <Target className="w-5 h-5" />
           Моя активность по категориям
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="w-full h-[300px]">
+        <div className="w-full" style={{ height: chartHeight }}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={categoriesActivityRadarData}>
               <PolarGrid />

@@ -13,7 +13,7 @@ export const CategoriesStatisticsTab = () => {
         <CategoriesStatisticsSkeleton />
       ) : (
         <div className={'flex flex-col gap-5'}>
-          <div className={'flex items-center gap-5'}>
+          <div className={'flex items-center gap-5 max-[1100px]:flex-col'}>
             <CategoriesDistributionBlock
               categoriesDistribution={statistics.categoriesDistribution}
             />

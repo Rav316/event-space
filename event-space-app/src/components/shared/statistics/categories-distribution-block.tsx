@@ -6,7 +6,6 @@ import {
   PieChart as RechartsPieChart,
   Pie,
   Cell,
-  type PieLabelRenderProps,
 } from 'recharts';
 import React from 'react';
 import type { CategoryDistributionDto } from '@/api/statistics/model.ts';
@@ -24,9 +23,6 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
     value: item.count,
   }));
 
-  const renderLabel = ({ name, percent }: PieLabelRenderProps) =>
-    `${name ?? ''} ${((Number(percent) || 0) * 100).toFixed(0)}%`;
-
   return (
     <Card className="w-full h-full">
       <CardHeader>
@@ -37,30 +33,48 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
       </CardHeader>
 
       <CardContent>
-        <div className="w-full h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                dataKey="value"
-                labelLine={false}
-                animationDuration={600}
-                label={renderLabel}
-              >
-                {pieData.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={categoryChartColors[i % categoryChartColors.length]}
-                    className="outline-none"
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </RechartsPieChart>
-          </ResponsiveContainer>
+        <div className="flex flex-col items-center w-full">
+          {/* График */}
+          <div className="w-full max-w-[400px] h-[250px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <RechartsPieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  dataKey="value"
+                  animationDuration={600}
+                >
+                  {pieData.map((_, i) => (
+                    <Cell
+                      key={i}
+                      fill={categoryChartColors[i % categoryChartColors.length]}
+                      className="outline-none"
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </RechartsPieChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4 px-2 w-full">
+            {pieData.map((entry, i) => (
+              <div key={i} className="flex items-center gap-2 min-w-[120px]">
+                <div
+                  className="w-3 h-3 rounded-sm shrink-0"
+                  style={{
+                    backgroundColor:
+                      categoryChartColors[i % categoryChartColors.length],
+                  }}
+                ></div>
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                  {entry.name} — {entry.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
