@@ -40,7 +40,7 @@ export const EventStatisticsBlocks = () => {
             title={'Средняя посещаемость'}
             Icon={TrendingUp}
             value={`${(data.avgAttendance * 100).toFixed(2)}%`}
-            delta={data.monthlyAttendanceDelta}
+            delta={Number(data.monthlyAttendanceDelta.toFixed(4))}
             isPercent={true}
           />
           <EventStatisticsBlock

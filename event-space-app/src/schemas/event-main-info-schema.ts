@@ -21,6 +21,7 @@ export const eventMainInfoSchema = z.object({
     .max(5, { message: 'Выберите не более 5 тегов' })
     .optional(),
   category: z.number().min(1, { message: 'Выберите категорию' }),
+  participantQuantity: z.number().min(1, { message: 'Выберите количество участников' }),
 });
 
 export type EventMainInfo = z.infer<typeof eventMainInfoSchema>;

@@ -29,6 +29,7 @@ export const useEventCreationStore = create<EventCreationState>()(
         description: '',
         category: 0,
         deadline: getTodayDate(),
+        participantQuantity: 0
       },
       eventSteps: [],
       setEventData: (event) =>
@@ -71,6 +72,7 @@ export const useEventCreationStore = create<EventCreationState>()(
               description: '',
               category: 0,
               deadline: getTodayDate(),
+              participantQuantity: 0
             };
           },
           false,

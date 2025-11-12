@@ -1,5 +1,6 @@
 package ru.alex.eventspaceapi.dto.event;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
@@ -29,6 +30,9 @@ public record EventCreateDto (
         String description,
         @NotNull
         Integer category,
+        @NotNull
+        @Min(0)
+        Integer participantQuantity,
         List<EventStepCreateDto> steps
 ) {
 }

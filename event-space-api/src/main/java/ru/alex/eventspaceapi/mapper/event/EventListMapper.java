@@ -24,7 +24,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
         }
 )
 public interface EventListMapper {
-    @Mapping(target = "participantQuantity", source = "event", qualifiedByName = "mapParticipantsQuantity")
+    @Mapping(target = "registeredUsers", source = "event", qualifiedByName = "mapRegisteredUsers")
     @Mapping(target = "isRegistered", source = "event", qualifiedByName = "mapIsRegistered")
     @Mapping(target = "author", source = "event", qualifiedByName = "mapAuthor")
     @Mapping(target = "canRegister", source = "event", qualifiedByName = "mapCanRegister")
@@ -32,8 +32,8 @@ public interface EventListMapper {
     @Mapping(target = "isAttended", source = "event", qualifiedByName = "mapIsAttended")
     EventListDto toDto(Event event);
 
-    @Named("mapParticipantsQuantity")
-    default Integer mapParticipantsQuantity(Event event) {
+    @Named("mapRegisteredUsers")
+    default Integer mapRegisteredUsers(Event event) {
         return event.getEventUsers().size();
     }
 

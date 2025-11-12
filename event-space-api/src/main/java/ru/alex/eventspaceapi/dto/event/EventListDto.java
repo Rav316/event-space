@@ -17,6 +17,7 @@ public record EventListDto(
         LocalTime endTime,
         LocalDate deadline,
         SpaceReadDto space,
+        Integer registeredUsers,
         Integer participantQuantity,
         String author,
         Boolean isRegistered,

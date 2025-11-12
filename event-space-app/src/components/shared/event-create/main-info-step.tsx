@@ -98,7 +98,7 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
           </div>
         </div>
         <div className="flex max-[600px]:flex-col justify-between gap-4">
-          <div className="flex flex-col gap-2 w-1/2 max-[600px]:w-full">
+          <div className="flex flex-col gap-2 w-1/3 max-[600px]:w-full">
             <Label htmlFor="category">
               Категория <RequiredMark />
             </Label>
@@ -130,6 +130,28 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                 {form.formState.errors.category && (
                   <FormErrorMessage>
                     {form.formState.errors.category.message}
+                  </FormErrorMessage>
+                )}
+              </>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 w-1/5 max-[600px]:w-full">
+            <Label htmlFor="participantQuantity">
+              Количество участников <RequiredMark />
+            </Label>
+            {isPending ? (
+              <Skeleton className={'w-full h-8'} />
+            ) : (
+              <>
+                <Input
+                  id={'participantQuantity'}
+                  placeholder={'Введите количество участников'}
+                  type={'number'}
+                  {...form.register('participantQuantity', {valueAsNumber: true})}
+                />
+                {form.formState.errors.participantQuantity && (
+                  <FormErrorMessage>
+                    {form.formState.errors.participantQuantity.message}
                   </FormErrorMessage>
                 )}
               </>

@@ -22,7 +22,7 @@ interface Props {
   canRegister: boolean;
   canUnregister: boolean;
   isDestructive?: boolean;
-  participantsQuantity: number;
+  registeredUsers: number;
   capacity: number;
 }
 
@@ -32,12 +32,12 @@ export const EventRegistrationButton: React.FC<Props> = ({
   canRegister,
   canUnregister,
   isDestructive,
-  participantsQuantity,
+  registeredUsers,
   capacity,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const hasPlaces = participantsQuantity < capacity;
+  const hasPlaces = registeredUsers < capacity;
 
   const { data, isFetching } = useMe();
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);

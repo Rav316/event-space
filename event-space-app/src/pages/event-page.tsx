@@ -156,7 +156,7 @@ const EventPage = () => {
               />
               <EventBadge
                 Icon={Users}
-                text={`${event.participantQuantity}/${event.space.capacity}`}
+                text={`${event.registeredUsers}/${event.participantQuantity}`}
                 caption="участников"
               />
               <EventBadge
@@ -212,9 +212,9 @@ const EventPage = () => {
               className={'flex flex-col gap-4 min-[900px]:max-[980px]:flex-row'}
             >
               <EventRegistrationBlock
-                participantsQuantity={event.participantQuantity}
+                registeredUsers={event.registeredUsers}
                 isRegistered={event.isRegistered}
-                quantity={event.space.capacity}
+                quantity={event.participantQuantity}
                 className="max-[980px]:flex-1 max-[900px]:flex-none"
                 canRegister={event.canRegister}
                 canUnregister={event.canUnregister}

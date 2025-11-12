@@ -8,7 +8,7 @@ import { QrCode } from 'lucide-react';
 import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 interface Props {
-  participantsQuantity: number;
+  registeredUsers: number;
   quantity: number;
   isRegistered?: boolean;
   className?: string;
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
-  participantsQuantity,
+  registeredUsers,
   quantity,
   className,
   isRegistered,
@@ -49,12 +49,12 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         <div className="flex justify-between">
           <span>Зарегистрировано</span>
           <span>
-            {participantsQuantity}/{quantity}
+            {registeredUsers}/{quantity}
           </span>
         </div>
-        <Progress value={(participantsQuantity / quantity) * 100} />
+        <Progress value={(registeredUsers / quantity) * 100} />
         <span className="text-muted-foreground text-sm">
-          {quantity - participantsQuantity} мест осталось
+          {quantity - registeredUsers} мест осталось
         </span>
       </div>
 
@@ -84,7 +84,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         eventId={eventId}
         isUserRegistered={!!isRegistered}
         isDestructive={true}
-        participantsQuantity={participantsQuantity}
+        registeredUsers={registeredUsers}
         capacity={quantity}
         canRegister={canRegister}
         canUnregister={canUnregister}
