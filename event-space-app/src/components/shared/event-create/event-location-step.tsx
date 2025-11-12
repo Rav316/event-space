@@ -12,10 +12,11 @@ import {
 import { SpaceFilters, SpaceList } from '@/components/shared';
 import { FormProvider, type useForm } from 'react-hook-form';
 import type { EventLocationData } from '@/schemas/event-location-schema.ts';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useBuildings } from '@/api/buildings/hooks.ts';
 import { useSpaceFilterStore } from '@/store/use-space-filter-store.ts';
 import { useSpaces } from '@/api/spaces/hooks.ts';
+import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
 
 interface Props {
   form: ReturnType<typeof useForm<EventLocationData>>;
@@ -24,6 +25,13 @@ interface Props {
 export const EventLocationStep: React.FC<Props> = ({ form }) => {
   const spaceFilter = useSpaceFilterStore((state) => state.filter);
   const setSpaceFilter = useSpaceFilterStore((state) => state.setFilter);
+  const event = useEventCreationStore((state) => state.event);
+
+  useEffect(() => {
+    if (event.participantQuantity) {
+      setSpaceFilter({ minCapacity: event.participantQuantity });
+    }
+  }, [event.participantQuantity, setSpaceFilter]);
 
   const { data: buildings, isPending: isBuildingsPending } = useBuildings();
   const { data: spaces, isPending: isSpacesPending } = useSpaces(spaceFilter);

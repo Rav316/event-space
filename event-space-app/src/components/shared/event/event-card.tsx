@@ -113,7 +113,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
             >
               <EventCardLabel
                 Icon={Users}
-                text={`${event.participantQuantity}/${event.space.capacity} участников`}
+                text={`${event.registeredUsers}/${event.participantQuantity} участников`}
               />
               {event.author && (
                 <span className={'text-muted-foreground'}>
@@ -128,8 +128,8 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           isUserRegistered={event.isRegistered}
           canRegister={event.canRegister}
           canUnregister={event.canUnregister}
-          participantsQuantity={event.participantQuantity}
-          capacity={event.space.capacity}
+          registeredUsers={event.registeredUsers}
+          capacity={event.participantQuantity}
         />
       </div>
     </div>

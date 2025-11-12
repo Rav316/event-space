@@ -15,6 +15,7 @@ export interface EventCreateDto {
   shortDescription: string;
   description: string;
   category: number;
+  participantQuantity: number;
   steps?: EventStepCreateDto[];
 }
 
@@ -49,6 +50,7 @@ export interface EventListDto {
   endTime: string;
   deadline?: string;
   space: Space;
+  registeredUsers: number;
   participantQuantity: number;
   author?: string;
   isRegistered: boolean;
@@ -70,6 +72,7 @@ export interface EventReadDto {
   deadline?: string;
   space: Space;
   participantQuantity: number;
+  registeredUsers: number;
   author?: UserEventAuthorDto;
   canRegister: boolean;
   canUnregister: boolean;

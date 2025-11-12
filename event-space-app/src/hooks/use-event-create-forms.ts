@@ -27,6 +27,7 @@ export const useEventCreateForms = () => {
       description: eventCreateDto.description,
       tags: eventCreateDto.tags,
       category: eventCreateDto.category,
+      participantQuantity: eventCreateDto.participantQuantity,
     }),
     [eventCreateDto],
   );
