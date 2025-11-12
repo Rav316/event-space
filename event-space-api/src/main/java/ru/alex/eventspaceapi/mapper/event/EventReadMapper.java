@@ -28,7 +28,7 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
         }
 )
 public interface EventReadMapper {
-    @Mapping(target = "participantQuantity", source = "event", qualifiedByName = "mapParticipantsQuantity")
+    @Mapping(target = "registeredUsers", source = "event", qualifiedByName = "mapRegisteredUsers")
     @Mapping(target = "isRegistered", source = "event", qualifiedByName = "mapIsRegistered")
     @Mapping(target = "canRegister", source = "event", qualifiedByName = "mapCanRegister")
     @Mapping(target = "canUnregister", source = "event", qualifiedByName = "mapCanUnregister")
@@ -36,8 +36,8 @@ public interface EventReadMapper {
     @Mapping(target = "qrToken", source = "event", qualifiedByName = "mapQrToken")
     EventReadDto toDto(Event event);
 
-    @Named("mapParticipantsQuantity")
-    default Integer mapParticipantsQuantity(Event event) {
+    @Named("mapRegisteredUsers")
+    default Integer mapRegisteredUsers(Event event) {
         return event.getEventUsers().size();
     }
 

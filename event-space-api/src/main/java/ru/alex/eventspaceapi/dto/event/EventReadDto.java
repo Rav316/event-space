@@ -19,6 +19,7 @@ public record EventReadDto(
         LocalTime endTime,
         LocalDate deadline,
         SpaceReadDto space,
+        Integer registeredUsers,
         Integer participantQuantity,
         UserEventAuthorDto author,
         Boolean isRegistered,
