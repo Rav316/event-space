@@ -34,8 +34,10 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           <Badge className={categoryColors[event.category.id - 1]}>
             {event.category.name}
           </Badge>
-          {event.attended && (
+          {event.attended ? (
             <Badge className="bg-green-100 text-green-900">Подтверждено</Badge>
+          ) : (
+            <Badge className="bg-red-100 text-red-900">Пропущено</Badge>
           )}
         </div>
 
