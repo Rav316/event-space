@@ -37,6 +37,7 @@ export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
                 onBlur={onBlur}
                 autoCapitalize="none"
                 placeholder="example@verifier.ru"
+                textContentType={'oneTimeCode'}
               />
               {error ? (
                 <StyledText className="text-destructive min-h-[20px]">
@@ -66,6 +67,8 @@ export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
+                textContentType={'oneTimeCode'}
+
               />
               {error ? (
                 <StyledText className="text-destructive min-h-[20px]">

@@ -6,6 +6,7 @@ import { ThemeProvider } from '@react-navigation/native';
 import { NAV_THEME } from '@/src/lib/theme';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -13,9 +14,11 @@ export default function RootLayout() {
   const activeScheme = (colorScheme ?? 'light').colorScheme!;
   return (
     <ThemeProvider value={NAV_THEME[activeScheme]}>
-      <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack screenOptions={{headerShown: false}}/>
-      <PortalHost />
+      <KeyboardProvider>
+        <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
+        <Stack screenOptions={{headerShown: false}}/>
+        <PortalHost />
+      </KeyboardProvider>
     </ThemeProvider>
   );
 }
