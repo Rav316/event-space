@@ -4,21 +4,16 @@
     "slug": "event-space-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "eventspacemobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "icon": "./assets/images/icon-light.png",
       "supportsTablet": true,
       "bundleIdentifier": "ru.alex"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
+      "icon": "./assets/images/icon-light-rounded.png",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "ru.alex.eventspace"
@@ -33,10 +28,21 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "ios": {
+            "image": "./assets/images/icon-transparent-black.png",
+            "dark": {
+              "image": "./assets/images/icon-transparent-white.png"
+            }
+          },
+          "android": {
+            "image": "./assets/images/splash-black.png",
+            "backgroundColor": "#ffffff",
+            "dark": {
+              "image": "./assets/images/splash-white.png"
+            }
+          },
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
           "dark": {
             "backgroundColor": "#000000"
           }
