@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rav316.eventspacemobile"
+      "bundleIdentifier": "ru.alex"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.rav316.eventspacemobile"
+      "package": "ru.alex.eventspace"
     },
     "web": {
       "output": "static",
