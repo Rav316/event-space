@@ -4,7 +4,6 @@ import { UserLoginDto } from '@/src/api/auth/models';
 import { TextInput, View } from 'react-native';
 import {
   PasswordInput,
-  StyledButton,
   StyledInput,
   StyledLabel,
   StyledText
@@ -12,11 +11,9 @@ import {
 
 interface Props {
   form: ReturnType<typeof useForm<UserLoginDto>>;
-  onSubmit: (data: UserLoginDto) => void;
 }
 
-export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
-  console.log('new form errors', form.formState.errors);
+export const LoginForm: React.FC<Props> = ({ form }) => {
   const passwordRef = useRef<TextInput>(null);
 
   return (
@@ -93,9 +90,6 @@ export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
           name={'password'}
         />
       </View>
-      <StyledButton className={'mt-3'} onPress={form.handleSubmit(onSubmit)}>
-        <StyledText className={'text-base'}>Войти</StyledText>
-      </StyledButton>
     </View>
   );
 };
