@@ -9,7 +9,6 @@ app:
       refresh-token:
         secret: agwj?4)U1i_6[gg16_l28=>^`J6s4Wtc`T/ye6R+]2uMqY{Y]<q'uzQRmkuY@FeX
         expiration: 2592000000 # 30 days
-      subject: User Details
       issuer: event space
   account:
     deletion-confirmation-phrase: "удалить мой аккаунт"

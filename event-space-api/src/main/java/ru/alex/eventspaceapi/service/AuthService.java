@@ -14,6 +14,7 @@ import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.auth.JwtTokenData;
 import ru.alex.eventspaceapi.dto.auth.RefreshTokenDto;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
@@ -60,8 +61,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(userRegisterDto.password()));
         return new AuthResponse(
                 userReadMapper.toDto(userRepository.save(user)),
-                jwtService.generateAccessToken(user.getEmail()),
-                jwtService.generateRefreshToken(user.getEmail())
+                jwtService.generateAccessToken(user.getId(), user.getEmail()),
+                jwtService.generateRefreshToken(user.getId(), user.getEmail())
         );
     }
 
@@ -76,8 +77,8 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + userLoginDto.email()));
         return new AuthResponse(
                 userReadMapper.toDto(user),
-                jwtService.generateAccessToken(user.getEmail()),
-                jwtService.generateRefreshToken(user.getEmail())
+                jwtService.generateAccessToken(user.getId(), user.getEmail()),
+                jwtService.generateRefreshToken(user.getId(), user.getEmail())
         );
     }
 
@@ -97,7 +98,7 @@ public class AuthService {
         }
         String password = passwordEncoder.encode(userPasswordChangeDto.confirmPassword());
         user.setPassword(password);
-        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
+        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getId());
     }
 
     @Transactional
@@ -116,18 +117,18 @@ public class AuthService {
         authenticationManager.authenticate(authInputToken);
 
         userRepository.delete(user);
-        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getEmail());
+        Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getId());
 
     }
 
     public AuthResponse refreshAccessToken(RefreshTokenDto refreshTokenDto) {
-        String email = jwtService.validateRefreshToken(refreshTokenDto.refreshToken());
-        User user = userRepository.findByEmailWithFaculty(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
+        JwtTokenData tokenData = jwtService.validateRefreshToken(refreshTokenDto.refreshToken());
+        User user = userRepository.findByIdWithFaculty(tokenData.id())
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + tokenData.id()));
         return new AuthResponse(
                 userReadMapper.toDto(user),
-                jwtService.generateAccessToken(user.getEmail()),
-                jwtService.generateRefreshToken(user.getEmail())
+                jwtService.generateAccessToken(user.getId(), user.getEmail()),
+                jwtService.generateRefreshToken(user.getId(), user.getEmail())
         );
     }
 }

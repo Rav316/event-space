@@ -41,11 +41,17 @@ public class UserService implements UserDetailsService {
     private final UserEditMapper userEditMapper;
 
     @Override
-    @Cacheable(value = "users", key = "#email")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmailWithFaculty(email)
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
+    }
+
+    @Cacheable(value = "users", key = "#id")
+    public UserDetails loadById(Integer id) {
+        return userRepository.findByIdWithFaculty(id)
+                .map(userDetailsMapper::toDto)
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + id));
     }
 
     public boolean existsByEmail(String email) {
@@ -53,7 +59,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @CacheEvict(value = "users", key = "#result.email()")
+    @CacheEvict(value = "users", key = "#result.id()")
     public UserReadDto update(Integer id, UserEditDto userEditDto, MultipartFile avatar) {
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
         User user = userRepository.findById(id)

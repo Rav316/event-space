@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import ru.alex.eventspaceapi.dto.auth.JwtTokenData;
 import ru.alex.eventspaceapi.http.handler.ErrorResponseHandler;
 import ru.alex.eventspaceapi.service.JwtService;
 import ru.alex.eventspaceapi.service.UserService;
@@ -49,9 +50,9 @@ public class JwtFilter extends FilterBase {
         try {
             String jwt = getJwtFromAuthHeader(authHeader);
 
-            String email = jwtService.validateAccessToken(jwt);
+            JwtTokenData tokenData = jwtService.validateAccessToken(jwt);
 
-            UserDetails userDetails = userService.loadUserByUsername(email);
+            UserDetails userDetails = userService.loadById(tokenData.id());
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
