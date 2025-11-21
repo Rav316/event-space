@@ -14,7 +14,7 @@ import MyRegistrationsPage from '@/pages/my-registrations-page.tsx';
 import StatisticsPage from '@/pages/statistics-page.tsx';
 
 const App = () => {
-  const token = useAuthStore((state) => state.token);
+  const token = useAuthStore((state) => state.accessToken);
 
   return (
     <>

@@ -11,7 +11,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const token = useAuthStore.getState().accessToken;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -44,12 +44,12 @@ axiosInstance.interceptors.response.use(
     const isRefreshRequest = originalRequest.url?.includes('refresh-token');
 
     if (
-      authStore.token &&
+      authStore.accessToken &&
       (error.response?.status === 401 || error.response?.status === 410) &&
       !originalRequest._retry
     ) {
       if (isRefreshRequest) {
-        authStore.removeToken();
+        authStore.removeTokens();
         return Promise.reject(error);
       }
 
@@ -70,18 +70,18 @@ axiosInstance.interceptors.response.use(
       try {
         const response = await axiosInstance.put<AuthResponse>(
           `${ApiRoutes.AUTH}/refresh-token`,
-          {},
+          {refreshToken: authStore.refreshToken},
           { withCredentials: true },
         );
 
         const newToken = response.data.accessToken;
-        authStore.setToken(newToken);
+        authStore.setTokens(newToken, response.data.refreshToken);
         processQueue(null, newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        authStore.removeToken();
+        authStore.removeTokens();
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

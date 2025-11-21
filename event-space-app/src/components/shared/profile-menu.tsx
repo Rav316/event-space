@@ -9,10 +9,13 @@ import {
 } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { LogOut, Settings, User } from 'lucide-react';
-import { useLogout, useMe } from '@/api/auth/hooks.ts';
-import { Link } from 'react-router';
+import { useMe } from '@/api/auth/hooks.ts';
+import { Link, useNavigate } from 'react-router';
 import { userRoles } from '@/constants/user-roles.ts';
 import { UserAvatar } from '@/components/shared';
+import { useAuthStore } from '@/store/use-auth-store.ts';
+import { queryClient } from '@/api/query-client.ts';
+import { showLogoutSuccess } from '@/components/shared/toast-logout.tsx';
 
 interface Props {
   className?: string;
@@ -20,7 +23,9 @@ interface Props {
 
 export const ProfileMenu: React.FC<Props> = ({ className }) => {
   const { data } = useMe();
-  const logoutMutation = useLogout();
+  const navigate = useNavigate();
+  const removeTokens = useAuthStore((state) => state.removeTokens);
+
   if (!data) {
     return;
   }
@@ -31,6 +36,15 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
   const avatarUrl = user.avatarUrl
     ? `${staticContentUrl}${user.avatarUrl}`
     : false;
+
+  const onLogout = () => {
+    navigate('/', {replace: true});
+    setTimeout(() => {
+      removeTokens();
+      queryClient.clear();
+    }, 100);
+    showLogoutSuccess();
+  }
 
   return (
     <div className={cn(className, 'flex items-center')}>
@@ -62,7 +76,7 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             <Settings />
             Настройки
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => logoutMutation.mutate()}>
+          <DropdownMenuItem onClick={onLogout}>
             <LogOut />
             Выйти
           </DropdownMenuItem>

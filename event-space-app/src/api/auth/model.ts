@@ -11,4 +11,5 @@ export type Role = (typeof Roles)[keyof typeof Roles];
 export interface AuthResponse {
   user: UserReadDto;
   accessToken: string;
+  refreshToken: string;
 }

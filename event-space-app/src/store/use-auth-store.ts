@@ -3,35 +3,40 @@ import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 interface AuthState {
-  token: string | null;
-  setToken: (token: string) => void;
-  removeToken: () => void;
+  accessToken: string | null;
+  refreshToken: string | null;
+  setTokens: (accessToken: string, refreshToken: string) => void;
+  removeTokens: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   devtools(
     immer((set) => ({
-      token: localStorage.getItem('token'),
-      setToken: (token) => {
-        localStorage.setItem('token', token);
+      accessToken: localStorage.getItem('accessToken'),
+      refreshToken: localStorage.getItem('refreshToken'),
+      setTokens: (accessToken, refreshToken) => {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
 
         set(
           (state) => {
-            state.token = token;
+            state.accessToken = accessToken;
+            state.refreshToken = refreshToken;
           },
           false,
           'setToken',
         );
       },
-      removeToken: () => {
-        console.log('removing token');
-        localStorage.removeItem('token');
+      removeTokens: () => {
+        console.log('removing tokens');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         set(
           (state) => {
-            state.token = null;
+            state.accessToken = null;
           },
           false,
-          'removeToken',
+          'removeTokens',
         );
       },
     })),

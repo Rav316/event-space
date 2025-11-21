@@ -8,14 +8,9 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import { useRegistrationStore } from '@/store/use-registration-store.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
-import {
-  showLogoutError,
-  showLogoutLoading,
-  showLogoutSuccess,
-} from '@/components/shared/toast-logout';
 
 export const useRegistration = () => {
-  const setToken = useAuthStore((state) => state.setToken);
+  const setTokens = useAuthStore((state) => state.setTokens);
   const resetRegistrationData = useRegistrationStore(
     (state) => state.resetRegistrationData,
   );
@@ -24,7 +19,7 @@ export const useRegistration = () => {
     mutationFn: Api.auth.register,
     onSuccess: (data) => {
       toast.success('Вы успешно зарегистрировались');
-      setToken(data.accessToken);
+      setTokens(data.accessToken, data.refreshToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);
       navigate('/');
       resetRegistrationData();
@@ -42,14 +37,14 @@ export const useRegistration = () => {
 };
 
 export const useLogin = () => {
-  const setToken = useAuthStore((state) => state.setToken);
+  const setTokens = useAuthStore((state) => state.setTokens);
   const setAuthModalOpen = useAuthModalStore((state) => state.setIsOpen);
   return useMutation({
     mutationFn: Api.auth.login,
     onSuccess: async (data) => {
       setAuthModalOpen(false);
       toast.success('Вы успешно вошли в систему');
-      setToken(data.accessToken);
+      setTokens(data.accessToken, data.refreshToken);
       queryClient.setQueryData(AUTH_KEYS.me, data);
       queryClient.clear();
     },
@@ -65,47 +60,16 @@ export const useLogin = () => {
   });
 };
 
-export const useLogout = () => {
-  const removeToken = useAuthStore((state) => state.removeToken);
-  const navigate = useNavigate();
-  return useMutation({
-    mutationFn: Api.auth.logout,
-
-    onMutate: () => {
-      const toastId = showLogoutLoading();
-      return { toastId };
-    },
-
-    onSuccess: (_, __, context) => {
-      if (context?.toastId) toast.dismiss(context.toastId);
-
-      navigate('/', { replace: true });
-      setTimeout(() => {
-        removeToken();
-        queryClient.clear();
-      }, 100);
-
-      showLogoutSuccess();
-    },
-
-    onError: (error, _, context) => {
-      if (context?.toastId) toast.dismiss(context.toastId);
-      if (error instanceof AxiosError) {
-        showLogoutError();
-      }
-    },
-  });
-};
-
 export const useMe = () => {
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.accessToken);
+  const refreshToken = useAuthStore((s) => s.refreshToken);
 
   return useQuery({
     enabled: !!token,
     refetchOnWindowFocus: false,
     retry: false,
     queryKey: AUTH_KEYS.me,
-    queryFn: Api.auth.refreshToken,
+    queryFn: () => Api.auth.refreshToken(refreshToken),
     staleTime: Infinity,
   });
 };

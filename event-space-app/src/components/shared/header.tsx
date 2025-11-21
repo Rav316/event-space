@@ -14,14 +14,14 @@ import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
 
 export const Header = () => {
   const { data, isFetching, isSuccess } = useMe();
-  const setToken = useAuthStore((state) => state.setToken);
+  const setTokens = useAuthStore((state) => state.setTokens);
   const openModal = useAuthModalStore((state) => state.setIsOpen);
 
   useEffect(() => {
     if (isSuccess && data) {
-      setToken(data.accessToken);
+      setTokens(data.accessToken, data.refreshToken);
     }
-  }, [data, isSuccess, setToken]);
+  }, [data, isSuccess, setTokens]);
 
   return (
     <header
