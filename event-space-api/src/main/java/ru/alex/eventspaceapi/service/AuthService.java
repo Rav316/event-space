@@ -14,6 +14,7 @@ import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.auth.RefreshTokenDto;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
@@ -59,7 +60,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(userRegisterDto.password()));
         return new AuthResponse(
                 userReadMapper.toDto(userRepository.save(user)),
-                jwtService.generateAccessToken(user.getEmail())
+                jwtService.generateAccessToken(user.getEmail()),
+                jwtService.generateRefreshToken(user.getEmail())
         );
     }
 
@@ -74,7 +76,8 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + userLoginDto.email()));
         return new AuthResponse(
                 userReadMapper.toDto(user),
-                jwtService.generateAccessToken(user.getEmail())
+                jwtService.generateAccessToken(user.getEmail()),
+                jwtService.generateRefreshToken(user.getEmail())
         );
     }
 
@@ -117,13 +120,14 @@ public class AuthService {
 
     }
 
-    public AuthResponse refreshAccessToken(String refreshToken) {
-        String email = jwtService.validateRefreshToken(refreshToken);
+    public AuthResponse refreshAccessToken(RefreshTokenDto refreshTokenDto) {
+        String email = jwtService.validateRefreshToken(refreshTokenDto.refreshToken());
         User user = userRepository.findByEmailWithFaculty(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
         return new AuthResponse(
                 userReadMapper.toDto(user),
-                jwtService.generateAccessToken(user.getEmail())
+                jwtService.generateAccessToken(user.getEmail()),
+                jwtService.generateRefreshToken(user.getEmail())
         );
     }
 }

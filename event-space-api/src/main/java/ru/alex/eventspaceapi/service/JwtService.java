@@ -38,6 +38,7 @@ public class JwtService {
 
     }
 
+
     public String generateAccessToken(String email) throws JWTVerificationException {
         Date expirationDate = Date.from(ZonedDateTime.now().toInstant().plusMillis(accessTokenExpiration));
         return JWT.create()
