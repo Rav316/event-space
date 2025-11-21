@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { UserLoginDto } from '@/src/api/auth/models';
-import { View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import {
   PasswordInput,
   StyledButton,
@@ -17,6 +17,8 @@ interface Props {
 
 export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
   console.log('new form errors', form.formState.errors);
+  const passwordRef = useRef<TextInput>(null);
+
   return (
     <View className={'w-full gap-4'}>
       <View className={'gap-1'}>
@@ -37,7 +39,13 @@ export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
                 onBlur={onBlur}
                 autoCapitalize="none"
                 placeholder="example@verifier.ru"
-                textContentType={'oneTimeCode'}
+                textContentType="oneTimeCode"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordRef.current?.focus();
+                }}
+                autoCorrect={false}
+                spellCheck={false}
               />
               {error ? (
                 <StyledText className="text-destructive min-h-[20px]">
@@ -64,11 +72,12 @@ export const LoginForm: React.FC<Props> = ({ form, onSubmit }) => {
           }) => (
             <>
               <PasswordInput
+                ref={passwordRef}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                textContentType={'oneTimeCode'}
-
+                autoCorrect={false}
+                textContentType="oneTimeCode"
               />
               {error ? (
                 <StyledText className="text-destructive min-h-[20px]">
