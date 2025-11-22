@@ -1,5 +1,13 @@
 import { ActivityIndicator } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 export const Spinner = () => {
-  return <ActivityIndicator size='small' color='#000' />;
+  const colorScheme = useColorScheme().colorScheme;
+
+  return (
+    <ActivityIndicator
+      size="small"
+      color={colorScheme === 'dark' ? '#000' : '#fff'}
+    />
+  );
 };
