@@ -1,9 +1,11 @@
 import { Stack } from 'expo-router';
 
-const MainLayout = () => {
+const AppMainLayout = () => {
   return (
-    <Stack screenOptions={{ headerShown: false }} />
-  )
-}
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={'(tabs)'} options={{ headerShown: false }} />
+    </Stack>
+  );
+};
 
-export default MainLayout;
+export default AppMainLayout;

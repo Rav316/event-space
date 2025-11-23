@@ -3,7 +3,7 @@ import { Eye, EyeOff } from 'lucide-react-native';
 import React, { forwardRef, useState } from 'react';
 import { StyledInput } from '@/src/components/ui/styled-input';
 import { cn } from '@/src/lib/utils';
-import { useColorScheme } from 'nativewind';
+import { useIconColor } from '@/src/hooks/use-icon-color';
 
 interface Props extends TextInputProps {
   className?: string;
@@ -12,8 +12,7 @@ interface Props extends TextInputProps {
 export const PasswordInput = forwardRef<TextInput, Props>(
   ({ className, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    const theme = useColorScheme();
-    const isDark = theme.colorScheme === 'dark';
+    const iconColor = useIconColor();
 
     return (
       <View className={'relative justify-center'}>
@@ -33,9 +32,9 @@ export const PasswordInput = forwardRef<TextInput, Props>(
           className={'absolute right-3 top-0 bottom-0 justify-center z-10'}
         >
           {showPassword ? (
-            <EyeOff className={'h-4 w-4'} color={isDark ? '#fff' : '#000'} />
+            <EyeOff className={'h-4 w-4'} color={iconColor} />
           ) : (
-            <Eye className={'h-4 w-4'} color={isDark ? '#fff' : '#000'} />
+            <Eye className={'h-4 w-4'} color={iconColor} />
           )}
         </Pressable>
       </View>
