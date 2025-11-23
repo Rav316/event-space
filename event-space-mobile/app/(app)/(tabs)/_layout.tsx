@@ -4,6 +4,8 @@ import { useIconColor } from '@/src/hooks/use-icon-color';
 import { Pressable, View, useColorScheme } from 'react-native';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
+// 1. Импортируем хук для безопасных зон
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type ScanButtonProps = BottomTabBarButtonProps & {
   children: React.ReactNode;
@@ -22,7 +24,9 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
     >
       <Pressable
         onPress={onPress}
-        className="w-[58px] h-[58px] rounded-full bg-black dark:bg-white  flex justify-center items-center absolute -top-[29px]"
+        // Возможно, здесь тоже захотите чуть подправить top, если кнопка "уедет",
+        // но обычно этого не требуется.
+        className="w-[58px] h-[58px] rounded-full bg-black dark:bg-white flex justify-center items-center absolute -top-[29px]"
       >
         {children}
       </Pressable>
@@ -33,6 +37,8 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
 const TabLayout = () => {
   const iconColor = useIconColor();
   const colorScheme = useColorScheme();
+  // 2. Получаем размеры отступов
+  const insets = useSafeAreaInsets();
 
   const isDark = colorScheme === 'dark';
   const scanIconColor = isDark ? '#000000' : '#FFFFFF';
@@ -43,11 +49,15 @@ const TabLayout = () => {
         tabBarActiveTintColor: iconColor,
         tabBarInactiveTintColor: '#999',
         tabBarStyle: {
-          height: 65,
+          height: 65 + insets.bottom,
+          paddingBottom: insets.bottom,
           overflow: 'visible',
           backgroundColor: isDark ? '#000000' : '#FFFFFF',
           borderTopWidth: 0.5,
           borderTopColor: isDark ? '#333' : '#ccc',
+        },
+        tabBarItemStyle: {
+          paddingTop: 10
         }
       }}
     >
@@ -65,7 +75,10 @@ const TabLayout = () => {
           title: 'Сканирование',
           tabBarIcon: () => <QrCode color={scanIconColor} />,
           tabBarButton: (props) => <ScanButton {...props} />,
-          tabBarLabel: () => null
+          tabBarLabel: () => null,
+          tabBarItemStyle: {
+            paddingTop: 0
+          }
         }}
       />
 
