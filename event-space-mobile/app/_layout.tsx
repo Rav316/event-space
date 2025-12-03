@@ -12,6 +12,7 @@ import { queryClient } from '@/src/api/queryClient';
 import { useMMKVString } from 'react-native-mmkv';
 import { STORAGE_KEYS } from '@/src/storage/keys';
 import { storage } from '@/src/storage/storage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -26,17 +27,19 @@ export default function RootLayout() {
     <ThemeProvider value={NAV_THEME[activeScheme]}>
       <KeyboardProvider>
         <QueryClientProvider client={queryClient}>
-          <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={isAuthenticated}>
-              <Stack.Screen name={'(app)'}/>
-            </Stack.Protected>
+          <GestureHandlerRootView>
+            <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Protected guard={isAuthenticated}>
+                <Stack.Screen name={'(app)'}/>
+              </Stack.Protected>
 
-            <Stack.Protected guard={!isAuthenticated}>
-              <Stack.Screen name={'(auth)'}/>
-            </Stack.Protected>
-          </Stack>
-          <PortalHost />
+              <Stack.Protected guard={!isAuthenticated}>
+                <Stack.Screen name={'(auth)'}/>
+              </Stack.Protected>
+            </Stack>
+            <PortalHost />
+          </GestureHandlerRootView>
         </QueryClientProvider>
       </KeyboardProvider>
     </ThemeProvider>
