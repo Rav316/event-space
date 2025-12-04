@@ -24,8 +24,6 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
     >
       <Pressable
         onPress={onPress}
-        // Возможно, здесь тоже захотите чуть подправить top, если кнопка "уедет",
-        // но обычно этого не требуется.
         className="w-[58px] h-[58px] rounded-full bg-black dark:bg-white flex justify-center items-center absolute -top-[29px]"
       >
         {children}

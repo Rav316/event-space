@@ -1,7 +1,7 @@
 import { MainLayout } from '@/src/hoc';
 import { StyledButton, StyledText } from '@/src/components/ui';
 import { Camera, Point, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRef } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -37,9 +37,9 @@ const ScanScreen = () => {
 
   if (device == null) {
     return (
-      <MainLayout>
+      <View className={'pt-5 flex-1 justify-center items-center'}>
         <StyledText>Камера не найдена</StyledText>
-      </MainLayout>
+      </View>
     )
   }
 
@@ -50,6 +50,7 @@ const ScanScreen = () => {
         style={StyleSheet.absoluteFill}
         device={device}
         isActive={true}
+        enableZoomGesture={true}
       />
     </GestureDetector>
   );
