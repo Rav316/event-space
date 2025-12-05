@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "event-space-mobile",
+    "name": "event space",
     "slug": "event-space-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "ios": {
       "icon": "./assets/images/icon-light.png",
       "supportsTablet": true,
-      "bundleIdentifier": "ru.alex"
+      "bundleIdentifier": "ru.alex.eventspace"
     },
     "android": {
       "icon": "./assets/images/icon-light-rounded.png",

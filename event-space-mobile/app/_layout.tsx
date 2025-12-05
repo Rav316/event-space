@@ -13,6 +13,7 @@ import { useMMKVString } from 'react-native-mmkv';
 import { STORAGE_KEYS } from '@/src/storage/keys';
 import { storage } from '@/src/storage/storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -25,23 +26,25 @@ export default function RootLayout() {
   const activeScheme = (colorScheme ?? 'light').colorScheme!;
   return (
     <ThemeProvider value={NAV_THEME[activeScheme]}>
-      <KeyboardProvider>
-        <QueryClientProvider client={queryClient}>
-          <GestureHandlerRootView>
-            <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Protected guard={isAuthenticated}>
-                <Stack.Screen name={'(app)'}/>
-              </Stack.Protected>
+      <SafeAreaProvider>
+        <KeyboardProvider>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView>
+              <StatusBar style={activeScheme === 'dark' ? 'light' : 'dark'} />
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Protected guard={isAuthenticated}>
+                  <Stack.Screen name={'(app)'}/>
+                </Stack.Protected>
 
-              <Stack.Protected guard={!isAuthenticated}>
-                <Stack.Screen name={'(auth)'}/>
-              </Stack.Protected>
-            </Stack>
-            <PortalHost />
-          </GestureHandlerRootView>
-        </QueryClientProvider>
-      </KeyboardProvider>
+                <Stack.Protected guard={!isAuthenticated}>
+                  <Stack.Screen name={'(auth)'}/>
+                </Stack.Protected>
+              </Stack>
+              <PortalHost />
+            </GestureHandlerRootView>
+          </QueryClientProvider>
+        </KeyboardProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

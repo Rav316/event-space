@@ -1,10 +1,9 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { House, QrCode, Settings } from 'lucide-react-native';
 import { useIconColor } from '@/src/hooks/use-icon-color';
 import { Pressable, View, useColorScheme } from 'react-native';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
-// 1. Импортируем хук для безопасных зон
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type ScanButtonProps = BottomTabBarButtonProps & {
@@ -35,8 +34,8 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
 const TabLayout = () => {
   const iconColor = useIconColor();
   const colorScheme = useColorScheme();
-  // 2. Получаем размеры отступов
   const insets = useSafeAreaInsets();
+  const router = useRouter(); // 2. Инициализируем роутер
 
   const isDark = colorScheme === 'dark';
   const scanIconColor = isDark ? '#000000' : '#FFFFFF';
@@ -67,6 +66,7 @@ const TabLayout = () => {
         }}
       />
 
+      {/* 3. Обновляем экран сканирования */}
       <Tabs.Screen
         name="scan"
         options={{
@@ -74,9 +74,14 @@ const TabLayout = () => {
           tabBarIcon: () => <QrCode color={scanIconColor} />,
           tabBarButton: (props) => <ScanButton {...props} />,
           tabBarLabel: () => null,
-          tabBarItemStyle: {
-            paddingTop: 0
-          }
+          tabBarItemStyle: { paddingTop: 0 }
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+
+            router.push('/qr-scan');
+          },
         }}
       />
 
