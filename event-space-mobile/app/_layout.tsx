@@ -1,18 +1,18 @@
 import '@/global.css';
 
-import { Stack } from 'expo-router';
-import { PortalHost } from '@rn-primitives/portal';
-import { ThemeProvider } from '@react-navigation/native';
-import { NAV_THEME } from '@/src/lib/theme';
-import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'nativewind';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/src/api/queryClient';
-import { useMMKVString } from 'react-native-mmkv';
+import { NAV_THEME } from '@/src/lib/theme';
 import { STORAGE_KEYS } from '@/src/storage/keys';
 import { storage } from '@/src/storage/storage';
+import { ThemeProvider } from '@react-navigation/native';
+import { PortalHost } from '@rn-primitives/portal';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from 'nativewind';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { useMMKVString } from 'react-native-mmkv';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {
