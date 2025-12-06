@@ -20,12 +20,14 @@ interface Props {
   onBack: () => void;
   isTorchActive: boolean;
   onToggleTorch: () => void;
+  onOpenGallery: () => void;
 }
 
 export const CameraOverlay: React.FC<Props> = ({
   onBack,
   isTorchActive,
-  onToggleTorch
+  onToggleTorch,
+  onOpenGallery
 }) => {
   const insets = useSafeAreaInsets();
   const [layout, setLayout] = useState({
@@ -109,20 +111,11 @@ export const CameraOverlay: React.FC<Props> = ({
         className="absolute w-full flex-row justify-center gap-6"
         style={{ bottom: insets.bottom + 32 }}
       >
-        {/* Фонарик */}
-        {/*<Pressable*/}
-        {/*  onPress={onToggleTorch}*/}
-        {/*  className="w-14 h-14 rounded-full bg-black/60 items-center justify-center"*/}
-        {/*>*/}
-        {/*  <Flashlight color="white" />*/}
-        {/*</Pressable>*/}
-
 
         <TorchButton isActive={isTorchActive} onToggle={onToggleTorch} />
 
-        {/* Галерея */}
         <Pressable
-          onPress={() => {}}
+          onPress={onOpenGallery}
           className="w-14 h-14 rounded-full bg-black/60 items-center justify-center"
         >
           <ImageIcon color="white" />

@@ -11,6 +11,7 @@ import { useRef, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CameraOverlay } from '@/src/components/shared/qr-scan';
 import { useNavigation } from 'expo-router';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const ScanScreen = () => {
   const camera = useRef<Camera>(null);
@@ -34,6 +35,24 @@ const ScanScreen = () => {
       console.log('tap', x, y);
       await focus({ x, y });
     });
+
+
+  const onOpenGallery = async () => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      selectionLimit: 1,
+      quality: 1
+    });
+
+    if(result.didCancel) {
+      return;
+    }
+
+    if(result.assets && result.assets.length > 0) {
+      const photo = result.assets[0];
+      console.log('selected photo:', photo.uri);
+    }
+  }
 
   if (!hasPermission) {
     return (
@@ -69,6 +88,7 @@ const ScanScreen = () => {
             isTorchActive={torch}
             onToggleTorch={() => setTorch((prev) => !prev)}
             onBack={() => navigate.goBack()}
+            onOpenGallery={onOpenGallery}
           />
         </View>
       </GestureDetector>
