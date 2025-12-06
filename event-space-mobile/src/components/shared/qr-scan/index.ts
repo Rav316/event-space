@@ -1,2 +1,2 @@
-export {CameraOverlay} from './camera-overlay';
-export {TorchButton} from './torch-button';
+export { CameraOverlay, type RegionOfInterest } from './camera-overlay';
+export { TorchButton } from './torch-button';

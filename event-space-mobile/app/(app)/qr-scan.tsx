@@ -1,25 +1,47 @@
-import { MainLayout } from '@/src/hoc';
+import {
+  CameraOverlay,
+  RegionOfInterest
+} from '@/src/components/shared/qr-scan';
 import { StyledButton, StyledText } from '@/src/components/ui';
+import { MainLayout } from '@/src/hoc';
+import * as Burnt from 'burnt';
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from 'expo-router';
+import { useCallback, useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   Camera,
   Point,
   useCameraDevice,
-  useCameraPermission
+  useCameraPermission,
+  useCodeScanner
 } from 'react-native-vision-camera';
-import { StyleSheet, View } from 'react-native';
-import { useRef, useState } from 'react';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { CameraOverlay } from '@/src/components/shared/qr-scan';
-import { useNavigation } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker'
 
 const ScanScreen = () => {
   const camera = useRef<Camera>(null);
   const [torch, setTorch] = useState(false);
+  const hasScannedRef = useRef(false);
+  const [regionOfInterest, setRegionOfInterest] =
+    useState<RegionOfInterest | null>(null);
 
   const { hasPermission, requestPermission } = useCameraPermission();
 
   const device = useCameraDevice('back');
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr'],
+    onCodeScanned: (codes) => {
+      if (hasScannedRef.current) return;
+      hasScannedRef.current = true;
+      Burnt.toast({
+        title: 'QR-код успешно отсканирован',
+        preset: 'done'
+      });
+      console.log(codes);
+    },
+
+    regionOfInterest: regionOfInterest ?? undefined
+  });
 
   const navigate = useNavigation();
 
@@ -36,7 +58,6 @@ const ScanScreen = () => {
       await focus({ x, y });
     });
 
-
   const onOpenGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
@@ -44,15 +65,19 @@ const ScanScreen = () => {
       quality: 1
     });
 
-    if(result.canceled) {
+    if (result.canceled) {
       return;
     }
 
-    if(result.assets && result.assets.length > 0) {
+    if (result.assets && result.assets.length > 0) {
       const photo = result.assets[0];
       console.log('selected photo:', photo.uri);
     }
-  }
+  };
+
+  const handleRegionChange = useCallback((region: RegionOfInterest) => {
+    setRegionOfInterest(region);
+  }, []);
 
   if (!hasPermission) {
     return (
@@ -78,6 +103,7 @@ const ScanScreen = () => {
         <View className={'flex-1'}>
           <Camera
             ref={camera}
+            codeScanner={codeScanner}
             style={StyleSheet.absoluteFill}
             device={device}
             isActive={true}
@@ -89,6 +115,7 @@ const ScanScreen = () => {
             onToggleTorch={() => setTorch((prev) => !prev)}
             onBack={() => navigate.goBack()}
             onOpenGallery={onOpenGallery}
+            onRegionChange={handleRegionChange}
           />
         </View>
       </GestureDetector>

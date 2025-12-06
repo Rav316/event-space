@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Pressable,
-  Dimensions,
-  LayoutChangeEvent,
-  Text
-} from 'react-native';
-import Svg, { Rect, Mask } from 'react-native-svg';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, ImageIcon } from 'lucide-react-native';
 import { TorchButton } from '@/src/components/shared/qr-scan/torch-button';
+import { ChevronLeft, ImageIcon } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
+import {
+    Dimensions,
+    LayoutChangeEvent,
+    Pressable,
+    Text,
+    View
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Mask, Rect } from 'react-native-svg';
 
 const { width: initialWidth, height: initialHeight } = Dimensions.get('window');
 
 const SCAN_SIZE = 250;
 const RADIUS = 20;
+const ROI_SCALE = 1; // percentage of visual square used for actual scanning
+
+export type RegionOfInterest = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 interface Props {
   onBack: () => void;
   isTorchActive: boolean;
   onToggleTorch: () => void;
   onOpenGallery: () => void;
+  onRegionChange?: (region: RegionOfInterest) => void;
 }
 
 export const CameraOverlay: React.FC<Props> = ({
   onBack,
   isTorchActive,
   onToggleTorch,
-  onOpenGallery
+  onOpenGallery,
+  onRegionChange
 }) => {
   const insets = useSafeAreaInsets();
   const [layout, setLayout] = useState({
@@ -42,6 +52,34 @@ export const CameraOverlay: React.FC<Props> = ({
 
   const rectX = (layout.width - SCAN_SIZE) / 2;
   const rectY = (layout.height - SCAN_SIZE) / 2;
+
+  const roiWidth = SCAN_SIZE * ROI_SCALE;
+  const roiHeight = SCAN_SIZE * ROI_SCALE;
+  const roiX = rectX + (SCAN_SIZE - roiWidth) / 2;
+  const roiY = rectY + (SCAN_SIZE - roiHeight) / 2;
+
+  useEffect(() => {
+    if (!onRegionChange || layout.width === 0 || layout.height === 0) {
+      return;
+    }
+
+    onRegionChange({
+      x: roiX / layout.width,
+      y: roiY / layout.height,
+      width: roiWidth / layout.width,
+      height: roiHeight / layout.height
+    });
+  }, [
+    layout.width,
+    layout.height,
+    onRegionChange,
+    rectX,
+    rectY,
+    roiHeight,
+    roiWidth,
+    roiX,
+    roiY
+  ]);
 
   return (
     <>
