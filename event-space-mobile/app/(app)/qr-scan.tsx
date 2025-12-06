@@ -11,7 +11,7 @@ import { useRef, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CameraOverlay } from '@/src/components/shared/qr-scan';
 import { useNavigation } from 'expo-router';
-import { launchImageLibrary } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker'
 
 const ScanScreen = () => {
   const camera = useRef<Camera>(null);
@@ -38,13 +38,13 @@ const ScanScreen = () => {
 
 
   const onOpenGallery = async () => {
-    const result = await launchImageLibrary({
-      mediaType: 'photo',
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
       selectionLimit: 1,
       quality: 1
     });
 
-    if(result.didCancel) {
+    if(result.canceled) {
       return;
     }
 
