@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { View, Pressable, Dimensions, LayoutChangeEvent, Text } from 'react-native';
+import {
+  View,
+  Pressable,
+  Dimensions,
+  LayoutChangeEvent,
+  Text
+} from 'react-native';
 import Svg, { Rect, Mask } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronLeft, Flashlight, ImageIcon } from 'lucide-react-native';
+import { ChevronLeft, ImageIcon } from 'lucide-react-native';
+import { TorchButton } from '@/src/components/shared/qr-scan/torch-button';
 
 const { width: initialWidth, height: initialHeight } = Dimensions.get('window');
 
@@ -11,12 +18,20 @@ const RADIUS = 20;
 
 interface Props {
   onBack: () => void;
+  isTorchActive: boolean;
   onToggleTorch: () => void;
 }
 
-export const CameraOverlay: React.FC<Props> = ({onBack, onToggleTorch}) => {
+export const CameraOverlay: React.FC<Props> = ({
+  onBack,
+  isTorchActive,
+  onToggleTorch
+}) => {
   const insets = useSafeAreaInsets();
-  const [layout, setLayout] = useState({ width: initialWidth, height: initialHeight });
+  const [layout, setLayout] = useState({
+    width: initialWidth,
+    height: initialHeight
+  });
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -33,7 +48,11 @@ export const CameraOverlay: React.FC<Props> = ({onBack, onToggleTorch}) => {
         className="absolute left-4 w-11 h-11 rounded-full bg-black/60 items-center justify-center z-20"
         style={{ top: insets.top + 12 }}
       >
-        <ChevronLeft className={'text-white z-10'} color={'white'} style={{ marginLeft: -3 }}/>
+        <ChevronLeft
+          className={'text-white z-10'}
+          color={'white'}
+          style={{ marginLeft: -3 }}
+        />
       </Pressable>
 
       <View
@@ -72,7 +91,7 @@ export const CameraOverlay: React.FC<Props> = ({onBack, onToggleTorch}) => {
             top: rectY,
             width: SCAN_SIZE,
             height: SCAN_SIZE,
-            borderRadius: RADIUS,
+            borderRadius: RADIUS
           }}
         />
       </View>
@@ -91,12 +110,15 @@ export const CameraOverlay: React.FC<Props> = ({onBack, onToggleTorch}) => {
         style={{ bottom: insets.bottom + 32 }}
       >
         {/* Фонарик */}
-        <Pressable
-          onPress={onToggleTorch}
-          className="w-14 h-14 rounded-full bg-black/60 items-center justify-center"
-        >
-          <Flashlight color="white" />
-        </Pressable>
+        {/*<Pressable*/}
+        {/*  onPress={onToggleTorch}*/}
+        {/*  className="w-14 h-14 rounded-full bg-black/60 items-center justify-center"*/}
+        {/*>*/}
+        {/*  <Flashlight color="white" />*/}
+        {/*</Pressable>*/}
+
+
+        <TorchButton isActive={isTorchActive} onToggle={onToggleTorch} />
 
         {/* Галерея */}
         <Pressable

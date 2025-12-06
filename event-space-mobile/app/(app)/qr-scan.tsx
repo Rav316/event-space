@@ -66,6 +66,7 @@ const ScanScreen = () => {
             torch={torch ? 'on' : 'off'}
           />
           <CameraOverlay
+            isTorchActive={torch}
             onToggleTorch={() => setTorch((prev) => !prev)}
             onBack={() => navigate.goBack()}
           />
