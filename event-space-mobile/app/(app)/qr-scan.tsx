@@ -7,15 +7,20 @@ import {
   useCameraPermission
 } from 'react-native-vision-camera';
 import { StyleSheet, View } from 'react-native';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CameraOverlay } from '@/src/components/shared/qr-scan';
+import { useNavigation } from 'expo-router';
 
 const ScanScreen = () => {
   const camera = useRef<Camera>(null);
+  const [torch, setTorch] = useState(false);
+
   const { hasPermission, requestPermission } = useCameraPermission();
 
   const device = useCameraDevice('back');
+
+  const navigate = useNavigation();
 
   const focus = async (point: Point) => {
     const c = camera.current;
@@ -51,16 +56,20 @@ const ScanScreen = () => {
   return (
     <View className={'flex-1'}>
       <GestureDetector gesture={gesture}>
-       <View className={'flex-1'}>
-         <Camera
-           ref={camera}
-           style={StyleSheet.absoluteFill}
-           device={device}
-           isActive={true}
-           enableZoomGesture={true}
-         />
-         <CameraOverlay/>
-       </View>
+        <View className={'flex-1'}>
+          <Camera
+            ref={camera}
+            style={StyleSheet.absoluteFill}
+            device={device}
+            isActive={true}
+            enableZoomGesture={true}
+            torch={torch ? 'on' : 'off'}
+          />
+          <CameraOverlay
+            onToggleTorch={() => setTorch((prev) => !prev)}
+            onBack={() => navigate.goBack()}
+          />
+        </View>
       </GestureDetector>
     </View>
   );
