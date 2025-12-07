@@ -15,7 +15,10 @@ const { width: initialWidth, height: initialHeight } = Dimensions.get('window');
 
 const SCAN_SIZE = 250;
 const RADIUS = 20;
-const ROI_SCALE = 1; // percentage of visual square used for actual scanning
+const ROI_SCALE = 1.5;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
 
 export type RegionOfInterest = {
   x: number;
@@ -53,10 +56,18 @@ export const CameraOverlay: React.FC<Props> = ({
   const rectX = (layout.width - SCAN_SIZE) / 2;
   const rectY = (layout.height - SCAN_SIZE) / 2;
 
-  const roiWidth = SCAN_SIZE * ROI_SCALE;
-  const roiHeight = SCAN_SIZE * ROI_SCALE;
-  const roiX = rectX + (SCAN_SIZE - roiWidth) / 2;
-  const roiY = rectY + (SCAN_SIZE - roiHeight) / 2;
+  const roiWidth = Math.min(SCAN_SIZE * ROI_SCALE, layout.width);
+  const roiHeight = Math.min(SCAN_SIZE * ROI_SCALE, layout.height);
+  const roiX = clamp(
+    rectX + (SCAN_SIZE - roiWidth) / 2,
+    0,
+    layout.width - roiWidth
+  );
+  const roiY = clamp(
+    rectY + (SCAN_SIZE - roiHeight) / 2,
+    0,
+    layout.height - roiHeight
+  );
 
   useEffect(() => {
     if (!onRegionChange || layout.width === 0 || layout.height === 0) {

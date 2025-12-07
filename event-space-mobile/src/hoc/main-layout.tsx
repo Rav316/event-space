@@ -23,7 +23,7 @@ export const MainLayout: React.FC<PropsWithChildren<Props>> = ({
     insets.bottom || initialWindowMetrics?.insets?.bottom || 0;
 
   return (
-    <View style={{ paddingTop: topInset }} className={'flex-1'}>
+    <View style={{ paddingTop: topInset }} className={'flex-1 '}>
       <KeyboardAvoidingView
         className={cn('flex-1 px-5', className)}
         behavior={'padding'}

@@ -1,21 +1,21 @@
-import {
-  CameraOverlay,
-  RegionOfInterest
+  import {
+    CameraOverlay,
+    RegionOfInterest
 } from '@/src/components/shared/qr-scan';
 import { StyledButton, StyledText } from '@/src/components/ui';
 import { MainLayout } from '@/src/hoc';
 import * as Burnt from 'burnt';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
-  Camera,
-  Point,
-  useCameraDevice,
-  useCameraPermission,
-  useCodeScanner
+    Camera,
+    Point,
+    useCameraDevice,
+    useCameraPermission,
+    useCodeScanner
 } from 'react-native-vision-camera';
 
 const ScanScreen = () => {
@@ -26,6 +26,7 @@ const ScanScreen = () => {
     useState<RegionOfInterest | null>(null);
 
   const { hasPermission, requestPermission } = useCameraPermission();
+  const router = useRouter();
 
   const device = useCameraDevice('back');
   const codeScanner = useCodeScanner({
@@ -37,6 +38,7 @@ const ScanScreen = () => {
         title: 'QR-код успешно отсканирован',
         preset: 'done'
       });
+      router.navigate('/qr-scan/success');
       console.log(codes);
     },
 
