@@ -1,4 +1,4 @@
-  import {
+import {
   CameraOverlay,
   RegionOfInterest
 } from '@/src/components/shared/qr-scan';
@@ -9,7 +9,7 @@ import * as Burnt from 'burnt';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   Camera,
@@ -18,6 +18,7 @@ import {
   useCameraPermission,
   useCodeScanner
 } from 'react-native-vision-camera';
+import RNQRGenerator from 'rn-qr-generator';
 
 const ScanScreen = () => {
   const camera = useRef<Camera>(null);
@@ -25,18 +26,21 @@ const ScanScreen = () => {
   const hasScannedRef = useRef(false);
   const [regionOfInterest, setRegionOfInterest] =
     useState<RegionOfInterest | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const { hasPermission, requestPermission } = useCameraPermission();
   const router = useRouter();
+  const navigate = useNavigation();
 
   const device = useCameraDevice('back');
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
     onCodeScanned: (codes) => {
       if (hasScannedRef.current) return;
       hasScannedRef.current = true;
 
-      const isSuccess = Math.random() < 0.5;
+      const isSuccess = codes.length > 0;
 
       if (isSuccess) {
         Burnt.toast({
@@ -46,18 +50,16 @@ const ScanScreen = () => {
         router.navigate('/qr-scan/success');
       } else {
         Burnt.toast({
-          title: 'Ошибка при сканировании QR-кода',
+          title: 'Ошибка при сканировании',
           preset: 'error'
         });
         router.navigate('/qr-scan/fail');
       }
       console.log(codes);
     },
-
     regionOfInterest: regionOfInterest ?? undefined
   });
 
-  const navigate = useNavigation();
   useFocusEffect(
     useCallback(() => {
       hasScannedRef.current = false;
@@ -73,7 +75,6 @@ const ScanScreen = () => {
   const gesture = Gesture.Tap()
     .runOnJS(true)
     .onEnd(async ({ x, y }) => {
-      console.log('tap', x, y);
       await focus({ x, y });
     });
 
@@ -84,13 +85,48 @@ const ScanScreen = () => {
       quality: 1
     });
 
-    if (result.canceled) {
-      return;
-    }
+    if (result.canceled) return;
 
     if (result.assets && result.assets.length > 0) {
       const photo = result.assets[0];
-      console.log('selected photo:', photo.uri);
+      setLoading(true);
+      await detectQrCode(photo.uri);
+      setLoading(false);
+    }
+  };
+
+  const detectQrCode = async (uri: string) => {
+    Burnt.toast({
+      title: 'Обработка изображения...',
+      preset: 'none',
+      duration: 2,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    try {
+      const response = await RNQRGenerator.detect({ uri });
+      const { values } = response;
+
+      if (values && values.length > 0) {
+        Burnt.toast({
+          title: 'QR-код найден!',
+          preset: 'done'
+        });
+        router.navigate('/qr-scan/success');
+      } else {
+        Burnt.toast({
+          title: 'QR-код не найден',
+          message: 'Попробуйте другое фото',
+          preset: 'error'
+        });
+      }
+    } catch (error) {
+      console.log('Cannot detect QR code', error);
+      Burnt.toast({
+        title: 'Ошибка обработки',
+        preset: 'error'
+      });
     }
   };
 
@@ -136,6 +172,21 @@ const ScanScreen = () => {
             onOpenGallery={onOpenGallery}
             onRegionChange={handleRegionChange}
           />
+
+
+          {loading && (
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000
+              }}
+            >
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
         </View>
       </GestureDetector>
     </View>
