@@ -27,66 +27,54 @@ const ScanScreen = () => {
   const [regionOfInterest, setRegionOfInterest] =
     useState<RegionOfInterest | null>(null);
   const [loading, setLoading] = useState(false);
-
   const { hasPermission, requestPermission } = useCameraPermission();
   const router = useRouter();
   const navigate = useNavigation();
-
   const device = useCameraDevice('back');
-
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
     onCodeScanned: (codes) => {
-      if (hasScannedRef.current) return;
+      if (loading || hasScannedRef.current) return;
       hasScannedRef.current = true;
-
-      const isSuccess = codes.length > 0;
-
-      if (isSuccess) {
-        Burnt.toast({
-          title: 'QR-код успешно отсканирован',
-          preset: 'done'
-        });
-        router.navigate('/qr-scan/success');
-      } else {
-        Burnt.toast({
-          title: 'Ошибка при сканировании',
-          preset: 'error'
-        });
-        router.navigate('/qr-scan/fail');
-      }
+      Burnt.toast({
+        title: 'QR-код успешно отсканирован',
+        preset: 'done'
+      });
+      router.navigate('/qr-scan/success');
       console.log(codes);
     },
     regionOfInterest: regionOfInterest ?? undefined
   });
-
   useFocusEffect(
     useCallback(() => {
       hasScannedRef.current = false;
     }, [])
   );
-
   const focus = async (point: Point) => {
     const c = camera.current;
     if (!c) return;
     await c.focus(point);
   };
-
   const gesture = Gesture.Tap()
     .runOnJS(true)
     .onEnd(async ({ x, y }) => {
       await focus({ x, y });
     });
-
   const onOpenGallery = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+      Burnt.toast({
+        title: 'Доступ к галерее запрещен',
+        preset: 'error'
+      });
+      return;
+    }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      selectionLimit: 1,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
       quality: 1
     });
-
     if (result.canceled) return;
-
     if (result.assets && result.assets.length > 0) {
       const photo = result.assets[0];
       setLoading(true);
@@ -94,23 +82,19 @@ const ScanScreen = () => {
       setLoading(false);
     }
   };
-
   const detectQrCode = async (uri: string) => {
     Burnt.toast({
       title: 'Обработка изображения...',
       preset: 'none',
       duration: 2,
     });
-
     await new Promise((resolve) => setTimeout(resolve, 800));
-
     try {
       const response = await RNQRGenerator.detect({ uri });
       const { values } = response;
-
       if (values && values.length > 0) {
         Burnt.toast({
-          title: 'QR-код найден!',
+          title: 'QR-код успешно отсканирован',
           preset: 'done'
         });
         router.navigate('/qr-scan/success');
@@ -129,29 +113,63 @@ const ScanScreen = () => {
       });
     }
   };
-
   const handleRegionChange = useCallback((region: RegionOfInterest) => {
     setRegionOfInterest(region);
   }, []);
-
   if (!hasPermission) {
     return (
       <MainLayout>
-        <StyledButton onPress={requestPermission}>
-          <StyledText>Дайте доступ к камере</StyledText>
-        </StyledButton>
+        <View className={'pt-5 flex-1 justify-center items-center'}>
+          <StyledText>Нет доступа к камере</StyledText>
+          <StyledButton onPress={requestPermission}>
+            <StyledText>Дать доступ к камере</StyledText>
+          </StyledButton>
+          <StyledButton onPress={onOpenGallery} style={{ marginTop: 20 }}>
+            <StyledText>Сканировать из галереи</StyledText>
+          </StyledButton>
+          {loading && (
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000
+              }}
+            >
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
+        </View>
       </MainLayout>
     );
   }
 
   if (device == null) {
     return (
-      <View className={'pt-5 flex-1 justify-center items-center'}>
-        <StyledText>Камера не найдена</StyledText>
-      </View>
+      <MainLayout>
+        <View className={'pt-5 flex-1 justify-center items-center'}>
+          <StyledText>Камера не найдена</StyledText>
+          <StyledButton onPress={onOpenGallery} style={{ marginTop: 20 }}>
+            <StyledText>Сканировать из галереи</StyledText>
+          </StyledButton>
+          {loading && (
+            <View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000
+              }}
+            >
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
+        </View>
+      </MainLayout>
     );
   }
-
   return (
     <View className={'flex-1'}>
       <GestureDetector gesture={gesture}>
@@ -161,7 +179,7 @@ const ScanScreen = () => {
             codeScanner={codeScanner}
             style={StyleSheet.absoluteFill}
             device={device}
-            isActive={true}
+            isActive={!loading}
             enableZoomGesture={true}
             torch={torch ? 'on' : 'off'}
           />
@@ -172,8 +190,6 @@ const ScanScreen = () => {
             onOpenGallery={onOpenGallery}
             onRegionChange={handleRegionChange}
           />
-
-
           {loading && (
             <View
               style={{
@@ -192,5 +208,4 @@ const ScanScreen = () => {
     </View>
   );
 };
-
 export default ScanScreen;
