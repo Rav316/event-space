@@ -9,7 +9,7 @@ import * as Burnt from 'burnt';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   Camera,
@@ -70,7 +70,7 @@ const ScanScreen = () => {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsMultipleSelection: false,
       quality: 1
     });
@@ -86,7 +86,7 @@ const ScanScreen = () => {
     Burnt.toast({
       title: 'Обработка изображения...',
       preset: 'none',
-      duration: 2,
+      duration: 2
     });
     await new Promise((resolve) => setTimeout(resolve, 800));
     try {
