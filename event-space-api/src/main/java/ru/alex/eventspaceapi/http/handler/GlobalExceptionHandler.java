@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.dto.response.ErrorResponse;
+import ru.alex.eventspaceapi.exception.QrConfirmationException;
 import ru.alex.eventspaceapi.util.ExceptionUtils;
 
 import java.time.Instant;
@@ -96,5 +97,15 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(QrConfirmationException.class)
+    public ResponseEntity<ErrorResponse> handleQrConfirmationException(QrConfirmationException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErrorResponse(
+                        Instant.now(),
+                        Map.of("message", ex.getMessage(), "code", ex.getCode().name())
+                )
+        );
     }
 }

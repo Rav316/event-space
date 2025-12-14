@@ -4,6 +4,6 @@ import java.time.Instant;
 
 public record ErrorResponse (
         Instant timestamp,
-        Object message
+        Object reason
 ) {
 }

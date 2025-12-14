@@ -12,6 +12,8 @@ import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
+import ru.alex.eventspaceapi.exception.QrConfirmationException;
+import ru.alex.eventspaceapi.model.QrConfirmErrorCode;
 
 import java.time.*;
 import java.util.List;
@@ -78,22 +80,42 @@ public class EventUserService {
 
     @Transactional
     public void confirmParticipantAttendance(String token) {
-        if(!isValidUUID(token)) {
-            throw new IllegalArgumentException("token is not valid");
+        if (!isValidUUID(token)) {
+            throw new QrConfirmationException(
+                    QrConfirmErrorCode.INVALID_TOKEN,
+                    "QR token has invalid format"
+            );
         }
-        EventUser eventUser = eventUserRepository.findByQrTokenWithEvent(UUID.fromString(token))
-                .orElseThrow(() -> new EntityNotFoundException("no information found with the passed token"));
+        EventUser eventUser = eventUserRepository
+                .findByQrTokenWithEvent(UUID.fromString(token))
+                .orElseThrow(() -> new QrConfirmationException(
+                        QrConfirmErrorCode.TOKEN_NOT_FOUND,
+                        "No information found for this QR token"
+                ));
         Event event = eventUser.getEvent();
         ZonedDateTime eventStart = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
         ZonedDateTime eventEnd = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
         Instant now = Instant.now();
 
         if (now.isBefore(eventStart.minusHours(24).toInstant())) {
-            throw new IllegalStateException("confirmation is only available 24 hours before the event");
+            throw new QrConfirmationException(
+                    QrConfirmErrorCode.TOO_EARLY,
+                    "Confirmation is available only 24 hours before event"
+            );
         }
 
         if (now.isAfter(eventEnd.toInstant())) {
-            throw new IllegalStateException("It is not possible to confirm participation in an event that has already ended");
+            throw new QrConfirmationException(
+                    QrConfirmErrorCode.EVENT_ENDED,
+                    "Event has already ended"
+            );
+        }
+
+        if (eventUser.getAttended()) {
+            throw new QrConfirmationException(
+                    QrConfirmErrorCode.ALREADY_SCANNED,
+                    "QR code already scanned"
+            );
         }
 
         eventUser.setAttended(true);
