@@ -4,12 +4,7 @@ import { View } from 'react-native';
 import { StyledText } from '@/src/components/ui';
 import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
 import { useCallback, useRef } from 'react';
-
-type RootStackParamList = {
-  ScanResult: {
-    token: string;
-  };
-};
+import { RootStackParamList } from '@/src/types/routes';
 
 const ScanResultPage = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ScanResult'>>();
