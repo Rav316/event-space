@@ -40,7 +40,10 @@ const ScanScreen = () => {
         title: 'QR-код успешно отсканирован',
         preset: 'done'
       });
-      router.navigate('/qr-scan/success');
+      router.replace({
+        pathname: '/qr-scan/result',
+        params: { token: codes[0].value }
+      });
       console.log(codes);
     },
     regionOfInterest: regionOfInterest ?? undefined
@@ -97,7 +100,10 @@ const ScanScreen = () => {
           title: 'QR-код успешно отсканирован',
           preset: 'done'
         });
-        router.navigate('/qr-scan/success');
+        router.replace({
+          pathname: '/qr-scan/result',
+          params: { token: values[0] }
+        });
       } else {
         Burnt.toast({
           title: 'QR-код не найден',
