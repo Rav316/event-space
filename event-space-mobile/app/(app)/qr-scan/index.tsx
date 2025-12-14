@@ -36,10 +36,6 @@ const ScanScreen = () => {
     onCodeScanned: (codes) => {
       if (loading || hasScannedRef.current) return;
       hasScannedRef.current = true;
-      Burnt.toast({
-        title: 'QR-код успешно отсканирован',
-        preset: 'done'
-      });
       router.replace({
         pathname: '/qr-scan/result',
         params: { token: codes[0].value }
@@ -86,20 +82,11 @@ const ScanScreen = () => {
     }
   };
   const detectQrCode = async (uri: string) => {
-    Burnt.toast({
-      title: 'Обработка изображения...',
-      preset: 'none',
-      duration: 2
-    });
     await new Promise((resolve) => setTimeout(resolve, 800));
     try {
       const response = await RNQRGenerator.detect({ uri });
       const { values } = response;
       if (values && values.length > 0) {
-        Burnt.toast({
-          title: 'QR-код успешно отсканирован',
-          preset: 'done'
-        });
         router.replace({
           pathname: '/qr-scan/result',
           params: { token: values[0] }

@@ -13,7 +13,7 @@ export const useLogin = () => {
     mutationFn: Api.auth.login,
     onSuccess: (data) => {
       if (
-        roles[data.user.role] !== 'VERIFIER' ||
+        roles[data.user.role] !== 'VERIFIER' &&
         roles[data.user.role] !== 'ADMIN'
       ) {
         Alert.alert(

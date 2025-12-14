@@ -5,6 +5,7 @@ import { StyledText } from '@/src/components/ui';
 import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
 import { useCallback, useRef } from 'react';
 import { RootStackParamList } from '@/src/types/routes';
+import { getQrErrorMessage } from '@/src/utils/get-qr-error-message';
 
 const ScanResultPage = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ScanResult'>>();
@@ -23,6 +24,7 @@ const ScanResultPage = () => {
     }, [confirmAttendanceMutation, token])
   );
 
+
   return (
     <MainLayout>
       <View className="items-center gap-2">
@@ -36,7 +38,11 @@ const ScanResultPage = () => {
           <StyledText>Успешно</StyledText>
         )}
 
-        {confirmAttendanceMutation.isError && <StyledText>Ошибка</StyledText>}
+        {confirmAttendanceMutation.isError && (
+          <StyledText>
+            {getQrErrorMessage(confirmAttendanceMutation.error)}
+          </StyledText>
+        )}
       </View>
     </MainLayout>
   );

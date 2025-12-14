@@ -11,7 +11,6 @@ export const useConfirmAttendance = () => {
 
     },
     onError: (error) => {
-      console.error('error', error);
       if(error instanceof AxiosError) {
         console.error(error.response?.data);
       }
