@@ -55,23 +55,23 @@ public class EventController {
     }
 
     @GetMapping("/tags/{prefix}")
-    public List<String> findTagsStartWith(@PathVariable("prefix") String prefix) {
+    public List<String> findTagsStartWith(@PathVariable String prefix) {
         return eventService.findTagsStartWith(prefix);
     }
 
     @GetMapping("/{id}")
-    public EventReadDto findById(@PathVariable("id") Integer id) {
+    public EventReadDto findById(@PathVariable Integer id) {
         return eventService.findById(id);
     }
 
     @GetMapping("/{id}/steps")
-    public List<EventStepReadDto> getEventStepsByEvent(@PathVariable("id") Integer id) {
+    public List<EventStepReadDto> getEventStepsByEvent(@PathVariable Integer id) {
         return eventStepService.findAllStepsByEvent(id);
     }
 
     @GetMapping("/{id}/reviews")
     public SliceResponse<EventReviewReadDto> findAllByEvent(
-            @PathVariable("id") Integer id,
+            @PathVariable Integer id,
             @Validated @ModelAttribute EventReviewFilter filter
     ) {
         return SliceResponse.of(eventReviewService.findAllReviewsByEvent(id, filter));
@@ -79,7 +79,7 @@ public class EventController {
 
     @PostMapping("/{id}/reviews")
     public ResponseEntity<EventReviewReadDto> addReviewForEvent(
-            @PathVariable("id") Integer id,
+            @PathVariable Integer id,
             @Validated @RequestBody EventReviewCreateEditDto eventReviewCreateEditDto
     ) {
         return new ResponseEntity<>(eventReviewService.addReviewForEvent(id, eventReviewCreateEditDto), CREATED);
@@ -87,7 +87,7 @@ public class EventController {
 
     @PutMapping("/{id}/reviews")
     public ResponseEntity<Void> updateEventReview(
-            @PathVariable("id") Integer id,
+            @PathVariable Integer id,
             @Validated @RequestBody EventReviewCreateEditDto eventReviewCreateEditDto
     ) {
         eventReviewService.updateReviewByEvent(id, eventReviewCreateEditDto);
@@ -95,28 +95,25 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}/reviews")
-    public ResponseEntity<Void> deleteReviewByEvent(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteReviewByEvent(@PathVariable Integer id) {
         eventReviewService.deleteReviewByEvent(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
 
     @GetMapping("/{id}/reviews/my")
-    public ResponseEntity<EventReviewMyDto> getMyReviewForEvent(@PathVariable("id") Integer id) {
+    public ResponseEntity<EventReviewMyDto> getMyReviewForEvent(@PathVariable Integer id) {
         return new ResponseEntity<>(eventReviewService.getUserReviewByEvent(id), OK);
     }
 
     @GetMapping("/{id}/reviews/statistics")
-    public EventReviewStatisticsDto getEventReviewsStatistics(@PathVariable("id") Integer id) {
+    public EventReviewStatisticsDto getEventReviewsStatistics(@PathVariable Integer id) {
         return eventReviewService.getEventReviewsStatistics(id);
     }
 
-    @PostMapping("/{id}/confirm-attendance")
+    @PostMapping("/confirm-attendance/{token}")
     @PreAuthorize("hasAuthority('VERIFIER')")
-    public ResponseEntity<Void> confirmParticipantAttendance(
-            @PathVariable("id") Integer id,
-            @RequestParam("token") String token
-    ) {
-        eventUserService.confirmParticipantAttendance(id, token);
+    public ResponseEntity<Void> confirmParticipantAttendance(@PathVariable String token) {
+        eventUserService.confirmParticipantAttendance(token);
         return new ResponseEntity<>(OK);
     }
 
@@ -130,13 +127,13 @@ public class EventController {
     }
 
     @PostMapping("/{id}/register")
-    public ResponseEntity<Void> registerForEvent(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> registerForEvent(@PathVariable Integer id) {
         eventUserService.registerForEvent(id);
         return new ResponseEntity<>(CREATED);
     }
 
     @DeleteMapping("/{id}/unregister")
-    public ResponseEntity<Void> unregisterFromEvent(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> unregisterFromEvent(@PathVariable Integer id) {
         eventUserService.unregisterFromEvent(id);
         return new ResponseEntity<>(NO_CONTENT);
     }

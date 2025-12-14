@@ -77,16 +77,13 @@ public class EventUserService {
     }
 
     @Transactional
-    public void confirmParticipantAttendance(Integer id, String token) {
+    public void confirmParticipantAttendance(String token) {
         if(!isValidUUID(token)) {
             throw new IllegalArgumentException("token is not valid");
         }
         EventUser eventUser = eventUserRepository.findByQrTokenWithEvent(UUID.fromString(token))
                 .orElseThrow(() -> new EntityNotFoundException("no information found with the passed token"));
         Event event = eventUser.getEvent();
-        if(!event.getId().equals(id)) {
-            throw new IllegalArgumentException("inappropriate token for this event");
-        }
         ZonedDateTime eventStart = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
         ZonedDateTime eventEnd = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
         Instant now = Instant.now();
