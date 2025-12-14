@@ -81,7 +81,7 @@ const EventPage = () => {
 
   return (
     <Wrapper className="max-w-[1400px]">
-      <div className="flex flex-col gap-5 mt-[20px]">
+      <div className="flex flex-col gap-5 mt-5">
         <div>
           <Button variant="outline" onClick={() => navigate(-1)}>
             <ArrowLeft />
@@ -193,7 +193,7 @@ const EventPage = () => {
               >
                 <div
                   className={
-                    'rounded-full w-10 h-10 bg-green-600 flex justify-center items-center flex-shrink-0'
+                    'rounded-full w-10 h-10 bg-green-600 flex justify-center items-center shrink-0'
                   }
                 >
                   <CircleCheck className={'text-white'} />

@@ -13,14 +13,12 @@ interface Props {
 }
 
 export const EventQrCodeDialog: React.FC<Props> = ({
-  eventId,
   value,
   attended,
   open,
   eventFinished,
   onOpenChange,
 }) => {
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const isDisabled = attended || eventFinished;
 
