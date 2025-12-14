@@ -36,7 +36,7 @@ public class EventUserService {
             throw new IllegalStateException("the event has already started, you cannot register on it");
         }
 
-        if (event.getDeadline() != null && event.getDeadline().isAfter(LocalDate.now())) {
+        if (event.getDeadline() != null && event.getDeadline().isBefore(LocalDate.now())) {
             throw new IllegalStateException("the registration deadline for the events has expired");
         }
 

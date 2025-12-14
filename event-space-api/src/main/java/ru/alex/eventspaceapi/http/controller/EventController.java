@@ -111,7 +111,7 @@ public class EventController {
     }
 
     @PostMapping("/confirm-attendance/{token}")
-    @PreAuthorize("hasAuthority('VERIFIER')")
+    @PreAuthorize("hasAnyAuthority('VERIFIER', 'ADMIN')")
     public ResponseEntity<Void> confirmParticipantAttendance(@PathVariable String token) {
         eventUserService.confirmParticipantAttendance(token);
         return new ResponseEntity<>(OK);

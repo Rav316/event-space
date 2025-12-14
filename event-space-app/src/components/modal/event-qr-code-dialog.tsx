@@ -21,7 +21,6 @@ export const EventQrCodeDialog: React.FC<Props> = ({
   onOpenChange,
 }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const confirmAttendanceUrl = `${apiUrl}/events/${eventId}/confirm-attendance?token=${value}`;
 
   const isDisabled = attended || eventFinished;
 
@@ -40,7 +39,7 @@ export const EventQrCodeDialog: React.FC<Props> = ({
                 isDisabled ? 'blur-md opacity-60' : ''
               }`}
             >
-              <QRCodeCanvas value={confirmAttendanceUrl} />
+              <QRCodeCanvas value={value} />
             </div>
 
             {attended && (
