@@ -4,8 +4,6 @@ services:
       context: ./placeholder-service
     container_name: placeholder_service
     restart: always
-    ports:
-      - "8081:8080"
     networks:
       - my_network
 
