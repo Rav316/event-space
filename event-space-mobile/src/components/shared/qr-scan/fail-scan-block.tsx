@@ -3,8 +3,13 @@ import { StyledButton, StyledText } from '@/src/components/ui';
 import { View } from 'react-native';
 import { useNavigation } from 'expo-router';
 import { CommonActions } from '@react-navigation/native';
+import React from 'react';
 
-export const FailScanBlock = () => {
+interface Props {
+  errorMessage: string;
+}
+
+export const FailScanBlock: React.FC<Props> = ({ errorMessage }) => {
   const navigation = useNavigation();
 
   const handleReturnHome = () => {
@@ -31,7 +36,7 @@ export const FailScanBlock = () => {
         Билет недействителен
       </StyledText>
       <StyledText className={'text-center text-base text-muted-foreground'}>
-        QR-код не распознан нашей системой или уже был отсканирован.
+        {errorMessage}
       </StyledText>
       <View className={'gap-3 w-full'}>
         <StyledButton

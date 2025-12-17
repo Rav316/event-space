@@ -9,6 +9,7 @@ import {
   FailScanBlock,
   SuccessScanBlock
 } from '@/src/components/shared/qr-scan';
+import { getQrErrorMessage } from '@/src/utils/get-qr-error-message';
 
 const ScanResultPage = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ScanResult'>>();
@@ -41,7 +42,11 @@ const ScanResultPage = () => {
           <SuccessScanBlock eventInfo={confirmAttendanceMutation.data} />
         )}
 
-        {confirmAttendanceMutation.isError && <FailScanBlock />}
+        {confirmAttendanceMutation.isError && (
+          <FailScanBlock
+            errorMessage={getQrErrorMessage(confirmAttendanceMutation.error)}
+          />
+        )}
       </View>
     </MainLayout>
   );
