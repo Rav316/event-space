@@ -4,8 +4,14 @@ import { StyledButton, StyledText } from '@/src/components/ui';
 import { QrEventInfo } from '@/src/components/shared/qr-scan/qr-event-info';
 import { useNavigation } from 'expo-router';
 import { CommonActions } from '@react-navigation/native';
+import { EventQrInfoDto } from '@/src/api/events/models';
+import React from 'react';
 
-export const SuccessScanBlock = () => {
+interface Props {
+  eventInfo: EventQrInfoDto;
+}
+
+export const SuccessScanBlock: React.FC<Props> = ({ eventInfo }) => {
   const navigation = useNavigation();
 
   const handleReturnHome = () => {
@@ -38,10 +44,13 @@ export const SuccessScanBlock = () => {
           </StyledText>
         </View>
       </View>
-      <QrEventInfo />
-      <StyledButton className={'w-full h-[50px] mt-3'} onPress={handleReturnHome}>
+      <QrEventInfo eventInfo={eventInfo}/>
+      <StyledButton
+        className={'w-full h-[50px] mt-3'}
+        onPress={handleReturnHome}
+      >
         <StyledText className={'text-center'}>Вернуться на главную</StyledText>
       </StyledButton>
     </>
   );
-}
+};

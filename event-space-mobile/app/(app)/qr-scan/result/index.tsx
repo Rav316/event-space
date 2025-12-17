@@ -37,17 +37,9 @@ const ScanResultPage = () => {
           <StyledText>Обработка...</StyledText>
         )}
 
-        {/*{confirmAttendanceMutation.isSuccess && (*/}
-        {/*  <StyledText>Успешно</StyledText>*/}
-        {/*)}*/}
-
-        {/*{confirmAttendanceMutation.isError && (*/}
-        {/*  <StyledText>*/}
-        {/*    {getQrErrorMessage(confirmAttendanceMutation.error)}*/}
-        {/*  </StyledText>*/}
-        {/*)}*/}
-
-        {confirmAttendanceMutation.isSuccess && <SuccessScanBlock />}
+        {confirmAttendanceMutation.isSuccess && (
+          <SuccessScanBlock eventInfo={confirmAttendanceMutation.data} />
+        )}
 
         {confirmAttendanceMutation.isError && <FailScanBlock />}
       </View>
