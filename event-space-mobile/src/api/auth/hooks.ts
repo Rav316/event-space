@@ -36,6 +36,7 @@ export const useLogin = () => {
             preset: 'error'
           });
         } else {
+          console.error('error', error.response);
           Burnt.toast({
             title: 'Произошла ошибка при входе в систему',
             preset: 'error'

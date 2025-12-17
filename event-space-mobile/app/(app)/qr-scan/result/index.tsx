@@ -5,7 +5,10 @@ import { StyledText } from '@/src/components/ui';
 import { RouteProp, useFocusEffect, useRoute } from '@react-navigation/native';
 import { useCallback, useRef } from 'react';
 import { RootStackParamList } from '@/src/types/routes';
-import { getQrErrorMessage } from '@/src/utils/get-qr-error-message';
+import {
+  FailScanBlock,
+  SuccessScanBlock
+} from '@/src/components/shared/qr-scan';
 
 const ScanResultPage = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ScanResult'>>();
@@ -24,25 +27,29 @@ const ScanResultPage = () => {
     }, [confirmAttendanceMutation, token])
   );
 
-
   return (
-    <MainLayout>
-      <View className="items-center gap-2">
-        <StyledText>Результат сканирования</StyledText>
-
+    <MainLayout className={'justify-center'}>
+      <StyledText className={'mt-3 text-center text-base font-bold'}>
+        Результат сканирования
+      </StyledText>
+      <View className="flex-1  justify-center items-center gap-2">
         {confirmAttendanceMutation.isPending && (
           <StyledText>Обработка...</StyledText>
         )}
 
-        {confirmAttendanceMutation.isSuccess && (
-          <StyledText>Успешно</StyledText>
-        )}
+        {/*{confirmAttendanceMutation.isSuccess && (*/}
+        {/*  <StyledText>Успешно</StyledText>*/}
+        {/*)}*/}
 
-        {confirmAttendanceMutation.isError && (
-          <StyledText>
-            {getQrErrorMessage(confirmAttendanceMutation.error)}
-          </StyledText>
-        )}
+        {/*{confirmAttendanceMutation.isError && (*/}
+        {/*  <StyledText>*/}
+        {/*    {getQrErrorMessage(confirmAttendanceMutation.error)}*/}
+        {/*  </StyledText>*/}
+        {/*)}*/}
+
+        {confirmAttendanceMutation.isSuccess && <SuccessScanBlock />}
+
+        {confirmAttendanceMutation.isError && <FailScanBlock />}
       </View>
     </MainLayout>
   );

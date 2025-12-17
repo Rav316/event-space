@@ -1,11 +1,10 @@
-import { MainLayout } from '@/src/hoc';
 import { CircleX } from 'lucide-react-native';
-import { useNavigation } from 'expo-router';
-import { CommonActions } from '@react-navigation/native';
 import { StyledButton, StyledText } from '@/src/components/ui';
 import { View } from 'react-native';
+import { useNavigation } from 'expo-router';
+import { CommonActions } from '@react-navigation/native';
 
-const FailQrPage = () => {
+export const FailScanBlock = () => {
   const navigation = useNavigation();
 
   const handleReturnHome = () => {
@@ -26,7 +25,7 @@ const FailQrPage = () => {
   };
 
   return (
-    <MainLayout className={'items-center justify-center gap-6'}>
+    <View className={'w-full items-center gap-5'}>
       <CircleX color={'#DC2627'} width={130} height={130} />
       <StyledText className={'text-3xl font-bold'}>
         Билет недействителен
@@ -35,20 +34,20 @@ const FailQrPage = () => {
         QR-код не распознан нашей системой или уже был отсканирован.
       </StyledText>
       <View className={'gap-3 w-full'}>
-        <StyledButton onPress={() => navigation.goBack()} className={'w-full h-[50px]'}>
+        <StyledButton
+          onPress={() => navigation.goBack()}
+          className={'w-full h-[50px]'}
+        >
           <StyledText className={'text-base'}>Попробовать ещё раз</StyledText>
         </StyledButton>
         <StyledButton
           className={'w-full h-[50px]'}
           variant={'outline'}
+          onPress={handleReturnHome}
         >
-          <StyledText className={'text-base'} onPress={handleReturnHome}>
-            Вернуться на главную
-          </StyledText>
+          <StyledText className={'text-base'}>Вернуться на главную</StyledText>
         </StyledButton>
       </View>
-    </MainLayout>
+    </View>
   );
 };
-
-export default FailQrPage;

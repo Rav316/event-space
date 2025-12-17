@@ -9,7 +9,13 @@ import * as Burnt from 'burnt';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Linking,
+  StyleSheet,
+  View
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   Camera,
@@ -27,16 +33,19 @@ const ScanScreen = () => {
   const [regionOfInterest, setRegionOfInterest] =
     useState<RegionOfInterest | null>(null);
   const [loading, setLoading] = useState(false);
+
   const { hasPermission, requestPermission } = useCameraPermission();
+
   const router = useRouter();
   const navigate = useNavigation();
   const device = useCameraDevice('back');
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
     onCodeScanned: (codes) => {
       if (loading || hasScannedRef.current) return;
       hasScannedRef.current = true;
-      router.replace({
+      router.navigate({
         pathname: '/qr-scan/result',
         params: { token: codes[0].value }
       });
@@ -44,24 +53,29 @@ const ScanScreen = () => {
     },
     regionOfInterest: regionOfInterest ?? undefined
   });
+
   useFocusEffect(
     useCallback(() => {
       hasScannedRef.current = false;
     }, [])
   );
+
   const focus = async (point: Point) => {
     const c = camera.current;
     if (!c) return;
     await c.focus(point);
   };
+
   const gesture = Gesture.Tap()
     .runOnJS(true)
     .onEnd(async ({ x, y }) => {
       await focus({ x, y });
     });
+
   const onOpenGallery = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
+      // Здесь тоже можно добавить Linking.openSettings(), если нужно
       Burnt.toast({
         title: 'Доступ к галерее запрещен',
         preset: 'error'
@@ -73,7 +87,9 @@ const ScanScreen = () => {
       allowsMultipleSelection: false,
       quality: 1
     });
+
     if (result.canceled) return;
+
     if (result.assets && result.assets.length > 0) {
       const photo = result.assets[0];
       setLoading(true);
@@ -81,13 +97,14 @@ const ScanScreen = () => {
       setLoading(false);
     }
   };
+
   const detectQrCode = async (uri: string) => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     try {
       const response = await RNQRGenerator.detect({ uri });
       const { values } = response;
       if (values && values.length > 0) {
-        router.replace({
+        router.navigate({
           pathname: '/qr-scan/result',
           params: { token: values[0] }
         });
@@ -106,20 +123,45 @@ const ScanScreen = () => {
       });
     }
   };
+
   const handleRegionChange = useCallback((region: RegionOfInterest) => {
     setRegionOfInterest(region);
   }, []);
+
+  // Новая функция для обработки запроса прав камеры
+  const handleRequestCameraPermission = async () => {
+    const result = await requestPermission();
+    if (!result) {
+      // Если результат false, значит пользователь отказал (сейчас или ранее)
+      Alert.alert(
+        'Необходим доступ к камере',
+        'Чтобы сканировать QR-коды, разрешите доступ к камере в настройках вашего устройства.',
+        [
+          { text: 'Отмена', style: 'cancel' },
+          {
+            text: 'Открыть настройки',
+            onPress: () => Linking.openSettings()
+          }
+        ]
+      );
+    }
+  };
+
   if (!hasPermission) {
     return (
       <MainLayout>
-        <View className={'pt-5 flex-1 justify-center items-center'}>
-          <StyledText>Нет доступа к камере</StyledText>
-          <StyledButton onPress={requestPermission}>
-            <StyledText>Дать доступ к камере</StyledText>
-          </StyledButton>
-          <StyledButton onPress={onOpenGallery} style={{ marginTop: 20 }}>
-            <StyledText>Сканировать из галереи</StyledText>
-          </StyledButton>
+        <View className={'pt-5 flex-1 justify-center items-center gap-6'}>
+          <StyledText className="text-center px-4">
+            Для работы сканера необходим доступ к камере
+          </StyledText>
+          <View className={'gap-2'}>
+            <StyledButton onPress={handleRequestCameraPermission}>
+              <StyledText>Разрешить доступ</StyledText>
+            </StyledButton>
+            <StyledButton onPress={onOpenGallery}>
+              <StyledText>Сканировать из галереи</StyledText>
+            </StyledButton>
+          </View>
           {loading && (
             <View
               style={{
@@ -163,6 +205,7 @@ const ScanScreen = () => {
       </MainLayout>
     );
   }
+
   return (
     <View className={'flex-1'}>
       <GestureDetector gesture={gesture}>
@@ -201,4 +244,5 @@ const ScanScreen = () => {
     </View>
   );
 };
+
 export default ScanScreen;
