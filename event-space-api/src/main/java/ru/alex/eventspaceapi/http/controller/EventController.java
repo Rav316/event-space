@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
+import ru.alex.eventspaceapi.dto.event.EventQrInfoDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewMyDto;
@@ -112,9 +113,8 @@ public class EventController {
 
     @PostMapping("/confirm-attendance/{token}")
     @PreAuthorize("hasAnyAuthority('VERIFIER', 'ADMIN')")
-    public ResponseEntity<Void> confirmParticipantAttendance(@PathVariable String token) {
-        eventUserService.confirmParticipantAttendance(token);
-        return new ResponseEntity<>(OK);
+    public ResponseEntity<EventQrInfoDto> confirmParticipantAttendance(@PathVariable String token) {
+        return new ResponseEntity<>(eventUserService.confirmParticipantAttendance(token), OK);
     }
 
     @PostMapping

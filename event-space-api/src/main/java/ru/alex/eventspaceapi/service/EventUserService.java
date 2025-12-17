@@ -11,8 +11,10 @@ import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.event.EventQrInfoDto;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.QrConfirmationException;
+import ru.alex.eventspaceapi.mapper.event.EventQrInfoMapper;
 import ru.alex.eventspaceapi.model.QrConfirmErrorCode;
 
 import java.time.*;
@@ -29,6 +31,8 @@ public class EventUserService {
     private final EventRepository eventRepository;
     private final EventUserRepository eventUserRepository;
     private final UserRepository userRepository;
+    private final EventQrInfoMapper eventQrInfoMapper;
+
 
     @Transactional
     public void registerForEvent(Integer id) {
@@ -79,7 +83,7 @@ public class EventUserService {
     }
 
     @Transactional
-    public void confirmParticipantAttendance(String token) {
+    public EventQrInfoDto confirmParticipantAttendance(String token) {
         if (!isValidUUID(token)) {
             throw new QrConfirmationException(
                     QrConfirmErrorCode.INVALID_TOKEN,
@@ -121,6 +125,8 @@ public class EventUserService {
         eventUser.setAttended(true);
         eventUser.setConfirmedBy(userRepository.getReferenceById(Objects.requireNonNull(getAuthorizedUser()).id()));
         eventUser.setConfirmedAt(Instant.now());
+
+        return eventQrInfoMapper.toDto(event);
     }
 
     private boolean isEventPassed(Event event) {
