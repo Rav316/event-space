@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AUTH_KEYS } from '@/src/api/auth/keys';
 import { Api } from '@/src/api/api-client';
-import { setTokens } from '@/src/storage/auth-helper';
+import { getAccessToken, getRefreshToken, setTokens } from '@/src/storage/auth-helper';
 import * as Burnt from 'burnt';
 import { AxiosError } from 'axios';
 import { roles } from '@/src/types/roles';
@@ -46,3 +46,18 @@ export const useLogin = () => {
     }
   });
 };
+
+export const useMe = () => {
+  const token = getAccessToken();
+  const refreshToken = getRefreshToken();
+
+  return useQuery({
+    enabled: !!token,
+    refetchOnWindowFocus: false,
+    retry: false,
+    queryKey: AUTH_KEYS.me,
+    queryFn: () => Api.auth.refreshToken(refreshToken),
+    staleTime: Infinity
+  })
+
+}

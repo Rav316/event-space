@@ -17,3 +17,16 @@ export interface UserReadDto {
   registerDate: Date;
   faculty: FacultyListDto;
 }
+
+export interface UserEditDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  faculty: number;
+  course?: number;
+  description?: string;
+  tgUsername?: string;
+  vkUrl?: string;
+  githubUrl?: string;
+}

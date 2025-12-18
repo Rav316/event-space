@@ -31,7 +31,7 @@ export default function Index() {
   return (
     <MainLayout className={'flex-1 justify-center items-center gap-5'}>
       <StyledText className={'text-4xl font-medium'}>EventSpace</StyledText>
-      <View className={''}>
+      <View>
         <StyledText className={'text-muted-foreground text-center'}>
           Добро пожаловать!
         </StyledText>

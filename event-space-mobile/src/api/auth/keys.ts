@@ -1,3 +1,4 @@
 export const AUTH_KEYS = {
-  login: ['login']
+  login: ['login'] as const,
+  me: ['me'] as const
 }

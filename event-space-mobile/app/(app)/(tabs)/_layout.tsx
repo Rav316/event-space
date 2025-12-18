@@ -1,5 +1,5 @@
 import { Tabs, useRouter } from 'expo-router';
-import { House, QrCode, Settings } from 'lucide-react-native';
+import { House, QrCode, User } from 'lucide-react-native';
 import { useIconColor } from '@/src/hooks/use-icon-color';
 import { Pressable, View, useColorScheme } from 'react-native';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
@@ -17,7 +17,7 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 10,
+        zIndex: 10
       }}
       pointerEvents="box-none"
     >
@@ -51,11 +51,12 @@ const TabLayout = () => {
           overflow: 'visible',
           backgroundColor: isDark ? '#000000' : '#FFFFFF',
           borderTopWidth: 0.5,
-          borderTopColor: isDark ? '#333' : '#ccc',
+          borderTopColor: isDark ? '#333' : '#ccc'
         },
         tabBarItemStyle: {
           paddingTop: 10
-        }
+        },
+        headerShown: false
       }}
     >
       <Tabs.Screen
@@ -81,15 +82,15 @@ const TabLayout = () => {
             e.preventDefault();
 
             router.push('/qr-scan');
-          },
+          }
         }}
       />
 
       <Tabs.Screen
-        name="settings"
+        name="profile"
         options={{
-          title: 'Настройки',
-          tabBarIcon: ({ color }) => <Settings color={color} />
+          title: 'Профиль',
+          tabBarIcon: ({ color }) => <User color={color} />
         }}
       />
     </Tabs>
