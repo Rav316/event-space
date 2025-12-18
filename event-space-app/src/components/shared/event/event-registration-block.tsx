@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Progress } from '@/components/ui';
+import { Button, Progress, Separator } from '@/components/ui';
 import { cn } from '@/lib/utils.ts';
 import { useParams } from 'react-router';
 import { EventRegistrationButton } from '@/components/shared/event';
@@ -18,6 +18,7 @@ interface Props {
   attended?: boolean;
   eventDate: string;
   endTime: string;
+  deadline?: string;
 }
 
 export const EventRegistrationBlock: React.FC<Props> = ({
@@ -31,6 +32,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   attended = false,
   eventDate,
   endTime,
+  deadline,
 }) => {
   const params = useParams();
   const eventId = Number(params.eventId);
@@ -88,7 +90,27 @@ export const EventRegistrationBlock: React.FC<Props> = ({
         capacity={quantity}
         canRegister={canRegister}
         canUnregister={canUnregister}
+        deadline={deadline}
       />
+
+      <Separator />
+      <div className={'flex flex-col gap-1 items-center'}>
+        <span
+          className={
+            'text-center text-muted-foreground text-base max-[420px]:text-start min-[900px]:max-[1309px]:leading-none'
+          }
+        >
+          Дедлайн регистрации на мероприятие истёк.
+        </span>
+
+        <span
+          className={
+            'text-center text-muted-foreground text-sm max-[420px]:text-start  min-[900px]:max-[1309px]:leading-none'
+          }
+        >
+          Регистрация была доступна до 10 декабря 2025 г.
+        </span>
+      </div>
     </div>
   );
 };

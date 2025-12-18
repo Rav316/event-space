@@ -1,5 +1,6 @@
 import { type LucideProps } from 'lucide-react';
 import React from 'react';
+import { cn } from '@/lib/utils.ts';
 
 interface Props {
   Icon: React.ForwardRefExoticComponent<
@@ -7,16 +8,22 @@ interface Props {
   >;
   text: string;
   caption: string;
+  iconClassName?: string;
 }
 
-export const EventBadge: React.FC<Props> = ({ Icon, text, caption }) => {
+export const EventBadge: React.FC<Props> = ({
+  Icon,
+  text,
+  caption,
+  iconClassName,
+}) => {
   return (
     <div
       className={
         'flex items-center gap-4 bg-[#F4F2F7] p-3 rounded-2xl flex-1 min-w-0 max-[650px]:w-full max-[650px]:py-2'
       }
     >
-      <Icon className="shrink-0" />
+      <Icon className={cn('shrink-0', iconClassName)} />
       <div className={'flex flex-col min-w-0'}>
         <span
           className={

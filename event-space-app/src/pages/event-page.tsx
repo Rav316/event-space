@@ -165,6 +165,7 @@ const EventPage = () => {
                   event.deadline ? formatDateToRuFormat(event.deadline) : '---'
                 }
                 caption="дедлайн регистрации"
+                iconClassName={'text-orange-500'}
               />
             </div>
 
@@ -222,6 +223,7 @@ const EventPage = () => {
                 attended={event.isAttended}
                 eventDate={event.eventDate}
                 endTime={event.endTime}
+                deadline={event.deadline}
               />
               {event.author && (
                 <EventOrganizerBlock

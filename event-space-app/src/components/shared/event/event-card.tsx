@@ -75,7 +75,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
       <div className={'flex flex-col p-[21px]'}>
         <div className={'pb-[21px] flex flex-col gap-y-3'}>
           <span className={'font-medium'}>{event.name}</span>
-          <p className={'text-muted-foreground line-clamp-2 min-h-[48px]'}>
+          <p className={'text-muted-foreground line-clamp-2 min-h-12'}>
             {event.shortDescription}
           </p>
           <div className={'flex flex-col gap-y-2'}>
@@ -100,6 +100,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
             >
               {event.deadline && (
                 <EventCardLabel
+                  iconClassName={'text-orange-500'}
                   Icon={Flame}
                   text={formatDateToRuFormat(event.deadline)}
                 />
@@ -130,6 +131,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           canUnregister={event.canUnregister}
           registeredUsers={event.registeredUsers}
           capacity={event.participantQuantity}
+          deadline={event.deadline}
         />
       </div>
     </div>

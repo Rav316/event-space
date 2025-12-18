@@ -15,6 +15,7 @@ import {
   useRegisterForEvent,
   useUnregisterFromEvent,
 } from '@/api/events/hooks.ts';
+import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 
 interface Props {
   eventId: number;
@@ -24,6 +25,7 @@ interface Props {
   isDestructive?: boolean;
   registeredUsers: number;
   capacity: number;
+  deadline?: string;
 }
 
 export const EventRegistrationButton: React.FC<Props> = ({
@@ -34,6 +36,7 @@ export const EventRegistrationButton: React.FC<Props> = ({
   isDestructive,
   registeredUsers,
   capacity,
+  deadline
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -71,7 +74,7 @@ export const EventRegistrationButton: React.FC<Props> = ({
   const isButtonEnabled = data
     ? isUserRegistered
       ? canUnregister
-      : canRegister && hasPlaces
+      : canRegister && hasPlaces && (deadline === undefined || compareWithToday(deadline) > -1)
     : true;
 
   return (
