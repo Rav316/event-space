@@ -2,19 +2,27 @@ import { QrEventInfoItem } from '@/src/components/shared/qr-scan/qr-event-info-i
 import { cn } from '@/src/lib/utils';
 import { useColorScheme } from 'nativewind';
 import { FlatList, View } from 'react-native';
+import { EventQrInfoDto } from '@/src/api/events/models';
+import React from 'react';
 
-const EVENT_DETAILS = [
-  { title: 'Event name', value: 'Innovate & Inspire Summit 2024' },
-  { title: 'Date', value: 'October 26, 2025' },
-  { title: 'Time', value: '9:00 AM - 5:00 PM' },
-  {
-    title: 'Location',
-    value:
-      'Metropolis Convention Center, 48 Skyline Avenue, Floor 7, Pavilion D',
-  },
-];
+interface Props {
+  eventInfo: EventQrInfoDto;
+}
 
-export const QrEventInfo = () => {
+export const QrEventInfo: React.FC<Props> = ({ eventInfo }) => {
+  const eventDetails = [
+    { title: 'Название события', value: eventInfo.name },
+    { title: 'Дата события', value: eventInfo.date },
+    {
+      title: 'Время события',
+      value: `${eventInfo.startTime.slice(0, 5)} - ${eventInfo.endTime.slice(0, 5)}`
+    },
+    {
+      title: 'Место проведения',
+      value: `${eventInfo.address}, ${eventInfo.space}`
+    }
+  ];
+
   const colorScheme = useColorScheme().colorScheme;
   const separatorColor = colorScheme === 'dark' ? 'bg-white/10' : 'bg-black/10';
 
@@ -26,7 +34,7 @@ export const QrEventInfo = () => {
       )}
     >
       <FlatList
-        data={EVENT_DETAILS}
+        data={eventDetails}
         scrollEnabled={false}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => <QrEventInfoItem {...item} />}
