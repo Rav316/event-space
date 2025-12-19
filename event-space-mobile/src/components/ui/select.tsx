@@ -11,14 +11,13 @@ import {
 } from 'lucide-react-native';
 import * as React from 'react';
 import { createContext, useContext, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
+import { ScrollView as GestureScrollView } from 'react-native-gesture-handler';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { FullWindowOverlay as RNFullWindowOverlay } from 'react-native-screens';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 type Option = SelectPrimitive.Option;
-
 const SelectWidthContext = createContext<number | undefined>(undefined);
-
 type SelectProps = SelectPrimitive.RootProps;
 const Select: React.FC<SelectProps> = ({ children, ...props }) => {
   const [triggerWidth, setTriggerWidth] = useState<number | undefined>(
@@ -42,9 +41,7 @@ const Select: React.FC<SelectProps> = ({ children, ...props }) => {
     </SelectWidthContext.Provider>
   );
 };
-
 const SelectGroup = SelectPrimitive.Group;
-
 function SelectValue({
   ref,
   className,
@@ -66,7 +63,6 @@ function SelectValue({
     />
   );
 }
-
 function SelectTrigger({
   ref,
   className,
@@ -110,10 +106,8 @@ function SelectTrigger({
     </SelectPrimitive.Trigger>
   );
 }
-
 const FullWindowOverlay =
   Platform.OS === 'ios' ? RNFullWindowOverlay : React.Fragment;
-
 function SelectContent({
   className,
   children,
@@ -126,6 +120,7 @@ function SelectContent({
     portalHost?: string;
   }) {
   const triggerWidth = useContext(SelectWidthContext);
+  const insets = useSafeAreaInsets();
   return (
     <SelectPrimitive.Portal hostName={portalHost}>
       <FullWindowOverlay>
@@ -137,6 +132,7 @@ function SelectContent({
               className="z-50"
               entering={FadeIn}
               exiting={FadeOut}
+              collapsable={false}
             >
               <SelectPrimitive.Content
                 className={cn(
@@ -159,11 +155,12 @@ function SelectContent({
                   className
                 )}
                 style={
-                  Platform.OS !== 'web' && triggerWidth
+                  Platform.OS !== 'web' && triggerWidth !== undefined
                     ? { width: triggerWidth }
                     : undefined
                 }
                 position={position}
+                insets={{ top: insets.top, bottom: insets.bottom }}
                 {...props}
               >
                 <SelectScrollUpButton />
@@ -179,7 +176,7 @@ function SelectContent({
                       )
                   )}
                 >
-                  {children}
+                  <NativeSelectScrollView>{children}</NativeSelectScrollView>
                 </SelectPrimitive.Viewport>
                 <SelectScrollDownButton />
               </SelectPrimitive.Content>
@@ -190,7 +187,6 @@ function SelectContent({
     </SelectPrimitive.Portal>
   );
 }
-
 function SelectLabel({
   className,
   ...props
@@ -205,7 +201,6 @@ function SelectLabel({
     />
   );
 }
-
 function SelectItem({
   className,
   children,
@@ -232,7 +227,6 @@ function SelectItem({
     </SelectPrimitive.Item>
   );
 }
-
 function SelectSeparator({
   className,
   ...props
@@ -249,7 +243,6 @@ function SelectSeparator({
     />
   );
 }
-
 /**
  * @platform Web only
  * Returns null on native platforms
@@ -273,7 +266,6 @@ function SelectScrollUpButton({
     </SelectPrimitive.ScrollUpButton>
   );
 }
-
 /**
  * @platform Web only
  * Returns null on native platforms
@@ -297,7 +289,6 @@ function SelectScrollDownButton({
     </SelectPrimitive.ScrollDownButton>
   );
 }
-
 /**
  * @platform Native only
  * Returns the children on the web
@@ -305,13 +296,14 @@ function SelectScrollDownButton({
 function NativeSelectScrollView({
   className,
   ...props
-}: React.ComponentProps<typeof ScrollView>) {
+}: React.ComponentProps<typeof GestureScrollView>) {
   if (Platform.OS === 'web') {
     return <>{props.children}</>;
   }
-  return <ScrollView className={cn('max-h-52', className)} {...props} />;
+  return (
+    <GestureScrollView className={cn('max-h-[80vh]', className)} {...props} />
+  );
 }
-
 export {
   NativeSelectScrollView,
   Select,

@@ -10,21 +10,17 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/src/components/ui/select';
+import { useFaculties } from '@/src/api/faculties/hooks';
 
 interface Props {
   form: ReturnType<typeof useForm<UserEditDto>>;
 }
 
-const faculties = [
-  { value: '1', label: 'Факультет' },
-  { value: '2', label: 'Факультет 2' },
-  { value: '3', label: 'Факультет 3' }
-];
-
 const courses = [1, 2, 3, 4];
 
 export const ProfileForm: React.FC<Props> = ({ form }) => {
-  console.log('form data', form.formState);
+  const {data: faculties, isPending: isFacultiesPending} = useFaculties();
+
 
   return (
     <View className={'w-full gap-4 mt-6'}>
@@ -127,41 +123,53 @@ export const ProfileForm: React.FC<Props> = ({ form }) => {
             control={form.control}
             name={'faculty'}
             render={({
-              field: { value, onChange, onBlur },
+              field: { value, onChange },
               fieldState: { error }
-            }) => (
-              <>
-                <Select
-                  value={{
-                    value: faculties[0].value,
-                    label: faculties[0].label
-                  }}
-                  onValueChange={(val) => onChange(Number(val))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={'Факультет'} />
-                  </SelectTrigger>
-                  <SelectContent className={'w-full'}>
-                    {faculties.map((faculty) => (
-                      <SelectItem
-                        key={faculty.value}
-                        value={faculty.value}
-                        label={faculty.label}
-                      />
-                    ))}
-                  </SelectContent>
-                </Select>
-                {error ? (
-                  <StyledText className={'text-destructive min-h-[20px]'}>
-                    {error.message}
-                  </StyledText>
-                ) : (
-                  <StyledText className={'opacity-0 min-h-[20px]'}>
-                    placeholder
-                  </StyledText>
-                )}
-              </>
-            )}
+            }) => {
+              console.log('all faculties', faculties);
+
+              const selectedFaculty = faculties?.find(
+                (faculty) => faculty.id === value
+              );
+
+              return (
+                <>
+                  <Select
+                    value={
+                      selectedFaculty
+                        ? {
+                            value: selectedFaculty.id.toString(),
+                            label: selectedFaculty.name
+                          }
+                        : undefined
+                    }
+                    onValueChange={(val) => onChange(Number(val?.value))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={'Факультет'} />
+                    </SelectTrigger>
+                    <SelectContent className={'w-full'}>
+                      {faculties?.map((faculty) => (
+                        <SelectItem
+                          key={faculty.id}
+                          value={faculty.id.toString()}
+                          label={faculty.name}
+                        />
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {error ? (
+                    <StyledText className={'text-destructive min-h-[20px]'}>
+                      {error.message}
+                    </StyledText>
+                  ) : (
+                    <StyledText className={'opacity-0 min-h-[20px]'}>
+                      placeholder
+                    </StyledText>
+                  )}
+                </>
+              );
+            }}
           />
         </View>
         <View className={'gap-1 flex-1 basis-0'}>
@@ -169,42 +177,48 @@ export const ProfileForm: React.FC<Props> = ({ form }) => {
           <Controller
             control={form.control}
             name={'course'}
-            render={({
-              field: { value, onChange, onBlur },
-              fieldState: { error }
-            }) => (
-              <>
-                <Select
-                  value={{
-                    value: courses[0].toString(),
-                    label: `${courses[0]} курс`
-                  }}
-                  onValueChange={(val) => onChange(Number(val))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={'Курс'} />
-                  </SelectTrigger>
-                  <SelectContent className={'w-full'}>
-                    {courses.map((course) => (
-                      <SelectItem
-                        key={course}
-                        value={course.toString()}
-                        label={`${course} курс`}
-                      />
-                    ))}
-                  </SelectContent>
-                </Select>
-                {error ? (
-                  <StyledText className={'text-destructive min-h-[20px]'}>
-                    {error.message}
+            render={({ field: { value, onChange }, fieldState: { error } }) => {
+              const selectedCourse = courses.find((c) => c === value);
+
+              return (
+                <>
+                  <Select
+                    value={
+                      selectedCourse
+                        ? {
+                            value: selectedCourse.toString(),
+                            label: `${selectedCourse} курс`
+                          }
+                        : undefined
+                    }
+                    onValueChange={(val) => onChange(Number(val?.value))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={'Курс'} />
+                    </SelectTrigger>
+                    <SelectContent className={'w-full'}>
+                      {courses.map((course) => (
+                        <SelectItem
+                          key={course}
+                          value={course.toString()}
+                          label={`${course} курс`}
+                        />
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <StyledText
+                    className={
+                      error
+                        ? 'text-destructive min-h-[20px]'
+                        : 'opacity-0 min-h-[20px]'
+                    }
+                  >
+                    {error?.message ?? 'placeholder'}
                   </StyledText>
-                ) : (
-                  <StyledText className={'opacity-0 min-h-[20px]'}>
-                    placeholder
-                  </StyledText>
-                )}
-              </>
-            )}
+                </>
+              );
+            }}
           />
         </View>
       </View>
