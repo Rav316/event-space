@@ -1,12 +1,14 @@
 import { ScrollMainLayout } from '@/src/hoc';
 import { removeTokens } from '@/src/storage/auth-helper';
 import {
-  Avatar,
-  AvatarFallback,
   StyledButton,
   StyledText
 } from '@/src/components/ui';
-import { ProfileForm, ProfileSkeleton } from '@/src/components/shared/profile';
+import {
+  ProfileForm,
+  ProfileSkeleton,
+  UserAvatar
+} from '@/src/components/shared/profile';
 import { useForm } from 'react-hook-form';
 import { UserEditDto } from '@/src/api/user/models';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +18,8 @@ import { View } from 'react-native';
 import { useEffect } from 'react';
 
 const ProfileTab = () => {
+  const staticContentUrl = process.env.EXPO_PUBLIC_STATIC_URL;
+
   const logout = () => {
     removeTokens();
   };
@@ -66,11 +70,21 @@ const ProfileTab = () => {
         <ProfileSkeleton />
       ) : (
         <>
-          <Avatar alt={'avatar'} className={'w-24 h-24'}>
-            <AvatarFallback>
-              <StyledText className={'text-3xl'}>АС</StyledText>
-            </AvatarFallback>
-          </Avatar>
+          {/*<Avatar alt={'avatar'} className={'w-24 h-24'}>*/}
+          {/*  <AvatarFallback>*/}
+          {/*    <StyledText className={'text-3xl'}>АС</StyledText>*/}
+          {/*  </AvatarFallback>*/}
+          {/*</Avatar>*/}
+
+          <UserAvatar
+            firstName={user?.firstName}
+            lastName={user?.lastName}
+            avatarUrl={
+              user?.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : false
+            }
+            className={'w-24 h-24'}
+            avatarFallbackClassName={'text-3xl'}
+          />
           <View className={'w-full items-center'}>
             <StyledText className={'text-2xl font-semibold'}>
               Александр Смирнов

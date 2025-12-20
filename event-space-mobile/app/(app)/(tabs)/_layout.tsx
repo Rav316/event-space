@@ -5,12 +5,14 @@ import { Pressable, View, useColorScheme } from 'react-native';
 import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { cn } from '@/src/lib/utils';
 
 type ScanButtonProps = BottomTabBarButtonProps & {
   children: React.ReactNode;
+  isDark: boolean;
 };
 
-const ScanButton = ({ children, onPress }: ScanButtonProps) => {
+const ScanButton = ({ onPress, isDark }: ScanButtonProps) => {
   return (
     <View
       style={{
@@ -23,9 +25,12 @@ const ScanButton = ({ children, onPress }: ScanButtonProps) => {
     >
       <Pressable
         onPress={onPress}
-        className="w-[58px] h-[58px] rounded-full bg-black dark:bg-white flex justify-center items-center absolute -top-[29px]"
+        className={cn(
+          'w-[58px] h-[58px] rounded-full  flex justify-center items-center absolute -top-[29px] border',
+          isDark ? 'bg-white' : 'bg-black'
+        )}
       >
-        {children}
+        <QrCode color={isDark ? '#000000' : '#FFFFFF'} />
       </Pressable>
     </View>
   );
@@ -35,10 +40,9 @@ const TabLayout = () => {
   const iconColor = useIconColor();
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
-  const router = useRouter(); // 2. Инициализируем роутер
+  const router = useRouter();
 
   const isDark = colorScheme === 'dark';
-  const scanIconColor = isDark ? '#000000' : '#FFFFFF';
 
   return (
     <Tabs
@@ -49,7 +53,6 @@ const TabLayout = () => {
           height: 65 + insets.bottom,
           paddingBottom: insets.bottom,
           overflow: 'visible',
-          backgroundColor: isDark ? '#000000' : '#FFFFFF',
           borderTopWidth: 0.5,
           borderTopColor: isDark ? '#333' : '#ccc'
         },
@@ -67,13 +70,12 @@ const TabLayout = () => {
         }}
       />
 
-      {/* 3. Обновляем экран сканирования */}
       <Tabs.Screen
         name="scan"
         options={{
           title: 'Сканирование',
-          tabBarIcon: () => <QrCode color={scanIconColor} />,
-          tabBarButton: (props) => <ScanButton {...props} />,
+          tabBarIcon: () => <View />,
+          tabBarButton: (props) => <ScanButton isDark={isDark} {...props} />,
           tabBarLabel: () => null,
           tabBarItemStyle: { paddingTop: 0 }
         }}

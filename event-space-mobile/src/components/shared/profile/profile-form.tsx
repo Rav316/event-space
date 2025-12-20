@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { StyledInput, StyledLabel, StyledText } from '@/src/components/ui';
+import { Skeleton, StyledInput, StyledLabel, StyledText } from '@/src/components/ui';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { UserEditDto } from '@/src/api/user/models';
@@ -19,8 +19,7 @@ interface Props {
 const courses = [1, 2, 3, 4];
 
 export const ProfileForm: React.FC<Props> = ({ form }) => {
-  const {data: faculties, isPending: isFacultiesPending} = useFaculties();
-
+  const { data: faculties, isPending: isFacultiesPending } = useFaculties();
 
   return (
     <View className={'w-full gap-4 mt-6'}>
@@ -119,58 +118,62 @@ export const ProfileForm: React.FC<Props> = ({ form }) => {
       <View className={'flex-row gap-2 w-full'}>
         <View className={'gap-1 flex-1 basis-0'}>
           <StyledLabel className={'text-base'}>Факультет</StyledLabel>
-          <Controller
-            control={form.control}
-            name={'faculty'}
-            render={({
-              field: { value, onChange },
-              fieldState: { error }
-            }) => {
-              console.log('all faculties', faculties);
+          {isFacultiesPending ? (
+            <Skeleton className={'h-10 w-full'} />
+          ) : (
+            <Controller
+              control={form.control}
+              name={'faculty'}
+              render={({
+                field: { value, onChange },
+                fieldState: { error }
+              }) => {
+                console.log('all faculties', faculties);
 
-              const selectedFaculty = faculties?.find(
-                (faculty) => faculty.id === value
-              );
+                const selectedFaculty = faculties?.find(
+                  (faculty) => faculty.id === value
+                );
 
-              return (
-                <>
-                  <Select
-                    value={
-                      selectedFaculty
-                        ? {
-                            value: selectedFaculty.id.toString(),
-                            label: selectedFaculty.name
-                          }
-                        : undefined
-                    }
-                    onValueChange={(val) => onChange(Number(val?.value))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={'Факультет'} />
-                    </SelectTrigger>
-                    <SelectContent className={'w-full'}>
-                      {faculties?.map((faculty) => (
-                        <SelectItem
-                          key={faculty.id}
-                          value={faculty.id.toString()}
-                          label={faculty.name}
-                        />
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {error ? (
-                    <StyledText className={'text-destructive min-h-[20px]'}>
-                      {error.message}
-                    </StyledText>
-                  ) : (
-                    <StyledText className={'opacity-0 min-h-[20px]'}>
-                      placeholder
-                    </StyledText>
-                  )}
-                </>
-              );
-            }}
-          />
+                return (
+                  <>
+                    <Select
+                      value={
+                        selectedFaculty
+                          ? {
+                              value: selectedFaculty.id.toString(),
+                              label: selectedFaculty.name
+                            }
+                          : undefined
+                      }
+                      onValueChange={(val) => onChange(Number(val?.value))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={'Факультет'} />
+                      </SelectTrigger>
+                      <SelectContent className={'w-full'}>
+                        {faculties?.map((faculty) => (
+                          <SelectItem
+                            key={faculty.id}
+                            value={faculty.id.toString()}
+                            label={faculty.name}
+                          />
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {error ? (
+                      <StyledText className={'text-destructive min-h-[20px]'}>
+                        {error.message}
+                      </StyledText>
+                    ) : (
+                      <StyledText className={'opacity-0 min-h-[20px]'}>
+                        placeholder
+                      </StyledText>
+                    )}
+                  </>
+                );
+              }}
+            />
+          )}
         </View>
         <View className={'gap-1 flex-1 basis-0'}>
           <StyledLabel className={'text-base'}>Курс</StyledLabel>
