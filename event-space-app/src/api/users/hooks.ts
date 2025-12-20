@@ -57,7 +57,7 @@ export const useChangePassword = () => {
 };
 
 export const useDeleteAccount = () => {
-  const removeToken = useAuthStore((state) => state.removeToken);
+  const removeToken = useAuthStore((state) => state.removeTokens);
   const navigate = useNavigate();
   return useMutation({
     mutationFn: Api.users.deleteAccount,
