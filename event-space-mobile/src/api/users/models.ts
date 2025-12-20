@@ -1,4 +1,5 @@
 import { FacultyListDto } from '@/src/api/faculties/models';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 export interface UserReadDto {
   id: number;
@@ -34,5 +35,5 @@ export interface UserEditDto {
 export interface UserEditData {
   userId: number;
   user: UserEditDto;
-  avatar: File | null;
+  avatar: ImagePickerAsset | null;
 }

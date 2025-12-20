@@ -128,7 +128,6 @@ export const ProfileForm: React.FC<Props> = ({ form }) => {
                 field: { value, onChange },
                 fieldState: { error }
               }) => {
-                console.log('all faculties', faculties);
 
                 const selectedFaculty = faculties?.find(
                   (faculty) => faculty.id === value

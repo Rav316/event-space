@@ -7,6 +7,15 @@ import * as Burnt from 'burnt';
 import { AxiosError } from 'axios';
 import { USERS_KEYS } from '@/src/api/users/keys';
 
+export const useCheckEmail = () => {
+  return useMutation({
+    mutationFn: Api.users.existsByEmail,
+    onSuccess: (exists, email) => {
+      queryClient.setQueryData(['emailExists', email], exists)
+    }
+  })
+}
+
 export const useEditUser = () => {
   return useMutation({
     mutationFn: Api.users.editUser,
