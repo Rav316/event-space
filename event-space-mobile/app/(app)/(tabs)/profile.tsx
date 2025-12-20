@@ -5,20 +5,23 @@ import {
   StyledText
 } from '@/src/components/ui';
 import {
+  ProfileAvatar,
   ProfileForm,
-  ProfileSkeleton,
-  UserAvatar
+  ProfileSkeleton
 } from '@/src/components/shared/profile';
 import { useForm } from 'react-hook-form';
-import { UserEditDto } from '@/src/api/user/models';
+import { UserEditDto } from '@/src/api/users/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userProfileSchema } from '@/src/schemas/user-profile-schema';
 import { useMe } from '@/src/api/auth/hooks';
 import { View } from 'react-native';
 import { useEffect } from 'react';
+import { Pencil } from 'lucide-react-native';
+import { useColorScheme } from 'nativewind';
 
 const ProfileTab = () => {
-  const staticContentUrl = process.env.EXPO_PUBLIC_STATIC_URL;
+  const colorScheme = useColorScheme().colorScheme;
+
 
   const logout = () => {
     removeTokens();
@@ -66,25 +69,11 @@ const ProfileTab = () => {
 
   return (
     <ScrollMainLayout className={'items-center'}>
-      {isPending ? (
+      {isPending || !user ? (
         <ProfileSkeleton />
       ) : (
         <>
-          {/*<Avatar alt={'avatar'} className={'w-24 h-24'}>*/}
-          {/*  <AvatarFallback>*/}
-          {/*    <StyledText className={'text-3xl'}>АС</StyledText>*/}
-          {/*  </AvatarFallback>*/}
-          {/*</Avatar>*/}
-
-          <UserAvatar
-            firstName={user?.firstName}
-            lastName={user?.lastName}
-            avatarUrl={
-              user?.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : false
-            }
-            className={'w-24 h-24'}
-            avatarFallbackClassName={'text-3xl'}
-          />
+          <ProfileAvatar user={user} />
           <View className={'w-full items-center'}>
             <StyledText className={'text-2xl font-semibold'}>
               Александр Смирнов
@@ -104,9 +93,18 @@ const ProfileTab = () => {
             </View>
             <ProfileForm form={profileForm} />
           </View>
-          <StyledButton onPress={logout}>
-            <StyledText>Выйти</StyledText>
-          </StyledButton>
+          <View className={'w-full gap-3'}>
+            <StyledButton>
+              <Pencil
+                color={colorScheme === 'dark' ? 'black' : 'white'}
+                size={16}
+              />
+              <StyledText>Редактировать профиль</StyledText>
+            </StyledButton>
+            <StyledButton onPress={logout} variant={'destructive'}>
+              <StyledText>Выйти</StyledText>
+            </StyledButton>
+          </View>
         </>
       )}
     </ScrollMainLayout>

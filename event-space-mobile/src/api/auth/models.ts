@@ -1,4 +1,4 @@
-import { UserReadDto } from '@/src/api/user/models';
+import { UserReadDto } from '@/src/api/users/models';
 
 export interface UserLoginDto {
   email: string;

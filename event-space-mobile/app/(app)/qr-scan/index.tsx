@@ -75,7 +75,6 @@ const ScanScreen = () => {
   const onOpenGallery = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
-      // Здесь тоже можно добавить Linking.openSettings(), если нужно
       Burnt.toast({
         title: 'Доступ к галерее запрещен',
         preset: 'error'
@@ -128,11 +127,9 @@ const ScanScreen = () => {
     setRegionOfInterest(region);
   }, []);
 
-  // Новая функция для обработки запроса прав камеры
   const handleRequestCameraPermission = async () => {
     const result = await requestPermission();
     if (!result) {
-      // Если результат false, значит пользователь отказал (сейчас или ранее)
       Alert.alert(
         'Необходим доступ к камере',
         'Чтобы сканировать QR-коды, разрешите доступ к камере в настройках вашего устройства.',

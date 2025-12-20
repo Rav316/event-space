@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { Skeleton, StyledInput, StyledLabel, StyledText } from '@/src/components/ui';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { UserEditDto } from '@/src/api/user/models';
+import { UserEditDto } from '@/src/api/users/models';
 import {
   Select,
   SelectContent,

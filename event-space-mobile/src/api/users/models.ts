@@ -30,3 +30,9 @@ export interface UserEditDto {
   vkUrl?: string;
   githubUrl?: string;
 }
+
+export interface UserEditData {
+  userId: number;
+  user: UserEditDto;
+  avatar: File | null;
+}

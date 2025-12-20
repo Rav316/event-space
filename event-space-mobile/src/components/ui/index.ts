@@ -6,3 +6,4 @@ export {PasswordInput} from './password-input';
 export {Avatar, AvatarFallback, AvatarImage} from './avatar';
 export {Skeleton} from './skeleton'
 export * as Select from './select';
+export * as DropdownMenu from './dropdown-menu';
