@@ -29,7 +29,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserReadDto> update(
-            @PathVariable("id") Integer id,
+            @PathVariable Integer id,
             @Validated @RequestPart("user") UserEditDto userEditDto,
             @RequestPart(value = "avatar", required = false) MultipartFile avatar
             ) {

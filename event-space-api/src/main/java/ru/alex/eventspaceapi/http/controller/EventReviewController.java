@@ -26,13 +26,13 @@ public class EventReviewController {
     }
 
     @PostMapping("/{id}/mark-as-helpful")
-    public ResponseEntity<Void> markReviewAsHelpful(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> markReviewAsHelpful(@PathVariable Integer id) {
         helpfulMarkService.markReviewAsHelpful(id);
         return new ResponseEntity<>(OK);
     }
 
     @DeleteMapping("/{id}/unmark-as-helpful")
-    public ResponseEntity<Void> unmarkReviewAsHelpful(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> unmarkReviewAsHelpful(@PathVariable Integer id) {
         helpfulMarkService.unmarkReviewAsHelpful(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
