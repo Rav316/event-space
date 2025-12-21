@@ -31,9 +31,10 @@ public class UserController {
     public ResponseEntity<UserReadDto> update(
             @PathVariable Integer id,
             @Validated @RequestPart("user") UserEditDto userEditDto,
-            @RequestPart(value = "avatar", required = false) MultipartFile avatar
+            @RequestPart(value = "avatar", required = false) MultipartFile avatar,
+            @RequestPart(value = "avatarRemoved", required = false) Boolean avatarRemoved
             ) {
-        return new ResponseEntity<>(userService.update(id, userEditDto, avatar), OK);
+        return new ResponseEntity<>(userService.update(id, userEditDto, avatar, avatarRemoved), OK);
     }
 
     @PatchMapping("/profile/change-password")

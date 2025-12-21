@@ -60,7 +60,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     @CacheEvict(value = "users", key = "#result.id()")
-    public UserReadDto update(Integer id, UserEditDto userEditDto, MultipartFile avatar) {
+    public UserReadDto update(Integer id, UserEditDto userEditDto, MultipartFile avatar, Boolean avatarRemoved) {
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -73,13 +73,14 @@ public class UserService implements UserDetailsService {
                     .orElseThrow(() -> new FacultyNotFoundException(userEditDto.faculty()));
             user.setFaculty(faculty);
         }
-        if (avatar != null) {
-            if (avatar.isEmpty()) {
-                if (user.getAvatarUrl() != null) {
-                    fileService.deleteFileByUrl(user.getAvatarUrl());
-                    user.setAvatarUrl(null);
-                }
-            } else {
+
+        if(avatarRemoved != null && avatarRemoved) {
+            if (user.getAvatarUrl() != null) {
+                fileService.deleteFileByUrl(user.getAvatarUrl());
+                user.setAvatarUrl(null);
+            }
+        } else {
+            if (avatar != null) {
                 if (user.getAvatarUrl() != null) {
                     fileService.deleteFileByUrl(user.getAvatarUrl());
                 }
@@ -87,6 +88,7 @@ public class UserService implements UserDetailsService {
                 user.setAvatarUrl(avatarUrl);
             }
         }
+
         return userReadMapper.toDto(user);
     }
 }
