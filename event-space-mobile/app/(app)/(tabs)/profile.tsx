@@ -34,6 +34,21 @@ const ProfileTab = () => {
   const [selectedAsset, setSelectedAsset] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
   const [avatarRemoved, setAvatarRemoved] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    if (editUserMutation.isPending) return;
+
+    setRefreshing(true);
+
+    try {
+      await queryClient.invalidateQueries({
+        queryKey: ['me']
+      });
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const { data, isPending, isError } = useMe();
   const checkEmailMutation = useCheckEmail();
@@ -146,7 +161,11 @@ const ProfileTab = () => {
   });
 
   return (
-    <ScrollMainLayout className={'items-center'}>
+    <ScrollMainLayout
+      className={'items-center'}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    >
       {isPending || !user ? (
         <ProfileSkeleton />
       ) : (

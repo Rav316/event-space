@@ -3,18 +3,21 @@ import {
   initialWindowMetrics,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import { View } from 'react-native';
-import {
-  KeyboardAwareScrollView
-} from 'react-native-keyboard-controller';
+import { RefreshControl, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 interface Props {
   className?: string;
+
+  refreshing?: boolean;
+  onRefresh?: () => void | Promise<void>;
 }
 
 export const ScrollMainLayout: React.FC<PropsWithChildren<Props>> = ({
   children,
-  className
+  className,
+  refreshing = false,
+  onRefresh
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -24,7 +27,7 @@ export const ScrollMainLayout: React.FC<PropsWithChildren<Props>> = ({
 
   return (
     <View
-      className={'flex-1 px-5'}
+      className="flex-1 px-5"
       style={{ paddingBottom: bottomInset, paddingTop: topInset }}
     >
       <KeyboardAwareScrollView
@@ -32,6 +35,11 @@ export const ScrollMainLayout: React.FC<PropsWithChildren<Props>> = ({
         contentContainerClassName={className}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
       >
         {children}
       </KeyboardAwareScrollView>
