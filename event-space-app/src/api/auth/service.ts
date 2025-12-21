@@ -34,8 +34,3 @@ export const refreshToken = async (refreshToken: string | null): Promise<AuthRes
   );
   return response.data;
 };
-
-export const logout = async (): Promise<void> => {
-  const response = await axiosInstance.post<void>(`${ApiRoutes.AUTH}/logout`);
-  return response.data;
-};
