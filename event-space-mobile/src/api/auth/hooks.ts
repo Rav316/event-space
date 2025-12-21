@@ -4,7 +4,7 @@ import { Api } from '@/src/api/api-client';
 import { getAccessToken, getRefreshToken, setTokens } from '@/src/storage/auth-helper';
 import * as Burnt from 'burnt';
 import { AxiosError } from 'axios';
-import { roles } from '@/src/types/roles';
+import { userRoles } from '@/src/types/userRoles';
 import { Alert } from 'react-native';
 
 export const useLogin = () => {
@@ -13,8 +13,8 @@ export const useLogin = () => {
     mutationFn: Api.auth.login,
     onSuccess: (data) => {
       if (
-        roles[data.user.role] !== 'VERIFIER' &&
-        roles[data.user.role] !== 'ADMIN'
+        userRoles[data.user.role].value !== 'VERIFIER' &&
+        userRoles[data.user.role].value !== 'ADMIN'
       ) {
         Alert.alert(
           'Отказано в доступе',

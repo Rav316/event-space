@@ -9,51 +9,32 @@ import { UserAvatar } from '@/src/components/shared/profile/user-avatar';
 import { Trash2, Upload } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { UserReadDto } from '@/src/api/users/models';
-import React, { useCallback, useState } from 'react';
-import * as ImagePicker from 'expo-image-picker';
-import * as Burnt from 'burnt';
+import React, { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
 interface Props {
   user: UserReadDto;
+  localAvatarUri: string | null;
+  setLocalAvatarUri: (uri: string | null) => void;
+  chooseAvatar: () => Promise<void>;
 }
 
-export const ProfileAvatar: React.FC<Props> = ({ user }) => {
+export const ProfileAvatar: React.FC<Props> = ({
+  user,
+  localAvatarUri,
+  setLocalAvatarUri,
+  chooseAvatar
+}) => {
   const staticContentUrl = process.env.EXPO_PUBLIC_STATIC_URL;
   const colorScheme = useColorScheme().colorScheme;
-
-  const [localAvatarUri, setLocalAvatarUri] = useState<string | null>(
-    null
-  );
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         setLocalAvatarUri(null);
       };
-    }, [])
+    }, [setLocalAvatarUri])
   );
-
-  const chooseAvatar = async () => {
-    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!granted) {
-      Burnt.toast({
-        title: 'Доступ к галерее запрещен',
-        preset: 'error'
-      });
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsMultipleSelection: false,
-      quality: 1
-    });
-
-    if (result.canceled) return;
-
-    setLocalAvatarUri(result.assets[0].uri);
-  };
 
   const removeAvatar = () => {
     setLocalAvatarUri(null);
