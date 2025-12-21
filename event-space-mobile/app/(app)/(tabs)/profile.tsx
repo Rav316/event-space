@@ -23,41 +23,32 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Burnt from 'burnt';
 import { userRoles } from '@/src/types/userRoles';
 import { Spinner } from '@/src/components/ui/spinner';
-import {LogoutModal} from "@/src/components/modal";
-
+import { LogoutModal } from '@/src/components/modal';
 const ProfileTab = () => {
   const colorScheme = useColorScheme().colorScheme;
-
   const logout = () => {
     removeTokens();
     queryClient.clear();
   };
-
   const [selectedAsset, setSelectedAsset] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
   const [avatarRemoved, setAvatarRemoved] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
   const onRefresh = async () => {
     if (editUserMutation.isPending) return;
-
     setRefreshing(true);
-
     try {
-      await queryClient.invalidateQueries({
+      await queryClient.refetchQueries({
         queryKey: ['me']
       });
     } finally {
       setRefreshing(false);
     }
   };
-
-  const { data, isPending, isError } = useMe();
+  const { data, isError } = useMe();
   const checkEmailMutation = useCheckEmail();
   const editUserMutation = useEditUser();
-
   const user = data?.user;
-
   const defaultValues = {
     firstName: '',
     lastName: '',
@@ -70,15 +61,12 @@ const ProfileTab = () => {
     vkUrl: '',
     githubUrl: ''
   };
-
   const profileForm = useForm<UserEditDto>({
     resolver: zodResolver(userProfileSchema),
     defaultValues
   });
-
   const [initialUserData, setInitialUserData] =
     useState<UserEditDto>(defaultValues);
-
   useEffect(() => {
     if (user) {
       const userData = {
@@ -93,16 +81,10 @@ const ProfileTab = () => {
         vkUrl: user.vkUrl || '',
         githubUrl: user.githubUrl || ''
       };
-
       profileForm.reset(userData);
       setInitialUserData(userData);
     }
   }, [user, profileForm]);
-
-  if (isError) {
-    return <StyledText>Error loading profile</StyledText>;
-  }
-
   const chooseAvatar = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
@@ -112,29 +94,22 @@ const ProfileTab = () => {
       });
       return;
     }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsMultipleSelection: false,
       quality: 1
     });
-
     if (result.canceled) return;
-
-    setAvatarRemoved(false)
-
+    setAvatarRemoved(false);
     const asset = result.assets[0];
     setSelectedAsset(asset);
   };
-
   const onSubmit = profileForm.handleSubmit(async (data) => {
     const isFormChanged = !deepEqual(data, initialUserData);
     const isAvatarChanged = !!selectedAsset;
-
     if (!isFormChanged && !isAvatarChanged && !avatarRemoved) {
       return;
     }
-
     const emailOk = await validateEmailUnique({
       email: data.email,
       defaultEmail: initialUserData.email,
@@ -142,9 +117,7 @@ const ProfileTab = () => {
       checkEmailMutation,
       form: profileForm
     });
-
     if (!emailOk) return;
-
     editUserMutation.mutate(
       {
         user: { ...data },
@@ -161,14 +134,27 @@ const ProfileTab = () => {
       }
     );
   });
-
   return (
     <ScrollMainLayout
-      className={'items-center'}
+      className={'items-center flex-1'}
       refreshing={refreshing}
       onRefresh={onRefresh}
     >
-      {isPending || !user ? (
+      {refreshing && isError ? (
+        <ProfileSkeleton />
+      ) : isError ? (
+        <View className={'items-center justify-center w-full flex-1 gap-2'}>
+          <StyledText className={'text-2xl text-center font-medium'}>
+            Произошла ошибка при загрузке профиля
+          </StyledText>
+          <StyledText className={'text-muted-foreground text-center'}>
+            Пожалуйста, обновите страницу или попробуйте позже.
+          </StyledText>
+          <StyledButton>
+            <StyledText onPress={onRefresh}>Обновить страницу</StyledText>
+          </StyledButton>
+        </View>
+      ) : !user ? (
         <ProfileSkeleton />
       ) : (
         <>
@@ -219,12 +205,11 @@ const ProfileTab = () => {
                 </>
               )}
             </StyledButton>
-            <LogoutModal logout={logout}/>
+            <LogoutModal logout={logout} />
           </View>
         </>
       )}
     </ScrollMainLayout>
   );
 };
-
 export default ProfileTab;
