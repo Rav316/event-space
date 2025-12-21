@@ -22,7 +22,7 @@ import { useCheckEmail, useEditUser } from '@/src/api/users/hooks';
 import * as ImagePicker from 'expo-image-picker';
 import * as Burnt from 'burnt';
 import { userRoles } from '@/src/types/userRoles';
-import {Spinner} from "@/src/components/ui/spinner";
+import { Spinner } from '@/src/components/ui/spinner';
 
 const ProfileTab = () => {
   const colorScheme = useColorScheme().colorScheme;
@@ -31,9 +31,9 @@ const ProfileTab = () => {
     removeTokens();
   };
 
-  const [localAvatarUri, setLocalAvatarUri] = useState<string | null>(null);
   const [selectedAsset, setSelectedAsset] =
     useState<ImagePicker.ImagePickerAsset | null>(null);
+  const [avatarRemoved, setAvatarRemoved] = useState(false);
 
   const { data, isPending, isError } = useMe();
   const checkEmailMutation = useCheckEmail();
@@ -104,9 +104,9 @@ const ProfileTab = () => {
 
     if (result.canceled) return;
 
-    const asset = result.assets[0];
+    setAvatarRemoved(false)
 
-    setLocalAvatarUri(asset.uri);
+    const asset = result.assets[0];
     setSelectedAsset(asset);
   };
 
@@ -114,7 +114,7 @@ const ProfileTab = () => {
     const isFormChanged = !deepEqual(data, initialUserData);
     const isAvatarChanged = !!selectedAsset;
 
-    if (!isFormChanged && !isAvatarChanged) {
+    if (!isFormChanged && !isAvatarChanged && !avatarRemoved) {
       return;
     }
 
@@ -128,11 +128,21 @@ const ProfileTab = () => {
 
     if (!emailOk) return;
 
-    editUserMutation.mutate({
-      user: { ...data },
-      userId: user?.id || 0,
-      avatar: selectedAsset
-    });
+    editUserMutation.mutate(
+      {
+        user: { ...data },
+        userId: user?.id || 0,
+        avatar: selectedAsset,
+        avatarRemoved
+      },
+      {
+        onSuccess: () => {
+          setSelectedAsset(null);
+          setSelectedAsset(null);
+          setAvatarRemoved(false);
+        }
+      }
+    );
   });
 
   return (
@@ -143,9 +153,11 @@ const ProfileTab = () => {
         <>
           <ProfileAvatar
             user={user}
-            localAvatarUri={localAvatarUri}
-            setLocalAvatarUri={setLocalAvatarUri}
+            selectedAsset={selectedAsset}
+            setSelectedAsset={setSelectedAsset}
             chooseAvatar={chooseAvatar}
+            avatarRemoved={avatarRemoved}
+            setAvatarRemoved={setAvatarRemoved}
           />
           <View className={'w-full items-center'}>
             <StyledText className={'text-2xl font-semibold'}>
@@ -173,7 +185,7 @@ const ProfileTab = () => {
             >
               {editUserMutation.isPending ? (
                 <>
-                  <Spinner/>
+                  <Spinner />
                   <StyledText>Сохранение...</StyledText>
                 </>
               ) : (

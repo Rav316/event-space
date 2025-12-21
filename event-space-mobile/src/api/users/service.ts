@@ -21,13 +21,18 @@ export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
     type: 'application/json'
   } as any);
 
-  if (data.avatar) {
+  if (!data.avatarRemoved && data.avatar) {
     formData.append('avatar', {
       uri: data.avatar.uri,
       type: data.avatar.mimeType ?? 'image/jpeg',
       name: data.avatar.fileName ?? data.avatar.uri.split('/').pop()
     } as any);
   }
+
+  formData.append('avatarRemoved', {
+    string: JSON.stringify(data.avatarRemoved),
+    type: 'application/json'
+  } as any)
 
   console.log(formData);
 

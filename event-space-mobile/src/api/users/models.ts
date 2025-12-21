@@ -36,4 +36,5 @@ export interface UserEditData {
   userId: number;
   user: UserEditDto;
   avatar: ImagePickerAsset | null;
+  avatarRemoved: boolean;
 }
