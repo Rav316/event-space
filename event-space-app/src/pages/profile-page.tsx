@@ -26,6 +26,7 @@ const ProfilePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [avatarRemoved, setAvatarRemoved] = useState(false);
 
   const { data } = useMe();
   const user = data?.user;
@@ -90,11 +91,13 @@ const ProfilePage = () => {
         user: { ...data },
         userId: user?.id || 0,
         avatar: selectedFile,
+        avatarRemoved
       },
       {
         onSuccess: () => {
           userProfileForm.reset(data);
           setEditMode(false);
+          setAvatarRemoved(false)
         },
       },
     );
@@ -117,6 +120,8 @@ const ProfilePage = () => {
               setSelectedFile={setSelectedFile}
               previewUrl={previewUrl}
               setPreviewUrl={setPreviewUrl}
+              avatarRemoved={avatarRemoved}
+              setAvatarRemoved={setAvatarRemoved}
             />
           </div>
           <div className={'flex flex-col gap-5 flex-7'}>

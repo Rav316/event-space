@@ -7,7 +7,7 @@ import {
   Separator,
 } from '@/components/ui';
 import { motion, AnimatePresence } from 'framer-motion';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Pencil, Trash2, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { useMe } from '@/api/auth/hooks.ts';
@@ -19,6 +19,8 @@ interface Props {
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
   previewUrl: string | null;
   setPreviewUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  avatarRemoved: boolean;
+  setAvatarRemoved: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserMainInfoBlock: React.FC<Props> = ({
@@ -26,9 +28,10 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   setSelectedFile,
   previewUrl,
   setPreviewUrl,
+  avatarRemoved,
+  setAvatarRemoved
 }) => {
   const { data } = useMe();
-  const [avatarRemoved, setAvatarRemoved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!data) return null;
@@ -117,7 +120,6 @@ export const UserMainInfoBlock: React.FC<Props> = ({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Скрытый input вне DropdownMenu — обязательно! */}
               <input
                 ref={fileInputRef}
                 type="file"

@@ -25,9 +25,13 @@ export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
     'user',
     new Blob([JSON.stringify(data.user)], { type: 'application/json' }),
   );
-  if (data.avatar) {
+  if (!data.avatarRemoved && data.avatar) {
     formData.append('avatar', data.avatar);
   }
+  formData.append(
+    'avatarRemoved',
+    new Blob([data.avatarRemoved.toString()], { type: 'application/json' }),
+  );
 
   const response = await axiosInstance.put<UserReadDto>(
     `${ApiRoutes.USERS}/${data.userId}`,

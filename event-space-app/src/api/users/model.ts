@@ -46,6 +46,7 @@ export interface UserEditData {
   userId: number;
   user: UserEditDto;
   avatar: File | null;
+  avatarRemoved: boolean;
 }
 
 export interface UserPasswordChangeDto {
