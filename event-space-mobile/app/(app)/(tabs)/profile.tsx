@@ -22,6 +22,7 @@ import { useCheckEmail, useEditUser } from '@/src/api/users/hooks';
 import * as ImagePicker from 'expo-image-picker';
 import * as Burnt from 'burnt';
 import { userRoles } from '@/src/types/userRoles';
+import {Spinner} from "@/src/components/ui/spinner";
 
 const ProfileTab = () => {
   const colorScheme = useColorScheme().colorScheme;
@@ -166,12 +167,24 @@ const ProfileTab = () => {
             <ProfileForm form={profileForm} />
           </View>
           <View className={'w-full gap-3'}>
-            <StyledButton onPress={onSubmit}>
-              <Pencil
-                color={colorScheme === 'dark' ? 'black' : 'white'}
-                size={16}
-              />
-              <StyledText>Сохранить изменения</StyledText>
+            <StyledButton
+              disabled={editUserMutation.isPending}
+              onPress={onSubmit}
+            >
+              {editUserMutation.isPending ? (
+                <>
+                  <Spinner/>
+                  <StyledText>Сохранение...</StyledText>
+                </>
+              ) : (
+                <>
+                  <Pencil
+                    color={colorScheme === 'dark' ? 'black' : 'white'}
+                    size={16}
+                  />
+                  <StyledText>Сохранить изменения</StyledText>
+                </>
+              )}
             </StyledButton>
 
             <StyledButton onPress={logout} variant={'destructive'}>
