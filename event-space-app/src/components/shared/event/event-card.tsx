@@ -19,6 +19,8 @@ import {
   EventCardLabel,
   EventRegistrationButton,
 } from '@/components/shared/event';
+import { compareWithToday } from '@/utils/compare-with-current-date.ts';
+import { cn } from '@/lib/utils.ts';
 
 interface Props {
   event: EventListDto;
@@ -100,12 +102,18 @@ export const EventCard: React.FC<Props> = ({ event }) => {
             >
               {event.deadline && (
                 <EventCardLabel
-                  iconClassName={'text-orange-500'}
+                  iconClassName={cn(
+                    compareWithToday(event.deadline) === -1 && 'text-orange-500',
+                  )}
                   Icon={Flame}
                   text={formatDateToRuFormat(event.deadline)}
                 />
               )}
-              <EventCardLabel Icon={MapPin} text={`${event.space.building.name}, ${event.space.name}`} />
+
+              <EventCardLabel
+                Icon={MapPin}
+                text={`${event.space.building.name}, ${event.space.name}`}
+              />
             </div>
             <div
               className={

@@ -6,6 +6,8 @@ import { EventRegistrationButton } from '@/components/shared/event';
 import { EventQrCodeDialog } from '@/components/modal';
 import { QrCode } from 'lucide-react';
 import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
+import { compareWithToday } from '@/utils/compare-with-current-date.ts';
+import { formatDate } from '@/utils/format-date.ts';
 
 interface Props {
   registeredUsers: number;
@@ -94,23 +96,25 @@ export const EventRegistrationBlock: React.FC<Props> = ({
       />
 
       <Separator />
-      <div className={'flex flex-col gap-1 items-center'}>
-        <span
-          className={
-            'text-center text-muted-foreground text-base max-[420px]:text-start min-[900px]:max-[1309px]:leading-none'
-          }
-        >
-          Дедлайн регистрации на мероприятие истёк.
-        </span>
+      {deadline && compareWithToday(deadline) === -1 && (
+        <div className={'flex flex-col gap-1 items-center'}>
+          <span
+            className={
+              'text-center text-muted-foreground text-base max-[420px]:text-start min-[900px]:max-[1309px]:leading-none'
+            }
+          >
+            Дедлайн регистрации на мероприятие истёк.
+          </span>
 
-        <span
-          className={
-            'text-center text-muted-foreground text-sm max-[420px]:text-start  min-[900px]:max-[1309px]:leading-none'
-          }
-        >
-          Регистрация была доступна до 10 декабря 2025 г.
-        </span>
-      </div>
+          <span
+            className={
+              'text-center text-muted-foreground text-sm max-[420px]:text-start  min-[900px]:max-[1309px]:leading-none'
+            }
+          >
+            Регистрация была доступна до {formatDate(deadline)}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,7 @@
-export const compareWithToday = (dateStr: string) => {
+export const compareWithToday = (dateStr?: string) => {
+  if(!dateStr) {
+    return -1;
+  }
   const [y, m, d] = dateStr.split('-').map(Number);
 
   const inputDate = new Date(y, m - 1, d);

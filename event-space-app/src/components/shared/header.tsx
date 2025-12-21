@@ -26,7 +26,7 @@ export const Header = () => {
   return (
     <header
       className={
-        'flex justify-center items-center py-[20px] px-[20px] border-b border-[#E5E5E5]'
+        'flex justify-center items-center py-5 px-5 border-b border-[#E5E5E5]'
       }
     >
       <div

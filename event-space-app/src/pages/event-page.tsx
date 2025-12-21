@@ -30,6 +30,8 @@ import {
   EventShareBlock,
   EventSkeleton,
 } from '@/components/shared/event';
+import { cn } from '@/lib/utils.ts';
+import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 
 const EventPage = () => {
   const navigate = useNavigate();
@@ -165,7 +167,7 @@ const EventPage = () => {
                   event.deadline ? formatDateToRuFormat(event.deadline) : '---'
                 }
                 caption="дедлайн регистрации"
-                iconClassName={'text-orange-500'}
+                iconClassName={cn(compareWithToday(event.deadline) === -1 && 'text-orange-500')}
               />
             </div>
 
