@@ -11,19 +11,24 @@ import { useColorScheme } from 'nativewind';
 import { UserReadDto } from '@/src/api/users/models';
 import React, { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 interface Props {
   user: UserReadDto;
-  localAvatarUri: string | null;
-  setLocalAvatarUri: (uri: string | null) => void;
+  selectedAsset: ImagePickerAsset | null;
+  setSelectedAsset: (asset: ImagePickerAsset | null) => void;
   chooseAvatar: () => Promise<void>;
+  avatarRemoved: boolean;
+  setAvatarRemoved: (value: boolean) => void;
 }
 
 export const ProfileAvatar: React.FC<Props> = ({
   user,
-  localAvatarUri,
-  setLocalAvatarUri,
-  chooseAvatar
+  selectedAsset,
+  setSelectedAsset,
+  chooseAvatar,
+  avatarRemoved,
+  setAvatarRemoved
 }) => {
   const staticContentUrl = process.env.EXPO_PUBLIC_STATIC_URL;
   const colorScheme = useColorScheme().colorScheme;
@@ -31,17 +36,22 @@ export const ProfileAvatar: React.FC<Props> = ({
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setLocalAvatarUri(null);
+        setSelectedAsset(null);
+        setAvatarRemoved(false);
       };
-    }, [setLocalAvatarUri])
+    }, [setAvatarRemoved, setSelectedAsset])
   );
 
   const removeAvatar = () => {
-    setLocalAvatarUri(null);
+    if(selectedAsset) {
+      setSelectedAsset(null);
+    } else {
+      setAvatarRemoved(true);
+    }
   };
 
   const avatarUrl =
-    localAvatarUri ??
+    selectedAsset?.uri ??
     (user.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : false);
 
   return (
@@ -50,7 +60,7 @@ export const ProfileAvatar: React.FC<Props> = ({
         <UserAvatar
           firstName={user.firstName}
           lastName={user.lastName}
-          avatarUrl={avatarUrl}
+          avatarUrl={!avatarRemoved ? avatarUrl : undefined}
           className={'w-24 h-24'}
           avatarFallbackClassName={'text-3xl'}
         />
@@ -72,9 +82,15 @@ export const ProfileAvatar: React.FC<Props> = ({
             width={16}
             height={16}
           />
-          <StyledText className="text-destructive">
-            Убрать выбранное фото
-          </StyledText>
+          {selectedAsset ? (
+            <StyledText className="text-destructive">
+              Убрать выбранное фото
+            </StyledText>
+          ) : (
+            <StyledText className="text-destructive">
+              Убрать аватар
+            </StyledText>
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
