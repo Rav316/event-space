@@ -23,12 +23,14 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Burnt from 'burnt';
 import { userRoles } from '@/src/types/userRoles';
 import { Spinner } from '@/src/components/ui/spinner';
+import {LogoutModal} from "@/src/components/modal";
 
 const ProfileTab = () => {
   const colorScheme = useColorScheme().colorScheme;
 
   const logout = () => {
     removeTokens();
+    queryClient.clear();
   };
 
   const [selectedAsset, setSelectedAsset] =
@@ -217,10 +219,7 @@ const ProfileTab = () => {
                 </>
               )}
             </StyledButton>
-
-            <StyledButton onPress={logout} variant={'destructive'}>
-              <StyledText>Выйти</StyledText>
-            </StyledButton>
+            <LogoutModal logout={logout}/>
           </View>
         </>
       )}
