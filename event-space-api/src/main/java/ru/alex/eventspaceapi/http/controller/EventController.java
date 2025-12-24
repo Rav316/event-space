@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
+import ru.alex.eventspaceapi.dto.event.EventListPreviewDto;
 import ru.alex.eventspaceapi.dto.event.EventQrInfoDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewCreateEditDto;
@@ -17,6 +18,7 @@ import ru.alex.eventspaceapi.dto.eventReview.EventReviewReadDto;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepReadDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
+import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.dto.response.PageResponse;
 import ru.alex.eventspaceapi.dto.response.SliceResponse;
@@ -38,6 +40,11 @@ public class EventController {
     @GetMapping
     public PageResponse<EventListDto> findAllByFilter(@ModelAttribute EventFilter filter) {
         return PageResponse.of(eventService.findAllByFilter(filter));
+    }
+
+    @GetMapping("/preview")
+    public SliceResponse<EventListPreviewDto> findAllPreviewEventsByFilter(@ModelAttribute EventPreviewFilter filter) {
+        return SliceResponse.of(eventService.findAllByFilter(filter));
     }
 
     @GetMapping("/actual")

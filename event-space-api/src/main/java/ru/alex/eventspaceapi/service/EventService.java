@@ -12,15 +12,18 @@ import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
+import ru.alex.eventspaceapi.dto.event.EventListPreviewDto;
 import ru.alex.eventspaceapi.dto.event.EventReadDto;
 import ru.alex.eventspaceapi.dto.eventStep.EventStepCreateDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
+import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
 import ru.alex.eventspaceapi.mapper.event.EventListForUserMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListMapper;
+import ru.alex.eventspaceapi.mapper.event.EventListPreviewMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 
@@ -45,6 +48,7 @@ public class EventService {
     private final EventUserRepository eventUserRepository;
     private final EventStepCreateMapper eventStepCreateMapper;
     private final EventListMapper eventListMapper;
+    private final EventListPreviewMapper eventListPreviewMapper;
     private final EventReadMapper eventReadMapper;
     private final EventListForUserMapper eventListForUserMapper;
 
@@ -52,6 +56,11 @@ public class EventService {
         UserDetailsDto authorizedUser = getAuthorizedUser();
         return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null, filter)
                 .map(eventListMapper::toDto);
+    }
+
+    public Slice<EventListPreviewDto> findAllByFilter(EventPreviewFilter filter) {
+        return eventRepository.findAllEventsByFilter(filter)
+                .map(eventListPreviewMapper::toDto);
     }
 
     public List<EventListDto> getActualEvents() {

@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
+import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -45,7 +48,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .leftJoin(event.author, user).fetchJoin()
                 .leftJoin(event.eventUsers, eventUser).fetchJoin()
                 .where(predicate)
-                .orderBy(getSortOrder(filter))
+                .orderBy(getSortOrder(filter.sort()))
                 .limit(pageSize)
                 .offset((long) page * pageSize)
                 .fetch();
@@ -59,7 +62,33 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         return new PageImpl<>(events, PageRequest.of(page, pageSize), Objects.requireNonNull(total));
     }
 
+    @Override
+    public Slice<Event> findAllEventsByFilter(EventPreviewFilter filter) {
+        int pageSize = 25;
+        int page = filter.page() != null ? filter.page() : 0;
 
+        BooleanExpression predicate = buildPredicate(filter);
+
+        List<Event> events = queryFactory
+                .selectFrom(event)
+                .leftJoin(event.category, eventCategory).fetchJoin()
+                .leftJoin(event.space, space).fetchJoin()
+                .leftJoin(space.building, building).fetchJoin()
+                .where(predicate)
+                .orderBy(getSortOrder(filter.sort()))
+                .limit(pageSize + 1)
+                .offset((long) page * pageSize)
+                .fetch();
+
+        boolean hasNext = events.size() > pageSize;
+
+        if(hasNext) {
+            events = events.subList(0, pageSize);
+        }
+
+        return new SliceImpl<>(events, PageRequest.of(page, pageSize), hasNext);
+
+    }
 
 
     private BooleanExpression buildPredicate(EventFilter filter) {
@@ -86,10 +115,22 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             predicate = predicate.and(event.eventUsers.size().lt(event.space.capacity));
         }
 
-        if(filter.period() != null) {
+        return getPeriodPredicate(predicate, filter.period());
+    }
+
+    private BooleanExpression buildPredicate(EventPreviewFilter filter) {
+        BooleanExpression predicate = Expressions.TRUE.isTrue();
+        if (filter.categories() != null && !filter.categories().isEmpty()) {
+            predicate = predicate.and(event.category.id.in(filter.categories()));
+        }
+        return getPeriodPredicate(predicate, filter.period());
+    }
+
+    private BooleanExpression getPeriodPredicate(BooleanExpression predicate, String period) {
+        if(period != null) {
             LocalDate today = LocalDate.now();
             LocalTime now = LocalTime.now();
-            predicate = switch (filter.period()) {
+            predicate = switch (period) {
                 case "past" -> {
                     BooleanExpression passedEvents = event.eventDate.before(today)
                             .or(event.eventDate.eq(today)
@@ -108,11 +149,11 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         return predicate;
     }
 
-    private OrderSpecifier<?>[] getSortOrder(EventFilter filter) {
+    private OrderSpecifier<?>[] getSortOrder(String sort) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
-        if (filter.sort() != null) {
-            switch (filter.sort()) {
+        if (sort != null) {
+            switch (sort) {
                 case "date":
                     orderSpecifiers.add(event.eventDate.desc());
                     orderSpecifiers.add(event.startTime.desc());
