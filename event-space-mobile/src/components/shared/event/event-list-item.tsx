@@ -1,5 +1,4 @@
 import { StyledText } from '@/src/components/ui';
-import { IEvent } from '@/src/components/shared/event/event-list';
 import { Image } from 'expo-image';
 import { Badge } from '@/src/components/ui/badge';
 import { categoryColors } from '@/src/constants/category-colors';
@@ -8,66 +7,89 @@ import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import { useColorScheme } from 'nativewind';
 import { getEventImageUrl } from '@/src/utils/get-event-image-url';
+import { EventListPreviewDto } from '@/src/api/events/models';
 
 interface Props {
-  event: IEvent;
+  event: EventListPreviewDto;
 }
 
 export const EventListItem: React.FC<Props> = ({ event }) => {
-  const colorScheme = useColorScheme().colorScheme;
+  const { colorScheme } = useColorScheme();
+
+  const imageUrl = event.imageUrl ? getEventImageUrl(event.imageUrl) : null;
+
+  const getPlaceholderText = (name: string) => {
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 2) {
+      return (words[0][0] + words[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  const placeholderText = event.name ? getPlaceholderText(event.name) : 'EV';
 
   return (
     <View
       className={
-        'rounded-2xl border-2 border-[#E5E5E5] dark:border-[#333333] p-4'
+        'rounded-2xl border-2 border-[#E5E5E5] dark:border-[#333333] p-4 bg-white dark:bg-[#1A1A1A]'
       }
     >
-      <View className={'w-full flex-row items-center gap-3'}>
-        <Image
-          source={{ uri: getEventImageUrl(event.name, event.imageUrl) }}
-          style={styles.image}
-          contentFit={'cover'}
-        />
+      <View className={'w-full flex-row items-center gap-4'}>
+        {imageUrl ? (
+          <Image
+            source={{ uri: imageUrl }}
+            style={styles.image}
+            contentFit={'cover'}
+            transition={200}
+          />
+        ) : (
+          <View
+            style={styles.image}
+            className="items-center justify-center rounded-2xl bg-secondary dark:bg-zinc-800 border border-black/5 dark:border-white/10"
+          >
+            <StyledText
+              className="text-2xl font-bold tracking-tighter text-zinc-400 dark:text-zinc-500"
+              style={{ opacity: 0.8 }}
+            >
+              {placeholderText}
+            </StyledText>
+          </View>
+        )}
+
         <View className={'flex-1 items-start h-full gap-1'}>
           <Badge className={categoryColors[event.category.id - 1].badge}>
             <StyledText className={categoryColors[event.category.id - 1].text}>
               {event.category.name}
             </StyledText>
           </Badge>
+
           <StyledText
-            className={'font-semibold'}
+            className={'font-bold text-base leading-5 text-foreground'}
             numberOfLines={2}
-            ellipsizeMode="tail"
           >
             {event.name}
           </StyledText>
-          <View className={'flex-row gap-2 items-center w-full'}>
+
+          <View className={'flex-row gap-2 items-center mt-1'}>
             <Calendar
-              width={15}
-              height={15}
-              color={colorScheme === 'dark' ? 'white' : 'black'}
+              size={14}
+              color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
             />
-            <StyledText
-              className={'text-muted-foreground text-xs flex-1'}
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
-              {event.eventDate}, {event.startTime} - {event.endTime}
+            <StyledText className={'text-muted-foreground text-xs'}>
+              {event.eventDate}
             </StyledText>
           </View>
-          <View className={'flex-row gap-2 w-full'}>
+
+          <View className={'flex-row gap-2 items-center'}>
             <MapPin
-              width={15}
-              height={15}
-              style={{ marginTop: 3 }}
-              color={colorScheme === 'dark' ? 'white' : 'black'}
+              size={14}
+              color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
             />
             <StyledText
               className={'text-muted-foreground text-xs flex-1'}
-              numberOfLines={2}
-              ellipsizeMode="tail"
+              numberOfLines={1}
             >
-              {event.space.building.address}, {event.space.name}
+              {event.space.name}
             </StyledText>
           </View>
         </View>
