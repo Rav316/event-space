@@ -3,18 +3,29 @@ import { View } from 'react-native';
 import { Checkbox, Label, StyledText } from '@/src/components/ui';
 import { Badge } from '@/src/components/ui/badge';
 
-interface Props {
+interface Props
+  extends Omit<React.ComponentProps<typeof Checkbox>, 'id'> {
   id: number;
   name: string;
   count: number;
 }
 
-export const CategoryCheckbox: React.FC<Props> = ({id, name, count}) => {
+export const CategoryCheckbox: React.FC<Props> = ({
+  id,
+  name,
+  count,
+  checked,
+  ...props
+}) => {
   return (
     <View className={'flex-row items-center justify-center'}>
       <View className={'flex-row justify-between items-center gap-2 w-full'}>
         <View className={'flex-row items-center gap-2'}>
-          <Checkbox checked={false} onCheckedChange={() => {}} id={name}/>
+          <Checkbox
+            checked={checked}
+            id={name}
+            {...props}
+          />
           <Label>{name}</Label>
         </View>
         <Badge variant={'outline'}>
@@ -22,5 +33,5 @@ export const CategoryCheckbox: React.FC<Props> = ({id, name, count}) => {
         </Badge>
       </View>
     </View>
-  )
-}
+  );
+};
