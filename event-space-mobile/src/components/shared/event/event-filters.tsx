@@ -17,10 +17,7 @@ export const EventFilters = () => {
 
   return (
     <View className={'gap-2'}>
-      <CategoriesFilter
-        selectedCategories={[1, 3]}
-        onCategorySelect={() => {}}
-      />
+      <CategoriesFilter />
       <View className={'flex-row gap-2'}>
         <Select className={'w-[53%]'}>
           <SelectTrigger className={'w-full'}>

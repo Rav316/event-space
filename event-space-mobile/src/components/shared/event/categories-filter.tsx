@@ -10,19 +10,24 @@ import { useColorScheme } from 'nativewind';
 import { CategoryCheckbox } from '@/src/components/shared/event/category-checkbox';
 import { useEventCategoriesWithEventCount } from '@/src/api/event-categories/hooks';
 import React from 'react';
+import { useEventFilterStore } from '@/src/store/use-event-filter-store';
 
-interface Props {
-  selectedCategories: number[];
-  onCategorySelect: (categoryId: number) => void;
-}
-
-export const CategoriesFilter: React.FC<Props> = ({
-  selectedCategories,
-  onCategorySelect
-}) => {
+export const CategoriesFilter = () => {
   const colorScheme = useColorScheme().colorScheme;
 
   const { data, isPending } = useEventCategoriesWithEventCount();
+
+  const selectedCategories = useEventFilterStore((state) => state.categories);
+  const addCategory = useEventFilterStore((state) => state.addCategory);
+  const removeCategory = useEventFilterStore((state) => state.removeCategory);
+
+  const handleCategoryToggle = (categoryId: number) => {
+    if (selectedCategories.includes(categoryId)) {
+      removeCategory(categoryId);
+    } else {
+      addCategory(categoryId);
+    }
+  };
 
   return (
     <>
@@ -47,11 +52,11 @@ export const CategoriesFilter: React.FC<Props> = ({
                       name={item.name}
                       count={item.eventCount}
                       checked={selectedCategories.includes(item.id)}
-                      onCheckedChange={() => {}}
+                      onCheckedChange={() => handleCategoryToggle(item.id)}
                     />
                   )}
                   keyExtractor={(item) => item.id.toString()}
-                  ItemSeparatorComponent={() => <View className={'h-2'} />}
+                  ItemSeparatorComponent={() => <View className={'h-6'} />}
                 />
               </PopoverContent>
             </StyledButton>
