@@ -120,6 +120,9 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
     private BooleanExpression buildPredicate(EventPreviewFilter filter) {
         BooleanExpression predicate = Expressions.TRUE.isTrue();
+        if (filter.name() != null && !filter.name().isBlank()) {
+            predicate = predicate.and(event.name.containsIgnoreCase(filter.name()));
+        }
         if (filter.categories() != null && !filter.categories().isEmpty()) {
             predicate = predicate.and(event.category.id.in(filter.categories()));
         }
