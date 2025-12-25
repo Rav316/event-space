@@ -5,3 +5,5 @@ export {EventFilters} from './event-filters';
 export {CategoryCheckbox} from './category-checkbox';
 export {CategoriesFilter} from './categories-filter';
 export {AnimatedEventListItem} from './animated-event-list-item';
+export {EventSortSelect} from './event-sort-select';
+export {EventPeriodSelect} from './event-period-select';

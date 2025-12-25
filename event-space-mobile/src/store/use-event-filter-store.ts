@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { eventSortCategories } from '@/src/constants/event-sort-categories';
+import { eventPeriods } from '@/src/constants/event-periods';
 
 interface EventFilterState {
   name?: string;
   categories: number[];
-  sort?: string;
-  period?: string;
+  sort: string;
+  period: string;
   setName: (name: string) => void;
   addCategory: (category: number) => void;
   removeCategory: (category: number) => void;
@@ -15,6 +17,8 @@ interface EventFilterState {
 
 export const useEventFilterStore = create<EventFilterState>()(
   immer((set) => ({
+    sort: eventSortCategories[0].value,
+    period: eventPeriods[0].value,
     categories: [],
     setName: (name) => set({ name }),
     addCategory: (category) =>
