@@ -1,5 +1,6 @@
 import type { EventListMyDto } from '@/api/events/model.ts';
 import * as React from 'react';
+import { useState } from 'react';
 import {
   Badge,
   Button,
@@ -18,8 +19,8 @@ import {
   Flame,
   MapPin,
   SquarePen,
-  Trash,
   Users,
+  Trash,
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
@@ -27,12 +28,15 @@ import { EventCardLabel } from '@/components/shared/event';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import { cn } from '@/lib/utils.ts';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
+import { RemoveEventModal } from '@/components/modal';
 
 interface Props {
   event: EventListMyDto;
 }
 
 export const MyEventCard: React.FC<Props> = ({ event }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <div
       className={
@@ -66,13 +70,19 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
               Редактировать
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setModalOpen(true)}>
               <Trash />
               <span className={'text-destructive'}>Удалить</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <RemoveEventModal
+        eventId={event.id}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+      />
 
       <div className="overflow-hidden rounded-t-2xl">
         <Link to={`/events/${event.id}`}>

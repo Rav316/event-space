@@ -171,3 +171,7 @@ export const unregisterFromEvent = async (eventId: number): Promise<void> => {
   );
   return response.data;
 };
+
+export const removeEvent = async (eventId: number): Promise<void> => {
+  await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}`);
+};

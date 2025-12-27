@@ -247,3 +247,20 @@ export const useUnregisterFromEvent = (eventId: number) => {
     },
   });
 };
+
+export const useRemoveEvent = () => {
+  return useMutation({
+    mutationFn: Api.events.removeEvent,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'events',
+      });
+      toast.success('Вы успешно удалили мероприятие')
+    },
+    onError: (error) => {
+      if(error instanceof AxiosError) {
+        toast.error('Произошла ошибка при удалении мероприятия')
+      }
+    }
+  })
+}
