@@ -70,3 +70,8 @@ export interface CategoryActivityDto {
   category: EventCategory;
   activityPercent: number;
 }
+
+export interface EventAuthorStatisticsDto {
+  createdEvents: number;
+  totalParticipants: number;
+}

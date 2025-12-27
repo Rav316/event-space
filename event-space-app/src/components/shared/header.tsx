@@ -1,4 +1,4 @@
-import { Calendar, ChartColumn, History, Plus, Users } from 'lucide-react';
+import { Briefcase, Calendar, ChartColumn, Plus, Users } from 'lucide-react';
 import {
   HeaderItem,
   NavigationMenu,
@@ -52,13 +52,15 @@ export const Header = () => {
           </Link>
           {data && (
             <>
+              <Link to={'/my-events'}>
+                <HeaderItem Icon={Briefcase} text={'Мои мероприятия'} />
+              </Link>
               <Link to={'/my-registrations'}>
                 <HeaderItem Icon={Users} text={'Мои регистрации'} />
               </Link>
               <Link to={'/statistics'}>
                 <HeaderItem Icon={ChartColumn} text={'Статистика'} />
               </Link>
-              <HeaderItem Icon={History} text={'История'} />
             </>
           )}
         </div>

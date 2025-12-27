@@ -1,5 +1,6 @@
 export const STATISTICS_KEYS = {
-  statistics: ['events', 'statistics'] as const,
+  events: ['events', 'statistics'] as const,
+  eventAuthoredStatistics: ['event-authored', 'statistics'] as const,
   detailsStatistics: ['users', 'statistics', 'details'] as const,
   overviewStatistics: ['overview', 'statistics'] as const,
   profileStatistics: ['profile', 'statistics'] as const,

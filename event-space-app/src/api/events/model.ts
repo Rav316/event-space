@@ -91,8 +91,13 @@ export interface EventFilter {
   page?: number;
 }
 
-export interface EventRequestData {
-  filter: EventFilter;
+export interface EventMyFilter {
+  name: string;
+  category?: number;
+}
+
+export interface EventRequestData<T> {
+  filter: T;
   page: number;
 }
 
@@ -108,4 +113,20 @@ export interface EventListForUserDto {
   qrToken: string;
   attended: boolean;
   registeredAt: string;
+}
+
+export interface EventListMyDto {
+  id: number;
+  name: string;
+  category: EventCategory;
+  shortDescription: string;
+  imageUrl?: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  deadline?: string;
+  space: Space;
+  registeredUsers: number;
+  participantQuantity: number;
+  author?: string;
 }

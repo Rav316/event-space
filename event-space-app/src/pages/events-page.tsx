@@ -10,7 +10,7 @@ import {
   EventGroup,
   EventSearch,
   EventsNotFound,
-  EventsPagination
+  EventsPagination,
 } from '@/components/shared/event';
 
 const EventsPage = () => {
@@ -49,7 +49,7 @@ const EventsPage = () => {
         ) : (
           <>
             {isEventCategoriesPending || isEventsPending ? (
-              <Skeleton className={'h-[20px] w-[220px]'} />
+              <Skeleton className={'h-5 w-[220px]'} />
             ) : (
               <span className={'text-muted-foreground text-sm'}>
                 Найдено {events?.metadata.totalElements} из{' '}
@@ -67,7 +67,9 @@ const EventsPage = () => {
             {events && (
               <EventsPagination
                 currentPage={currentPage}
-                totalPages={Math.ceil(events.metadata.totalElements / events.metadata.size)}
+                totalPages={Math.ceil(
+                  events.metadata.totalElements / events.metadata.size,
+                )}
                 onPageChange={setCurrentPage}
               />
             )}

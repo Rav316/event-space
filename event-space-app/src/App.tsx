@@ -12,6 +12,7 @@ import ProfilePage from '@/pages/profile-page.tsx';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import MyRegistrationsPage from '@/pages/my-registrations-page.tsx';
 import StatisticsPage from '@/pages/statistics-page.tsx';
+import MyEventsPage from '@/pages/my-events-page.tsx';
 
 const App = () => {
   const token = useAuthStore((state) => state.accessToken);
@@ -30,6 +31,11 @@ const App = () => {
             }
           />
           <Route path={'/events'} element={<EventsPage />} />
+          <Route path={'/my-events'} element={
+            <RequireAuth>
+              <MyEventsPage/>
+            </RequireAuth>
+          }/>
           <Route
             path={'/events/create'}
             element={

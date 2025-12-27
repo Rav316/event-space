@@ -2,6 +2,7 @@ import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type {
   CategoryStatisticsDto,
+  EventAuthorStatisticsDto,
   EventStatisticsDto,
   OverviewStatisticsDto,
   UserProfileStatisticsDto,
@@ -15,6 +16,14 @@ export const getMyEventStatistics = async (): Promise<EventStatisticsDto> => {
   );
   return response.data;
 };
+
+export const getEventAuthoredStatistics =
+  async (): Promise<EventAuthorStatisticsDto> => {
+    const response = await axiosInstance.get<EventAuthorStatisticsDto>(
+      `${ApiRoutes.STATISTICS}/events/authored`,
+    );
+    return response.data;
+  };
 
 export const getUserStatistics = async (): Promise<UserStatisticsDto> => {
   const response = await axiosInstance.get<UserStatisticsDto>(

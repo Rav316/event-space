@@ -11,12 +11,12 @@ import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
-import type { EventRequestData } from '@/api/events/model.ts';
 import { queryClient } from '@/api/query-client.ts';
 import type {
   EventReviewFilter,
   EventReviewMyDto,
 } from '@/api/event-reviews/model.ts';
+import type { EventFilter, EventMyFilter, EventRequestData } from '@/api/events/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -83,13 +83,21 @@ export const useFinishedEvents = (options?: { enabled?: boolean }) => {
   });
 };
 
-export const useEventsByFilter = (eventRequestData: EventRequestData) => {
+export const useEventsByFilter = (eventRequestData: EventRequestData<EventFilter>) => {
   return useQuery({
     queryFn: () => Api.events.findAllByFilter(eventRequestData),
     queryKey: EVENTS_KEYS.filters(eventRequestData),
     refetchOnWindowFocus: false,
   });
 };
+
+export const useMyEventsByFilter = (eventRequestData: EventRequestData<EventMyFilter>) => {
+  return useQuery({
+    queryFn: () => Api.events.findAllMyEvents(eventRequestData),
+    queryKey: EVENTS_KEYS.my(eventRequestData),
+    refetchOnWindowFocus: false,
+  })
+}
 
 export const useTagsStartWith = (prefix: string) => {
   return useQuery({

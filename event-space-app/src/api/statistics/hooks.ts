@@ -5,10 +5,18 @@ import { STATISTICS_KEYS } from '@/api/statistics/keys.ts';
 export const useMyEventStatistics = () => {
   return useQuery({
     queryFn: Api.statistics.getMyEventStatistics,
-    queryKey: STATISTICS_KEYS.statistics,
+    queryKey: STATISTICS_KEYS.events,
     refetchOnWindowFocus: false,
   });
 };
+
+export const useEventAuthoredStatistics = () => {
+  return useQuery({
+    queryFn: Api.statistics.getEventAuthoredStatistics,
+    queryKey: STATISTICS_KEYS.eventAuthoredStatistics,
+    refetchOnWindowFocus: false,
+  })
+}
 
 export const useUserStatistics = () => {
   return useQuery({
