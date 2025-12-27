@@ -24,6 +24,11 @@ public class StatisticsController {
         return statisticsService.getUserEventsStatistics();
     }
 
+    @GetMapping("/events/authored")
+    public EventAuthorStatisticsDto getAuthoredEventsStatistics() {
+        return statisticsService.getAuthoredEventsStatistics();
+    }
+
     @GetMapping("/overview")
     public OverviewStatisticsDto getOverviewStatistics() {
         return statisticsService.getOverviewStatistics();

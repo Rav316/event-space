@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
+import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
@@ -18,12 +19,17 @@ import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StatisticsService {
+    private final EventRepository eventRepository;
     private final EventUserRepository eventUserRepository;
     private final EventReviewRepository eventReviewRepository;
     private final EventCategoryRepository eventCategoryRepository;
 
     public EventStatisticsDto getUserEventsStatistics() {
         return eventUserRepository.getUserEventStatistics(Objects.requireNonNull(getAuthorizedUser()).id());
+    }
+
+    public EventAuthorStatisticsDto getAuthoredEventsStatistics() {
+        return eventRepository.getEventStatisticsByUser(Objects.requireNonNull(getAuthorizedUser()).id());
     }
 
     public UserStatisticsDto getUserStatistics() {
