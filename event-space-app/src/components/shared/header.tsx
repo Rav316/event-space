@@ -6,7 +6,7 @@ import {
   SearchInput,
 } from '@/components/shared';
 import { Button, Skeleton } from '@/components/ui';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { useMe } from '@/api/auth/hooks.ts';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/use-auth-store.ts';
@@ -47,20 +47,44 @@ export const Header = () => {
             'flex items-center gap-x-4 max-[1350px]:hidden min-w-[500px]'
           }
         >
-          <Link to={'/events'}>
-            <HeaderItem Icon={Calendar} text={'Мероприятия'} />
-          </Link>
+          <NavLink to={'/events'}>
+            {({ isActive }) => (
+              <HeaderItem
+                Icon={Calendar}
+                text={'Мероприятия'}
+                isActive={isActive}
+              />
+            )}
+          </NavLink>
           {data && (
             <>
-              <Link to={'/my-events'}>
-                <HeaderItem Icon={Briefcase} text={'Мои мероприятия'} />
-              </Link>
-              <Link to={'/my-registrations'}>
-                <HeaderItem Icon={Users} text={'Мои регистрации'} />
-              </Link>
-              <Link to={'/statistics'}>
-                <HeaderItem Icon={ChartColumn} text={'Статистика'} />
-              </Link>
+              <NavLink to={'/my-events'}>
+                {({ isActive }) => (
+                  <HeaderItem
+                    Icon={Briefcase}
+                    text={'Мои мероприятия'}
+                    isActive={isActive}
+                  />
+                )}
+              </NavLink>
+              <NavLink to={'/my-registrations'}>
+                {({ isActive }) => (
+                  <HeaderItem
+                    Icon={Users}
+                    text={'Мои регистрации'}
+                    isActive={isActive}
+                  />
+                )}
+              </NavLink>
+              <NavLink to={'/statistics'}>
+                {({ isActive }) => (
+                  <HeaderItem
+                    Icon={ChartColumn}
+                    text={'Статистика'}
+                    isActive={isActive}
+                  />
+                )}
+              </NavLink>
             </>
           )}
         </div>

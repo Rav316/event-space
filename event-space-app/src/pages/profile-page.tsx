@@ -105,7 +105,7 @@ const ProfilePage = () => {
 
   return (
     <Wrapper>
-      <div className={'flex flex-col gap-5 mt-[20px]'}>
+      <div className={'flex flex-col gap-5 mt-5'}>
         <ProfileHeader
           onEditClick={() => setEditMode(true)}
           onCancelClick={onCancelClick}
