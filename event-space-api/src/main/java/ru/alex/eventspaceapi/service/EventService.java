@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.*;
 import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
@@ -29,6 +31,7 @@ import ru.alex.eventspaceapi.mapper.event.EventListMyMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListPreviewMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
+import ru.alex.eventspaceapi.model.Role;
 
 import java.time.*;
 import java.util.List;
@@ -161,6 +164,17 @@ public class EventService {
 
             eventStepRepository.insertEventStepsBatch(eventSteps);
         }
+    }
+
+    @Transactional
+    public void delete(Integer id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
+        if(!event.getAuthor().getId().equals(authorizedUser.id()) || authorizedUser.role() != Role.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
+        }
+        eventRepository.delete(event);
     }
 
     private void validateEventSteps(EventCreateDto event) {

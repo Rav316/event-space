@@ -151,4 +151,10 @@ public class EventController {
         eventUserService.unregisterFromEvent(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeEvent(@PathVariable Integer id) {
+        eventService.delete(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
 }
