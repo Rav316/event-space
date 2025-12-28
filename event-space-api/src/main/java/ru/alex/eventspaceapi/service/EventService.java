@@ -250,10 +250,16 @@ public class EventService {
 
         validateEventSteps(dto.steps(), dto.startTime(), dto.endTime());
 
-        if(eventImage != null && !eventImage.isEmpty()) {
-            fileService.deleteFileByUrl(event.getImageUrl());
-            String imageUrl = fileService.saveFile(eventImage, "events");
-            event.setImageUrl(imageUrl);
+        if(eventImage != null) {
+            if(event.getImageUrl() != null) {
+                fileService.deleteFileByUrl(event.getImageUrl());
+            }
+            if(!eventImage.isEmpty()) {
+                String imageUrl = fileService.saveFile(eventImage, "events");
+                event.setImageUrl(imageUrl);
+            } else {
+                event.setImageUrl(null);
+            }
         }
 
         Event savedEvent = eventRepository.save(event);
