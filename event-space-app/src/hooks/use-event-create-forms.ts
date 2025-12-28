@@ -7,8 +7,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   type EventDateTime,
-  eventDateTimeSchema,
-} from '@/schemas/event-date-time-schema.ts';
+  eventCreateDateTimeSchema,
+} from '@/schemas/event-create-date-time-schema.ts';
 import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
 import {
@@ -55,7 +55,7 @@ export const useEventCreateForms = () => {
   });
 
   const eventDateTimeForm = useForm<EventDateTime>({
-    resolver: zodResolver(eventDateTimeSchema),
+    resolver: zodResolver(eventCreateDateTimeSchema),
     defaultValues: eventDateTimeDefaults,
   });
 

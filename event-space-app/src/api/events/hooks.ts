@@ -16,7 +16,11 @@ import type {
   EventReviewFilter,
   EventReviewMyDto,
 } from '@/api/event-reviews/model.ts';
-import type { EventFilter, EventMyFilter, EventRequestData } from '@/api/events/model.ts';
+import type {
+  EventFilter,
+  EventMyFilter,
+  EventRequestData,
+} from '@/api/events/model.ts';
 
 export const useEventCreate = () => {
   const navigate = useNavigate();
@@ -33,12 +37,28 @@ export const useEventCreate = () => {
       resetEventSteps();
       clearImage();
 
-      toast.success('Вы успешно создали мероприятие');
+      toast.success('Мероприятие успешно создано');
       setTimeout(() => navigate('/'), 0);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         toast.error('Произошла ошибка при создании мероприятия');
+      }
+    },
+  });
+};
+
+export const useEventUpdate = () => {
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: Api.events.update,
+    onSuccess: () => {
+      toast.success('Мероприятие успешно обновлено');
+      setTimeout(() => navigate('/'), 0);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при обновлении мероприятия');
       }
     },
   });
@@ -83,7 +103,9 @@ export const useFinishedEvents = (options?: { enabled?: boolean }) => {
   });
 };
 
-export const useEventsByFilter = (eventRequestData: EventRequestData<EventFilter>) => {
+export const useEventsByFilter = (
+  eventRequestData: EventRequestData<EventFilter>,
+) => {
   return useQuery({
     queryFn: () => Api.events.findAllByFilter(eventRequestData),
     queryKey: EVENTS_KEYS.filters(eventRequestData),
@@ -91,13 +113,15 @@ export const useEventsByFilter = (eventRequestData: EventRequestData<EventFilter
   });
 };
 
-export const useMyEventsByFilter = (eventRequestData: EventRequestData<EventMyFilter>) => {
+export const useMyEventsByFilter = (
+  eventRequestData: EventRequestData<EventMyFilter>,
+) => {
   return useQuery({
     queryFn: () => Api.events.findAllMyEvents(eventRequestData),
     queryKey: EVENTS_KEYS.my(eventRequestData),
     refetchOnWindowFocus: false,
-  })
-}
+  });
+};
 
 export const useTagsStartWith = (prefix: string) => {
   return useQuery({
@@ -111,7 +135,15 @@ export const useTagsStartWith = (prefix: string) => {
 export const useEventById = (eventId: number) => {
   return useQuery({
     queryFn: () => Api.events.findById(eventId),
-    queryKey: EVENTS_KEYS.event(eventId),
+    queryKey: EVENTS_KEYS.byId(eventId),
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useEventByIdWithDetails = (eventId: number) => {
+  return useQuery({
+    queryFn: () => Api.events.findByIdWithDetails(eventId),
+    queryKey: EVENTS_KEYS.byIdWithDetails(eventId),
     refetchOnWindowFocus: false,
   });
 };
@@ -255,12 +287,12 @@ export const useRemoveEvent = () => {
       await queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === 'events',
       });
-      toast.success('Вы успешно удалили мероприятие')
+      toast.success('Вы успешно удалили мероприятие');
     },
     onError: (error) => {
-      if(error instanceof AxiosError) {
-        toast.error('Произошла ошибка при удалении мероприятия')
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при удалении мероприятия');
       }
-    }
-  })
-}
+    },
+  });
+};

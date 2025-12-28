@@ -4,7 +4,7 @@ const dateSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, 'Введите дату в правильном формате');
 
-export const eventDateTimeSchema = z
+export const eventCreateDateTimeSchema = z
   .object({
     eventDate: dateSchema,
     startTime: z
@@ -67,4 +67,4 @@ export const eventDateTimeSchema = z
     }
   });
 
-export type EventDateTime = z.infer<typeof eventDateTimeSchema>;
+export type EventDateTime = z.infer<typeof eventCreateDateTimeSchema>;

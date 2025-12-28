@@ -19,7 +19,8 @@ export const EVENTS_KEYS = {
     eventRequestData.page
   ],
   tags: (prefix: string) => ['tags', prefix] as const,
-  event: (eventId: number) => [...EVENTS_KEYS.all, eventId] as const,
+  byId: (eventId: number) => [...EVENTS_KEYS.all, eventId] as const,
+  byIdWithDetails: (eventId: number) => [...EVENTS_KEYS.all, eventId, 'details'],
   steps: (eventId: number) => [eventId, 'steps'] as const,
   reviews: (eventId: number, filter: EventReviewFilter) =>
     ['reviews', eventId, filter] as const,

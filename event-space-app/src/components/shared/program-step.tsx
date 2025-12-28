@@ -80,7 +80,7 @@ export const ProgramStep: React.FC<Props> = ({
               value={step.startTime}
             />
             <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
-              {step.startTime}
+              {step.startTime.slice(0, 5)}
             </span>
           </div>
 
@@ -94,7 +94,7 @@ export const ProgramStep: React.FC<Props> = ({
               value={step.endTime}
             />
             <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
-              {step.endTime}
+              {step.endTime.slice(0, 5)}
             </span>
           </div>
         </div>

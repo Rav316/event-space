@@ -14,27 +14,29 @@ import { FormProvider, type useForm } from 'react-hook-form';
 import type { EventLocationData } from '@/schemas/event-location-schema.ts';
 import React, { useEffect } from 'react';
 import { useBuildings } from '@/api/buildings/hooks.ts';
-import { useSpaceFilterStore } from '@/store/use-space-filter-store.ts';
 import { useSpaces } from '@/api/spaces/hooks.ts';
-import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
+import type { EventCreateDto } from '@/api/events/model.ts';
+import type { SpaceFilter } from '@/api/spaces/model.ts';
 
 interface Props {
   form: ReturnType<typeof useForm<EventLocationData>>;
+  event: EventCreateDto;
+  building: number;
+  filter: SpaceFilter;
+  setFilter: (filter: Partial<SpaceFilter>) => void;
 }
 
-export const EventLocationStep: React.FC<Props> = ({ form }) => {
-  const spaceFilter = useSpaceFilterStore((state) => state.filter);
-  const setSpaceFilter = useSpaceFilterStore((state) => state.setFilter);
-  const event = useEventCreationStore((state) => state.event);
+export const EventLocationStep: React.FC<Props> = ({ form, event, filter, setFilter }) => {
 
   useEffect(() => {
     if (event.participantQuantity) {
-      setSpaceFilter({ minCapacity: event.participantQuantity });
+      setFilter({ minCapacity: event.participantQuantity });
     }
-  }, [event.participantQuantity, setSpaceFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event.participantQuantity]);
 
   const { data: buildings, isPending: isBuildingsPending } = useBuildings();
-  const { data: spaces, isPending: isSpacesPending } = useSpaces(spaceFilter);
+  const { data: spaces, isPending: isSpacesPending } = useSpaces(filter);
 
   return (
     <FormProvider {...form}>
@@ -48,13 +50,9 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
           ) : (
             <Select
               defaultValue={
-                spaceFilter.building === 0
-                  ? undefined
-                  : String(spaceFilter.building)
+                filter.building === 0 ? undefined : String(filter.building)
               }
-              onValueChange={(value) =>
-                setSpaceFilter({ building: Number(value) })
-              }
+              onValueChange={(value) => setFilter({ building: Number(value) })}
             >
               <SelectTrigger id={'location'} className={'w-full'}>
                 <SelectValue placeholder="Выберите корпус" />
@@ -70,7 +68,7 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
           )}
         </div>
 
-        {spaceFilter.building !== 0 && (
+        {filter.building !== 0 && (
           <>
             <div className={'flex flex-col gap-0.5'}>
               <h3 className={'font-medium text-lg'}>
@@ -78,7 +76,7 @@ export const EventLocationStep: React.FC<Props> = ({ form }) => {
               </h3>
               <span className={'text-muted-foreground text-sm'}>
                 Выберите кабинет в корпусе "
-                {buildings?.find((b) => b.id === spaceFilter.building)?.name}" (
+                {buildings?.find((b) => b.id === filter.building)?.name}" (
                 {spaces?.length} кабинетов доступно)
               </span>
             </div>

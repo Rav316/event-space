@@ -3,12 +3,18 @@ import { Button } from '@/components/ui';
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { useEventImageStore } from '@/store/use-event-image-store.ts';
 
-export const MediaSettingsStep = () => {
-  const previewUrl = useEventImageStore((state) => state.previewUrl);
-  const setFile = useEventImageStore((state) => state.setFile);
-  const clearImage = useEventImageStore((state) => state.clearImage);
+interface Props {
+  previewUrl: string | null;
+  setFile: (file: File) => void;
+  clearImage: () => void;
+}
+
+export const MediaSettingsStep: React.FC<Props> = ({
+  previewUrl,
+  setFile,
+  clearImage,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const isValidFile = (file: File) =>

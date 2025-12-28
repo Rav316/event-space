@@ -23,6 +23,8 @@ export const RemoveEventModal: React.FC<Props> = ({
     });
   };
 
+  // TODO 28.12.2025 11:29:32 добавить на клиенте эту хрень, чтобы кнопка удаления была неактивна если мероприятие уже началось
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[420px]">

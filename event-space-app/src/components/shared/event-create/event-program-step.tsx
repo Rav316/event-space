@@ -10,24 +10,26 @@ import { Clock, Plus } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { ProgramStep } from '@/components/shared';
 import { FormProvider, type useForm } from 'react-hook-form';
-import type { EventStepCreateDto } from '@/api/events/model.ts';
-import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
+import type { EventCreateDto, EventStepCreateDto } from '@/api/events/model.ts';
 
 interface Props {
   form: ReturnType<typeof useForm<EventStepCreateDto>>;
+  event: EventCreateDto;
+  eventSteps: EventStepCreateDto[];
+  addEventStep: (step: EventStepCreateDto) => void;
+  updateEventStep: (index: number, data: Partial<EventStepCreateDto>) => void;
+  removeEventStep: (index: number) => void;
 }
 
-export const EventProgramStep: React.FC<Props> = ({ form }) => {
+export const EventProgramStep: React.FC<Props> = ({
+  form,
+  event,
+  eventSteps,
+  addEventStep,
+  updateEventStep,
+  removeEventStep,
+}) => {
   const endTime = form.watch('endTime');
-  const addEventStep = useEventCreationStore((state) => state.addEventStep);
-  const eventSteps = useEventCreationStore((state) => state.eventSteps);
-  const updateEventStep = useEventCreationStore(
-    (state) => state.updateEventStep,
-  );
-  const removeEventStep = useEventCreationStore(
-    (state) => state.removeEventStep,
-  );
-  const event = useEventCreationStore((state) => state.event);
 
   const onClickAddEventStep = (data: EventStepCreateDto) => {
     const startTime =
@@ -75,7 +77,8 @@ export const EventProgramStep: React.FC<Props> = ({ form }) => {
     <div className={'flex flex-col gap-4'}>
       <div className={'flex flex-col gap-1'}>
         <h3 className={'font-medium text-xl'}>
-          Начало мероприятия - {event.startTime}, конец - {event.endTime}
+          Начало мероприятия - {event.startTime.slice(0, 5)}, конец -{' '}
+          {event.endTime.slice(0, 5)}
         </h3>
         <span className={'text-muted-foreground text-sm'}>
           Добавьте пункты программы вашего мероприятия по времени. Это поможет

@@ -1,7 +1,7 @@
 import { FormErrorMessage, Input, Label, RequiredMark } from '@/components/ui';
 import { FormProvider, type useForm } from 'react-hook-form';
 import React from 'react';
-import type { EventDateTime } from '@/schemas/event-date-time-schema.ts';
+import type { EventDateTime } from '@/schemas/event-create-date-time-schema.ts';
 
 interface Props {
   form: ReturnType<typeof useForm<EventDateTime>>;

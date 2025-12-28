@@ -65,10 +65,12 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
               <Eye />
               Просмотр
             </DropdownMenuItem>
-            <DropdownMenuItem className={'items-end'}>
-              <SquarePen />
-              Редактировать
-            </DropdownMenuItem>
+            <Link to={`/events/${event.id}/edit`}>
+              <DropdownMenuItem className={'items-end'}>
+                <SquarePen />
+                Редактировать
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setModalOpen(true)}>
               <Trash />

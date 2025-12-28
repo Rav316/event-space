@@ -26,15 +26,17 @@ export interface EventStepCreateDto {
   description?: string;
 }
 
-export interface EventStep {
+export interface EventStep extends EventStepCreateDto {
   id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
 }
 
 export interface EventCreateData {
+  event: EventCreateDto;
+  image: File | null;
+}
+
+export interface EventEditData {
+  eventId: number;
   event: EventCreateDto;
   image: File | null;
 }
@@ -129,4 +131,23 @@ export interface EventListMyDto {
   registeredUsers: number;
   participantQuantity: number;
   author?: string;
+}
+
+export interface EventDetailsDto {
+  id: number;
+  name: string;
+  shortDescription: string;
+  description: string;
+  category: number;
+  registeredUsers: number;
+  participantQuantity: number;
+  tags: string[];
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+  deadline: string;
+  steps: EventStep[];
+  building: number;
+  space: number;
+  imageUrl: string;
 }

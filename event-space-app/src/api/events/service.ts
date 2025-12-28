@@ -1,5 +1,7 @@
 import type {
   EventCreateData,
+  EventDetailsDto,
+  EventEditData,
   EventFilter,
   EventListDto,
   EventListForUserDto,
@@ -34,6 +36,21 @@ export const create = async (data: EventCreateData): Promise<void> => {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
+
+export const update = async (data: EventEditData): Promise<void> => {
+  const formData = new FormData();
+  formData.append(
+    'event',
+    new Blob([JSON.stringify(data.event)], { type: 'application/json' }),
+  );
+  if (data.image) {
+    formData.append('image', data.image);
+  }
+
+  await axiosInstance.put<void>(`${ApiRoutes.EVENTS}/${data.eventId}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}
 
 export const findAllByFilter = async (
   requestData: EventRequestData<EventFilter>,
@@ -85,6 +102,15 @@ export const getMyFinishedEvents = async (
 export const findById = async (id: number): Promise<EventReadDto> => {
   const response = await axiosInstance.get<EventReadDto>(
     `${ApiRoutes.EVENTS}/${id}`,
+  );
+  return response.data;
+};
+
+export const findByIdWithDetails = async (
+  id: number,
+): Promise<EventDetailsDto> => {
+  const response = await axiosInstance.get<EventDetailsDto>(
+    `${ApiRoutes.EVENTS}/${id}/details`,
   );
   return response.data;
 };

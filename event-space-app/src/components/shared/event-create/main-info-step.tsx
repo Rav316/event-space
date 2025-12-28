@@ -108,13 +108,17 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
               <>
                 <Select
                   value={
-                    form.watch('category')?.toString() === '0'
-                      ? undefined
-                      : form.watch('category')?.toString()
+                    form.watch('category') && form.watch('category') !== 0
+                      ? String(form.watch('category'))
+                      : ''
                   }
-                  onValueChange={(value) =>
-                    form.setValue('category', Number(value))
-                  }
+                  onValueChange={(value) => {
+                    if (value) {
+                      form.setValue('category', Number(value), {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
                 >
                   <SelectTrigger id="category" className="w-full">
                     <SelectValue placeholder="Выберите категорию" />
@@ -127,6 +131,7 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                     ))}
                   </SelectContent>
                 </Select>
+
                 {form.formState.errors.category && (
                   <FormErrorMessage>
                     {form.formState.errors.category.message}
@@ -147,7 +152,9 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                   id={'participantQuantity'}
                   placeholder={'Введите количество участников'}
                   type={'number'}
-                  {...form.register('participantQuantity', {valueAsNumber: true})}
+                  {...form.register('participantQuantity', {
+                    valueAsNumber: true,
+                  })}
                 />
                 {form.formState.errors.participantQuantity && (
                   <FormErrorMessage>

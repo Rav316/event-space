@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useEventCreate } from '@/api/events/hooks.ts';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
+import { useSpaceFilterStore } from '@/store/use-space-filter-store.ts';
 
 const EventCreatePage = () => {
   const { currentStep, back, next, goToStep } = useStepper(
@@ -26,13 +27,24 @@ const EventCreatePage = () => {
   );
   const event = useEventCreationStore((state) => state.event);
   const eventSteps = useEventCreationStore((state) => state.eventSteps);
+  const addEventStep = useEventCreationStore((state) => state.addEventStep);
+  const removeEventStep = useEventCreationStore(
+    (state) => state.removeEventStep,
+  );
+  const updateEventStep = useEventCreationStore(
+    (state) => state.updateEventStep,
+  );
   const eventImage = useEventImageStore((state) => state.file);
+  const previewUrl = useEventImageStore((state) => state.previewUrl);
+  const setFile = useEventImageStore((state) => state.setFile);
+  const clearImage = useEventImageStore((state) => state.clearImage);
   const setEventData = useEventCreationStore((state) => state.setEventData);
   const resetEventSteps = useEventCreationStore(
     (state) => state.resetEventSteps,
   );
   const resetEvent = useEventCreationStore((state) => state.resetEvent);
-  const clearImage = useEventImageStore((state) => state.clearImage);
+  const spaceFilter = useSpaceFilterStore((state) => state.filter);
+  const setSpaceFilter = useSpaceFilterStore((state) => state.setFilter);
 
   const {
     mainInfoForm,
@@ -108,11 +120,34 @@ const EventCreatePage = () => {
       case 1:
         return <DateTimeStep form={eventDateTimeForm} />;
       case 2:
-        return <EventProgramStep form={eventStepForm} />;
+        return (
+          <EventProgramStep
+            form={eventStepForm}
+            event={event}
+            eventSteps={eventSteps}
+            addEventStep={addEventStep}
+            updateEventStep={updateEventStep}
+            removeEventStep={removeEventStep}
+          />
+        );
       case 3:
-        return <EventLocationStep form={eventLocationForm} />;
+        return (
+          <EventLocationStep
+            form={eventLocationForm}
+            event={event}
+            building={0}
+            filter={spaceFilter}
+            setFilter={setSpaceFilter}
+          />
+        );
       case 4:
-        return <MediaSettingsStep />;
+        return (
+          <MediaSettingsStep
+            previewUrl={previewUrl}
+            setFile={setFile}
+            clearImage={clearImage}
+          />
+        );
     }
   };
 
