@@ -1,1 +1,1 @@
-export {EventEditHeader} from './event-edit-header';
+export { EventEditHeader } from './event-edit-header';

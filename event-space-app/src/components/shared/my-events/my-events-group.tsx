@@ -10,7 +10,11 @@ interface Props {
   isLoading?: boolean;
 }
 
-export const MyEventsGroup: React.FC<Props> = ({ className, events, isLoading }) => {
+export const MyEventsGroup: React.FC<Props> = ({
+  className,
+  events,
+  isLoading,
+}) => {
   return (
     <div
       className={cn(

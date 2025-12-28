@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui';
-import { Calendar, ChartColumn, History, Menu, Users } from 'lucide-react';
+import { Briefcase, Calendar, ChartColumn, Menu, Users } from 'lucide-react';
 import * as React from 'react';
 import { Link } from 'react-router';
 
@@ -30,6 +30,12 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
               Мероприятия
             </DropdownMenuItem>
           </Link>
+          <Link to={'/my-events'}>
+            <DropdownMenuItem>
+              <Briefcase />
+              Мои мероприятия
+            </DropdownMenuItem>
+          </Link>
           <Link to={'/my-registrations'}>
             <DropdownMenuItem>
               <Users />
@@ -42,10 +48,6 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
               Статистика
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <History />
-            История
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

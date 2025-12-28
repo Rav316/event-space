@@ -26,8 +26,12 @@ interface Props {
   setFilter: (filter: Partial<SpaceFilter>) => void;
 }
 
-export const EventLocationStep: React.FC<Props> = ({ form, event, filter, setFilter }) => {
-
+export const EventLocationStep: React.FC<Props> = ({
+  form,
+  event,
+  filter,
+  setFilter,
+}) => {
   useEffect(() => {
     if (event.participantQuantity) {
       setFilter({ minCapacity: event.participantQuantity });

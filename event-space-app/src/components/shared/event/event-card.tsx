@@ -103,7 +103,8 @@ export const EventCard: React.FC<Props> = ({ event }) => {
               {event.deadline && (
                 <EventCardLabel
                   iconClassName={cn(
-                    compareWithToday(event.deadline) === -1 && 'text-orange-500',
+                    compareWithToday(event.deadline) === -1 &&
+                      'text-orange-500',
                   )}
                   Icon={Flame}
                   text={formatDateToRuFormat(event.deadline)}

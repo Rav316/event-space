@@ -70,7 +70,9 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
               open={openQr}
               attended={event.attended}
               onOpenChange={setOpenQr}
-              eventFinished={compareWithCurrentTime(event.eventDate, event.endTime) === 1}
+              eventFinished={
+                compareWithCurrentTime(event.eventDate, event.endTime) === 1
+              }
             />
             <Link to={`/events/${event.id}`}>
               <Button variant="outline">Подробнее</Button>

@@ -19,5 +19,5 @@ export const Api = {
   spaces,
   buildings,
   spaceTypes,
-  statistics
+  statistics,
 };

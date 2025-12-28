@@ -63,7 +63,7 @@ export const useDeleteAccount = () => {
     mutationFn: Api.users.deleteAccount,
     onSuccess: () => {
       toast.success('Аккаунт успешно удалён');
-      navigate('/', {replace: true})
+      navigate('/', { replace: true });
       setTimeout(() => {
         removeToken();
         queryClient.clear();
@@ -71,12 +71,12 @@ export const useDeleteAccount = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        if(error.response?.status === 403) {
+        if (error.response?.status === 403) {
           toast.error('Неверный текущий пароль');
           return;
         }
         toast.error('Произошла ошибка при удалении аккаунта');
       }
     },
-  })
-}
+  });
+};

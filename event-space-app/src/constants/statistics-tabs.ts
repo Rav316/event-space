@@ -2,12 +2,12 @@ import type { Tab } from '@/types/tab.ts';
 
 export const statisticsTabs: Tab[] = [
   {
-    text: 'Обзор'
+    text: 'Обзор',
   },
   {
-    text: 'Мои отзывы'
+    text: 'Мои отзывы',
   },
   {
-    text: 'Категории'
+    text: 'Категории',
   },
-]
+];

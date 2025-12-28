@@ -16,7 +16,9 @@ interface Props {
   categoriesActivity: CategoryActivityDto[];
 }
 
-export const CategoriesActivityBlock: React.FC<Props> = ({ categoriesActivity }) => {
+export const CategoriesActivityBlock: React.FC<Props> = ({
+  categoriesActivity,
+}) => {
   const [chartHeight, setChartHeight] = useState(300);
 
   useEffect(() => {

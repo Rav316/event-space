@@ -25,11 +25,13 @@ export const login = async (loginData: LoginData): Promise<AuthResponse> => {
   return response.data;
 };
 
-export const refreshToken = async (refreshToken: string | null): Promise<AuthResponse> => {
+export const refreshToken = async (
+  refreshToken: string | null,
+): Promise<AuthResponse> => {
   console.log('refresh query');
   const response = await axiosInstance.put<AuthResponse>(
     `${ApiRoutes.AUTH}/refresh-token`,
-    {refreshToken},
+    { refreshToken },
     { withCredentials: true },
   );
   return response.data;

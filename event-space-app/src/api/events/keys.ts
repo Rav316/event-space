@@ -1,4 +1,8 @@
-import type { EventFilter, EventMyFilter, EventRequestData } from '@/api/events/model.ts';
+import type {
+  EventFilter,
+  EventMyFilter,
+  EventRequestData,
+} from '@/api/events/model.ts';
 import type { EventReviewFilter } from '@/api/event-reviews/model.ts';
 
 export const EVENTS_KEYS = {
@@ -16,11 +20,15 @@ export const EVENTS_KEYS = {
     ...EVENTS_KEYS.all,
     'my',
     eventRequestData.filter,
-    eventRequestData.page
+    eventRequestData.page,
   ],
   tags: (prefix: string) => ['tags', prefix] as const,
   byId: (eventId: number) => [...EVENTS_KEYS.all, eventId] as const,
-  byIdWithDetails: (eventId: number) => [...EVENTS_KEYS.all, eventId, 'details'],
+  byIdWithDetails: (eventId: number) => [
+    ...EVENTS_KEYS.all,
+    eventId,
+    'details',
+  ],
   steps: (eventId: number) => [eventId, 'steps'] as const,
   reviews: (eventId: number, filter: EventReviewFilter) =>
     ['reviews', eventId, filter] as const,

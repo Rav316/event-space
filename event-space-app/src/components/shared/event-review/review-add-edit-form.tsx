@@ -35,7 +35,9 @@ export const ReviewAddEditForm: React.FC<Props> = ({
         }
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <h3 className={'font-medium text-xl max-[410px]:text-center'}>Ваш отзыв о мероприятии</h3>
+        <h3 className={'font-medium text-xl max-[410px]:text-center'}>
+          Ваш отзыв о мероприятии
+        </h3>
         <span>
           Оценка <RequiredMark />
           <div className={'flex flex-col gap-1'}>

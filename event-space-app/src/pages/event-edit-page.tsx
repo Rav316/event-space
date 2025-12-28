@@ -42,7 +42,7 @@ const EventEditPage = () => {
     previewUrl,
     setFile,
     clearImage,
-    imageFile
+    imageFile,
   } = useEventEditState(event);
 
   const { mainInfoForm, eventDateTimeForm, eventLocationForm, eventStepForm } =

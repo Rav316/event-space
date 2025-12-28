@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui';
 import { ArrowLeft } from 'lucide-react';
 
-
 export const EventEditHeader = () => {
   const navigate = useNavigate();
 
@@ -25,9 +24,7 @@ export const EventEditHeader = () => {
           <h1 className={'font-bold text-3xl max-[443px]:text-2xl'}>
             Изменить мероприятие
           </h1>
-          <p
-            className={'text-muted-foreground max-[443px]:text-sm '}
-          >
+          <p className={'text-muted-foreground max-[443px]:text-sm '}>
             Заполните информацию о вашем мероприятии
           </p>
         </div>

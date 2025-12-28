@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import {
   Badge,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -61,10 +60,12 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align={'end'} collisionPadding={20}>
-            <DropdownMenuItem>
-              <Eye />
-              Просмотр
-            </DropdownMenuItem>
+            <Link to={`/events/${event.id}`}>
+              <DropdownMenuItem>
+                <Eye />
+                Просмотр
+              </DropdownMenuItem>
+            </Link>
             <Link to={`/events/${event.id}/edit`}>
               <DropdownMenuItem className={'items-end'}>
                 <SquarePen />
@@ -154,20 +155,6 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
               )}
             </div>
           </div>
-        </div>
-        <div
-          className={
-            'flex items-center gap-2 max-[1100px]:flex-col max-[900px]:flex-row min-[528px]:max-[700px]:hidden max-[370px]:flex-col'
-          }
-        >
-          <Button variant={'outline'} className={'flex-1 w-full'}>
-            <SquarePen />
-            <span>Редактировать</span>
-          </Button>
-          <Button className={'flex-1 w-full'}>
-            <Eye />
-            <span>Просмотр</span>
-          </Button>
         </div>
       </div>
     </div>

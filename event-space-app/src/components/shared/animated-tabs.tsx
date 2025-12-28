@@ -16,10 +16,10 @@ export const AnimatedTabs: React.FC<Props> = ({
 }) => {
   return (
     <div className="w-full">
-      <div className='relative bg-muted rounded-2xl p-1 flex w-full overflow-hidden'>
+      <div className="relative bg-muted rounded-2xl p-1 flex w-full overflow-hidden">
         <motion.div
-          layoutId='activeTab'
-          className='absolute rounded-2xl bg-background shadow-md'
+          layoutId="activeTab"
+          className="absolute rounded-2xl bg-background shadow-md"
           transition={{
             type: 'spring',
             stiffness: 500,
@@ -28,7 +28,7 @@ export const AnimatedTabs: React.FC<Props> = ({
           style={{
             top: 4, // p-1 ≈ 4px
             bottom: 4,
-            left: `calc(${activeIndex * 100 / tabs.length}% + 4px)`,
+            left: `calc(${(activeIndex * 100) / tabs.length}% + 4px)`,
             width: `calc(${100 / tabs.length}% - 8px)`,
           }}
         />
@@ -42,16 +42,14 @@ export const AnimatedTabs: React.FC<Props> = ({
                 ? 'text-foreground'
                 : 'text-muted-foreground hover:text-foreground',
             )}
-
           >
-            {tab.Icon && <tab.Icon className="w-4 h-4 z-10 max-[500px]:hidden" />
-            }
+            {tab.Icon && (
+              <tab.Icon className="w-4 h-4 z-10 max-[500px]:hidden" />
+            )}
             {tab.text}
           </button>
         ))}
       </div>
-
-
     </div>
   );
 };

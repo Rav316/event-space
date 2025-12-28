@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const GetStartedSection: React.FC<Props> = ({ className }) => {
-  const {data} = useMe();
+  const { data } = useMe();
 
   return (
     <div

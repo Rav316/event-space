@@ -19,7 +19,6 @@ export const EventQrCodeDialog: React.FC<Props> = ({
   eventFinished,
   onOpenChange,
 }) => {
-
   const isDisabled = attended || eventFinished;
 
   return (

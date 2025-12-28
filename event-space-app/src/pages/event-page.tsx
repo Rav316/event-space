@@ -167,7 +167,9 @@ const EventPage = () => {
                   event.deadline ? formatDateToRuFormat(event.deadline) : '---'
                 }
                 caption="дедлайн регистрации"
-                iconClassName={cn(compareWithToday(event.deadline) === -1 && 'text-orange-500')}
+                iconClassName={cn(
+                  compareWithToday(event.deadline) === -1 && 'text-orange-500',
+                )}
               />
             </div>
 

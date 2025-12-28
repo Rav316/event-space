@@ -63,7 +63,7 @@ export const HelpfulButton: React.FC<Props> = ({
         <ThumbsUp
           className={cn(
             'transition-colors',
-            userMarkedHelpful ? 'text-black' : 'text-muted-foreground'
+            userMarkedHelpful ? 'text-black' : 'text-muted-foreground',
           )}
         />
       </motion.div>

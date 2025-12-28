@@ -57,7 +57,7 @@ export const UserSettings: React.FC<Props> = ({ editMode }) => {
         <h3 className={'font-medium text-xl'}>Безопасность</h3>
         <ChangePasswordDialog />
         <Separator />
-        <DeleteAccountModal/>
+        <DeleteAccountModal />
       </div>
     </div>
   );

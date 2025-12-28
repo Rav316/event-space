@@ -47,10 +47,14 @@ export const update = async (data: EventEditData): Promise<void> => {
     formData.append('image', data.image);
   }
 
-  await axiosInstance.put<void>(`${ApiRoutes.EVENTS}/${data.eventId}`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-}
+  await axiosInstance.put<void>(
+    `${ApiRoutes.EVENTS}/${data.eventId}`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+};
 
 export const findAllByFilter = async (
   requestData: EventRequestData<EventFilter>,

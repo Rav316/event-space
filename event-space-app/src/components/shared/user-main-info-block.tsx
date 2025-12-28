@@ -29,7 +29,7 @@ export const UserMainInfoBlock: React.FC<Props> = ({
   previewUrl,
   setPreviewUrl,
   avatarRemoved,
-  setAvatarRemoved
+  setAvatarRemoved,
 }) => {
   const { data } = useMe();
   const fileInputRef = useRef<HTMLInputElement>(null);

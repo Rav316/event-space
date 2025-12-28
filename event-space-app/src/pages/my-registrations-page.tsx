@@ -5,10 +5,7 @@ import {
   NoUpcomingEventsBlock,
 } from '@/components/shared';
 import { EventList } from '@/components/shared/event';
-import {
-  useFinishedEvents,
-  useUpcomingEvents,
-} from '@/api/events/hooks.ts';
+import { useFinishedEvents, useUpcomingEvents } from '@/api/events/hooks.ts';
 import { Skeleton } from '@/components/ui';
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';

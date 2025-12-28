@@ -38,13 +38,13 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
     : false;
 
   const onLogout = () => {
-    navigate('/', {replace: true});
+    navigate('/', { replace: true });
     setTimeout(() => {
       removeTokens();
       queryClient.clear();
     }, 100);
     showLogoutSuccess();
-  }
+  };
 
   return (
     <div className={cn(className, 'flex items-center')}>

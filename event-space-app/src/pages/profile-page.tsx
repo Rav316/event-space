@@ -91,13 +91,13 @@ const ProfilePage = () => {
         user: { ...data },
         userId: user?.id || 0,
         avatar: selectedFile,
-        avatarRemoved
+        avatarRemoved,
       },
       {
         onSuccess: () => {
           userProfileForm.reset(data);
           setEditMode(false);
-          setAvatarRemoved(false)
+          setAvatarRemoved(false);
         },
       },
     );

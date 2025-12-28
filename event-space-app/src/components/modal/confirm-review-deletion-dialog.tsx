@@ -36,13 +36,8 @@ export const ConfirmReviewDeletionDialog: React.FC<Props> = ({ eventId }) => {
 
       <DialogContent className="sm:max-w-[420px]">
         Вы действительно хотите удалить отзыв?
-
         <DialogFooter className="flex justify-end gap-3 mt-2">
-          <Button
-            onClick={() => setOpen(false)}
-          >
-            Отмена
-          </Button>
+          <Button onClick={() => setOpen(false)}>Отмена</Button>
           <Button
             className="bg-red-500 hover:bg-red-600 text-white"
             onClick={onDelete}

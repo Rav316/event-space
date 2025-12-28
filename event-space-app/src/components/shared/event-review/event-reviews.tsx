@@ -151,9 +151,7 @@ export const EventReviews: React.FC<Props> = ({ event }) => {
 
       {myReview && <MyReview review={myReview} />}
 
-      {statistics.total > 0 && (
-        <ReviewFilters />
-      )}
+      {statistics.total > 0 && <ReviewFilters />}
       {statistics.total > 0 ? (
         <EventReviewsList eventId={event.id} />
       ) : (

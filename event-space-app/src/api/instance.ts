@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
       try {
         const response = await axiosInstance.put<AuthResponse>(
           `${ApiRoutes.AUTH}/refresh-token`,
-          {refreshToken: authStore.refreshToken},
+          { refreshToken: authStore.refreshToken },
           { withCredentials: true },
         );
 

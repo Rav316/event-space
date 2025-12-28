@@ -31,7 +31,7 @@ export const DeleteAccountModal = () => {
       confirmationPhrase: '',
     },
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit'
+    reValidateMode: 'onSubmit',
   });
 
   const accountDeleteMutation = useDeleteAccount();
@@ -41,7 +41,7 @@ export const DeleteAccountModal = () => {
       await accountDeleteMutation.mutateAsync(data, {
         onError: () => {
           setOpen(false);
-        }
+        },
       });
       setOpen(false);
     } catch (error) {
@@ -49,7 +49,7 @@ export const DeleteAccountModal = () => {
     } finally {
       accountDeleteForm.reset();
     }
-  })
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -93,7 +93,9 @@ export const DeleteAccountModal = () => {
             <div className="flex flex-col gap-2">
               <Label htmlFor="confirmationPhrase" className="text-black">
                 Введите фразу{' '}
-                <span className="text-red-500">&quot;удалить мой аккаунт&quot;</span>
+                <span className="text-red-500">
+                  &quot;удалить мой аккаунт&quot;
+                </span>
               </Label>
               <Input
                 className="text-black"
@@ -103,7 +105,10 @@ export const DeleteAccountModal = () => {
               />
               {accountDeleteForm.formState.errors.confirmationPhrase && (
                 <FormErrorMessage>
-                  {accountDeleteForm.formState.errors.confirmationPhrase.message}
+                  {
+                    accountDeleteForm.formState.errors.confirmationPhrase
+                      .message
+                  }
                 </FormErrorMessage>
               )}
             </div>

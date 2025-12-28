@@ -1,10 +1,5 @@
 import { Briefcase, Calendar, ChartColumn, Plus, Users } from 'lucide-react';
-import {
-  HeaderItem,
-  NavigationMenu,
-  ProfileMenu,
-  SearchInput,
-} from '@/components/shared';
+import { HeaderItem, NavigationMenu, ProfileMenu } from '@/components/shared';
 import { Button, Skeleton } from '@/components/ui';
 import { Link, NavLink } from 'react-router';
 import { useMe } from '@/api/auth/hooks.ts';
@@ -37,7 +32,7 @@ export const Header = () => {
         <Link to={'/'}>
           <div className={'flex items-center gap-2'}>
             <Calendar width={40} height={40} />
-            <h1 className={'text-3xl font-medium max-[800px]:hidden'}>
+            <h1 className={'text-3xl font-medium max-[520px]:hidden'}>
               EventSpace
             </h1>
           </div>
@@ -88,11 +83,6 @@ export const Header = () => {
             </>
           )}
         </div>
-        <div className={'w-[400px]'}>
-          <div className="relative w-full max-w-sm">
-            <SearchInput placeholder={'Поиск...'} value={''} />
-          </div>
-        </div>
         {!isFetching && !data ? (
           <Button onClick={() => openModal(true)}>
             <span>Войти</span>
@@ -112,7 +102,7 @@ export const Header = () => {
                 <Link to={'/events/create'}>
                   <Button className={'h-[30px]'}>
                     <Plus />
-                    <span className={'max-[500px]:hidden'}>Создать</span>
+                    <span className={'max-[320px]:hidden'}>Создать</span>
                   </Button>
                 </Link>
                 <ProfileMenu />

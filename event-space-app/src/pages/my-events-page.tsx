@@ -1,6 +1,5 @@
 import { Wrapper } from '@/components/hoc';
 import {
-  Button,
   Select,
   SelectContent,
   SelectItem,
@@ -8,7 +7,6 @@ import {
   SelectValue,
   Skeleton,
 } from '@/components/ui';
-import { Plus } from 'lucide-react';
 import { SearchInput } from '@/components/shared';
 import { MyEventsStatisticBlock } from '@/components/shared/my-events';
 import { useEventCategories } from '@/api/event-categories/hooks.ts';
@@ -55,22 +53,12 @@ const MyEventsPage = () => {
   }, [currentPage]);
 
   return (
-    <Wrapper className={'mt-5 flex flex-col gap-y-5'}>
-      <div
-        className={
-          'flex items-end gap-2 justify-between max-[515px]:flex-col max-[515px]:items-start max-[515px]:gap-y-4'
-        }
-      >
-        <div className={'flex flex-col '}>
-          <h1 className={'font-bold text-3xl'}>Мои мероприятия</h1>
-          <span className={'text-muted-foreground'}>
-            Управляйте опубликованными мероприятиями
-          </span>
-        </div>
-        <Button>
-          <Plus />
-          <span>Создать мероприятие</span>
-        </Button>
+    <Wrapper className={'mt-5 flex flex-col gap-y-5 mb-5'}>
+      <div className={'flex flex-col '}>
+        <h1 className={'font-bold text-3xl'}>Мои мероприятия</h1>
+        <span className={'text-muted-foreground'}>
+          Управляйте опубликованными мероприятиями
+        </span>
       </div>
       <div className={'flex gap-3 max-[400px]:flex-col max-[400px]:gap-y-2'}>
         {isStatisticsPending || !statistics ? (

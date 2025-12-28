@@ -15,8 +15,8 @@ export const useEventAuthoredStatistics = () => {
     queryFn: Api.statistics.getEventAuthoredStatistics,
     queryKey: STATISTICS_KEYS.eventAuthoredStatistics,
     refetchOnWindowFocus: false,
-  })
-}
+  });
+};
 
 export const useUserStatistics = () => {
   return useQuery({
@@ -39,20 +39,20 @@ export const useUserProfileStatistics = () => {
     queryKey: STATISTICS_KEYS.profileStatistics,
     refetchOnWindowFocus: false,
   });
-}
+};
 
 export const useReviewStatistics = () => {
   return useQuery({
     queryFn: Api.statistics.getReviewStatistics,
     queryKey: STATISTICS_KEYS.reviewsStatistics,
-    refetchOnWindowFocus: false
-  })
-}
+    refetchOnWindowFocus: false,
+  });
+};
 
 export const useCategoryStatistics = () => {
   return useQuery({
     queryFn: Api.statistics.getCategoryStatistics,
     queryKey: STATISTICS_KEYS.categoryStatistics,
-    refetchOnWindowFocus: false
-  })
-}
+    refetchOnWindowFocus: false,
+  });
+};

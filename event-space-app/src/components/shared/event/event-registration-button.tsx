@@ -36,7 +36,7 @@ export const EventRegistrationButton: React.FC<Props> = ({
   isDestructive,
   registeredUsers,
   capacity,
-  deadline
+  deadline,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -74,7 +74,9 @@ export const EventRegistrationButton: React.FC<Props> = ({
   const isButtonEnabled = data
     ? isUserRegistered
       ? canUnregister
-      : canRegister && hasPlaces && (deadline === undefined || compareWithToday(deadline) > -1)
+      : canRegister &&
+        hasPlaces &&
+        (deadline === undefined || compareWithToday(deadline) > -1)
     : true;
 
   return (

@@ -1,5 +1,5 @@
 export const compareWithToday = (dateStr?: string) => {
-  if(!dateStr) {
+  if (!dateStr) {
     return -1;
   }
   const [y, m, d] = dateStr.split('-').map(Number);
