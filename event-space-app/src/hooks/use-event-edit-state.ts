@@ -6,6 +6,7 @@ import type {
 import type { SpaceFilter } from '@/api/spaces/model.ts';
 
 export const useEventEditState = (event?: EventDetailsDto) => {
+  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
   const [eventData, setEventData] = useState<EventDetailsDto | undefined>(
     undefined,
   );
@@ -21,9 +22,11 @@ export const useEventEditState = (event?: EventDetailsDto) => {
       setEventData(event);
       setEventSteps(event.steps || []);
       updateSpaceFilter({ building: event.building || 0 });
-      setPreviewUrl(event.imageUrl || null);
+      setPreviewUrl(
+        (event.imageUrl && staticContentUrl + event.imageUrl) || null,
+      );
     }
-  }, [event]);
+  }, [event, staticContentUrl]);
 
   useEffect(() => {
     return () => {
@@ -78,12 +81,12 @@ export const useEventEditState = (event?: EventDetailsDto) => {
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl(null);
-    setImageFile(null);
+    setImageFile(new File([], ''));
   };
 
   const resetEventSteps = () => {
     setEventSteps([]);
-  }
+  };
 
   return {
     eventData,

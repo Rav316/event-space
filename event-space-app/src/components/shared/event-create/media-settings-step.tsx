@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 interface Props {
-  previewUrl: string | null;
+  imageUrl: string | null;
   setFile: (file: File) => void;
   clearImage: () => void;
 }
 
 export const MediaSettingsStep: React.FC<Props> = ({
-  previewUrl,
+  imageUrl,
   setFile,
   clearImage,
 }) => {
@@ -66,7 +66,7 @@ export const MediaSettingsStep: React.FC<Props> = ({
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
         >
-          {previewUrl && (
+          {imageUrl && (
             <button
               onClick={clearImage}
               className="absolute top-3 right-3 text-red-500 cursor-pointer"
@@ -76,10 +76,10 @@ export const MediaSettingsStep: React.FC<Props> = ({
           )}
 
           <div className="flex flex-col gap-4 items-center justify-center text-center">
-            {previewUrl ? (
+            {imageUrl ? (
               <div className="w-full h-64 flex items-center justify-center overflow-hidden rounded-md">
                 <img
-                  src={previewUrl}
+                  src={imageUrl}
                   alt="Preview"
                   className="object-contain w-full h-full"
                 />

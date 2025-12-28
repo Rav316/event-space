@@ -133,7 +133,7 @@ const EventEditPage = () => {
       case 4:
         return (
           <MediaSettingsStep
-            previewUrl={previewUrl}
+            imageUrl={previewUrl}
             setFile={setFile}
             clearImage={clearImage}
           />
