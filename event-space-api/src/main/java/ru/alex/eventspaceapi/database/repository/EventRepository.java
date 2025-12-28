@@ -37,6 +37,15 @@ public interface EventRepository extends JpaRepository<Event, Integer>, EventRep
     Optional<Event> findByIdWithLoadedEntities(Integer id);
 
     @Query("""
+        SELECT e FROM Event e
+        LEFT JOIN FETCH e.space s
+        LEFT JOIN FETCH s.building b
+        LEFT JOIN FETCH e.eventUsers eu
+        WHERE e.id = :id
+        """)
+    Optional<Event> findByIdWithDetails(Integer id);
+
+    @Query("""
         SELECT e
         FROM Event e
         WHERE e.id = :id

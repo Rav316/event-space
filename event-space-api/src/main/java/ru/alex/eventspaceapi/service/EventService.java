@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.*;
 import ru.alex.eventspaceapi.database.repository.*;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
+import ru.alex.eventspaceapi.dto.event.EventDetailsDto;
+import ru.alex.eventspaceapi.dto.event.EventEditDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventListMyDto;
@@ -25,6 +27,7 @@ import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.exception.EventCategoryNotFoundException;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.SpaceNotFoundException;
+import ru.alex.eventspaceapi.mapper.event.EventDetailsMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListForUserMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListMyMapper;
@@ -57,6 +60,7 @@ public class EventService {
     private final EventListMyMapper eventListMyMapper;
     private final EventListPreviewMapper eventListPreviewMapper;
     private final EventReadMapper eventReadMapper;
+    private final EventDetailsMapper eventDetailsMapper;
     private final EventListForUserMapper eventListForUserMapper;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
@@ -106,47 +110,54 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
 
+    public EventDetailsDto findByIdWithDetails(Integer id) {
+        Event event = eventRepository.findByIdWithDetails(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        List<EventStep> steps = eventStepRepository.findAllByEvent(event.getId());
+        return eventDetailsMapper.toDto(event, steps);
+    }
+
     @Transactional
-    public void create(EventCreateDto eventCreateDto, MultipartFile eventImage) {
+    public void create(EventCreateDto dto, MultipartFile eventImage) {
         Event event = new Event();
-        event.setName(eventCreateDto.name());
-        String[] tags = eventCreateDto.tags() == null ? new String[]{} :
-                eventCreateDto.tags()
+        event.setName(dto.name());
+        String[] tags = dto.tags() == null ? new String[]{} :
+                dto.tags()
                 .stream()
                 .distinct()
                 .toArray(String[]::new);
         event.setTags(tags);
-        if(eventCreateDto.eventDate().isBefore(LocalDate.now())) {
+        if(dto.eventDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("the event date cannot be earlier than the current one");
         }
-        event.setEventDate(eventCreateDto.eventDate());
-        if(eventCreateDto.endTime().isBefore(eventCreateDto.startTime())) {
+        event.setEventDate(dto.eventDate());
+        if(dto.endTime().isBefore(dto.startTime())) {
             throw new IllegalArgumentException("the end time of an event cannot be earlier than the start time of the event");
         }
-        if(eventCreateDto.eventDate().equals(LocalDate.now()) && eventCreateDto.startTime().isBefore(LocalTime.now())) {
+        if(dto.eventDate().equals(LocalDate.now()) && dto.startTime().isBefore(LocalTime.now())) {
             throw new IllegalArgumentException("the start time of the event cannot be earlier than the current time on the day of the event");
         }
-        event.setStartTime(eventCreateDto.startTime());
-        event.setEndTime(eventCreateDto.endTime());
-        event.setDeadline(eventCreateDto.deadline());
-        Space space = spaceRepository.findById(eventCreateDto.space())
-                .orElseThrow(() -> new SpaceNotFoundException(eventCreateDto.space()));
+        event.setStartTime(dto.startTime());
+        event.setEndTime(dto.endTime());
+        event.setDeadline(dto.deadline());
+        Space space = spaceRepository.findById(dto.space())
+                .orElseThrow(() -> new SpaceNotFoundException(dto.space()));
         event.setSpace(space);
-        event.setShortDescription(eventCreateDto.shortDescription());
-        event.setDescription(eventCreateDto.description());
+        event.setShortDescription(dto.shortDescription());
+        event.setDescription(dto.description());
         UserDetailsDto authorizedUser = getAuthorizedUser();
         event.setAuthor(userRepository.getReferenceById(Objects.requireNonNull(authorizedUser).id()));
 
-        EventCategory eventCategory = eventCategoryRepository.findById(eventCreateDto.category())
-                .orElseThrow(() -> new EventCategoryNotFoundException(eventCreateDto.category()));
+        EventCategory eventCategory = eventCategoryRepository.findById(dto.category())
+                .orElseThrow(() -> new EventCategoryNotFoundException(dto.category()));
         event.setCategory(eventCategory);
 
-        if(eventCreateDto.participantQuantity() > space.getCapacity()) {
+        if(dto.participantQuantity() > space.getCapacity()) {
             throw new IllegalArgumentException("the number of participants cannot be greater than the capacity of the space");
         }
-        event.setParticipantQuantity(eventCreateDto.participantQuantity());
+        event.setParticipantQuantity(dto.participantQuantity());
 
-        validateEventSteps(eventCreateDto);
+        validateEventSteps(dto.steps(), dto.startTime(), dto.endTime());
 
         if(eventImage != null && !eventImage.isEmpty()) {
             String imageUrl = fileService.saveFile(eventImage, "events");
@@ -155,8 +166,8 @@ public class EventService {
 
         Event savedEvent = eventRepository.save(event);
 
-        if(eventCreateDto.steps() != null && !eventCreateDto.steps().isEmpty()) {
-            List<EventStep> eventSteps = eventCreateDto.steps().stream()
+        if(dto.steps() != null && !dto.steps().isEmpty()) {
+            List<EventStep> eventSteps = dto.steps().stream()
                     .map(eventStepCreateMapper::toEntity)
                     .toList();
 
@@ -167,6 +178,98 @@ public class EventService {
     }
 
     @Transactional
+    public void update(Integer id, EventEditDto dto, MultipartFile eventImage) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+        UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
+        if(!event.getAuthor().getId().equals(authorizedUser.id()) || authorizedUser.role() != Role.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
+        }
+        if(isEventStarted(event)) {
+            throw new IllegalStateException("the event has already started, you cannot update this event");
+        }
+        if(isEventPassed(event)) {
+            throw new IllegalStateException("the event has already passed, you cannot update this event");
+        }
+
+        if(dto.name() != null) {
+            event.setName(dto.name());
+        }
+
+        if(dto.tags() != null && !dto.tags().isEmpty()) {
+            String[] tags = dto.tags()
+                    .stream()
+                    .distinct()
+                    .toArray(String[]::new);
+            event.setTags(tags);
+        }
+
+        if(dto.eventDate() != null) {
+            if(dto.eventDate().isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("the event date cannot be earlier than the current one");
+            }
+            event.setEventDate(dto.eventDate());
+        }
+        if(dto.startTime() != null) {
+            if(event.getEventDate().equals(LocalDate.now()) && dto.startTime().isBefore(LocalTime.now())) {
+                throw new IllegalArgumentException("the start time of the event cannot be earlier than the current time on the day of the event");
+            }
+            event.setStartTime(dto.startTime());
+        }
+        if(dto.endTime() != null) {
+            if(dto.endTime().isBefore(event.getStartTime())) {
+                throw new IllegalArgumentException("the end time of an event cannot be earlier than the start time of the event");
+            }
+            event.setEndTime(dto.endTime());
+        }
+        if(dto.deadline() != null) {
+            event.setDeadline(dto.deadline());
+        }
+        if(dto.space() != null) {
+            Space space = spaceRepository.findById(dto.space())
+                    .orElseThrow(() -> new SpaceNotFoundException(dto.space()));
+            event.setSpace(space);
+        }
+        if(dto.shortDescription() != null) {
+            event.setShortDescription(dto.shortDescription());
+        }
+        if(dto.description() != null) {
+            event.setDescription(dto.description());
+        }
+        if(dto.category() != null) {
+            EventCategory eventCategory = eventCategoryRepository.findById(dto.category())
+                    .orElseThrow(() -> new EventCategoryNotFoundException(dto.category()));
+            event.setCategory(eventCategory);
+        }
+        if(dto.participantQuantity() != null) {
+            if(dto.participantQuantity() > event.getSpace().getCapacity()) {
+                throw new IllegalArgumentException("the number of participants cannot be greater than the capacity of the space");
+            }
+            event.setParticipantQuantity(dto.participantQuantity());
+        }
+
+        validateEventSteps(dto.steps(), dto.startTime(), dto.endTime());
+
+        if(eventImage != null && !eventImage.isEmpty()) {
+            fileService.deleteFileByUrl(event.getImageUrl());
+            String imageUrl = fileService.saveFile(eventImage, "events");
+            event.setImageUrl(imageUrl);
+        }
+
+        Event savedEvent = eventRepository.save(event);
+
+        if(dto.steps() != null && !dto.steps().isEmpty()) {
+            List<EventStep> eventSteps = dto.steps().stream()
+                    .map(eventStepCreateMapper::toEntity)
+                    .toList();
+            eventSteps.forEach(step -> step.setEvent(savedEvent));
+            eventStepRepository.deleteByEvent(event.getId());
+            eventStepRepository.insertEventStepsBatch(eventSteps);
+        }
+
+    }
+
+    @Transactional
     public void delete(Integer id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
@@ -174,12 +277,14 @@ public class EventService {
         if(!event.getAuthor().getId().equals(authorizedUser.id()) || authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
+        if(isEventStarted(event) && !isEventPassed(event)) {
+            throw new IllegalStateException("You can't delete an event until it's finished.");
+        }
         eventRepository.delete(event);
     }
 
-    private void validateEventSteps(EventCreateDto event) {
-        List<EventStepCreateDto> steps = event.steps();
-
+    private void validateEventSteps(List<EventStepCreateDto> steps, LocalTime startTime, LocalTime endTime) {
+        if(steps == null) return;
         for (int i = 0; i < steps.size(); i++) {
             EventStepCreateDto step = steps.get(i);
 
@@ -203,12 +308,23 @@ public class EventService {
             }
 
             // 3) Steps must fit within event time
-            if (step.startTime().isBefore(event.startTime()) || step.endTime().isAfter(event.endTime())) {
+            if (step.startTime().isBefore(startTime) || step.endTime().isAfter(endTime)) {
                 throw new IllegalArgumentException(
                         String.format("Step %d: step is outside the event time boundaries (%s - %s)",
-                                i + 1, event.startTime(), event.endTime())
+                                i + 1, startTime, endTime)
                 );
             }
         }
+    }
+
+    private boolean isEventPassed(Event event) {
+        LocalDate now = LocalDate.now();
+        return event.getEventDate().isBefore(now) ||
+                (event.getEventDate().isEqual(now) && event.getEndTime().isBefore(LocalTime.now()));
+    }
+
+    private boolean isEventStarted(Event event) {
+        LocalDate now = LocalDate.now();
+        return (event.getEventDate().isEqual(now) && event.getStartTime().isBefore(LocalTime.now()));
     }
 }

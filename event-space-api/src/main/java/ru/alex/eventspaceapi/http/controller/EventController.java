@@ -7,6 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
+import ru.alex.eventspaceapi.dto.event.EventDetailsDto;
+import ru.alex.eventspaceapi.dto.event.EventEditDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.event.EventListForUserDto;
 import ru.alex.eventspaceapi.dto.event.EventListMyDto;
@@ -79,6 +81,11 @@ public class EventController {
         return eventService.findById(id);
     }
 
+    @GetMapping("/{id}/details")
+    public ResponseEntity<EventDetailsDto> findByIdWithDetails(@PathVariable Integer id) {
+        return new ResponseEntity<>(eventService.findByIdWithDetails(id), OK);
+    }
+
     @GetMapping("/{id}/steps")
     public List<EventStepReadDto> getEventStepsByEvent(@PathVariable Integer id) {
         return eventStepService.findAllStepsByEvent(id);
@@ -133,11 +140,21 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<Void> create(
-            @Validated @RequestPart("event")  EventCreateDto eventCreateDto,
+            @Validated @RequestPart("event") EventCreateDto eventCreateDto,
             @RequestPart(value = "image", required = false) MultipartFile image
     ) {
         eventService.create(eventCreateDto, image);
         return new ResponseEntity<>(CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable Integer id,
+            @Validated @RequestPart("event") EventEditDto eventEditDto,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) {
+        eventService.update(id, eventEditDto, image);
+        return new ResponseEntity<>(OK);
     }
 
     @PostMapping("/{id}/register")
