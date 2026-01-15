@@ -153,9 +153,13 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                   placeholder={'Введите количество участников'}
                   type={'number'}
                   {...form.register('participantQuantity', {
-                    valueAsNumber: true,
+                    setValueAs: (value) =>
+                      value === '' || value === null
+                        ? -1
+                        : Number(value),
                   })}
                 />
+
                 {form.formState.errors.participantQuantity && (
                   <FormErrorMessage>
                     {form.formState.errors.participantQuantity.message}

@@ -23,7 +23,7 @@ export const eventMainInfoSchema = z.object({
   category: z.number().min(1, { message: 'Выберите категорию' }),
   participantQuantity: z
     .number()
-    .min(1, { message: 'Выберите количество участников' }),
+    .min(1, { message: 'Укажите количество участников' }),
 });
 
 export type EventMainInfo = z.infer<typeof eventMainInfoSchema>;
