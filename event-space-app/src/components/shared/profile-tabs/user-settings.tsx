@@ -37,23 +37,6 @@ export const UserSettings: React.FC<Props> = ({ editMode }) => {
           'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'
         }
       >
-        <h3 className={'font-medium text-xl'}>Приватность</h3>
-        <ProfileSetting
-          editMode={editMode}
-          title={'Показывать email'}
-          description={'Другие пользователи смогут увидеть ваш email'}
-        />
-        <ProfileSetting
-          editMode={editMode}
-          title={'Показывать телефон'}
-          description={'Другие пользователи смогут увидеть ваш email'}
-        />
-      </div>
-      <div
-        className={
-          'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'
-        }
-      >
         <h3 className={'font-medium text-xl'}>Безопасность</h3>
         <ChangePasswordDialog />
         <Separator />

@@ -19,7 +19,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
 
   return (
     <div className="flex gap-4 border border-[#E5E5E5] rounded-2xl overflow-hidden max-[900px]:flex-col">
-      <div className="relative w-[450px] flex-shrink-0 max-[900px]:relative max-[900px]:w-full max-[900px]:h-60">
+      <div className="relative w-[450px] shrink-0 max-[900px]:relative max-[900px]:w-full max-[900px]:h-60">
         <Link to={`/events/${event.id}`}>
           <img
             className="absolute inset-0 w-full h-full object-cover max-[900px]:static max-[900px]:h-full"
@@ -34,11 +34,14 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           <Badge className={categoryColors[event.category.id - 1]}>
             {event.category.name}
           </Badge>
-          {event.attended ? (
-            <Badge className="bg-green-100 text-green-900">Подтверждено</Badge>
-          ) : (
-            <Badge className="bg-red-100 text-red-900">Пропущено</Badge>
-          )}
+          {compareWithCurrentTime(event.eventDate, event.endTime) === 1 &&
+            (event.attended ? (
+              <Badge className="bg-green-100 text-green-900">
+                Подтверждено
+              </Badge>
+            ) : (
+              <Badge className="bg-red-100 text-red-900">Пропущено</Badge>
+            ))}
         </div>
 
         <h3 className="font-medium text-xl">{event.name}</h3>
