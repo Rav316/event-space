@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
 
 interface Props {
@@ -16,20 +16,24 @@ export const UserAvatar: React.FC<Props> = ({
   className,
   avatarFallbackClassName,
 }) => {
+  const [imageError, setImageError] = useState(false);
+
   const initials =
     firstName?.trim() && lastName?.trim()
       ? `${firstName.trim()[0]}${lastName.trim()[0]}`.toUpperCase()
       : '??';
 
+  const showImage = avatarUrl && !imageError;
+
   return (
-    <Avatar key={avatarUrl || 'no-avatar'} className={className}>
-      {avatarUrl ? (
-        <AvatarImage src={avatarUrl} />
-      ) : (
-        <AvatarFallback className={avatarFallbackClassName}>
-          {initials}
-        </AvatarFallback>
+    <Avatar className={className}>
+      {showImage && (
+        <AvatarImage src={avatarUrl} onError={() => setImageError(true)} />
       )}
+
+      <AvatarFallback className={avatarFallbackClassName}>
+        {initials}
+      </AvatarFallback>
     </Avatar>
   );
 };
