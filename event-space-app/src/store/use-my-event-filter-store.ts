@@ -6,7 +6,7 @@ import { immer } from 'zustand/middleware/immer';
 interface MyEventsFilterState {
   filter: EventMyFilter;
   setName: (name: string) => void;
-  changeCategory: (category: number) => void;
+  changeCategory: (category?: number) => void;
   page: number;
   setPage: (page: number) => void;
 }
@@ -26,7 +26,11 @@ export const useMyEventsFilterStore = create<MyEventsFilterState>()(
         }),
       changeCategory: (category) =>
         set((state) => {
-          state.filter.category = category;
+          if (category === undefined) {
+            delete state.filter.category;
+          } else {
+            state.filter.category = category;
+          }
           state.page = 0;
         }),
 

@@ -92,13 +92,16 @@ const MyEventsPage = () => {
             <Skeleton className={'w-full h-8'} />
           ) : (
             <Select
-              value={filter.category?.toString()}
-              onValueChange={(value) => changeCategory(Number(value))}
+              value={filter.category !== undefined ? filter.category.toString() : 'all'}
+              onValueChange={(value) =>
+                value === 'all' ? changeCategory() : changeCategory(Number(value))
+              }
             >
               <SelectTrigger id="category" className="w-full">
-                <SelectValue placeholder="Выберите категорию" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value={'all'}>Все</SelectItem>
                 {categories?.map((category) => (
                   <SelectItem key={category.id} value={String(category.id)}>
                     {category.name}
