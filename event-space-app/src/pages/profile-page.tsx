@@ -2,7 +2,7 @@ import { Wrapper } from '@/components/hoc';
 import {
   AnimatedTabs,
   ProfileHeader,
-  UserMainInfoBlock,
+  ProfileMainInfoBlock, ProfileStatisticsGroup,
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
 import { useState } from 'react';
@@ -15,11 +15,7 @@ import { useCheckEmail, useEditUser } from '@/api/users/hooks.ts';
 import { deepEqual } from '@/utils/deep-equal.ts';
 import { queryClient } from '@/api/query-client.ts';
 import { validateEmailUnique } from '@/utils/validation.ts';
-import {
-  UserInfo,
-  UserSettings,
-  UserStatistics,
-} from '@/components/shared/profile-tabs';
+import { UserInfo, UserSettings } from '@/components/shared/profile-tabs';
 
 const ProfilePage = () => {
   const [profileActiveTab, setProfileActiveTab] = useState(0);
@@ -56,8 +52,6 @@ const ProfilePage = () => {
       case 0:
         return <UserInfo editMode={editMode} form={userProfileForm} />;
       case 1:
-        return <UserStatistics />;
-      case 2:
         return <UserSettings editMode={editMode} />;
     }
   };
@@ -115,14 +109,17 @@ const ProfilePage = () => {
         />
         <div className={'flex gap-5 max-[800px]:flex-col'}>
           <div className={'flex flex-col gap-5 flex-3'}>
-            <UserMainInfoBlock
-              editMode={editMode}
-              setSelectedFile={setSelectedFile}
-              previewUrl={previewUrl}
-              setPreviewUrl={setPreviewUrl}
-              avatarRemoved={avatarRemoved}
-              setAvatarRemoved={setAvatarRemoved}
-            />
+            <div className={'flex flex-col gap-5'}>
+              <ProfileMainInfoBlock
+                editMode={editMode}
+                setSelectedFile={setSelectedFile}
+                previewUrl={previewUrl}
+                setPreviewUrl={setPreviewUrl}
+                avatarRemoved={avatarRemoved}
+                setAvatarRemoved={setAvatarRemoved}
+              />
+              <ProfileStatisticsGroup/>
+            </div>
           </div>
           <div className={'flex flex-col gap-5 flex-7'}>
             <AnimatedTabs

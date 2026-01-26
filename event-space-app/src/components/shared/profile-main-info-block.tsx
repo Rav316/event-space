@@ -23,7 +23,7 @@ interface Props {
   setAvatarRemoved: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const UserMainInfoBlock: React.FC<Props> = ({
+export const ProfileMainInfoBlock: React.FC<Props> = ({
   editMode,
   setSelectedFile,
   previewUrl,
