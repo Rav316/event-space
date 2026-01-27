@@ -18,6 +18,9 @@ spring:
           starttls:
             enable: true
     protocol: smtp
+  threads:
+    virtual:
+      enabled: true
 
 app:
   messaging:
