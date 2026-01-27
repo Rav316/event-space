@@ -19,6 +19,7 @@ public record UserReadDto(
         String tgUsername,
         String vkUrl,
         String githubUrl,
+        boolean newEventNotifications,
         boolean active,
         LocalDate registerDate,
         FacultyListDto faculty

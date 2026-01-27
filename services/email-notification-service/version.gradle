@@ -1,0 +1,5 @@
+ext {
+    versions = [
+            'jackson': '3.0.4'
+    ]
+}

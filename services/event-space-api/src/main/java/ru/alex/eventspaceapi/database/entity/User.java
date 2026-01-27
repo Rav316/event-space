@@ -47,6 +47,9 @@ public class User {
     @Column(name = "github_url")
     private String githubUrl;
 
+    @Column(name = "new_event_notifications")
+    private boolean newEventNotifications = false;
+
     @Column(name = "isActive")
     private boolean active = true;
 

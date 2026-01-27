@@ -34,6 +34,8 @@ import ru.alex.eventspaceapi.mapper.event.EventListMyMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListPreviewMapper;
 import ru.alex.eventspaceapi.mapper.event.EventReadMapper;
 import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
+import ru.alex.eventspaceapi.messaging.EventCreatedMessage;
+import ru.alex.eventspaceapi.messaging.EventNotificationPublisher;
 import ru.alex.eventspaceapi.model.Role;
 
 import java.time.*;
@@ -62,6 +64,7 @@ public class EventService {
     private final EventReadMapper eventReadMapper;
     private final EventDetailsMapper eventDetailsMapper;
     private final EventListForUserMapper eventListForUserMapper;
+    private final EventNotificationPublisher eventNotificationPublisher;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
@@ -174,6 +177,21 @@ public class EventService {
             eventSteps.forEach(step -> step.setEvent(savedEvent));
 
             eventStepRepository.insertEventStepsBatch(eventSteps);
+        }
+
+        List<String> recipients = userRepository.findEmailsWithNewEventNotifications();
+        if(!recipients.isEmpty()) {
+            EventCreatedMessage message = new EventCreatedMessage(
+                    savedEvent.getId(),
+                    savedEvent.getName(),
+                    savedEvent.getEventDate(),
+                    savedEvent.getStartTime(),
+                    savedEvent.getEndTime(),
+                    savedEvent.getShortDescription(),
+                    savedEvent.getImageUrl(),
+                    recipients
+            );
+            eventNotificationPublisher.publishEventCreated(message);
         }
     }
 
