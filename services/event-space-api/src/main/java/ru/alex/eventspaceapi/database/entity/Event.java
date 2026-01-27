@@ -69,4 +69,10 @@ public class Event {
 
     @OneToMany(mappedBy = "event")
     private List<EventReview> reviews;
+
+    @Transient
+    private EventUser currentUserStatus;
+
+    @Transient
+    private Long registeredUsers;
 }

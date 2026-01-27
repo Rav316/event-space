@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import ru.alex.eventspaceapi.database.entity.Event;
-import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
@@ -30,11 +29,12 @@ public interface EventListMapper {
     @Mapping(target = "canRegister", source = "event", qualifiedByName = "mapCanRegister")
     @Mapping(target = "canUnregister", source = "event", qualifiedByName = "mapCanUnregister")
     @Mapping(target = "isAttended", source = "event", qualifiedByName = "mapIsAttended")
+    @Mapping(target = "qrToken", source = "event", qualifiedByName = "mapQrToken")
     EventListDto toDto(Event event);
 
     @Named("mapRegisteredUsers")
-    default Integer mapRegisteredUsers(Event event) {
-        return event.getEventUsers().size();
+    default Long mapRegisteredUsers(Event event) {
+        return event.getRegisteredUsers();
     }
 
     @Named("mapIsRegistered")
@@ -42,8 +42,7 @@ public interface EventListMapper {
         UserDetailsDto user = getAuthorizedUser();
         if (user == null) return false;
 
-        return event.getEventUsers().stream()
-                .anyMatch(eu -> eu.getUser().getId().equals(user.id()));
+        return event.getCurrentUserStatus() != null;
     }
 
     @Named("mapIsAttended")
@@ -51,11 +50,7 @@ public interface EventListMapper {
         UserDetailsDto user = getAuthorizedUser();
         if (user == null) return false;
 
-        return event.getEventUsers().stream()
-                .filter(eu -> eu.getUser().getId().equals(user.id()))
-                .findFirst()
-                .map(EventUser::getAttended)
-                .orElse(false);
+        return event.getCurrentUserStatus() != null && event.getCurrentUserStatus().getAttended();
     }
 
     @Named("mapAuthor")
@@ -92,10 +87,14 @@ public interface EventListMapper {
             return false;
         }
 
-        return event.getEventUsers().stream()
-                .filter(eu -> eu.getUser().getId().equals(user.id()))
-                .findFirst()
-                .map(eu -> !eu.getAttended())
-                .orElse(false);
+        return event.getCurrentUserStatus() != null && !event.getCurrentUserStatus().getAttended();
+    }
+
+    @Named("mapQrToken")
+    default String mapQrToken(Event event) {
+        UserDetailsDto user = getAuthorizedUser();
+        if (user == null || event.getCurrentUserStatus() == null) return null;
+
+        return event.getCurrentUserStatus().getQrToken().toString();
     }
 }

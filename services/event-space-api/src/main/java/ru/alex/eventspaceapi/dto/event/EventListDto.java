@@ -17,12 +17,13 @@ public record EventListDto(
         LocalTime endTime,
         LocalDate deadline,
         SpaceReadDto space,
-        Integer registeredUsers,
+        Long registeredUsers,
         Integer participantQuantity,
         String author,
         Boolean isRegistered,
         Boolean canRegister,
         Boolean canUnregister,
-        Boolean isAttended
+        Boolean isAttended,
+        String qrToken
 ) {
 }

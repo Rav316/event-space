@@ -69,7 +69,7 @@ public class EventService {
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
-        return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null, filter)
+        return eventRepository.findAllEventsByFilter(authorizedUser != null ? authorizedUser.id() : null,filter)
                 .map(eventListMapper::toDto);
     }
 
@@ -84,10 +84,8 @@ public class EventService {
     }
 
     public List<EventListDto> getActualEvents() {
-        return eventRepository.getActualEvents(PageRequest.of(0, 6))
-                .stream()
-                .map(eventListMapper::toDto)
-                .toList();
+        UserDetailsDto authorizedUser = getAuthorizedUser();
+        return eventRepository.getActualEvents(authorizedUser != null ? authorizedUser.id() : null);
     }
 
     public Slice<EventListForUserDto> getUpcomingEventsForUser(Integer page) {
