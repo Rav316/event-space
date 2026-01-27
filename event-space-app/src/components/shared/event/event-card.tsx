@@ -13,6 +13,7 @@ import * as React from 'react';
 import { categoryColors } from '@/constants/category-colors.ts';
 import { Link } from 'react-router';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
+import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
 import type { EventListDto } from '@/api/events/model.ts';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import {
@@ -69,6 +70,10 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           <img
             className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
             src={getEventImageUrl(event.name, event.imageUrl)}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = getPlaceholderImageUrl(event.name);
+            }}
             alt={event.name}
           />
         </Link>

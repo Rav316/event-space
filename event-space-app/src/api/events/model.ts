@@ -131,6 +131,7 @@ export interface EventListMyDto {
   registeredUsers: number;
   participantQuantity: number;
   author?: string;
+  canModify: boolean;
 }
 
 export interface EventDetailsDto {
@@ -150,4 +151,5 @@ export interface EventDetailsDto {
   building: number;
   space: number;
   imageUrl: string;
+  canModify: boolean;
 }

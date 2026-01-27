@@ -71,7 +71,7 @@ const Page403 = () => {
           }
         >
           <Button
-            className={'h-[40px]'}
+            className={'h-10'}
             variant={'outline'}
             onClick={() => navigate(-1)}
           >
@@ -79,13 +79,13 @@ const Page403 = () => {
             Назад
           </Button>
           <Link to={'/'}>
-            <Button className={'h-[40px] w-full'}>
+            <Button className={'h-10 w-full'}>
               <House />
               На главную
             </Button>
           </Link>
           <Button
-            className={'h-[40px]'}
+            className={'h-10'}
             variant={'outline'}
             onClick={() => setAuthModalOpen(true)}
           >

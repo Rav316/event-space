@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useEventEditState } from '@/hooks/use-event-edit-state.ts';
 import { eventStepsGlobalSchema } from '@/schemas/event-steps-global-schema.ts';
+import Page403 from '@/pages/page-403.tsx';
 
 const EventEditPage = () => {
   const params = useParams();
@@ -49,6 +50,11 @@ const EventEditPage = () => {
     useEventEditForms(event);
 
   const eventEditMutation = useEventUpdate();
+
+
+  if (event && !event.canModify) {
+    return <Page403 />;
+  }
 
   const onStepNext = () => {
     switch (currentStep) {
@@ -144,7 +150,9 @@ const EventEditPage = () => {
   return (
     <Wrapper>
       {isEventPending ? (
-        <div>Loading...</div>
+        <div className={'flex justify-center items-center h-[calc(100vh-5rem)]'}>
+          <Spinner />
+        </div>
       ) : (
         <>
           <div className={'flex flex-col py-5 gap-y-5'}>

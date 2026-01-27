@@ -28,6 +28,7 @@ import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import { cn } from '@/lib/utils.ts';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 import { RemoveEventModal } from '@/components/modal';
+import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
 
 interface Props {
   event: EventListMyDto;
@@ -66,16 +67,24 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
                 Просмотр
               </DropdownMenuItem>
             </Link>
-            <Link to={`/events/${event.id}/edit`}>
-              <DropdownMenuItem className={'items-end'}>
+            <DropdownMenuItem asChild disabled={!event.canModify}>
+              <Link
+                to={`/events/${event.id}/edit`}
+                onClick={(e) => !event.canModify && e.preventDefault()}
+                className="flex items-center gap-2"
+              >
                 <SquarePen />
                 Редактировать
-              </DropdownMenuItem>
-            </Link>
+              </Link>
+            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setModalOpen(true)}>
+            <DropdownMenuItem
+              disabled={!event.canModify}
+              onClick={() => event.canModify && setModalOpen(true)}
+            >
               <Trash />
-              <span className={'text-destructive'}>Удалить</span>
+              <span className="text-destructive">Удалить</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -93,6 +102,10 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
             className="w-full h-48 object-cover transition-transform duration-300"
             src={getEventImageUrl(event.name, event.imageUrl)}
             alt={event.name}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = getPlaceholderImageUrl(event.name);
+            }}
           />
         </Link>
       </div>
