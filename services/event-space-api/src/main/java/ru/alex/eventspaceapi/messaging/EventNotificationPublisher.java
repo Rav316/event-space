@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.messaging;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.config.RabbitProperties;
 
@@ -12,6 +13,7 @@ public class EventNotificationPublisher {
     private final RabbitTemplate rabbitTemplate;
     private final RabbitProperties rabbitProperties;
 
+    @Async
     public void publishEventCreated(EventCreatedMessage message) {
         rabbitTemplate.convertAndSend(
                 rabbitProperties.exchange(),

@@ -200,7 +200,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
-        if(!event.getAuthor().getId().equals(authorizedUser.id()) || authorizedUser.role() != Role.ADMIN) {
+        if(!event.getAuthor().getId().equals(authorizedUser.id()) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
         if(isEventStarted(event)) {
@@ -298,7 +298,7 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException(id));
         UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
-        if(!event.getAuthor().getId().equals(authorizedUser.id()) || authorizedUser.role() != Role.ADMIN) {
+        if(!event.getAuthor().getId().equals(authorizedUser.id()) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
         if(isEventStarted(event) && !isEventPassed(event)) {

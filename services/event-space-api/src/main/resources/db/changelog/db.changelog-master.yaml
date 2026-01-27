@@ -73,3 +73,5 @@ databaseChangeLog:
       file: db/changelog/db-update-event-table-3.0.sql
   - include:
       file: db/changelog/db-update-users-table-2.0.sql
+  - include:
+      file: db/changelog/db-update-users-table-2.1.sql
