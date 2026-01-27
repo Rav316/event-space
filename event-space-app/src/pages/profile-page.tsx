@@ -5,7 +5,8 @@ import {
   ProfileMainInfoBlock, ProfileStatisticsGroup,
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userProfileSchema } from '@/schemas/user-profile-schema.ts';
@@ -17,8 +18,22 @@ import { queryClient } from '@/api/query-client.ts';
 import { validateEmailUnique } from '@/utils/validation.ts';
 import { UserInfo, UserSettings } from '@/components/shared/profile-tabs';
 
+const getProfileTabIndex = (search: string) => {
+  const tabParam = new URLSearchParams(search).get('tab');
+
+  if (tabParam === 'settings') {
+    return 1;
+  }
+
+  return 0;
+};
+
 const ProfilePage = () => {
-  const [profileActiveTab, setProfileActiveTab] = useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [profileActiveTab, setProfileActiveTab] = useState(() =>
+    getProfileTabIndex(location.search),
+  );
   const [editMode, setEditMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -47,6 +62,26 @@ const ProfilePage = () => {
     resolver: zodResolver(userProfileSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    setProfileActiveTab(getProfileTabIndex(location.search));
+  }, [location.search]);
+
+  const handleTabChange = (index: number) => {
+    setProfileActiveTab(index);
+
+    const params = new URLSearchParams(location.search);
+    params.set('tab', index === 1 ? 'settings' : 'info');
+
+    const search = params.toString();
+    navigate(
+      {
+        pathname: location.pathname,
+        search: search ? `?${search}` : '',
+      },
+      { replace: true },
+    );
+  };
 
   const renderProfileTab = () => {
     switch (profileActiveTab) {
@@ -120,14 +155,14 @@ const ProfilePage = () => {
                 avatarRemoved={avatarRemoved}
                 setAvatarRemoved={setAvatarRemoved}
               />
-              <ProfileStatisticsGroup/>
+              <ProfileStatisticsGroup />
             </div>
           </div>
           <div className={'flex flex-col gap-5 flex-7'}>
             <AnimatedTabs
               tabs={profileTabs}
               activeIndex={profileActiveTab}
-              setActiveIndex={setProfileActiveTab}
+              setActiveIndex={handleTabChange}
             />
             <div className="min-h-[400px] transition-all duration-300">
               {renderProfileTab()}

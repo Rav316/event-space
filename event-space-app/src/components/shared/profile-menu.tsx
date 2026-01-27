@@ -66,16 +66,18 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link to={'/profile'}>
+          <Link to={'/profile?tab=info'}>
             <DropdownMenuItem>
               <User />
               Профиль
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            <Settings />
-            Настройки
-          </DropdownMenuItem>
+          <Link to={'/profile?tab=settings'}>
+            <DropdownMenuItem>
+              <Settings />
+              Настройки
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem onClick={onLogout}>
             <LogOut />
             Выйти

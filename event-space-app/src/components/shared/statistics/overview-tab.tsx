@@ -116,19 +116,19 @@ export const OverviewTab = () => {
           <UserActivityItem
             title={'Мероприятий за месяц'}
             myActivity={statistics.attendedEventsLastMonth}
-            avgActivity={statistics.avgAttendedEventsPerUserLastMonth}
+            avgActivity={statistics.avgAttendedEventsPerUserLastMonth || 0}
             maxActivity={10}
           />
           <UserActivityItem
             title={'Отзывов на мероприятие за последний месяц'}
             myActivity={statistics.reviewsLastMonth}
-            avgActivity={statistics.avgReviewsPerUserLastMonth}
+            avgActivity={statistics.avgReviewsPerUserLastMonth || 0}
             maxActivity={100}
           />
           <UserActivityItem
             title={'Средняя оценка'}
-            myActivity={statistics.avgRating}
-            avgActivity={statistics.avgRatingSystem}
+            myActivity={statistics.avgRating || 0}
+            avgActivity={statistics.avgRatingSystem || 0}
             maxActivity={5}
           />
         </div>
