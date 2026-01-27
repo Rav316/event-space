@@ -37,6 +37,7 @@ import ru.alex.eventspaceapi.mapper.eventStep.EventStepCreateMapper;
 import ru.alex.eventspaceapi.messaging.EventCreatedMessage;
 import ru.alex.eventspaceapi.messaging.EventNotificationPublisher;
 import ru.alex.eventspaceapi.model.Role;
+import ru.alex.eventspaceapi.util.EventUtils;
 
 import java.time.*;
 import java.util.List;
@@ -92,8 +93,8 @@ public class EventService {
     public Slice<EventListForUserDto> getUpcomingEventsForUser(Integer page) {
         return eventUserRepository.findAllUpcomingByUserWithLoadedEntities(
                 Objects.requireNonNull(getAuthorizedUser()).id(),
-                        PageRequest.of(page, USER_EVENTS_PAGE_SIZE)
-                ).map(eventListForUserMapper::toDto);
+                PageRequest.of(page, USER_EVENTS_PAGE_SIZE)
+        ).map(eventListForUserMapper::toDto);
     }
 
     public Slice<EventListForUserDto> getFinishedEventsForUser(Integer page) {
@@ -126,9 +127,9 @@ public class EventService {
         event.setName(dto.name());
         String[] tags = dto.tags() == null ? new String[]{} :
                 dto.tags()
-                .stream()
-                .distinct()
-                .toArray(String[]::new);
+                        .stream()
+                        .distinct()
+                        .toArray(String[]::new);
         event.setTags(tags);
         if(dto.eventDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("the event date cannot be earlier than the current one");
@@ -203,12 +204,13 @@ public class EventService {
         if(!event.getAuthor().getId().equals(authorizedUser.id()) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
-        if(isEventStarted(event)) {
+        if(EventUtils.isEventStarted(event)) {
             throw new IllegalStateException("the event has already started, you cannot update this event");
         }
-        if(isEventPassed(event)) {
+        if(EventUtils.isEventPassed(event)) {
             throw new IllegalStateException("the event has already passed, you cannot update this event");
         }
+
 
         if(dto.name() != null) {
             event.setName(dto.name());
@@ -301,8 +303,11 @@ public class EventService {
         if(!event.getAuthor().getId().equals(authorizedUser.id()) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
-        if(isEventStarted(event) && !isEventPassed(event)) {
-            throw new IllegalStateException("You can't delete an event until it's finished.");
+        if(EventUtils.isEventStarted(event)) {
+            throw new IllegalStateException("the event has already started, you cannot delete this event");
+        }
+        if(EventUtils.isEventPassed(event)) {
+            throw new IllegalStateException("the event has already passed, you cannot delete this event");
         }
         eventRepository.delete(event);
     }
@@ -341,14 +346,5 @@ public class EventService {
         }
     }
 
-    private boolean isEventPassed(Event event) {
-        LocalDate now = LocalDate.now();
-        return event.getEventDate().isBefore(now) ||
-                (event.getEventDate().isEqual(now) && event.getEndTime().isBefore(LocalTime.now()));
-    }
 
-    private boolean isEventStarted(Event event) {
-        LocalDate now = LocalDate.now();
-        return (event.getEventDate().isEqual(now) && event.getStartTime().isBefore(LocalTime.now()));
-    }
 }

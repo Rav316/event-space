@@ -19,6 +19,7 @@ public record EventListMyDto(
         SpaceReadDto space,
         Integer registeredUsers,
         Integer participantQuantity,
-        String author
+        String author,
+        Boolean canModify
 ) {
 }

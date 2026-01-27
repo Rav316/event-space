@@ -22,6 +22,7 @@ public record EventDetailsDto(
         List<EventStepReadDto> steps,
         Integer building,
         Integer space,
-        String imageUrl
+        String imageUrl,
+        Boolean canModify
 ) {
 }
