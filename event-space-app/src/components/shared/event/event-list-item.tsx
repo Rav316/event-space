@@ -63,7 +63,10 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
             Зарегистрирован: {formatDate(event.registeredAt)}
           </span>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => setOpenQr(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setOpenQr((prev) => !prev)}
+            >
               <QrCode />
               <span>QR-код</span>
             </Button>

@@ -22,17 +22,25 @@ import {
 } from '@/components/shared/event';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 import { cn } from '@/lib/utils.ts';
+import { useState } from 'react';
+import { EventQrCodeDialog } from '@/components/modal';
+import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 interface Props {
   event: EventListDto;
 }
 
 export const EventCard: React.FC<Props> = ({ event }) => {
+  const [openQr, setOpenQr] = useState(false);
+
+  const isQrDisabled = !event.qrToken;
+
   return (
     <div
-      className={
-        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md hover:translate-y-[-3px] transition-all duration-300 hover:shadow-lg'
-      }
+      className={cn(
+        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md transition-all duration-300',
+        'hover:translate-y-[-3px] hover:shadow-lg',
+      )}
     >
       <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">
         <Badge className={categoryColors[event.category.id - 1]}>
@@ -55,14 +63,37 @@ export const EventCard: React.FC<Props> = ({ event }) => {
         >
           <Share2 className="h-4 w-4" />
         </Button>
+
         <Button
           variant="secondary"
           size="sm"
-          className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-          onClick={(e) => e.preventDefault()}
+          disabled={isQrDisabled}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!isQrDisabled) setOpenQr(true);
+          }}
+          className={cn(
+            'relative z-20 transform-gpu transition-all duration-300',
+            'flex items-center justify-center',
+
+            'opacity-100 sm:opacity-0 sm:group-hover:opacity-100',
+
+            isQrDisabled &&
+              'sm:group-hover:opacity-40 opacity-40 pointer-events-none',
+          )}
         >
-          <QrCode className="h-4 w-4" />
+          <QrCode className="h-4 w-4 shrink-0" />
         </Button>
+
+        <EventQrCodeDialog
+          eventId={event.id}
+          value={event.qrToken}
+          open={openQr}
+          onOpenChange={setOpenQr}
+          eventFinished={
+            compareWithCurrentTime(event.eventDate, event.endTime) === 1
+          }
+        />
       </div>
 
       <div className="overflow-hidden rounded-t-2xl">
@@ -85,6 +116,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           <p className={'text-muted-foreground line-clamp-2 min-h-12'}>
             {event.shortDescription}
           </p>
+
           <div className={'flex flex-col gap-y-2'}>
             <div
               className={
@@ -100,6 +132,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
                 text={`${event.startTime.slice(0, 5)} - ${event.endTime.slice(0, 5)}`}
               />
             </div>
+
             <div
               className={
                 'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
@@ -121,6 +154,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
                 text={`${event.space.building.name}, ${event.space.name}`}
               />
             </div>
+
             <div
               className={
                 'flex min-[1000px]:items-center min-[1000px]:gap-5 max-[1000px]:flex-col max-[1000px]:gap-y-2'
@@ -138,6 +172,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
             </div>
           </div>
         </div>
+
         <EventRegistrationButton
           eventId={event.id}
           isUserRegistered={event.isRegistered}

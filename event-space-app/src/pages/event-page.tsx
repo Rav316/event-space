@@ -32,8 +32,12 @@ import {
 } from '@/components/shared/event';
 import { cn } from '@/lib/utils.ts';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
+import { EventQrCodeDialog } from '@/components/modal';
+import { useState } from 'react';
 
 const EventPage = () => {
+  const [openQr, setOpenQr] = useState(false);
+
   const navigate = useNavigate();
   const params = useParams();
   const eventId = Number(params.eventId);
@@ -126,12 +130,22 @@ const EventPage = () => {
                   <Share2 className="h-4 w-4" />
                 </Button>
                 <Button
+                  disabled={!event.qrToken}
                   variant="secondary"
                   size="sm"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={() => setOpenQr((prev) => !prev)}
                 >
                   <QrCode className="h-4 w-4" />
                 </Button>
+                <EventQrCodeDialog
+                  eventId={event.id}
+                  value={event.qrToken}
+                  open={openQr}
+                  onOpenChange={setOpenQr}
+                  eventFinished={
+                    compareWithCurrentTime(event.eventDate, event.endTime) === 1
+                  }
+                />
               </div>
             </div>
 

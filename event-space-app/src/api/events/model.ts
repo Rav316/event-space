@@ -59,6 +59,7 @@ export interface EventListDto {
   canRegister: boolean;
   canUnregister: boolean;
   isAttended: boolean;
+  qrToken: string;
 }
 
 export interface EventReadDto {
@@ -80,7 +81,7 @@ export interface EventReadDto {
   canUnregister: boolean;
   isRegistered: boolean;
   isAttended: boolean;
-  qrToken?: string;
+  qrToken: string;
 }
 
 export interface EventFilter {
