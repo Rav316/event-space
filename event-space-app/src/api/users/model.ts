@@ -17,6 +17,7 @@ export interface UserReadDto {
   active: boolean;
   registerDate: Date;
   faculty: FacultyListDto;
+  newEventNotifications: boolean;
 }
 
 export interface UserRegisterDto {
@@ -40,6 +41,7 @@ export interface UserEditDto {
   tgUsername?: string;
   vkUrl?: string;
   githubUrl?: string;
+  newEventNotifications?: boolean;
 }
 
 export interface UserEditData {

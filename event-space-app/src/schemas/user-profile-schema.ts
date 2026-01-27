@@ -17,4 +17,5 @@ export const userProfileSchema = z.object({
   tgUsername: z.string().optional(),
   vkUrl: z.string().optional(),
   githubUrl: z.string().optional(),
+  newEventNotifications: z.boolean().optional(),
 });
