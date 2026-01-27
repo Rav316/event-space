@@ -29,6 +29,7 @@ apply from: 'version.gradle'
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.liquibase:liquibase-core'
     implementation "org.hibernate.orm:hibernate-core:${versions.hibernate}"
     implementation "io.hypersistence:hypersistence-utils-hibernate-63:${versions.hypersistenceUtils}"

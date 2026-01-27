@@ -12,6 +12,11 @@ app:
       issuer: event space
   account:
     deletion-confirmation-phrase: "удалить мой аккаунт"
+  messaging:
+    rabbit:
+      exchange: event.notifications
+      routing-key: event.created
+      queue: event.notifications.new-events
 
 spring:
   application:
@@ -33,3 +38,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}

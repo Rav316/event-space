@@ -21,6 +21,7 @@ public record UserEditDto(
         String description,
         String tgUsername,
         String vkUrl,
-        String githubUrl
+        String githubUrl,
+        Boolean newEventNotifications
 ) {
 }
