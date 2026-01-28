@@ -152,7 +152,7 @@ const EventPage = () => {
             <h3 className="text-3xl font-bold">{event.name}</h3>
 
             <div className="flex flex-wrap items-center gap-2">
-              {event.tags.map((tag, index) => (
+              {event.tags?.map((tag, index) => (
                 <Badge key={index} variant="outline">
                   {tag}
                 </Badge>

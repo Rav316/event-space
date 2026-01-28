@@ -42,17 +42,17 @@ export const Header = () => {
             'flex items-center gap-x-4 max-[1350px]:hidden min-w-[500px]'
           }
         >
-          <NavLink to={'/events'}>
-            {({ isActive }) => (
-              <HeaderItem
-                Icon={Calendar}
-                text={'Мероприятия'}
-                isActive={isActive}
-              />
-            )}
-          </NavLink>
           {data && (
             <>
+              <NavLink to={'/events'}>
+                {({ isActive }) => (
+                  <HeaderItem
+                    Icon={Calendar}
+                    text={'Все мероприятия'}
+                    isActive={isActive}
+                  />
+                )}
+              </NavLink>
               <NavLink to={'/my-events'}>
                 {({ isActive }) => (
                   <HeaderItem

@@ -27,7 +27,7 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
           <Link to={'/events'}>
             <DropdownMenuItem>
               <Calendar />
-              Мероприятия
+              Все мероприятия
             </DropdownMenuItem>
           </Link>
           <Link to={'/my-events'}>
