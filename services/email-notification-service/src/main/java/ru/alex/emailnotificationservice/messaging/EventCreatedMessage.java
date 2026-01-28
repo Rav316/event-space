@@ -11,7 +11,6 @@ public record EventCreatedMessage(
         LocalTime startTime,
         LocalTime endTime,
         String shortDescription,
-        String imageUrl,
         List<String> recipients
 ) {
 }

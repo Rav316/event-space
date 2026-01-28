@@ -128,7 +128,9 @@ public class EventService {
                         .stream()
                         .distinct()
                         .toArray(String[]::new);
-        event.setTags(tags);
+        if(tags.length != 0) {
+            event.setTags(tags);
+        }
         if(dto.eventDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("the event date cannot be earlier than the current one");
         }
@@ -187,7 +189,6 @@ public class EventService {
                     savedEvent.getStartTime(),
                     savedEvent.getEndTime(),
                     savedEvent.getShortDescription(),
-                    savedEvent.getImageUrl(),
                     recipients
             );
             eventNotificationPublisher.publishEventCreated(message);

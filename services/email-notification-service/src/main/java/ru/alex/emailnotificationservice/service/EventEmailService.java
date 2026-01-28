@@ -3,9 +3,12 @@ package ru.alex.emailnotificationservice.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import ru.alex.emailnotificationservice.config.MailProperties;
 import ru.alex.emailnotificationservice.messaging.EventCreatedMessage;
 
@@ -20,8 +23,12 @@ import java.util.List;
 @Slf4j
 public class EventEmailService {
 
+    @Value("${app.website-url}")
+    private String websiteUrl;
+
     private final JavaMailSender mailSender;
     private final MailProperties mailProperties;
+    private final SpringTemplateEngine templateEngine;
 
     private String fromAddress;
 
@@ -57,8 +64,7 @@ public class EventEmailService {
         helper.setTo(recipient);
         helper.setSubject("Новое мероприятие: " + message.name());
 
-        String body = buildBody(message);
-        helper.setText(body, true);
+        helper.setText(buildBody(message), true);
 
         mailSender.send(mimeMessage);
     }
@@ -71,30 +77,14 @@ public class EventEmailService {
         String startTime = message.startTime() != null ? message.startTime().format(timeFormatter) : "";
         String endTime = message.endTime() != null ? message.endTime().format(timeFormatter) : "";
 
-        String imageSection = message.imageUrl() != null ?
-                "<p><img src='" + message.imageUrl() + "' alt='Event image' style='max-width:600px;width:100%;height:auto;'/></p>"
-                : "";
+        Context context = new Context();
+        context.setVariable("message", message);
+        context.setVariable("eventDate", eventDate);
+        context.setVariable("startTime", startTime);
+        context.setVariable("endTime", endTime);
+        context.setVariable("eventUrl", websiteUrl + "/events/" + message.eventId());
+        context.setVariable("shortDescription", message.shortDescription());
 
-        return """
-                <div style='font-family: Arial, sans-serif; line-height: 1.5;'>
-                  <h2>Новое мероприятие: %s</h2>
-                  <p><strong>Дата:</strong> %s</p>
-                  <p><strong>Время:</strong> %s - %s</p>
-                  <p>%s</p>
-                  %s
-                  <p>Не отвечайте на это письмо. Если вы хотите отписаться, выключите переключатель "Уведомления о новых мероприятиях" в настройках профиля.</p>
-                </div>
-                """.formatted(
-                safe(message.name()),
-                safe(eventDate),
-                safe(startTime),
-                safe(endTime),
-                safe(message.shortDescription()),
-                imageSection
-        );
-    }
-
-    private String safe(String value) {
-        return value == null ? "" : value;
+        return templateEngine.process("email/event-created", context);
     }
 }

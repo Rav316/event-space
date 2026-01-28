@@ -13,7 +13,6 @@ public record EventCreateDto (
         @NotNull
         @Size(min = 5, max = 128)
         String name,
-        @Size(min = 1)
         List<String> tags,
         @NotNull
         LocalDate eventDate,
