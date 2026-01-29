@@ -1,9 +1,7 @@
 package ru.alex.eventspaceapi.database.entity;
 
-import io.hypersistence.utils.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,7 +20,6 @@ public class Event {
 
     private String name;
 
-    @Type(StringArrayType.class)
     @Column(
             name = "tags",
             columnDefinition = "text[]"

@@ -1,4 +1,53 @@
 services:
+  event-space-db:
+    image: postgres:18
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/18/docker
+    networks:
+      - my_network
+
+  event-space-api:
+    build:
+      context: ./services/event-space-api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - event-space-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://event-space-db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - STATIC_CONTENT_PATH=${STATIC_CONTENT_PATH}
+      - PROMETHEUS_USERNAME=${PROMETHEUS_USERNAME}
+      - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    networks:
+      - my_network
+
+  email-notification-service:
+    build:
+      context: ./services/email-notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - GMAIL_USERNAME=${GMAIL_USERNAME}
+      - MAIL_FROM=${MAIL_FROM}
+      - PROMETHEUS_USERNAME=${PROMETHEUS_USERNAME}
+      - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_HOST=rabbitmq
+    networks:
+      - my_network
+
   placeholder:
     build:
       context: ./services/placeholder-service
@@ -29,8 +78,8 @@ services:
     - "5672:5672"
     - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
@@ -38,6 +87,39 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: always
+    networks:
+      - my_network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3100:3000"
+    user: "root"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./services/observability/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - my_network
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    user: "root"
+    environment:
+      - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        mkdir -p /etc/prometheus/secrets &&
+        echo "$$PROMETHEUS_PASSWORD" > /etc/prometheus/secrets/prometheus_basic_auth_password &&
+        exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus
+    volumes:
+      - prometheus_data:/prometheus
+      - ./services/observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - my_network
 
 networks:
   my_network:
@@ -45,3 +127,7 @@ networks:
 
 volumes:
   rabbitmq_data:
+  grafana_data:
+  prometheus_data:
+  postgres_data:
+  static_content_data:

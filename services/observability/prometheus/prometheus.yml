@@ -1,0 +1,15 @@
+scrape_configs:
+  - job_name: 'event-space-api'
+    scrape_interval: 15s
+    metrics_path: '/api/actuator/prometheus'
+    basic_auth: &prom_basic_auth
+      username: 'prometheus'
+      password_file: './secrets/prometheus_basic_auth_password'
+    static_configs:
+      - targets: [ 'event-space-api:8080' ]
+  - job_name: 'email-notification-service'
+    scrape_interval: 15s
+    metrics_path: '/api/actuator/prometheus'
+    basic_auth: *prom_basic_auth
+    static_configs:
+      - targets: [ 'email-notification-service:8081' ]
