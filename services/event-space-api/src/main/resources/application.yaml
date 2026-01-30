@@ -17,6 +17,9 @@ app:
       exchange: event.notifications
       routing-key: event.created
       queue: event.notifications.new-events
+  metrics:
+    username: ${PROMETHEUS_USERNAME}
+    password: ${PROMETHEUS_PASSWORD}
 
 spring:
   application:
@@ -43,3 +46,28 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics
+      base-path: /api/actuator
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+    tags:
+      application: ${spring.application.name}
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
+    deep-linking: true
+    path: /api/docs/swagger
+  api-docs:
+    path: /api/docs/openapi

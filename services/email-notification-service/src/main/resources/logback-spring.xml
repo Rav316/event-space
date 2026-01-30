@@ -30,7 +30,7 @@
 
         <http>
             <url>http://loki:3100/loki/api/v1/push</url>
-<!--            <useProtobufApi>true</useProtobufApi>-->
+            <!--            <useProtobufApi>true</useProtobufApi>-->
         </http>
         <message>
             <pattern>%-5level [%thread] %logger{20} - %msg%n</pattern>
@@ -43,7 +43,6 @@
             thread = %thread
             class = %logger
             message = %msg
-            userId = %X{userId:-anonymous}
         </structuredMetadata>
     </appender>
 

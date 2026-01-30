@@ -13,8 +13,8 @@ public abstract class FilterBase extends OncePerRequestFilter {
         if (requestURI.equals("/api/auth/register") ||
                 requestURI.equals("/api/auth/login") ||
                 requestURI.equals("/api/auth/refresh-token") ||
-                requestURI.startsWith("/swagger-ui") ||
-                requestURI.startsWith("/v3/api-docs")) {
+                requestURI.startsWith("/api/docs") ||
+                requestURI.startsWith("/api/actuator")) {
             return true;
         }
 

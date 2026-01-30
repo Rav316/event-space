@@ -1,10 +1,10 @@
-package ru.alex.eventspaceapi.http.handler;
+package ru.alex.emailnotificationservice.http.handler;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import ru.alex.eventspaceapi.dto.response.ErrorResponse;
+import ru.alex.emailnotificationservice.dto.response.ErrorResponse;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
