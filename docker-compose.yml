@@ -94,7 +94,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - "3100:3000"
+      - "3001:3000"
     user: "root"
     volumes:
       - grafana_data:/var/lib/grafana
@@ -121,6 +121,18 @@ services:
     networks:
       - my_network
 
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    user: "root"
+    volumes:
+      - loki_data:/loki
+      - ./services/observability/loki/loki-config.yaml:/etc/loki/local-config.yaml:ro
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - my_network
+
 networks:
   my_network:
     name: my_network
@@ -129,5 +141,6 @@ volumes:
   rabbitmq_data:
   grafana_data:
   prometheus_data:
+  loki_data:
   postgres_data:
   static_content_data:

@@ -1,9 +1,14 @@
-FROM gradle:9.1-jdk21 as build
+FROM gradle:9.1-jdk21 AS build
 
 WORKDIR /home/gradle/src
-COPY . .
 
-RUN gradle clean bootJar
+COPY build.gradle settings.gradle version.gradle ./
+
+RUN gradle dependencies --no-daemon
+
+COPY src ./src
+
+RUN gradle clean bootJar --no-daemon
 
 FROM eclipse-temurin:21-jdk
 
