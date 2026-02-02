@@ -23,7 +23,7 @@ import {
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 import { cn } from '@/lib/utils.ts';
 import { useState } from 'react';
-import { EventQrCodeDialog } from '@/components/modal';
+import { EventQrCodeDialog, EventShareDialog } from '@/components/modal';
 import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 
 interface Props {
@@ -32,6 +32,7 @@ interface Props {
 
 export const EventCard: React.FC<Props> = ({ event }) => {
   const [openQr, setOpenQr] = useState(false);
+  const [openShare, setOpenShare] = useState(false);
 
   const isQrDisabled = !event.qrToken;
 
@@ -59,10 +60,21 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           variant="secondary"
           size="sm"
           className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpenShare(true);
+          }}
         >
           <Share2 className="h-4 w-4" />
         </Button>
+
+        <EventShareDialog
+          open={openShare}
+          onOpenChange={setOpenShare}
+          eventName={event.name}
+          eventId={event.id}
+        />
 
         <Button
           variant="secondary"

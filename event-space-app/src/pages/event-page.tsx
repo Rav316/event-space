@@ -32,11 +32,12 @@ import {
 } from '@/components/shared/event';
 import { cn } from '@/lib/utils.ts';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
-import { EventQrCodeDialog } from '@/components/modal';
+import { EventQrCodeDialog, EventShareDialog } from '@/components/modal';
 import { useState } from 'react';
 
 const EventPage = () => {
   const [openQr, setOpenQr] = useState(false);
+  const [openShare, setOpenShare] = useState(false);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -125,10 +126,16 @@ const EventPage = () => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={() => setOpenShare(true)}
                 >
                   <Share2 className="h-4 w-4" />
                 </Button>
+                <EventShareDialog
+                  open={openShare}
+                  onOpenChange={setOpenShare}
+                  eventName={event.name}
+                  eventId={event.id}
+                />
                 <Button
                   disabled={!event.qrToken}
                   variant="secondary"
@@ -252,7 +259,15 @@ const EventPage = () => {
                   className={'max-[980px]:flex-1 max-[900px]:flex-none'}
                 />
               )}
-              <EventShareBlock className="max-[980px]:flex-1 max-[900px]:flex-none" />
+              <EventShareBlock
+                className="max-[980px]:flex-1 max-[900px]:flex-none"
+                eventName={event.name}
+                eventDescription={event.description}
+                eventDate={event.eventDate}
+                startTime={event.startTime}
+                endTime={event.endTime}
+                location={`${event.space.building.name}, ${event.space.name}`}
+              />
             </div>
           </div>
         </div>
