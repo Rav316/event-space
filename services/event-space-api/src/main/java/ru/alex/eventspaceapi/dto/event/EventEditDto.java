@@ -11,7 +11,6 @@ import java.util.List;
 public record EventEditDto(
         @Size(min = 5, max = 128)
         String name,
-        @Size(min = 1)
         List<String> tags,
         LocalDate eventDate,
         LocalTime startTime,
