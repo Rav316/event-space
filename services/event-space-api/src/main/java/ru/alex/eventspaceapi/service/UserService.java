@@ -15,6 +15,7 @@ import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
@@ -25,6 +26,7 @@ import ru.alex.eventspaceapi.mapper.user.UserEditMapper;
 import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.util.List;
 import java.util.Objects;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
@@ -56,6 +58,10 @@ public class UserService implements UserDetailsService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public List<TopOrganizerDto> getTopOrganizers() {
+        return userRepository.getTopOrganizers();
     }
 
     @Transactional

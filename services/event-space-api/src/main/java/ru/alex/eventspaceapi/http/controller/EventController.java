@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.alex.eventspaceapi.dto.event.EventCalendarDto;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventDetailsDto;
 import ru.alex.eventspaceapi.dto.event.EventEditDto;
@@ -59,6 +60,19 @@ public class EventController {
     @GetMapping("/actual")
     public List<EventListDto> getActualEvents() {
         return eventService.getActualEvents();
+    }
+
+    @GetMapping("/popular")
+    public List<EventListDto> getPopularEvents() {
+        return eventService.getPopularEvents();
+    }
+
+    @GetMapping("/calendar")
+    public List<EventCalendarDto> getEventsByMonth(
+            @RequestParam("year") Integer year,
+            @RequestParam("month") Integer month
+    ) {
+        return eventService.getEventsByMonth(year, month);
     }
 
     @GetMapping("/my/upcoming")

@@ -20,11 +20,13 @@ import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
+import ru.alex.eventspaceapi.dto.event.EventCalendarDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.filter.EventMyFilter;
 import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
 import ru.alex.eventspaceapi.dto.statistics.EventAuthorStatisticsDto;
+import ru.alex.eventspaceapi.mapper.event.EventCalendarRowMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListRowMapper;
 import ru.alex.eventspaceapi.mapper.event.EventMyStatisticsMapper;
 
@@ -51,6 +53,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final EventMyStatisticsMapper eventMyStatisticsMapper;
     private final EventListRowMapper eventListRowMapper;
+    private final EventCalendarRowMapper eventCalendarRowMapper;
 
     private static final int PAGE_SIZE = 9;
 
@@ -254,6 +257,101 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         Map<String, Integer> params = Collections.singletonMap("userId", userId);
 
         return jdbcTemplate.query(sql, params, eventListRowMapper);
+    }
+
+    @Override
+    public List<EventListDto> getPopularEvents(Integer userId) {
+        String sql = """
+                SELECT
+                e.id,
+                e.name,
+                e.short_description,
+                e.image_url,
+                e.event_date,
+                e.start_time,
+                e.end_time,
+                e.deadline,
+                e.participant_quantity,
+            
+                c.id   AS category_id,
+                c.name AS category_name,
+            
+                s.id   AS space_id,
+                s.name AS space_name,
+                s.capacity AS space_capacity,
+            
+                b.id   AS building_id,
+                b.name AS building_name,
+                b.address AS building_address,
+            
+                concat(a.first_name, ' ', a.last_name) AS author,
+            
+                (
+                    SELECT COUNT(*)
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                ) AS registered_users,
+            
+                EXISTS (
+                    SELECT 1
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS is_registered,
+            
+                (
+                    SELECT eu.attended
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS is_attended,
+            
+                (
+                    SELECT eu.qr_token
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS qr_token
+            
+            FROM event e
+            LEFT JOIN event_category c ON c.id = e.event_category_id
+            LEFT JOIN space s ON s.id = e.space_id
+            LEFT JOIN building b ON b.id = s.building_id
+            LEFT JOIN users a ON a.id = e.author
+            
+            WHERE (e.event_date, e.start_time) > (CURRENT_DATE, CURRENT_TIME)
+            ORDER BY registered_users DESC, e.event_date
+            LIMIT 6;
+            """;
+
+        Map<String, Integer> params = Collections.singletonMap("userId", userId);
+
+        return jdbcTemplate.query(sql, params, eventListRowMapper);
+    }
+
+    @Override
+    public List<EventCalendarDto> getEventsByMonth(Integer year, Integer month) {
+        String sql = """
+                SELECT
+                    e.id,
+                    e.name,
+                    c.id AS category_id,
+                    c.name AS category_name,
+                    e.event_date,
+                    e.start_time,
+                    e.end_time
+                FROM event e
+                LEFT JOIN event_category c ON c.id = e.event_category_id
+                WHERE EXTRACT(YEAR FROM e.event_date) = :year
+                  AND EXTRACT(MONTH FROM e.event_date) = :month
+                ORDER BY e.event_date, e.start_time
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("year", year)
+                .addValue("month", month);
+
+        return jdbcTemplate.query(sql, params, eventCalendarRowMapper);
     }
 
     @Override

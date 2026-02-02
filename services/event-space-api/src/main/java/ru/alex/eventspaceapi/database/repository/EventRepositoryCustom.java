@@ -9,6 +9,8 @@ import ru.alex.eventspaceapi.dto.filter.EventMyFilter;
 import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
 import ru.alex.eventspaceapi.dto.statistics.EventAuthorStatisticsDto;
 
+import ru.alex.eventspaceapi.dto.event.EventCalendarDto;
+
 import java.util.List;
 
 public interface EventRepositoryCustom {
@@ -19,6 +21,10 @@ public interface EventRepositoryCustom {
     Slice<Event> findAllEventsByFilter(EventPreviewFilter filter);
 
     List<EventListDto> getActualEvents(Integer userId);
+
+    List<EventListDto> getPopularEvents(Integer userId);
+
+    List<EventCalendarDto> getEventsByMonth(Integer year, Integer month);
 
     EventAuthorStatisticsDto getEventStatisticsByUser(Integer userId);
 }

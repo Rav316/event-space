@@ -5,12 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -21,6 +24,11 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
     private final AuthService authService;
     private final UserService userService;
+
+    @GetMapping("/top-organizers")
+    public List<TopOrganizerDto> getTopOrganizers() {
+        return userService.getTopOrganizers();
+    }
 
     @GetMapping("/exists-by-email")
     public ResponseEntity<Boolean> existsByEmail(@RequestParam("email") String email) {

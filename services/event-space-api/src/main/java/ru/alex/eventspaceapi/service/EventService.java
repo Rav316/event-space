@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.*;
 import ru.alex.eventspaceapi.database.repository.*;
+import ru.alex.eventspaceapi.dto.event.EventCalendarDto;
 import ru.alex.eventspaceapi.dto.event.EventCreateDto;
 import ru.alex.eventspaceapi.dto.event.EventDetailsDto;
 import ru.alex.eventspaceapi.dto.event.EventEditDto;
@@ -86,6 +87,15 @@ public class EventService {
     public List<EventListDto> getActualEvents() {
         UserDetailsDto authorizedUser = getAuthorizedUser();
         return eventRepository.getActualEvents(authorizedUser != null ? authorizedUser.id() : null);
+    }
+
+    public List<EventListDto> getPopularEvents() {
+        UserDetailsDto authorizedUser = getAuthorizedUser();
+        return eventRepository.getPopularEvents(authorizedUser != null ? authorizedUser.id() : null);
+    }
+
+    public List<EventCalendarDto> getEventsByMonth(Integer year, Integer month) {
+        return eventRepository.getEventsByMonth(year, month);
     }
 
     public Slice<EventListForUserDto> getUpcomingEventsForUser(Integer page) {

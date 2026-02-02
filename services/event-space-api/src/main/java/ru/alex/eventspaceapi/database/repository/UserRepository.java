@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty f WHERE u.id = :id")
     Optional<User> findByIdWithFaculty(Integer id);

@@ -37,11 +37,12 @@ public class JwtFilter extends FilterBase {
         String authHeader = request.getHeader("Authorization");
         if(authHeader == null) {
             String requestURI = request.getRequestURI();
-            if(request.getMethod().equalsIgnoreCase("GET") &&
-                    requestURI.startsWith("/api/events") &&
-                    !requestURI.matches("^/api/events/\\d+/reviews/my$") &&
-                    !requestURI.startsWith("/api/events/my")
-            ) {
+            if(request.getMethod().equalsIgnoreCase("GET") && (
+                    (requestURI.startsWith("/api/events") &&
+                            !requestURI.matches("^/api/events/\\d+/reviews/my$") &&
+                            !requestURI.startsWith("/api/events/my")) ||
+                    requestURI.equals("/api/users/top-organizers")
+            )) {
                 filterChain.doFilter(request, response);
                 return;
             }
