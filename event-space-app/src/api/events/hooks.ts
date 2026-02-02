@@ -71,6 +71,21 @@ export const useActualEvents = () => {
   });
 };
 
+export const usePopularEvents = () => {
+  return useQuery({
+    queryFn: Api.events.getPopularEvents,
+    queryKey: EVENTS_KEYS.popular,
+  });
+};
+
+export const useEventsByMonth = (year: number, month: number) => {
+  return useQuery({
+    queryFn: () => Api.events.getEventsByMonth(year, month),
+    queryKey: EVENTS_KEYS.calendar(year, month),
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useUpcomingEvents = (options?: { enabled?: boolean }) => {
   return useInfiniteQuery({
     queryKey: EVENTS_KEYS.upcoming,

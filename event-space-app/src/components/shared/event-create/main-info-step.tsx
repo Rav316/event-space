@@ -154,9 +154,7 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                   type={'number'}
                   {...form.register('participantQuantity', {
                     setValueAs: (value) =>
-                      value === '' || value === null
-                        ? -1
-                        : Number(value),
+                      value === '' || value === null ? -1 : Number(value),
                   })}
                 />
 
@@ -195,6 +193,11 @@ export const MainInfoStep: React.FC<Props> = ({ form }) => {
                 </Badge>
               ))}
             </div>
+            {form.formState.errors.tags && (
+              <FormErrorMessage>
+                {form.formState.errors.tags.message}
+              </FormErrorMessage>
+            )}
           </div>
         </div>
       </form>

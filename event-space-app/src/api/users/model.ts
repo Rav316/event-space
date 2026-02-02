@@ -72,3 +72,11 @@ export interface UserDeleteDto {
   currentPassword: string;
   confirmationPhrase: string;
 }
+
+export interface TopOrganizerDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string;
+  eventsCount: number;
+}

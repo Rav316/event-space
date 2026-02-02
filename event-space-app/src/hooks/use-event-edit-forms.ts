@@ -64,7 +64,7 @@ export const useEventEditForms = (event?: EventDetailsDto) => {
       name: event.name,
       shortDescription: event.shortDescription,
       description: event.description,
-      tags: event.tags,
+      tags: event.tags ?? [],
       category: event.category,
       participantQuantity: event.participantQuantity,
     });

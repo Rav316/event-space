@@ -1,6 +1,7 @@
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type {
+  TopOrganizerDto,
   UserDeleteDto,
   UserEditData,
   UserPasswordChangeDto,
@@ -55,4 +56,11 @@ export const changePassword = async (
 
 export const deleteAccount = async (data: UserDeleteDto): Promise<void> => {
   await axiosInstance.post<void>(`${ApiRoutes.USERS}/profile/delete`, data);
+};
+
+export const getTopOrganizers = async (): Promise<TopOrganizerDto[]> => {
+  const response = await axiosInstance.get<TopOrganizerDto[]>(
+    `${ApiRoutes.USERS}/top-organizers`,
+  );
+  return response.data;
 };

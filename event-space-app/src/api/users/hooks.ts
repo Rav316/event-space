@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Api } from '@/api/api-client.ts';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
@@ -7,6 +7,14 @@ import { AUTH_KEYS } from '@/api/auth/keys.ts';
 import type { AuthResponse } from '@/api/auth/model.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { useNavigate } from 'react-router';
+import { USERS_KEYS } from '@/api/users/keys.ts';
+
+export const useTopOrganizers = () => {
+  return useQuery({
+    queryFn: Api.users.getTopOrganizers,
+    queryKey: USERS_KEYS.topOrganizers,
+  });
+};
 
 export const useEditUser = () => {
   return useMutation({

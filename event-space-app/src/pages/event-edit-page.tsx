@@ -51,7 +51,6 @@ const EventEditPage = () => {
 
   const eventEditMutation = useEventUpdate();
 
-
   if (event && !event.canModify) {
     return <Page403 />;
   }

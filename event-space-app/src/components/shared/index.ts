@@ -28,4 +28,8 @@ export { ProfileSetting } from './profile-setting';
 export { NoUpcomingEventsBlock } from './no-upcoming-events-block';
 export { NoFinishedEventsBlock } from './no-finished-events-block';
 export {ProfileStatisticsGroup} from './profile-statistics-group';
+export {PopularEventsSection} from './popular-events-section';
+export {TopOrganizersSection} from './top-organizers-section';
+export {OrganizerCard} from './organizer-card';
+export {EventsCalendarSection} from './events-calendar-section';
 export * as toastLogout from './toast-logout';

@@ -135,6 +135,15 @@ export interface EventListMyDto {
   canModify: boolean;
 }
 
+export interface EventCalendarDto {
+  id: number;
+  name: string;
+  category: EventCategory;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface EventDetailsDto {
   id: number;
   name: string;

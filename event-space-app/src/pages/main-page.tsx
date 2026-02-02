@@ -1,8 +1,11 @@
 import { Wrapper } from '@/components/hoc';
 import {
+  EventsCalendarSection,
   GetStartedSection,
   HeroSection,
   NoActualEventsBlock,
+  PopularEventsSection,
+  TopOrganizersSection,
 } from '@/components/shared';
 import { Button } from '@/components/ui';
 import { ArrowRight, Calendar } from 'lucide-react';
@@ -64,7 +67,11 @@ const MainPage = () => {
             <NoActualEventsBlock />
           )}
 
-          <GetStartedSection className={'mb-5'} />
+          <PopularEventsSection className={'mt-10'} />
+          <TopOrganizersSection className={'mt-10'} />
+          <EventsCalendarSection className={'mt-10'} />
+
+          <GetStartedSection className={'mb-5 mt-10'} />
         </div>
       </Wrapper>
     </>

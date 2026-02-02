@@ -1,4 +1,5 @@
 import type {
+  EventCalendarDto,
   EventCreateData,
   EventDetailsDto,
   EventEditData,
@@ -204,4 +205,22 @@ export const unregisterFromEvent = async (eventId: number): Promise<void> => {
 
 export const removeEvent = async (eventId: number): Promise<void> => {
   await axiosInstance.delete<void>(`${ApiRoutes.EVENTS}/${eventId}`);
+};
+
+export const getPopularEvents = async (): Promise<EventListDto[]> => {
+  const response = await axiosInstance.get<EventListDto[]>(
+    `${ApiRoutes.EVENTS}/popular`,
+  );
+  return response.data;
+};
+
+export const getEventsByMonth = async (
+  year: number,
+  month: number,
+): Promise<EventCalendarDto[]> => {
+  const response = await axiosInstance.get<EventCalendarDto[]>(
+    `${ApiRoutes.EVENTS}/calendar`,
+    { params: { year, month } },
+  );
+  return response.data;
 };

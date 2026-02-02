@@ -8,6 +8,9 @@ import type { EventReviewFilter } from '@/api/event-reviews/model.ts';
 export const EVENTS_KEYS = {
   all: ['events'] as const,
   actual: ['events', 'actual'] as const,
+  popular: ['events', 'popular'] as const,
+  calendar: (year: number, month: number) =>
+    ['events', 'calendar', year, month] as const,
   upcoming: ['events', 'upcoming'] as const,
   finished: ['events', 'finished'] as const,
   filters: (eventRequestData: EventRequestData<EventFilter>) =>
