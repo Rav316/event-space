@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 import { useEventImageStore } from '@/store/use-event-image-store.ts';
+import confetti from 'canvas-confetti';
 import { EVENTS_KEYS } from '@/api/events/keys.ts';
 import { queryClient } from '@/api/query-client.ts';
 import type {
@@ -36,6 +37,12 @@ export const useEventCreate = () => {
       resetEvent();
       resetEventSteps();
       clearImage();
+
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
 
       toast.success('Мероприятие успешно создано');
       setTimeout(() => navigate('/'), 0);

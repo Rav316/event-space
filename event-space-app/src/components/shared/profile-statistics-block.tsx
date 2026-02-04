@@ -1,6 +1,7 @@
 import { type LucideProps } from 'lucide-react';
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
+import { AnimatedNumber } from '@/components/ui';
 
 interface Props {
   title: string;
@@ -37,7 +38,22 @@ export const ProfileStatisticsBlock: React.FC<Props> = ({
         <span className="text-muted-foreground text-xs leading-tight">
           {title}
         </span>
-        <h3 className="font-semibold text-sm leading-tight">{value}</h3>
+        <h3 className="font-semibold text-sm leading-tight">
+          {typeof value === 'number' ? (
+            <AnimatedNumber value={value} />
+          ) : (
+            (() => {
+              const match = String(value).match(/^([\d.]+)(.*)$/);
+              if (match) {
+                const num = parseFloat(match[1]);
+                const suffix = match[2];
+                const decimals = match[1].includes('.') ? (match[1].split('.')[1]?.length ?? 0) : 0;
+                return <AnimatedNumber value={num} decimals={decimals} suffix={suffix} />;
+              }
+              return value;
+            })()
+          )}
+        </h3>
       </div>
     </div>
   );
