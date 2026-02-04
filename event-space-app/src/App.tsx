@@ -1,82 +1,89 @@
-import MainPage from '@/pages/main-page.tsx';
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 import { OutletHeader, RequireGuest } from '@/components/hoc';
-import EventsPage from '@/pages/events-page.tsx';
 import Page404 from '@/pages/page-404.tsx';
-import RegistrationPage from '@/pages/registration-page.tsx';
 import { RequireAuth } from '@/components/hoc/require-auth.tsx';
-import EventCreatePage from '@/pages/event-create-page.tsx';
 import { LoginModal } from '@/components/modal';
-import EventPage from '@/pages/event-page.tsx';
-import ProfilePage from '@/pages/profile-page.tsx';
 import { useAuthStore } from '@/store/use-auth-store.ts';
-import MyRegistrationsPage from '@/pages/my-registrations-page.tsx';
-import StatisticsPage from '@/pages/statistics-page.tsx';
-import MyEventsPage from '@/pages/my-events-page.tsx';
-import EventEditPage from '@/pages/event-edit-page.tsx';
+import { PageLoader } from '@/components/ui';
+
+const MainPage = lazy(() => import('@/pages/main-page.tsx'));
+const EventsPage = lazy(() => import('@/pages/events-page.tsx'));
+const EventPage = lazy(() => import('@/pages/event-page.tsx'));
+const EventCreatePage = lazy(() => import('@/pages/event-create-page.tsx'));
+const EventEditPage = lazy(() => import('@/pages/event-edit-page.tsx'));
+const ProfilePage = lazy(() => import('@/pages/profile-page.tsx'));
+const MyEventsPage = lazy(() => import('@/pages/my-events-page.tsx'));
+const MyRegistrationsPage = lazy(
+  () => import('@/pages/my-registrations-page.tsx'),
+);
+const StatisticsPage = lazy(() => import('@/pages/statistics-page.tsx'));
+const RegistrationPage = lazy(() => import('@/pages/registration-page.tsx'));
 
 const App = () => {
   const token = useAuthStore((state) => state.accessToken);
 
   return (
     <>
-      <Routes>
-        <Route key={token ? 'auth' : 'guest'} element={<OutletHeader />}>
-          <Route path="/" element={<MainPage />} />
-          <Route
-            path={'/register'}
-            element={
-              <RequireGuest>
-                <RegistrationPage />
-              </RequireGuest>
-            }
-          />
-          <Route path={'/events'} element={<EventsPage />} />
-          <Route
-            path={'/my-events'}
-            element={
-              <RequireAuth>
-                <MyEventsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={'/events/create'}
-            element={
-              <RequireAuth>
-                <EventCreatePage />
-              </RequireAuth>
-            }
-          />
-          <Route path={'/events/:eventId'} element={<EventPage />} />
-          <Route path={'/events/:eventId/edit'} element={<EventEditPage />} />
-          <Route
-            path={'/profile'}
-            element={
-              <RequireAuth>
-                <ProfilePage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={'/my-registrations'}
-            element={
-              <RequireAuth>
-                <MyRegistrationsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={'/statistics'}
-            element={
-              <RequireAuth>
-                <StatisticsPage />
-              </RequireAuth>
-            }
-          />
-          <Route path="*" element={<Page404 />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route key={token ? 'auth' : 'guest'} element={<OutletHeader />}>
+            <Route path="/" element={<MainPage />} />
+            <Route
+              path={'/register'}
+              element={
+                <RequireGuest>
+                  <RegistrationPage />
+                </RequireGuest>
+              }
+            />
+            <Route path={'/events'} element={<EventsPage />} />
+            <Route
+              path={'/my-events'}
+              element={
+                <RequireAuth>
+                  <MyEventsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path={'/events/create'}
+              element={
+                <RequireAuth>
+                  <EventCreatePage />
+                </RequireAuth>
+              }
+            />
+            <Route path={'/events/:eventId'} element={<EventPage />} />
+            <Route path={'/events/:eventId/edit'} element={<EventEditPage />} />
+            <Route
+              path={'/profile'}
+              element={
+                <RequireAuth>
+                  <ProfilePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path={'/my-registrations'}
+              element={
+                <RequireAuth>
+                  <MyRegistrationsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path={'/statistics'}
+              element={
+                <RequireAuth>
+                  <StatisticsPage />
+                </RequireAuth>
+              }
+            />
+            <Route path="*" element={<Page404 />} />
+          </Route>
+        </Routes>
+      </Suspense>
       <LoginModal />
     </>
   );

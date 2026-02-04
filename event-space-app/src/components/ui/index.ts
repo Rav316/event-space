@@ -22,3 +22,4 @@ export * from './alert';
 export * from './scroll-area';
 export * from './command';
 export { Calendar } from './calendar';
+export { PageLoader } from './page-loader';
