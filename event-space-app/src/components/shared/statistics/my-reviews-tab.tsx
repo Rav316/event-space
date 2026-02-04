@@ -2,20 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { StarRating } from '@/components/shared';
 import { RatingDistributionBlock } from '@/components/shared/statistics/rating-distribution-block.tsx';
 import { Divide } from 'lucide-react';
-import { TopWordsBlock } from '@/components/shared/statistics/top-words-block.tsx';
-import type { ReviewWord } from '@/types/review-word.ts';
 import { LastReviewsList } from '@/components/shared/statistics/last-reviews-list.tsx';
 import { useReviewStatistics } from '@/api/statistics/hooks.ts';
 import { ReviewStatisticsSkeleton } from '@/components/shared/statistics/review-statistics-skeleton.tsx';
-
-const words: ReviewWord[] = [
-  { text: 'профессионально', count: 12 },
-  { text: 'интересно', count: 10 },
-  { text: 'полезно', count: 9 },
-  { text: 'практика', count: 8 },
-  { text: 'организация', count: 7 },
-  { text: 'актуально', count: 6 },
-];
 
 export const MyReviewsTab = () => {
   const { data: statistics, isPending: isStatisticsPending } =
@@ -28,7 +17,7 @@ export const MyReviewsTab = () => {
       ) : (
         <div className="flex flex-col gap-5 w-full">
           <div className="flex items-stretch gap-5 w-full max-[1000px]:flex-col">
-            <div className="flex flex-2 gap-5 max-[625px]:flex-col">
+            <div className="flex flex-1 gap-5 max-[625px]:flex-col">
               <Card className="w-full h-full">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -52,7 +41,6 @@ export const MyReviewsTab = () => {
                 </CardContent>
               </Card>
 
-              <TopWordsBlock words={words} />
             </div>
 
             <div className="flex-1">

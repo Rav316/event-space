@@ -4,6 +4,8 @@ import { useUserReviewFilterStore } from '@/store/use-user-review-filter-store.t
 import { useInfiniteScroll } from '@/hooks/use-infinity-scroll.ts';
 import { InfinityScrollLoading } from '@/components/shared/infinity-scroll-loading.tsx';
 import { AnimatedReviewListItem } from '@/components/hoc/animated-review-list-item.tsx';
+import { NoMyReviewsBlock } from '@/components/shared/statistics/no-my-reviews-block.tsx';
+import { LastReviewsListSkeleton } from '@/components/shared/statistics/last-reviews-list-skeleton.tsx';
 
 export const LastReviewsList = () => {
   const filter = useUserReviewFilterStore((state) => state.filter);
@@ -21,10 +23,12 @@ export const LastReviewsList = () => {
     isFetchingNextPage,
   });
 
+  const allReviews = reviews?.pages.flatMap((page) => page.content) ?? [];
+
   return (
     <>
       {isReviewsPending || !reviews ? (
-        <div>Loading...</div>
+        <LastReviewsListSkeleton />
       ) : (
         <div
           className={
@@ -33,25 +37,29 @@ export const LastReviewsList = () => {
         >
           <span className={'font-medium text-xl'}>Мои последние отзывы</span>
 
-          {reviews.pages.flatMap((page) =>
-            page.content.map((review) => (
-              <AnimatedReviewListItem key={review.eventId}>
-                <ReviewStatItem
-                  eventId={review.eventId}
-                  name={review.eventName}
-                  category={review.eventCategory}
-                  date={review.eventDate}
-                  participantQuantity={review.participantQuantity}
-                  rating={review.rating}
-                  content={review.content}
-                  createdAt={review.createdAt}
-                />
-              </AnimatedReviewListItem>
-            )),
-          )}
+          {allReviews.length === 0 ? (
+            <NoMyReviewsBlock />
+          ) : (
+            <>
+              {allReviews.map((review) => (
+                <AnimatedReviewListItem key={review.eventId}>
+                  <ReviewStatItem
+                    eventId={review.eventId}
+                    name={review.eventName}
+                    category={review.eventCategory}
+                    date={review.eventDate}
+                    participantQuantity={review.participantQuantity}
+                    rating={review.rating}
+                    content={review.content}
+                    createdAt={review.createdAt}
+                  />
+                </AnimatedReviewListItem>
+              ))}
 
-          {isFetchingNextPage && <InfinityScrollLoading />}
-          {hasNextPage && <div ref={loadMoreRef} className="h-10" />}
+              {isFetchingNextPage && <InfinityScrollLoading />}
+              {hasNextPage && <div ref={loadMoreRef} className="h-10" />}
+            </>
+          )}
         </div>
       )}
     </>
