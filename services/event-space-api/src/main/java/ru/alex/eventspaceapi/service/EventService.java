@@ -312,10 +312,10 @@ public class EventService {
         if(!event.getAuthor().getId().equals(authorizedUser.id()) && authorizedUser.role() != Role.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you can not delete this event");
         }
-        if(EventUtils.isEventStarted(event)) {
+        if(EventUtils.isEventStarted(event) && authorizedUser.role() != Role.ADMIN) {
             throw new IllegalStateException("the event has already started, you cannot delete this event");
         }
-        if(EventUtils.isEventPassed(event)) {
+        if(EventUtils.isEventPassed(event) && authorizedUser.role() != Role.ADMIN) {
             throw new IllegalStateException("the event has already passed, you cannot delete this event");
         }
         eventRepository.delete(event);
