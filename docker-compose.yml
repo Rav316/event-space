@@ -71,6 +71,19 @@ services:
     networks:
       - my_network
 
+  event-space-app:
+    build:
+      context: ./event-space-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - event-space-api
+      - nginx-static
+    restart: always
+    networks:
+      - my_network
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
