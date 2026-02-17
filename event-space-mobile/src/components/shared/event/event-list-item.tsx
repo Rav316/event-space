@@ -9,6 +9,7 @@ import { useColorScheme } from 'nativewind';
 import { getEventImageUrl } from '@/src/utils/get-event-image-url';
 import { EventListPreviewDto } from '@/src/api/events/models';
 import { ContextMenuView } from 'react-native-ios-context-menu';
+import {formatDateToRuFormat} from "@/src/utils/format-date-to-ru-format";
 
 interface Props {
   event: EventListPreviewDto;
@@ -120,7 +121,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
               color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
             />
             <StyledText className={'text-muted-foreground text-xs'}>
-              {event.eventDate}
+              {formatDateToRuFormat(event.eventDate)}
             </StyledText>
           </View>
 
