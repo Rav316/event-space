@@ -1,4 +1,7 @@
 .env
 .idea
+.DS_Store
 /services/nginx-static-service/storage
 /services/observability/prometheus/secrets/prometheus_basic_auth_password
+event-space-api/
+nginx-static/
