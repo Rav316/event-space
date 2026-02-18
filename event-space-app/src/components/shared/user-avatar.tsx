@@ -26,7 +26,7 @@ export const UserAvatar: React.FC<Props> = ({
   const showImage = avatarUrl && !imageError;
 
   return (
-    <Avatar className={className}>
+    <Avatar key={String(avatarUrl)} className={className}>
       {showImage && (
         <AvatarImage src={avatarUrl} onError={() => setImageError(true)} />
       )}
