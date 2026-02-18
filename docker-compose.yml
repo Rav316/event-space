@@ -27,6 +27,8 @@ services:
       - STATIC_CONTENT_PATH=${STATIC_CONTENT_PATH}
       - PROMETHEUS_USERNAME=${PROMETHEUS_USERNAME}
       - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    volumes:
+      - ./services/nginx-static-service/storage:/storage
     networks:
       - my_network
 
