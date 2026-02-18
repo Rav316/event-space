@@ -19,7 +19,7 @@ public record EventEditDto(
         Integer space,
         @Size(max = 130)
         String shortDescription,
-        @Size(max = 200)
+        @Size(max = 1000)
         String description,
         Integer category,
         @Min(0)

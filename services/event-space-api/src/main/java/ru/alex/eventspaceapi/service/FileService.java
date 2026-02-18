@@ -79,7 +79,7 @@ public class FileService {
 
     private void compressWithMagick(Path filePath) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder(
-                "magick", filePath.toString(),
+                "convert", filePath.toString(),
                 "-resize", "1920x1080>",
                 "-quality", "75",
                 filePath.toString()
