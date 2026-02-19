@@ -10,3 +10,6 @@ export {EventPeriodSelect} from './event-period-select';
 export {EventBadge} from './event-badge';
 export {EventOrganizerBlock} from './event-organizer-block';
 export {EventShareBlock} from './event-share-block';
+export {EventPageSkeleton} from './event-page-skeleton';
+export {EventProgramBlock} from './event-program-block';
+export {EventDescriptionBlock} from './event-description-block';

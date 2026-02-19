@@ -3,5 +3,6 @@ export const ApiRoutes = {
   EVENTS: '/events',
   FACULTIES: '/faculties',
   USERS: '/users',
-  EVENT_CATEGORIES: '/event-categories'
+  EVENT_CATEGORIES: '/event-categories',
+  EVENT_REVIEWS: '/event-reviews'
 }

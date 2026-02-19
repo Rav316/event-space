@@ -38,3 +38,14 @@ export interface UserEditData {
   avatar: ImagePickerAsset | null;
   avatarRemoved: boolean;
 }
+
+export interface UserAuthorDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string;
+}
+
+export interface UserEventAuthorDto extends UserAuthorDto {
+  faculty: string;
+}

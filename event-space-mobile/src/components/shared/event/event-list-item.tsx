@@ -22,6 +22,7 @@ const MAX_PREVIEW_HEIGHT = Dimensions.get('window').height * 0.6;
 export const EventListItem: React.FC<Props> = ({ event }) => {
   const { colorScheme } = useColorScheme();
   const [previewHeight, setPreviewHeight] = useState(PREVIEW_WIDTH);
+  const [imageError, setImageError] = useState(false);
 
   const imageUrl = event.imageUrl ? getEventImageUrl(event.imageUrl) : null;
 
@@ -35,7 +36,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
 
   const placeholderText = event.name ? getPlaceholderText(event.name) : 'EV';
 
-  const imageElement = imageUrl ? (
+  const imageElement = imageUrl && !imageError ? (
     Platform.OS === 'ios' ? (
       <ContextMenuView
         menuConfig={{
@@ -69,6 +70,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
             const ratio = height / width;
             setPreviewHeight(Math.min(PREVIEW_WIDTH * ratio, MAX_PREVIEW_HEIGHT));
           }}
+          onError={() => setImageError(true)}
         />
       </ContextMenuView>
     ) : (
@@ -77,6 +79,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
         style={styles.image}
         contentFit={'cover'}
         transition={200}
+        onError={() => setImageError(true)}
       />
     )
   ) : (
