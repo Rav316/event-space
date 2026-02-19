@@ -10,6 +10,7 @@ import { getEventImageUrl } from '@/src/utils/get-event-image-url';
 import { EventListPreviewDto } from '@/src/api/events/models';
 import { ContextMenuView } from 'react-native-ios-context-menu';
 import {formatDateToRuFormat} from "@/src/utils/format-date-to-ru-format";
+import { Link } from 'expo-router';
 
 interface Props {
   event: EventListPreviewDto;
@@ -93,53 +94,57 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
   );
 
   return (
-    <View
-      className={
-        'rounded-2xl border-2 border-[#E5E5E5] dark:border-[#333333] p-4 bg-white dark:bg-[#1A1A1A]'
-      }
-    >
-      <View className={'w-full flex-row items-center gap-4'}>
-        {imageElement}
+    <Link href={`/events/${event.id}`}>
+      <View
+        className={
+          'rounded-2xl border-2 border-[#E5E5E5] dark:border-[#333333] p-4 bg-white dark:bg-[#1A1A1A]'
+        }
+      >
+        <View className={'w-full flex-row items-center gap-4'}>
+          {imageElement}
 
-        <View className={'flex-1 items-start h-full gap-1'}>
-          <Badge className={categoryColors[event.category.id - 1].badge}>
-            <StyledText className={categoryColors[event.category.id - 1].text}>
-              {event.category.name}
-            </StyledText>
-          </Badge>
+          <View className={'flex-1 items-start h-full gap-1'}>
+            <Badge className={categoryColors[event.category.id - 1].badge}>
+              <StyledText
+                className={categoryColors[event.category.id - 1].text}
+              >
+                {event.category.name}
+              </StyledText>
+            </Badge>
 
-          <StyledText
-            className={'font-bold text-base leading-5 text-foreground'}
-            numberOfLines={2}
-          >
-            {event.name}
-          </StyledText>
-
-          <View className={'flex-row gap-2 items-center mt-1'}>
-            <Calendar
-              size={14}
-              color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
-            />
-            <StyledText className={'text-muted-foreground text-xs'}>
-              {formatDateToRuFormat(event.eventDate)}
-            </StyledText>
-          </View>
-
-          <View className={'flex-row gap-2 items-center'}>
-            <MapPin
-              size={14}
-              color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
-            />
             <StyledText
-              className={'text-muted-foreground text-xs flex-1'}
-              numberOfLines={1}
+              className={'font-bold text-base leading-5 text-foreground'}
+              numberOfLines={2}
             >
-              {event.space.name}
+              {event.name}
             </StyledText>
+
+            <View className={'flex-row gap-2 items-center mt-1'}>
+              <Calendar
+                size={14}
+                color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
+              />
+              <StyledText className={'text-muted-foreground text-xs'}>
+                {formatDateToRuFormat(event.eventDate)}
+              </StyledText>
+            </View>
+
+            <View className={'flex-row gap-2 items-center'}>
+              <MapPin
+                size={14}
+                color={colorScheme === 'dark' ? '#A1A1AA' : '#71717A'}
+              />
+              <StyledText
+                className={'text-muted-foreground text-xs flex-1'}
+                numberOfLines={1}
+              >
+                {event.space.name}
+              </StyledText>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </Link>
   );
 };
 

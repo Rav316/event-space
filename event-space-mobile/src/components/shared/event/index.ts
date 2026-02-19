@@ -7,3 +7,6 @@ export {CategoriesFilter} from './categories-filter';
 export {AnimatedEventListItem} from './animated-event-list-item';
 export {EventSortSelect} from './event-sort-select';
 export {EventPeriodSelect} from './event-period-select';
+export {EventBadge} from './event-badge';
+export {EventOrganizerBlock} from './event-organizer-block';
+export {EventShareBlock} from './event-share-block';

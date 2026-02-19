@@ -27,7 +27,7 @@ export const ScrollMainLayout: React.FC<PropsWithChildren<Props>> = ({
 
   return (
     <View
-      className="flex-1 px-5"
+      className="flex-1 px-3"
       style={{ paddingBottom: bottomInset, paddingTop: topInset }}
     >
       <KeyboardAwareScrollView

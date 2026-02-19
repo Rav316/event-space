@@ -25,7 +25,7 @@ export const MainLayout: React.FC<PropsWithChildren<Props>> = ({
   return (
     <View style={{ paddingTop: topInset }} className={'flex-1'}>
       <KeyboardAvoidingView
-        className={cn('flex-1 px-5', className)}
+        className={cn('flex-1 px-3', className)}
         behavior={'padding'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         style={{ paddingBottom: bottomInset }}

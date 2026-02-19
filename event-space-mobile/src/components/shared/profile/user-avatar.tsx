@@ -21,8 +21,6 @@ export const UserAvatar: React.FC<Props> = ({
       ? `${firstName.trim()[0]}${lastName.trim()[0]}`.toUpperCase()
       : '??';
 
-  console.log('avatar url: ', avatarUrl);
-
   return (
     <Avatar
       key={avatarUrl || 'no-avatar'}
