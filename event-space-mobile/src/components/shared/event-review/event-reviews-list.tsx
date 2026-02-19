@@ -6,6 +6,7 @@ import React from 'react';
 import { InfiniteData } from '@tanstack/react-query';
 import { SliceResponse } from '@/src/api/model';
 import { EventReviewReadDto } from '@/src/api/event-reviews/model';
+import { useColorScheme } from 'nativewind';
 
 interface Props {
   reviews: InfiniteData<SliceResponse<EventReviewReadDto>> | undefined;
@@ -20,6 +21,9 @@ export const EventReviewsList: React.FC<Props> = ({
   isFetchingNextPage,
   onHelpfulPress
 }) => {
+  const colorScheme = useColorScheme().colorScheme;
+  const resolvedIconColor = colorScheme === 'dark' ? '#ffffff' : '#000000';
+
   if (isPending || !reviews) {
     return (
       <View className={'gap-2'}>
@@ -43,10 +47,16 @@ export const EventReviewsList: React.FC<Props> = ({
   return (
     <View className={'gap-2'}>
       {allReviews.map((review) => (
-        <EventReview key={review.id} review={review} onHelpfulPress={onHelpfulPress} />
+        <EventReview
+          key={review.id}
+          review={review}
+          onHelpfulPress={onHelpfulPress}
+        />
       ))}
 
-      {isFetchingNextPage && <ActivityIndicator className={'py-2'} />}
+      {isFetchingNextPage && (
+        <ActivityIndicator className={'py-2'} color={resolvedIconColor} />
+      )}
     </View>
   );
 };

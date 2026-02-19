@@ -7,6 +7,7 @@ import {
   Pressable,
   RefreshControl,
   ScrollView,
+  Share,
   View
 } from 'react-native';
 import { Calendar, Flame, MapPin, Share2, Users } from 'lucide-react-native';
@@ -40,6 +41,7 @@ import {
   useUnmarkReviewAsHelpful
 } from '@/src/api/event-reviews/hooks';
 import { getEventImageUrl } from '@/src/utils/get-event-image-url';
+import { getEventWebUrl } from '@/src/utils/get-event-web-url';
 import { getPlaceholderImageUrl } from '@/src/utils/get-placeholder-image-url';
 import { formatDate } from '@/src/utils/format-date';
 import { formatDateToRuFormat } from '@/src/utils/format-date-to-ru-format';
@@ -106,6 +108,11 @@ const EventPage = () => {
     },
     [hasNextPage, isFetchingNextPage, fetchNextPage]
   );
+
+  const handleShareEvent = useCallback(async () => {
+    const url = getEventWebUrl(id);
+    await Share.share({ message: url });
+  }, [id]);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -182,6 +189,7 @@ const EventPage = () => {
               </Badge>
 
               <Pressable
+                onPress={handleShareEvent}
                 className={
                   'absolute top-2.5 right-2.5 w-9 h-9 rounded-xl items-center justify-center bg-white/60 dark:bg-black/50'
                 }
@@ -255,7 +263,7 @@ const EventPage = () => {
                 faculty={event.author?.faculty}
               />
             )}
-            <EventShareBlock />
+            <EventShareBlock eventId={id} event={event} />
             <EventReviewsBlock event={event} />
             <EventReviewsList
               reviews={reviews}

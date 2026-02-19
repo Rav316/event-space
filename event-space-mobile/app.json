@@ -62,6 +62,12 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Приложению нужен доступ к вашему календарю для добавления мероприятий."
+        }
       ]
     ],
 
