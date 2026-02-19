@@ -25,7 +25,7 @@ const EventPage = () => {
   return (
     <>
       <Stack.Screen options={{ title: `Мероприятие #${id}` }} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           className={'gap-4 px-3 pt-3'}
           style={{ paddingBottom: bottomInset }}
