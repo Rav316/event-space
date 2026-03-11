@@ -4,5 +4,4 @@
 /services/nginx-static-service/storage
 /services/observability/prometheus/secrets/prometheus_basic_auth_password
 .claude
-event-space-api/
 nginx-static/
