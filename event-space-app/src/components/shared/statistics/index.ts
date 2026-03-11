@@ -1,4 +1,4 @@
-export { EventStatisticsBlock } from './event-statistics-block';
+export { StatisticsBlock } from './statistics-block.tsx';
 export { EventStatisticsBlocks } from './event-statistics-blocks';
 export { OverviewTab } from './overview-tab';
 export { MyReviewsTab } from './my-reviews-tab';

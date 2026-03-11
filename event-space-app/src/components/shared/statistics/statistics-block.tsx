@@ -14,7 +14,7 @@ interface Props {
   className?: string;
 }
 
-export const EventStatisticsBlock: React.FC<Props> = ({
+export const StatisticsBlock: React.FC<Props> = ({
   title,
   Icon,
   value,

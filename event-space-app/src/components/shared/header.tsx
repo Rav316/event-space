@@ -1,4 +1,11 @@
-import { Briefcase, Calendar, ChartColumn, Plus, Users } from 'lucide-react';
+import {
+  Briefcase,
+  Calendar,
+  ChartColumn,
+  Plus,
+  Shield,
+  Users,
+} from 'lucide-react';
 import { HeaderItem, NavigationMenu, ProfileMenu } from '@/components/shared';
 import { Button, Skeleton } from '@/components/ui';
 import { Link, NavLink } from 'react-router';
@@ -6,6 +13,7 @@ import { useMe } from '@/api/auth/hooks.ts';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
+import { Roles } from '@/api/auth/model.ts';
 
 export const Header = () => {
   const { data, isFetching, isSuccess } = useMe();
@@ -80,6 +88,17 @@ export const Header = () => {
                   />
                 )}
               </NavLink>
+              {data.user.role === Roles.ADMIN && (
+                <NavLink to={'/admin'}>
+                  {({ isActive }) => (
+                    <HeaderItem
+                      Icon={Shield}
+                      text={'Админ-панель'}
+                      isActive={isActive}
+                    />
+                  )}
+                </NavLink>
+              )}
             </>
           )}
         </div>
