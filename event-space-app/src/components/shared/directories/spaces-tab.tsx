@@ -17,38 +17,18 @@ import {
 import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-
-const MOCK_SPACES = [
-  { id: 1,  name: 'Аудитория 101',   location: 'Главный корпус',    type: 'Аудитория',    floor: 1, capacity: 40 },
-  { id: 2,  name: 'Аудитория 205',   location: 'Главный корпус',    type: 'Аудитория',    floor: 2, capacity: 50 },
-  { id: 3,  name: 'Аудитория 301',   location: 'IT-корпус',         type: 'Аудитория',    floor: 3, capacity: 30 },
-  { id: 4,  name: 'Лаборатория 401', location: 'IT-корпус',         type: 'Лаборатория',  floor: 4, capacity: 20 },
-  { id: 5,  name: 'Зал №3',          location: 'Библиотека',        type: 'Читальный зал',floor: 2, capacity: 40 },
-  { id: 6,  name: 'Спортзал',        location: 'Спортивный комплекс', type: 'Спортзал',  floor: 1, capacity: 100 },
-  { id: 7,  name: 'Бассейн',         location: 'Спортивный комплекс', type: 'Бассейн',   floor: 1, capacity: 80 },
-  { id: 8,  name: 'Конференц A',     location: 'Главный корпус',    type: 'Конференц-зал',floor: 3, capacity: 60 },
-  { id: 9,  name: 'Конференц B',     location: 'IT-корпус',         type: 'Конференц-зал',floor: 2, capacity: 25 },
-  { id: 10, name: 'Актовый зал',     location: 'Главный корпус',    type: 'Актовый зал',  floor: 1, capacity: 500 },
-  { id: 11, name: 'Студия звукозаписи', location: 'IT-корпус',      type: 'Студия',       floor: 3, capacity: 10 },
-  { id: 12, name: 'Коворкинг',       location: 'IT-корпус',         type: 'Коворкинг',    floor: 1, capacity: 35 },
-  { id: 13, name: 'Лаборатория химии', location: 'Главный корпус',  type: 'Лаборатория',  floor: 2, capacity: 20 },
-  { id: 14, name: 'Лаборатория физики', location: 'Главный корпус', type: 'Лаборатория',  floor: 3, capacity: 20 },
-  { id: 15, name: 'Тренажёрный зал', location: 'Спортивный комплекс', type: 'Спортзал',  floor: 2, capacity: 45 },
-  { id: 16, name: 'Читальный зал',   location: 'Библиотека',        type: 'Читальный зал',floor: 1, capacity: 60 },
-  { id: 17, name: 'Аудитория 502',   location: 'IT-корпус',         type: 'Аудитория',    floor: 5, capacity: 30 },
-  { id: 18, name: 'Переговорная 1',  location: 'Главный корпус',    type: 'Переговорная', floor: 4, capacity: 12 },
-  { id: 19, name: 'Переговорная 2',  location: 'Главный корпус',    type: 'Переговорная', floor: 4, capacity: 12 },
-  { id: 20, name: 'Музейный зал',    location: 'Главный корпус',    type: 'Выставочный зал', floor: 1, capacity: 70 },
-  { id: 21, name: 'Лекционный зал',  location: 'IT-корпус',         type: 'Аудитория',    floor: 1, capacity: 120 },
-  { id: 22, name: 'Мастерская',      location: 'Спортивный комплекс', type: 'Мастерская', floor: 1, capacity: 15 },
-  { id: 23, name: 'Зал единоборств', location: 'Спортивный комплекс', type: 'Спортзал',  floor: 2, capacity: 30 },
-  { id: 24, name: 'Архивный зал',    location: 'Библиотека',        type: 'Архив',        floor: 3, capacity: 8 },
-  { id: 25, name: 'Серверная',       location: 'IT-корпус',         type: 'Техническое помещение', floor: 5, capacity: 5 },
-];
+import { useSpacesByFilter } from '@/api/admin/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
-type SortCol = 'name' | 'location' | 'type' | 'floor' | 'capacity';
+type SortCol = 'name' | 'type' | 'floor' | 'capacity';
+
+const COL_LABELS: Record<SortCol, string> = {
+  name: 'Название',
+  type: 'Тип пространства',
+  floor: 'Этаж',
+  capacity: 'Вместимость',
+};
 
 export const SpacesTab = () => {
   const [search, setSearch] = useState('');
@@ -61,6 +41,13 @@ export const SpacesTab = () => {
   useEffect(() => {
     setPage(0);
   }, [debouncedSearch]);
+
+  const sort = sortKey ? `${sortKey},${sortDir}` : undefined;
+  const { data } = useSpacesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
+
+  const rows = data?.content ?? [];
+  const totalElements = data?.totalElements ?? 0;
+  const totalPages = data?.totalPages ?? 0;
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -76,38 +63,6 @@ export const SpacesTab = () => {
     return sortDir === 'asc'
       ? <ArrowUp className={'ml-1 h-4 w-4'} />
       : <ArrowDown className={'ml-1 h-4 w-4'} />;
-  };
-
-  const filtered = MOCK_SPACES.filter((s) =>
-    [s.name, s.location, s.type, String(s.floor), String(s.capacity)]
-      .join(' ')
-      .toLowerCase()
-      .includes(debouncedSearch.toLowerCase()),
-  );
-
-  const sorted = sortKey
-    ? [...filtered].sort((a, b) => {
-        const aVal = a[sortKey];
-        const bVal = b[sortKey];
-        const cmp =
-          typeof aVal === 'number' && typeof bVal === 'number'
-            ? aVal - bVal
-            : String(aVal).localeCompare(String(bVal), 'ru');
-        return sortDir === 'asc' ? cmp : -cmp;
-      })
-    : filtered;
-
-  const totalElements = sorted.length;
-  const totalPages = Math.ceil(totalElements / pageSize);
-  const paginated = sorted.slice(page * pageSize, page * pageSize + pageSize);
-
-  const SORTABLE_COLS = ['name', 'location', 'type', 'floor', 'capacity'] as const;
-  const COL_LABELS: Record<SortCol, string> = {
-    name: 'Название',
-    location: 'Локация',
-    type: 'Тип пространства',
-    floor: 'Этаж',
-    capacity: 'Вместимость',
   };
 
   return (
@@ -136,16 +91,15 @@ export const SpacesTab = () => {
 
       <Table className={'table-fixed w-full'}>
         <colgroup>
-          <col className={'w-[22%]'} />
-          <col className={'w-[20%]'} />
-          <col className={'w-[20%]'} />
-          <col className={'w-[10%]'} />
-          <col className={'w-[16%]'} />
+          <col className={'w-[28%]'} />
+          <col className={'w-[28%]'} />
           <col className={'w-[12%]'} />
+          <col className={'w-[18%]'} />
+          <col className={'w-[14%]'} />
         </colgroup>
         <TableHeader>
           <TableRow>
-            {SORTABLE_COLS.map((col) => (
+            {(['name', 'type', 'floor', 'capacity'] as const).map((col) => (
               <TableHead
                 key={col}
                 className={'cursor-pointer select-none'}
@@ -161,10 +115,9 @@ export const SpacesTab = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.map((space) => (
+          {rows.map((space) => (
             <TableRow key={space.id}>
               <TableCell className={'font-medium'}>{space.name}</TableCell>
-              <TableCell>{space.location}</TableCell>
               <TableCell>{space.type}</TableCell>
               <TableCell>
                 <Badge variant={'outline'}>{space.floor} этаж</Badge>

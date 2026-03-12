@@ -30,3 +30,31 @@ export const useComplaintsByFilter = (filter: AdminListFilter, sort?: string) =>
     queryFn: () => Api.admin.findAllComplaints(filter, sort),
   });
 }
+
+export const useBuildingsByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.BUILDINGS, filter, sort],
+    queryFn: () => Api.admin.findAllBuildings(filter, sort),
+  });
+}
+
+export const useSpacesByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.SPACES, filter, sort],
+    queryFn: () => Api.admin.findAllSpaces(filter, sort),
+  });
+}
+
+export const useCategoriesByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.CATEGORIES, filter, sort],
+    queryFn: () => Api.admin.findAllCategories(filter, sort),
+  });
+}
+
+export const useFacultiesByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.FACULTIES, filter, sort],
+    queryFn: () => Api.admin.findAllFaculties(filter, sort),
+  });
+}

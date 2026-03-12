@@ -16,34 +16,7 @@ import {
 import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-
-const MOCK_LOCATIONS = [
-  { id: 1,  name: 'Главный корпус',             address: 'ул. Ленина, 1' },
-  { id: 2,  name: 'IT-корпус',                  address: 'ул. Ленина, 3' },
-  { id: 3,  name: 'Спортивный комплекс',        address: 'ул. Спортивная, 15' },
-  { id: 4,  name: 'Актовый зал',                address: 'ул. Ленина, 1' },
-  { id: 5,  name: 'Библиотека',                 address: 'ул. Университетская, 10' },
-  { id: 6,  name: 'Конференц-зал №1',           address: 'ул. Ленина, 1' },
-  { id: 7,  name: 'Конференц-зал №2',           address: 'ул. Ленина, 3' },
-  { id: 8,  name: 'Лекционная аудитория 201',   address: 'ул. Ленина, 3' },
-  { id: 9,  name: 'Лаборатория робототехники',  address: 'ул. Ленина, 5' },
-  { id: 10, name: 'Коворкинг-пространство',     address: 'ул. Ленина, 5' },
-  { id: 11, name: 'Студенческий клуб',          address: 'ул. Парковая, 2' },
-  { id: 12, name: 'Столовая',                   address: 'ул. Университетская, 10' },
-  { id: 13, name: 'Медицинский кабинет',        address: 'ул. Парковая, 2' },
-  { id: 14, name: 'Актовый зал №2',             address: 'ул. Спортивная, 15' },
-  { id: 15, name: 'Лаборатория химии',          address: 'ул. Ленина, 7' },
-  { id: 16, name: 'Лаборатория физики',         address: 'ул. Ленина, 7' },
-  { id: 17, name: 'Читальный зал',              address: 'ул. Университетская, 10' },
-  { id: 18, name: 'Бассейн',                    address: 'ул. Спортивная, 17' },
-  { id: 19, name: 'Тренажёрный зал',            address: 'ул. Спортивная, 15' },
-  { id: 20, name: 'Аудитория 305',              address: 'ул. Ленина, 3' },
-  { id: 21, name: 'Деканат',                    address: 'ул. Ленина, 1' },
-  { id: 22, name: 'Музей университета',         address: 'ул. Университетская, 12' },
-  { id: 23, name: 'Пресс-центр',                address: 'ул. Университетская, 12' },
-  { id: 24, name: 'Кабинет психолога',          address: 'ул. Парковая, 2' },
-  { id: 25, name: 'Зал заседаний учёного совета', address: 'ул. Ленина, 1' },
-];
+import { useBuildingsByFilter } from '@/api/admin/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
@@ -61,6 +34,13 @@ export const LocationTab = () => {
     setPage(0);
   }, [debouncedSearch]);
 
+  const sort = sortKey ? `${sortKey},${sortDir}` : undefined;
+  const { data } = useBuildingsByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
+
+  const rows = data?.content ?? [];
+  const totalElements = data?.totalElements ?? 0;
+  const totalPages = data?.totalPages ?? 0;
+
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
     else {
@@ -76,24 +56,6 @@ export const LocationTab = () => {
       ? <ArrowUp className={'ml-1 h-4 w-4'} />
       : <ArrowDown className={'ml-1 h-4 w-4'} />;
   };
-
-  const filtered = MOCK_LOCATIONS.filter((loc) =>
-    [loc.name, loc.address]
-      .join(' ')
-      .toLowerCase()
-      .includes(debouncedSearch.toLowerCase()),
-  );
-
-  const sorted = sortKey
-    ? [...filtered].sort((a, b) => {
-        const cmp = a[sortKey].localeCompare(b[sortKey], 'ru');
-        return sortDir === 'asc' ? cmp : -cmp;
-      })
-    : filtered;
-
-  const totalElements = sorted.length;
-  const totalPages = Math.ceil(totalElements / pageSize);
-  const paginated = sorted.slice(page * pageSize, page * pageSize + pageSize);
 
   return (
     <div className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}>
@@ -143,7 +105,7 @@ export const LocationTab = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.map((loc) => (
+          {rows.map((loc) => (
             <TableRow key={loc.id}>
               <TableCell className={'font-medium'}>{loc.name}</TableCell>
               <TableCell>{loc.address}</TableCell>

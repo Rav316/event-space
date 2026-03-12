@@ -3,4 +3,8 @@ export const ADMIN_KEYS = {
   USERS: 'users',
   EVENTS: 'admin-events',
   COMPLAINTS: 'admin-complaints',
+  BUILDINGS: 'admin-buildings',
+  SPACES: 'admin-spaces',
+  CATEGORIES: 'admin-categories',
+  FACULTIES: 'admin-faculties',
 }

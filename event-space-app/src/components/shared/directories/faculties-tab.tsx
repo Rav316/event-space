@@ -16,38 +16,11 @@ import {
 import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-
-const MOCK_FACULTIES = [
-  { id: 1,  name: 'Факультет информационных технологий',  location: 'IT-корпус' },
-  { id: 2,  name: 'Факультет математики',                 location: 'Главный корпус' },
-  { id: 3,  name: 'Факультет физики',                     location: 'Главный корпус' },
-  { id: 4,  name: 'Факультет химии',                      location: 'Главный корпус' },
-  { id: 5,  name: 'Факультет биологии',                   location: 'Главный корпус' },
-  { id: 6,  name: 'Факультет экономики',                  location: 'IT-корпус' },
-  { id: 7,  name: 'Факультет юриспруденции',              location: 'Главный корпус' },
-  { id: 8,  name: 'Факультет психологии',                 location: 'IT-корпус' },
-  { id: 9,  name: 'Факультет иностранных языков',         location: 'Главный корпус' },
-  { id: 10, name: 'Факультет истории',                    location: 'Главный корпус' },
-  { id: 11, name: 'Факультет философии',                  location: 'Главный корпус' },
-  { id: 12, name: 'Факультет социологии',                 location: 'IT-корпус' },
-  { id: 13, name: 'Факультет журналистики',               location: 'IT-корпус' },
-  { id: 14, name: 'Факультет архитектуры',                location: 'Спортивный комплекс' },
-  { id: 15, name: 'Факультет медицины',                   location: 'Главный корпус' },
-  { id: 16, name: 'Факультет педагогики',                 location: 'Главный корпус' },
-  { id: 17, name: 'Факультет музыки',                     location: 'IT-корпус' },
-  { id: 18, name: 'Факультет физической культуры',        location: 'Спортивный комплекс' },
-  { id: 19, name: 'Факультет менеджмента',                location: 'IT-корпус' },
-  { id: 20, name: 'Факультет дизайна',                    location: 'IT-корпус' },
-  { id: 21, name: 'Факультет политологии',                location: 'Главный корпус' },
-  { id: 22, name: 'Факультет экологии',                   location: 'Главный корпус' },
-  { id: 23, name: 'Факультет географии',                  location: 'Главный корпус' },
-  { id: 24, name: 'Факультет робототехники',              location: 'IT-корпус' },
-  { id: 25, name: 'Факультет кибербезопасности',          location: 'IT-корпус' },
-];
+import { useFacultiesByFilter } from '@/api/admin/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
-type SortCol = 'name' | 'location';
+type SortCol = 'name' | 'building';
 
 export const FacultiesTab = () => {
   const [search, setSearch] = useState('');
@@ -60,6 +33,13 @@ export const FacultiesTab = () => {
   useEffect(() => {
     setPage(0);
   }, [debouncedSearch]);
+
+  const sort = sortKey ? `${sortKey},${sortDir}` : undefined;
+  const { data } = useFacultiesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
+
+  const rows = data?.content ?? [];
+  const totalElements = data?.totalElements ?? 0;
+  const totalPages = data?.totalPages ?? 0;
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -76,24 +56,6 @@ export const FacultiesTab = () => {
       ? <ArrowUp className={'ml-1 h-4 w-4'} />
       : <ArrowDown className={'ml-1 h-4 w-4'} />;
   };
-
-  const filtered = MOCK_FACULTIES.filter((f) =>
-    [f.name, f.location]
-      .join(' ')
-      .toLowerCase()
-      .includes(debouncedSearch.toLowerCase()),
-  );
-
-  const sorted = sortKey
-    ? [...filtered].sort((a, b) => {
-        const cmp = a[sortKey].localeCompare(b[sortKey], 'ru');
-        return sortDir === 'asc' ? cmp : -cmp;
-      })
-    : filtered;
-
-  const totalElements = sorted.length;
-  const totalPages = Math.ceil(totalElements / pageSize);
-  const paginated = sorted.slice(page * pageSize, page * pageSize + pageSize);
 
   return (
     <div className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}>
@@ -127,14 +89,14 @@ export const FacultiesTab = () => {
         </colgroup>
         <TableHeader>
           <TableRow>
-            {(['name', 'location'] as const).map((col) => (
+            {(['name', 'building'] as const).map((col) => (
               <TableHead
                 key={col}
                 className={'cursor-pointer select-none'}
                 onClick={() => handleSort(col)}
               >
                 <div className={'flex items-center'}>
-                  {{ name: 'Название', location: 'Локация' }[col]}
+                  {{ name: 'Название', building: 'Корпус' }[col]}
                   <SortIcon col={col} />
                 </div>
               </TableHead>
@@ -143,10 +105,10 @@ export const FacultiesTab = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.map((faculty) => (
+          {rows.map((faculty) => (
             <TableRow key={faculty.id}>
               <TableCell className={'font-medium'}>{faculty.name}</TableCell>
-              <TableCell>{faculty.location}</TableCell>
+              <TableCell>{faculty.building}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
                   <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>

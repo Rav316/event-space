@@ -58,3 +58,20 @@ export interface EventPreviewDto {
   authorFirstName: string;
   authorLastName: string;
 }
+
+export interface BuildingReadDto {
+  id: number;
+  name: string;
+  address: string;
+}
+
+export interface EventCategoryReadDto {
+  id: number;
+  name: string;
+}
+
+export interface FacultyReadDto {
+  id: number;
+  name: string;
+  building: string;
+}
