@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import ru.alex.eventspaceapi.model.ComplaintStatus;
+import ru.alex.eventspaceapi.model.ComplaintTargetType;
 
 import java.time.LocalDate;
 
@@ -23,7 +26,16 @@ public class Complaint {
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
-    private String target;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "target_type")
+    private ComplaintTargetType targetType;
+
+    @Column(name = "target_id")
+    private Integer targetId;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "target_snapshot", columnDefinition = "jsonb")
+    private String targetSnapshot;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "complaint_type_id", referencedColumnName = "id")

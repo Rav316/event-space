@@ -10,6 +10,7 @@ public record UserAdminListDto(
         Integer role,
         Integer course,
         FacultyListDto faculty,
-        boolean active
+        boolean active,
+        String avatarUrl
 ) {
 }

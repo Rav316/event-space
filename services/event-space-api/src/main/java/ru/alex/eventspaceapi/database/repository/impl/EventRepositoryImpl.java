@@ -72,13 +72,21 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             event.eventDate, event.startTime, event.endTime
     );
 
+    private static final ComparableExpressionBase<?> REGISTERED_USERS_ORDER_EXPR =
+            Expressions.numberTemplate(
+                    Long.class,
+                    "(select count(eu) from EventUser eu where eu.event.id = {0})",
+                    event.id
+            );
+
     private static final Map<String, ComparableExpressionBase<?>> EVENT_SORT_BINDINGS = Map.of(
             "id", event.id,
             "name", event.name,
             "date", event.eventDate,
             "author", Expressions.stringTemplate("concat({0}, ' ', {1})", user.firstName, user.lastName),
             "category", eventCategory.name,
-            "status", STATUS_ORDER_EXPR
+            "status", STATUS_ORDER_EXPR,
+            "registeredUsers", REGISTERED_USERS_ORDER_EXPR
     );
 
     @Override

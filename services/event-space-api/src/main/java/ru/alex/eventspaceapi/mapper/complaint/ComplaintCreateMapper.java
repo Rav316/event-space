@@ -9,5 +9,8 @@ import ru.alex.eventspaceapi.dto.complaint.ComplaintCreateDto;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ComplaintCreateMapper {
     @Mapping(target = "complaintType", ignore = true)
+    @Mapping(target = "targetType", ignore = true)
+    @Mapping(target = "targetId", ignore = true)
+    @Mapping(target = "targetSnapshot", ignore = true)
     Complaint toEntity(ComplaintCreateDto dto);
 }

@@ -89,3 +89,5 @@ databaseChangeLog:
       file: db/changelog/db-update-users-table-3.0.sql
   - include:
       file: db/changelog/db-update-users-table-3.1.sql
+  - include:
+      file: db/changelog/db-update-complaint-table-2.0.sql
