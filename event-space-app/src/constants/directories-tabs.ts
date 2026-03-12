@@ -7,7 +7,7 @@ export const directoriesTabs: Tab[] = [
     Icon: MapPin,
   },
   {
-    text: 'Кабинеты',
+    text: 'Пространства',
     Icon: DoorOpen,
   },
   {

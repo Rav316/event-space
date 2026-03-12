@@ -5,10 +5,24 @@ import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { AnimatedTabs } from '@/components/shared';
 import { directoriesTabs } from '@/constants/directories-tabs.ts';
+import { LocationTab, SpacesTab, CategoriesTab, FacultiesTab } from '@/components/shared/directories';
 
 const DirectoriesPage = () => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const renderTabContent = () => {
+    switch (activeIndex) {
+      case 0:
+        return <LocationTab/>;
+      case 1:
+        return <SpacesTab />;
+      case 2:
+        return <CategoriesTab />;
+      case 3:
+        return <FacultiesTab />;
+    }
+  }
 
   return (
     <Wrapper className={'flex flex-col py-5 gap-5'}>
@@ -31,6 +45,7 @@ const DirectoriesPage = () => {
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
       />
+      {renderTabContent()}
     </Wrapper>
   );
 };
