@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
 
     @Query("SELECT u.email FROM User u WHERE u.newEventNotifications = true AND u.active = true")
     List<String> findEmailsWithNewEventNotifications();
+
 }

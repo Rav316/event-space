@@ -42,33 +42,30 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain appChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.sessionManagement(
-                sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
-        http.headers(
-                headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-        );
-        http.exceptionHandling(
-                configurer -> configurer
-                        .authenticationEntryPoint(authenticationEntryPoint())
-                        .accessDeniedHandler(accessDeniedHandler())
-        );
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain appChain(HttpSecurity http) {
+        return http.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).headers(
+                        headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                ).exceptionHandling(
+                        configurer -> configurer
+                                .authenticationEntryPoint(authenticationEntryPoint())
+                                .accessDeniedHandler(accessDeniedHandler())
+                ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
 
-        return http.build();
     }
 
     @Bean
     @Order(1)
-    public SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain actuatorChain(HttpSecurity http) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(actuatorUserDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder);
 
         AuthenticationManager localAuthManager = new ProviderManager(authProvider);
-        http.securityMatcher("/api/actuator","/api/actuator/**")
+        http.securityMatcher("/api/actuator", "/api/actuator/**")
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().hasRole("MONITORING"))
                 .httpBasic(Customizer.withDefaults())
@@ -80,7 +77,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/complaints")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class ComplaintController {
     private final ComplaintService complaintService;
