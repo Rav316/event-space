@@ -9,18 +9,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.dto.auth.JwtTokenData;
+import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.http.handler.ErrorResponseHandler;
 import ru.alex.eventspaceapi.service.JwtService;
 import ru.alex.eventspaceapi.service.UserService;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.GONE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 import static ru.alex.eventspaceapi.util.AuthUtils.getJwtFromAuthHeader;
 
 @Component
@@ -53,7 +52,16 @@ public class JwtFilter extends FilterBase {
 
             JwtTokenData tokenData = jwtService.validateAccessToken(jwt);
 
-            UserDetails userDetails = userService.loadById(tokenData.id());
+            UserDetailsDto userDetails = userService.loadById(tokenData.id());
+            if(!userDetails.active()) {
+                String reason = userDetails.blockingReason();
+                errorResponseHandler.writeErrorResponse(response, FORBIDDEN, reason != null ? reason : "Account is blocked");
+                return;
+            }
+
+            if(userDetails.passwordChangedAt() != null && tokenData.issuedAt().isBefore(userDetails.passwordChangedAt())) {
+                throw new JWTVerificationException("Token was issued before password change");
+            }
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,

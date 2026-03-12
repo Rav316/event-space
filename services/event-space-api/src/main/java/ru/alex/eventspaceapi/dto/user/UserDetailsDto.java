@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -13,7 +14,10 @@ public record UserDetailsDto(
         String lastName,
         String email,
         String password,
-        Role role
+        Role role,
+        boolean active,
+        String blockingReason,
+        Instant passwordChangedAt
 ) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

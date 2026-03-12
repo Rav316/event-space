@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Cacheable(value = "users", key = "#id")
-    public UserDetails loadById(Integer id) {
+    public UserDetailsDto loadById(Integer id) {
         return userRepository.findByIdWithFaculty(id)
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + id));

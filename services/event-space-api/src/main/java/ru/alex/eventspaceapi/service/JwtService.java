@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.alex.eventspaceapi.dto.auth.JwtTokenData;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -44,6 +46,7 @@ public class JwtService {
                 .withIssuedAt(new Date())
                 .withIssuer(issuer)
                 .withExpiresAt(expirationDate)
+                .withJWTId(UUID.randomUUID().toString())
                 .sign(Algorithm.HMAC256(accessTokenSecret));
     }
 
@@ -55,6 +58,7 @@ public class JwtService {
                 .withIssuedAt(new Date())
                 .withIssuer(issuer)
                 .withExpiresAt(expirationDate)
+                .withJWTId(UUID.randomUUID().toString())
                 .sign(Algorithm.HMAC256(refreshTokenSecret));
     }
 
@@ -76,9 +80,12 @@ public class JwtService {
 
         try {
             DecodedJWT jwt = verifier.verify(token);
+            Instant issuedAt = jwt.getIssuedAt().toInstant();
+
             return new JwtTokenData(
                     Integer.valueOf(jwt.getSubject()),
-                    jwt.getClaim("email").asString()
+                    jwt.getClaim("email").asString(),
+                    issuedAt
             );
         } catch (TokenExpiredException e) {
             throw e;

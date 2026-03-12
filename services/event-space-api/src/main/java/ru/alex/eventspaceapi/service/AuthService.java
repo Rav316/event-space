@@ -27,6 +27,8 @@ import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
 import ru.alex.eventspaceapi.mapper.user.UserRegisterMapper;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -84,7 +86,7 @@ public class AuthService {
 
 
     @Transactional
-    public void changePassword(UserPasswordChangeDto userPasswordChangeDto) {
+    public AuthResponse changePassword(UserPasswordChangeDto userPasswordChangeDto) {
         Integer id = Objects.requireNonNull(getAuthorizedUser()).id();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -98,7 +100,14 @@ public class AuthService {
         }
         String password = passwordEncoder.encode(userPasswordChangeDto.confirmPassword());
         user.setPassword(password);
+        user.setPasswordChangedAt(Instant.now());
         Objects.requireNonNull(cacheManager.getCache("users")).evict(user.getId());
+
+        return new AuthResponse(
+                userReadMapper.toDto(user),
+                jwtService.generateAccessToken(user.getId(), user.getEmail()),
+                jwtService.generateRefreshToken(user.getId(), user.getEmail())
+        );
     }
 
     @Transactional
@@ -125,6 +134,9 @@ public class AuthService {
         JwtTokenData tokenData = jwtService.validateRefreshToken(refreshTokenDto.refreshToken());
         User user = userRepository.findByIdWithFaculty(tokenData.id())
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + tokenData.id()));
+        if (user.getPasswordChangedAt() != null && tokenData.issuedAt().isBefore(user.getPasswordChangedAt().truncatedTo(ChronoUnit.SECONDS))) {
+            throw new ResponseStatusException(FORBIDDEN, "Refresh token was issued before password change");
+        }
         return new AuthResponse(
                 userReadMapper.toDto(user),
                 jwtService.generateAccessToken(user.getId(), user.getEmail()),

@@ -85,3 +85,7 @@ databaseChangeLog:
       file: db/changelog/db-insert-init-data-3.0.sql
   - include:
       file: db/changelog/db-update-complaint-table-1.0.sql
+  - include:
+      file: db/changelog/db-update-users-table-3.0.sql
+  - include:
+      file: db/changelog/db-update-users-table-3.1.sql

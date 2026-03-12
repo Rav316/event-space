@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
-import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
@@ -43,14 +42,6 @@ public class UserController {
             @RequestPart(value = "avatarRemoved", required = false) Boolean avatarRemoved
             ) {
         return new ResponseEntity<>(userService.update(id, userEditDto, avatar, avatarRemoved), OK);
-    }
-
-    @PatchMapping("/profile/change-password")
-    public ResponseEntity<Void> changePassword(
-            @Validated @RequestBody UserPasswordChangeDto userPasswordChangeDto
-    ) {
-        authService.changePassword(userPasswordChangeDto);
-        return new ResponseEntity<>(OK);
     }
 
     @PostMapping("/profile/delete")
