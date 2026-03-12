@@ -46,24 +46,6 @@ export const useCheckEmail = () => {
   });
 };
 
-export const useChangePassword = () => {
-  return useMutation({
-    mutationFn: Api.users.changePassword,
-    onSuccess: () => {
-      toast.success('Пароль успешно изменен');
-    },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 403) {
-          toast.error('Неверный текущий пароль');
-        } else {
-          toast.error('Произошла ошибка при изменении пароля');
-        }
-      }
-    },
-  });
-};
-
 export const useDeleteAccount = () => {
   const removeToken = useAuthStore((state) => state.removeTokens);
   const navigate = useNavigate();

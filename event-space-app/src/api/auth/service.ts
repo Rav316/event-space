@@ -1,8 +1,10 @@
-import type { AuthResponse } from '@/api/auth/model.ts';
+import type { AuthResponse, UserPasswordChangeDto } from '@/api/auth/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type { LoginData } from '@/schemas/form-login-schema.ts';
-import type { UserRegisterDto } from '@/api/users/model.ts';
+import type {
+  UserRegisterDto,
+} from '@/api/users/model.ts';
 
 export const register = async (
   registerData: UserRegisterDto,
@@ -33,6 +35,16 @@ export const refreshToken = async (
     `${ApiRoutes.AUTH}/refresh-token`,
     { refreshToken },
     { withCredentials: true },
+  );
+  return response.data;
+};
+
+export const changePassword = async (
+  data: UserPasswordChangeDto,
+): Promise<AuthResponse> => {
+  const response = await axiosInstance.patch<AuthResponse>(
+    `${ApiRoutes.AUTH}/profile/change-password`,
+    data,
   );
   return response.data;
 };

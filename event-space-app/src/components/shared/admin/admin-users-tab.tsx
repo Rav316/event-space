@@ -3,6 +3,11 @@ import {
   Badge,
   Button,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,6 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Textarea,
 } from '@/components/ui';
 import {
   ArrowDown,
@@ -315,6 +321,8 @@ export const AdminUsersTab = () => {
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [blockTarget, setBlockTarget] = useState<number[] | null>(null);
+  const [blockReason, setBlockReason] = useState('');
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -373,6 +381,17 @@ export const AdminUsersTab = () => {
     });
   };
 
+  const openBlockModal = (ids: number[]) => {
+    setBlockTarget(ids);
+    setBlockReason('');
+  };
+
+  const handleBlockConfirm = () => {
+    console.log('Block users:', blockTarget, 'Reason:', blockReason);
+    setBlockTarget(null);
+    setBlockReason('');
+  };
+
   return (
     <div className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}>
       <div className={'flex items-center justify-between'}>
@@ -387,6 +406,7 @@ export const AdminUsersTab = () => {
             variant="outline"
             size="sm"
             className={'text-red-600 border-red-200 hover:bg-red-50 gap-1'}
+            onClick={() => openBlockModal([...selected])}
           >
             <Ban className={'w-3 h-3'} />
             Заблокировать
@@ -501,7 +521,10 @@ export const AdminUsersTab = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     {user.status !== 'blocked' ? (
-                      <DropdownMenuItem className={'text-red-600 gap-2 cursor-pointer'}>
+                      <DropdownMenuItem
+                        className={'text-red-600 gap-2 cursor-pointer'}
+                        onClick={() => openBlockModal([user.id])}
+                      >
                         <Ban className={'w-4 h-4'} /> Заблокировать
                       </DropdownMenuItem>
                     ) : (
@@ -565,6 +588,44 @@ export const AdminUsersTab = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={blockTarget !== null} onOpenChange={(open) => !open && setBlockTarget(null)}>
+        <DialogContent className={'sm:max-w-md'}>
+          <DialogHeader>
+            <DialogTitle>Заблокировать пользователя{blockTarget && blockTarget.length > 1 ? 'й' : ''}</DialogTitle>
+          </DialogHeader>
+          <div className={'flex flex-col gap-2'}>
+            <span className={'text-sm text-muted-foreground'}>
+              {blockTarget && blockTarget.length > 1
+                ? `Будет заблокировано ${blockTarget.length} пользователей.`
+                : 'Укажите причину блокировки.'}
+            </span>
+            <Textarea
+              placeholder={'Причина блокировки...'}
+              value={blockReason}
+              onChange={(e) => setBlockReason(e.target.value)}
+              maxLength={128}
+              className={'resize-none min-h-20 max-h-40 overflow-y-auto break-all'}
+            />
+            <span className={`text-xs self-end ${blockReason.length >= 128 ? 'text-red-500' : 'text-muted-foreground'}`}>
+              {blockReason.length}/128
+            </span>
+          </div>
+          <DialogFooter>
+            <Button variant={'outline'} onClick={() => setBlockTarget(null)}>
+              Отмена
+            </Button>
+            <Button
+              variant={'destructive'}
+              onClick={handleBlockConfirm}
+              disabled={!blockReason.trim()}
+            >
+              <Ban className={'w-4 h-4 mr-1'} />
+              Заблокировать
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

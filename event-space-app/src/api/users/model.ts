@@ -51,12 +51,6 @@ export interface UserEditData {
   avatarRemoved: boolean;
 }
 
-export interface UserPasswordChangeDto {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 export interface UserAuthorDto {
   id: number;
   firstName: string;

@@ -73,3 +73,23 @@ export const useMe = () => {
     staleTime: Infinity,
   });
 };
+
+export const useChangePassword = () => {
+  const setTokens = useAuthStore((state) => state.setTokens);
+  return useMutation({
+    mutationFn: Api.auth.changePassword,
+    onSuccess: (data) => {
+      setTokens(data.accessToken, data.refreshToken);
+      toast.success('Пароль успешно изменен');
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
+          toast.error('Неверный текущий пароль');
+        } else {
+          toast.error('Произошла ошибка при изменении пароля');
+        }
+      }
+    },
+  });
+};

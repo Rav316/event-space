@@ -4,7 +4,6 @@ import type {
   TopOrganizerDto,
   UserDeleteDto,
   UserEditData,
-  UserPasswordChangeDto,
   UserReadDto,
 } from '@/api/users/model.ts';
 
@@ -43,15 +42,6 @@ export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
   );
 
   return response.data;
-};
-
-export const changePassword = async (
-  data: UserPasswordChangeDto,
-): Promise<void> => {
-  await axiosInstance.patch<void>(
-    `${ApiRoutes.USERS}/profile/change-password`,
-    data,
-  );
 };
 
 export const deleteAccount = async (data: UserDeleteDto): Promise<void> => {
