@@ -17,9 +17,9 @@ import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
-import ru.alex.eventspaceapi.dto.filter.UserFilter;
+import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
-import ru.alex.eventspaceapi.dto.user.UserListDto;
+import ru.alex.eventspaceapi.dto.user.UserAdminListDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
     private final UserListMapper userListMapper;
 
 
-    public Page<UserListDto> findAll(UserFilter filter, Sort sort) {
+    public Page<UserAdminListDto> findAll(AdminListFilter filter, Sort sort) {
         return userRepository.findAll(filter, sort)
                 .map(userListMapper::toDto);
     }

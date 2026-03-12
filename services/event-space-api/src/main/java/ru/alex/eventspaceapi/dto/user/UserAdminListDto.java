@@ -2,7 +2,7 @@ package ru.alex.eventspaceapi.dto.user;
 
 import ru.alex.eventspaceapi.dto.faculty.FacultyListDto;
 
-public record UserListDto(
+public record UserAdminListDto(
         Integer id,
         String firstName,
         String lastName,

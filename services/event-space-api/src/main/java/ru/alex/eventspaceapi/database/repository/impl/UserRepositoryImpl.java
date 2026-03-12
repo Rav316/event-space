@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.UserRepositoryCustom;
-import ru.alex.eventspaceapi.dto.filter.UserFilter;
+import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
 import ru.alex.eventspaceapi.mapper.user.TopOrganizerRowMapper;
 import ru.alex.eventspaceapi.util.PageUtils;
@@ -53,7 +53,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public Page<User> findAll(UserFilter filter, Sort sort) {
+    public Page<User> findAll(AdminListFilter filter, Sort sort) {
         int page = filter.page() != null && filter.page() > 0 ? filter.page() : 0;
         int requestedSize = filter.size() != null && filter.size() > 0 ? filter.size() : 15;
         int pageSize = PageUtils.getNearestPageSize(requestedSize);
@@ -107,7 +107,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return jdbcTemplate.query(sql, Collections.emptyMap(), topOrganizerRowMapper);
     }
 
-    private BooleanExpression buildPredicate(UserFilter filter) {
+    private BooleanExpression buildPredicate(AdminListFilter filter) {
         BooleanExpression predicate = Expressions.TRUE.isTrue();
 
         if (filter.search() != null && !filter.search().isBlank()) {

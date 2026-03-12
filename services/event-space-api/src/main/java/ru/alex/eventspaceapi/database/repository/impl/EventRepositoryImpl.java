@@ -3,6 +3,7 @@ package ru.alex.eventspaceapi.database.repository.impl;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.repository.EventRepositoryCustom;
 import ru.alex.eventspaceapi.dto.event.EventCalendarDto;
 import ru.alex.eventspaceapi.dto.event.EventListDto;
+import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.filter.EventFilter;
 import ru.alex.eventspaceapi.dto.filter.EventMyFilter;
 import ru.alex.eventspaceapi.dto.filter.EventPreviewFilter;
@@ -29,6 +32,8 @@ import ru.alex.eventspaceapi.dto.statistics.EventAuthorStatisticsDto;
 import ru.alex.eventspaceapi.mapper.event.EventCalendarRowMapper;
 import ru.alex.eventspaceapi.mapper.event.EventListRowMapper;
 import ru.alex.eventspaceapi.mapper.event.EventMyStatisticsMapper;
+import ru.alex.eventspaceapi.util.PageUtils;
+import ru.alex.eventspaceapi.util.QueryDslUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -56,6 +61,25 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     private final EventCalendarRowMapper eventCalendarRowMapper;
 
     private static final int PAGE_SIZE = 9;
+
+    // 0 = UPCOMING, 1 = ONGOING, 2 = PAST — mirrors EventStatus ordinal order
+    private static final ComparableExpressionBase<?> STATUS_ORDER_EXPR = Expressions.numberTemplate(
+            Integer.class,
+            "CASE " +
+            "WHEN {0} > current_date OR ({0} = current_date AND {1} > current_time) THEN 0 " +
+            "WHEN {0} = current_date AND {1} <= current_time AND {2} >= current_time THEN 1 " +
+            "ELSE 2 END",
+            event.eventDate, event.startTime, event.endTime
+    );
+
+    private static final Map<String, ComparableExpressionBase<?>> EVENT_SORT_BINDINGS = Map.of(
+            "id", event.id,
+            "name", event.name,
+            "date", event.eventDate,
+            "author", Expressions.stringTemplate("concat({0}, ' ', {1})", user.firstName, user.lastName),
+            "category", eventCategory.name,
+            "status", STATUS_ORDER_EXPR
+    );
 
     @Override
     public Page<Event> findAllEventsByFilter(Integer userId, EventFilter filter) {
@@ -132,6 +156,68 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         );
     }
 
+    @Override
+    public Page<Event> findAllEventsByFilter(AdminListFilter filter, Sort sort) {
+        int page = filter.page() != null && filter.page() > 0 ? filter.page() : 0;
+        int requestedSize = filter.size() != null && filter.size() > 0 ? filter.size() : 15;
+        int pageSize = PageUtils.getNearestPageSize(requestedSize);
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        BooleanExpression predicate = buildAdminPredicate(filter);
+        OrderSpecifier<?>[] sortOrder = QueryDslUtils.toOrderSpecifiers(sort, EVENT_SORT_BINDINGS, event.id.desc());
+
+        JPQLSubQuery<Long> registeredUsersCount =
+                JPAExpressions
+                        .select(eventUser.id.count())
+                        .from(eventUser)
+                        .where(eventUser.event.eq(event));
+
+        List<Tuple> rows = queryFactory
+                .select(event, registeredUsersCount)
+                .from(event)
+                .leftJoin(event.category, eventCategory).fetchJoin()
+                .leftJoin(event.space, space).fetchJoin()
+                .leftJoin(space.building, building).fetchJoin()
+                .leftJoin(event.author, user).fetchJoin()
+                .where(predicate)
+                .orderBy(sortOrder)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
+
+        List<Event> events = rows.stream()
+                .map(t -> {
+                    Event e = t.get(event);
+                    Long count = t.get(registeredUsersCount);
+                    if (e != null) {
+                        e.setRegisteredUsers(count != null ? count : 0L);
+                    }
+                    return e;
+                })
+                .toList();
+
+        Long total = queryFactory
+                .select(event.count())
+                .from(event)
+                .leftJoin(event.author, user)
+                .leftJoin(event.category, eventCategory)
+                .where(predicate)
+                .fetchOne();
+
+        return new PageImpl<>(events, pageable, total != null ? total : 0);
+    }
+
+    private BooleanExpression buildAdminPredicate(AdminListFilter filter) {
+        BooleanExpression predicate = Expressions.TRUE.isTrue();
+        if (filter.search() != null && !filter.search().isBlank()) {
+            BooleanExpression byName = event.name.containsIgnoreCase(filter.search());
+            BooleanExpression byAuthor = user.firstName.concat(" ").concat(user.lastName)
+                    .containsIgnoreCase(filter.search());
+            BooleanExpression byCategory = eventCategory.name.containsIgnoreCase(filter.search());
+            predicate = predicate.and(byName.or(byAuthor).or(byCategory));
+        }
+        return predicate;
+    }
 
 
     @Override
