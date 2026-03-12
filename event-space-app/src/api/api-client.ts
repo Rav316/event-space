@@ -8,6 +8,7 @@ import * as spaces from '@/api/spaces/service';
 import * as buildings from '@/api/buildings/service';
 import * as statistics from '@/api/statistics/service';
 import * as complaints from '@/api/complaint/service';
+import * as admin from '@/api/admin/service';
 
 export const Api = {
   auth,
@@ -19,5 +20,6 @@ export const Api = {
   spaces,
   buildings,
   statistics,
-  complaints
+  complaints,
+  admin
 };

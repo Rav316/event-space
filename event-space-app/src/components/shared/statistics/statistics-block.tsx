@@ -9,8 +9,10 @@ interface Props {
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
   value: number | string;
-  delta: number;
+  delta?: number;
   isPercent?: boolean;
+  deltaLabel?: string;
+  subtitle?: string;
   className?: string;
 }
 
@@ -20,11 +22,13 @@ export const StatisticsBlock: React.FC<Props> = ({
   value,
   delta,
   isPercent = false,
+  deltaLabel = 'к прошлому месяцу',
+  subtitle,
   className,
 }) => {
-  const isNegative = delta < 0;
-  const isZero = delta === 0;
-  const displayDelta = Math.abs(delta);
+  const isNegative = (delta ?? 0) < 0;
+  const isZero = (delta ?? 0) === 0;
+  const displayDelta = Math.abs(delta ?? 0);
 
   const percentColor = isZero
     ? 'text-gray-500'
@@ -60,13 +64,17 @@ export const StatisticsBlock: React.FC<Props> = ({
           })()
         )}
       </h3>
-      <span className="text-muted-foreground">
-        <span className={percentColor}>
-          {sign}
-          {!isPercent ? `${displayDelta}` : `${displayDelta * 100}%`}
-        </span>{' '}
-        к прошлому месяцу
-      </span>
+      {subtitle !== undefined ? (
+        <span className="text-muted-foreground">{subtitle}</span>
+      ) : delta !== undefined ? (
+        <span className="text-muted-foreground">
+          <span className={percentColor}>
+            {sign}
+            {!isPercent ? `${displayDelta}` : `${displayDelta * 100}%`}
+          </span>{' '}
+          {deltaLabel}
+        </span>
+      ) : null}
     </div>
   );
 };

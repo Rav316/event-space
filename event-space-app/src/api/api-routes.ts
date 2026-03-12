@@ -10,4 +10,5 @@ export const ApiRoutes = {
   SPACE_TYPES: '/space-types',
   STATISTICS: '/statistics',
   COMPLAINTS: '/complaints',
+  ADMIN: '/admin'
 };

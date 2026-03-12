@@ -80,7 +80,7 @@ export const ComplaintDialog: React.FC<Props> = ({
     <Dialog
       open={open}
       onOpenChange={(v) => {
-        if (!v) handleClose();
+        if (!v && !complaintCreateMutation.isPending) handleClose();
       }}
     >
       <DialogContent className={'sm:max-w-lg'}>
@@ -166,7 +166,12 @@ export const ComplaintDialog: React.FC<Props> = ({
           </div>
 
           <div className={'flex justify-end gap-2 pt-5'}>
-            <Button type="button" variant={'outline'} onClick={handleClose}>
+            <Button
+              type="button"
+              variant={'outline'}
+              onClick={handleClose}
+              disabled={complaintCreateMutation.isPending}
+            >
               Отмена
             </Button>
             <Button type="submit">
