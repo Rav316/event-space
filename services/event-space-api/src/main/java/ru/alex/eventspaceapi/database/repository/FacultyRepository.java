@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.Faculty;
 
 @Repository
-public interface FacultyRepository extends JpaRepository<Faculty, Integer> {
+public interface FacultyRepository extends JpaRepository<Faculty, Integer>, FacultyRepositoryCustom {
 }

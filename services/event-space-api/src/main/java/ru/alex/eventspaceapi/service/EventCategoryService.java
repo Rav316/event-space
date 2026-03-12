@@ -1,12 +1,14 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryCountDto;
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
+import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryCountMapper;
 import ru.alex.eventspaceapi.mapper.eventCategory.EventCategoryReadMapper;
 
@@ -25,6 +27,11 @@ public class EventCategoryService {
                 .stream()
                 .map(eventCategoryReadMapper::toDto)
                 .toList();
+    }
+
+    public Page<EventCategoryReadDto> findAllByFilter(AdminListFilter filter, Sort sort) {
+        return eventCategoryRepository.findAllByFilter(filter, sort)
+                .map(eventCategoryReadMapper::toDto);
     }
 
     public List<EventCategoryCountDto> findAllCategoriesWithEventCount() {

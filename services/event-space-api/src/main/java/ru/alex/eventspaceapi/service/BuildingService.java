@@ -1,11 +1,13 @@
 package ru.alex.eventspaceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.eventspaceapi.database.repository.BuildingRepository;
 import ru.alex.eventspaceapi.dto.building.BuildingReadDto;
+import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.mapper.building.BuildingReadMapper;
 
 import java.util.List;
@@ -22,5 +24,10 @@ public class BuildingService {
                 .stream()
                 .map(buildingReadMapper::toDto)
                 .toList();
+    }
+
+    public Page<BuildingReadDto> findAllByFilter(AdminListFilter filter, Sort sort) {
+        return buildingRepository.findAllByFilter(filter, sort)
+                .map(buildingReadMapper::toDto);
     }
 }
