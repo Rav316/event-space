@@ -33,7 +33,8 @@ import {
   CheckCircle,
   Settings,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import { useUsersByFilter } from '@/api/admin/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
@@ -54,13 +55,19 @@ export const AdminUsersTab = () => {
   const [pageSize, setPageSize] = useState(15);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 300);
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [blockTarget, setBlockTarget] = useState<number[] | null>(null);
   const [blockReason, setBlockReason] = useState('');
 
+  useEffect(() => {
+    setPage(0);
+    setSelected(new Set());
+  }, [debouncedSearch]);
+
   const sort = sortKey ? `${sortColToParam[sortKey]},${sortDir}` : undefined;
-  const { data, isLoading } = useUsersByFilter({ page, size: pageSize, search: search.trim() || undefined }, sort);
+  const { data, isLoading } = useUsersByFilter({ page, size: pageSize, search: debouncedSearch.trim() || undefined }, sort);
 
   const users = data?.content ?? [];
   const totalElements = data?.metadata.totalElements ?? 0;
@@ -141,14 +148,19 @@ export const AdminUsersTab = () => {
 
       <SearchInput
         value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(0);
-        }}
+        onChange={(e) => setSearch(e.target.value)}
         placeholder="Поиск по имени или email..."
       />
 
-      <Table>
+      <Table className={'table-fixed w-full'}>
+        <colgroup>
+          <col className={'w-[40px]'} />
+          <col className={'w-[35%]'} />
+          <col className={'w-[15%]'} />
+          <col className={'w-[25%]'} />
+          <col className={'w-[13%]'} />
+          <col className={'w-[7%]'} />
+        </colgroup>
         <TableHeader>
           <TableRow>
             <TableHead className={'w-10'}>

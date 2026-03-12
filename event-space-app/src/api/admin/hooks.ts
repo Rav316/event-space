@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { ADMIN_KEYS } from '@/api/admin/keys.ts';
 import { Api } from '@/api/api-client.ts';
-import type { UserFilter } from '@/api/users/model.ts';
+import type { AdminListFilter } from '@/api/admin/model.ts';
 
 export const useAdminStatistics = () => {
   return useQuery({
@@ -10,9 +10,16 @@ export const useAdminStatistics = () => {
   });
 }
 
-export const useUsersByFilter = (filter: UserFilter, sort?: string) => {
+export const useUsersByFilter = (filter: AdminListFilter, sort?: string) => {
   return useQuery({
     queryKey: [ADMIN_KEYS.USERS, filter, sort],
     queryFn: () => Api.admin.findAllUsers(filter, sort),
+  });
+}
+
+export const useEventsByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.EVENTS, filter, sort],
+    queryFn: () => Api.admin.findAllEvents(filter, sort),
   });
 }

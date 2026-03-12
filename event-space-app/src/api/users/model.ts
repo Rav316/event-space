@@ -75,7 +75,7 @@ export interface TopOrganizerDto {
   eventsCount: number;
 }
 
-export interface UserListDto {
+export interface UserAdminListDto {
   id: number;
   firstName: string;
   lastName: string;
@@ -84,10 +84,4 @@ export interface UserListDto {
   course: number;
   faculty: FacultyListDto;
   active: boolean;
-}
-
-export interface UserFilter {
-  page: number;
-  size: number;
-  search?: string;
 }

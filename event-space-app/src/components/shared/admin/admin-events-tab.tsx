@@ -23,161 +23,25 @@ import {
   ArrowUp,
   ArrowUpDown,
   Ban,
-  CheckCircle,
   Settings,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import { useEventsByFilter } from '@/api/admin/hooks.ts';
+import { categoryColors } from '@/constants/category-colors.ts';
+import { eventStatuses } from '@/constants/event-statuses.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
-const mockEvents = [
-  {
-    id: 1,
-    title: 'Хакатон AI Challenge 2024',
-    organizer: 'Проф. Иванов А.С.',
-    category: 'IT-секции',
-    date: '2024-02-25',
-    participants: 156,
-    maxParticipants: 200,
-    status: 'active',
-  },
-  {
-    id: 2,
-    title: 'Концерт студенческого хора',
-    organizer: 'Анна Петрова',
-    category: 'Культурные',
-    date: '2024-02-28',
-    participants: 45,
-    maxParticipants: 100,
-    status: 'active',
-  },
-  {
-    id: 3,
-    title: 'Мастер-класс по веб-дизайну',
-    organizer: 'Мария Сидорова',
-    category: 'Мастер-классы',
-    date: '2024-03-05',
-    participants: 30,
-    maxParticipants: 50,
-    status: 'active',
-  },
-  {
-    id: 4,
-    title: 'Спортивный турнир по футболу',
-    organizer: 'Дмитрий Козлов',
-    category: 'Спортивные',
-    date: '2024-03-12',
-    participants: 0,
-    maxParticipants: 22,
-    status: 'draft',
-  },
-  {
-    id: 5,
-    title: 'Научная конференция "Будущее технологий"',
-    organizer: 'Проф. Смирнова Е.В.',
-    category: 'Научные',
-    date: '2024-01-20',
-    participants: 120,
-    maxParticipants: 150,
-    status: 'completed',
-  },
-  {
-    id: 6,
-    title: 'Вечеринка "Welcome Students"',
-    organizer: 'Иван Петров',
-    category: 'Культурные',
-    date: '2024-02-15',
-    participants: 85,
-    maxParticipants: 100,
-    status: 'cancelled',
-  },
-  {
-    id: 7,
-    title: 'Олимпиада по математике',
-    organizer: 'Проф. Белова Т.И.',
-    category: 'Научные',
-    date: '2024-03-20',
-    participants: 60,
-    maxParticipants: 80,
-    status: 'active',
-  },
-  {
-    id: 8,
-    title: 'Фотовыставка "Наш кампус"',
-    organizer: 'Екатерина Новикова',
-    category: 'Культурные',
-    date: '2024-03-18',
-    participants: 0,
-    maxParticipants: 300,
-    status: 'draft',
-  },
-  {
-    id: 9,
-    title: 'Лекция по кибербезопасности',
-    organizer: 'Алексей Громов',
-    category: 'IT-секции',
-    date: '2024-02-10',
-    participants: 95,
-    maxParticipants: 100,
-    status: 'completed',
-  },
-  {
-    id: 10,
-    title: 'Турнир по настольному теннису',
-    organizer: 'Сергей Волков',
-    category: 'Спортивные',
-    date: '2024-03-25',
-    participants: 16,
-    maxParticipants: 32,
-    status: 'active',
-  },
-  {
-    id: 11,
-    title: 'Воркшоп по UX/UI дизайну',
-    organizer: 'Ольга Тихонова',
-    category: 'Мастер-классы',
-    date: '2024-04-02',
-    participants: 0,
-    maxParticipants: 25,
-    status: 'draft',
-  },
-  {
-    id: 12,
-    title: 'День открытых дверей факультета ИТ',
-    organizer: 'Проф. Захаров М.В.',
-    category: 'Научные',
-    date: '2024-03-30',
-    participants: 200,
-    maxParticipants: 500,
-    status: 'active',
-  },
-];
+type SortCol = 'title' | 'category' | 'date' | 'participants';
 
-const statusOrder = { active: 0, draft: 1, completed: 2, cancelled: 3 };
-
-type SortCol = 'title' | 'category' | 'date' | 'participants' | 'status';
-
-function sortEvents(events: typeof mockEvents, key: SortCol, dir: 'asc' | 'desc') {
-  return [...events].sort((a, b) => {
-    let cmp = 0;
-    if (key === 'title') cmp = a.title.localeCompare(b.title, 'ru');
-    else if (key === 'category') cmp = a.category.localeCompare(b.category, 'ru');
-    else if (key === 'date') cmp = a.date.localeCompare(b.date);
-    else if (key === 'participants') cmp = a.participants - b.participants;
-    else if (key === 'status')
-      cmp =
-        statusOrder[a.status as keyof typeof statusOrder] -
-        statusOrder[b.status as keyof typeof statusOrder];
-    return dir === 'asc' ? cmp : -cmp;
-  });
-}
-
-const statusConfig = {
-  active: { label: 'Активен', className: 'bg-green-100 text-green-700 border-green-200' },
-  draft: { label: 'Черновик', className: 'bg-gray-100 text-gray-700 border-gray-200' },
-  completed: { label: 'Завершено', className: 'bg-blue-100 text-blue-700 border-blue-200' },
-  cancelled: { label: 'Отменено', className: 'bg-red-600 text-white border-red-600' },
+const sortColToParam: Record<SortCol, string> = {
+  title: 'name',
+  category: 'category',
+  date: 'date',
+  participants: 'registeredUsers',
 };
+
 
 function ParticipantsBar({ current, max }: { current: number; max: number }) {
   const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
@@ -195,8 +59,23 @@ export const AdminEventsTab = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 300);
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+
+  useEffect(() => {
+    setPage(0);
+  }, [debouncedSearch]);
+
+  const sort = sortKey ? `${sortColToParam[sortKey]},${sortDir}` : undefined;
+  const { data, isLoading } = useEventsByFilter(
+    { page, size: pageSize, search: debouncedSearch.trim() || undefined },
+    sort,
+  );
+
+  const events = data?.content ?? [];
+  const totalElements = data?.metadata.totalElements ?? 0;
+  const totalPages = data ? Math.ceil(totalElements / pageSize) : 0;
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -216,21 +95,6 @@ export const AdminEventsTab = () => {
     );
   };
 
-  const filtered = search.trim()
-    ? mockEvents.filter((e) => {
-        const q = search.toLowerCase();
-        return (
-          e.title.toLowerCase().includes(q) ||
-          e.organizer.toLowerCase().includes(q) ||
-          e.category.toLowerCase().includes(q)
-        );
-      })
-    : mockEvents;
-
-  const filteredEvents = sortKey ? sortEvents(filtered, sortKey, sortDir) : filtered;
-  const totalPages = Math.ceil(filteredEvents.length / pageSize);
-  const pageEvents = filteredEvents.slice(page * pageSize, (page + 1) * pageSize);
-
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString('ru-RU', {
       day: 'numeric',
@@ -239,100 +103,132 @@ export const AdminEventsTab = () => {
     });
 
   return (
-    <div className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}>
+    <div
+      className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}
+    >
       <div className={'flex items-center justify-between min-h-8'}>
         <span className={'font-medium text-lg'}>Управление мероприятиями</span>
       </div>
 
       <SearchInput
         value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(0);
-        }}
+        onChange={(e) => setSearch(e.target.value)}
         placeholder="Поиск по названию, организатору или категории..."
       />
 
-      <Table>
+      <Table className={'table-fixed w-full'}>
+        <colgroup>
+          <col className={'w-[35%]'} />
+          <col className={'w-[15%]'} />
+          <col className={'w-[15%]'} />
+          <col className={'w-[18%]'} />
+          <col className={'w-[10%]'} />
+          <col className={'w-[7%]'} />
+        </colgroup>
         <TableHeader>
           <TableRow>
-            {(['title', 'category', 'date', 'participants', 'status'] as const).map((col) => (
-              <TableHead
-                key={col}
-                className={'cursor-pointer select-none'}
-                onClick={() => handleSort(col)}
-              >
-                <div className={'flex items-center gap-1'}>
-                  {
+            {(['title', 'category', 'date', 'participants'] as const).map(
+              (col) => (
+                <TableHead
+                  key={col}
+                  className={'cursor-pointer select-none'}
+                  onClick={() => handleSort(col)}
+                >
+                  <div className={'flex items-center gap-1'}>
                     {
-                      title: 'Мероприятие',
-                      category: 'Категория',
-                      date: 'Дата',
-                      participants: 'Участники',
-                      status: 'Статус',
-                    }[col]
-                  }
-                  <SortIcon col={col} />
-                </div>
-              </TableHead>
-            ))}
+                      {
+                        title: 'Мероприятие',
+                        category: 'Категория',
+                        date: 'Дата',
+                        participants: 'Участники',
+                      }[col]
+                    }
+                    <SortIcon col={col} />
+                  </div>
+                </TableHead>
+              ),
+            )}
+            <TableHead>Статус</TableHead>
             <TableHead className={'text-right'}>Действия</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pageEvents.map((event) => {
-            const sc = statusConfig[event.status as keyof typeof statusConfig];
-            return (
-              <TableRow key={event.id}>
-                <TableCell>
-                  <div className={'flex flex-col'}>
-                    <span className={'font-medium'}>{event.title}</span>
-                    <span className={'text-xs text-muted-foreground'}>{event.organizer}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline">{event.category}</Badge>
-                </TableCell>
-                <TableCell className={'whitespace-nowrap'}>{formatDate(event.date)}</TableCell>
-                <TableCell>
-                  <ParticipantsBar current={event.participants} max={event.maxParticipants} />
-                </TableCell>
-                <TableCell>
-                  <Badge className={sc.className}>{sc.label}</Badge>
-                </TableCell>
-                <TableCell className={'text-right'}>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className={'h-8 w-8'}>
-                        <Settings className={'w-4 h-4 text-muted-foreground'} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {event.status !== 'cancelled' ? (
-                        <DropdownMenuItem className={'text-red-600 gap-2 cursor-pointer'}>
+          {isLoading
+            ? Array.from({ length: pageSize }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell colSpan={6}>
+                    <div className={'h-8 bg-muted animate-pulse rounded'} />
+                  </TableCell>
+                </TableRow>
+              ))
+            : events.map((event) => (
+                <TableRow key={event.id}>
+                  <TableCell>
+                    <div className={'flex flex-col'}>
+                      <span className={'font-medium'}>{event.name}</span>
+                      <span className={'text-xs text-muted-foreground'}>
+                        {event.author}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={categoryColors[event.category.id - 1]}
+                    >
+                      {event.category.name}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className={'whitespace-nowrap'}>
+                    {formatDate(event.eventDate)}
+                  </TableCell>
+                  <TableCell>
+                    <ParticipantsBar
+                      current={event.registeredUsers}
+                      max={event.participantQuantity}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={eventStatuses[event.status]?.className}>
+                      {eventStatuses[event.status]?.label}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className={'text-right'}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={'h-8 w-8'}
+                        >
+                          <Settings
+                            className={'w-4 h-4 text-muted-foreground'}
+                          />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className={'text-red-600 gap-2 cursor-pointer'}
+                        >
                           <Ban className={'w-4 h-4'} /> Отменить
                         </DropdownMenuItem>
-                      ) : (
-                        <DropdownMenuItem className={'text-green-600 gap-2 cursor-pointer'}>
-                          <CheckCircle className={'w-4 h-4'} /> Восстановить
-                        </DropdownMenuItem>
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
 
       <div className={'flex items-center justify-between'}>
         <span className={'text-sm text-muted-foreground'}>
-          {filteredEvents.length} мероприятий
+          {totalElements} мероприятий
         </span>
         <div className={'flex items-center gap-3'}>
           <div className={'flex items-center gap-2'}>
-            <span className={'text-sm text-muted-foreground'}>Строк на странице</span>
+            <span className={'text-sm text-muted-foreground'}>
+              Строк на странице
+            </span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => {

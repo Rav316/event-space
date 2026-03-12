@@ -1,3 +1,22 @@
+import type { EventCategory } from '@/api/event-categories/model.ts';
+
+export interface EventAdminListDto {
+  id: number;
+  name: string;
+  author: string;
+  category: EventCategory;
+  eventDate: string;
+  registeredUsers: number;
+  participantQuantity: number;
+  status: number;
+}
+
+export interface AdminListFilter {
+  page: number;
+  size: number;
+  search?: string;
+}
+
 export interface AdminStatisticsDto {
   totalUsers: number;
   activeUsers: number;
