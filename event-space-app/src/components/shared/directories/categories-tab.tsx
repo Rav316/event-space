@@ -43,8 +43,8 @@ export const CategoriesTab = () => {
   const { data } = useCategoriesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
 
   const rows = data?.content ?? [];
-  const totalElements = data?.totalElements ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const totalElements = data?.metadata.totalElements ?? 0;
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   const handleSort = () => {
     setSortDir((d) => (d === 'asc' ? 'desc' : d === 'desc' ? null : 'asc'));

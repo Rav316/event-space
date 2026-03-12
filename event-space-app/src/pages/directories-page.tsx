@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { AnimatedTabs } from '@/components/shared';
 import { directoriesTabs } from '@/constants/directories-tabs.ts';
-import { LocationTab, SpacesTab, CategoriesTab, FacultiesTab } from '@/components/shared/directories';
+import { BuildingTab, SpacesTab, CategoriesTab, FacultiesTab } from '@/components/shared/directories';
 
 const DirectoriesPage = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const DirectoriesPage = () => {
   const renderTabContent = () => {
     switch (activeIndex) {
       case 0:
-        return <LocationTab/>;
+        return <BuildingTab/>;
       case 1:
         return <SpacesTab />;
       case 2:

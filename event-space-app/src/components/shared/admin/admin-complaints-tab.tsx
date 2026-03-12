@@ -166,8 +166,8 @@ export const AdminComplaintsTab = () => {
   const { data } = useComplaintsByFilter({ page, size: pageSize, search: debouncedSearch || undefined }, sort);
 
   const complaints = data?.content ?? [];
-  const totalPages = data?.totalPages ?? 0;
-  const totalElements = data?.totalElements ?? 0;
+  const totalElements = data?.metadata.totalElements ?? 0;
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));

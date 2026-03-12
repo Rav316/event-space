@@ -22,7 +22,7 @@ const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
 type SortCol = 'name' | 'address';
 
-export const LocationTab = () => {
+export const BuildingTab = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 300);
   const [page, setPage] = useState(0);
@@ -38,8 +38,8 @@ export const LocationTab = () => {
   const { data } = useBuildingsByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
 
   const rows = data?.content ?? [];
-  const totalElements = data?.totalElements ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const totalElements = data?.metadata.totalElements ?? 0;
+  const totalPages = data?.metadata.totalElements ?? 0;
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -105,10 +105,10 @@ export const LocationTab = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((loc) => (
-            <TableRow key={loc.id}>
-              <TableCell className={'font-medium'}>{loc.name}</TableCell>
-              <TableCell>{loc.address}</TableCell>
+          {rows.map((building) => (
+            <TableRow key={building.id}>
+              <TableCell className={'font-medium'}>{building.name}</TableCell>
+              <TableCell>{building.address}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
                   <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>

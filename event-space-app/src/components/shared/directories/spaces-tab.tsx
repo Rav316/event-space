@@ -46,8 +46,8 @@ export const SpacesTab = () => {
   const { data } = useSpacesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
 
   const rows = data?.content ?? [];
-  const totalElements = data?.totalElements ?? 0;
-  const totalPages = data?.totalPages ?? 0;
+  const totalElements = data?.metadata.totalElements ?? 0;
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
