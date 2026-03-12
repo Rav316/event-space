@@ -1,3 +1,4 @@
 export const ADMIN_KEYS = {
-  STATISTICS: 'statistics'
+  STATISTICS: 'statistics',
+  USERS: 'users'
 }

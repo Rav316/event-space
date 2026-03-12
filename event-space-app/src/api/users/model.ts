@@ -74,3 +74,20 @@ export interface TopOrganizerDto {
   avatarUrl: string;
   eventsCount: number;
 }
+
+export interface UserListDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: number;
+  course: number;
+  faculty: FacultyListDto;
+  active: boolean;
+}
+
+export interface UserFilter {
+  page: number;
+  size: number;
+  search?: string;
+}
