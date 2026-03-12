@@ -24,3 +24,4 @@ export * from './command';
 export { Calendar } from './calendar';
 export { PageLoader } from './page-loader';
 export { AnimatedNumber } from './animated-number';
+export * from './table';

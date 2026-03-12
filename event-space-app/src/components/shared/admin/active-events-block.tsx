@@ -1,4 +1,4 @@
-import { Progress } from '@/components/ui';
+import { Progress, Separator } from '@/components/ui';
 
 export const ActiveEventsBlock = () => {
   const events = [
@@ -32,18 +32,21 @@ export const ActiveEventsBlock = () => {
       }
     >
       <span className={'font-medium'}>Активные мероприятия</span>
-      <div className={'flex flex-col flex-1 gap-2'}>
+      <div className={'flex flex-col flex-1'}>
         {events.map((event, index) => (
-          <div className={'flex justify-between items-center'} key={index}>
-            <div className={'flex flex-col'}>
-              <span>{event.title}</span>
-              <span className={'text-muted-foreground text-xs'}>
-                {event.eventDate} · {event.author}
-              </span>
-            </div>
-            <div className={'flex flex-col'}>
-              {event.registeredUsers} / {event.participantQuantity}
-              <Progress value={Math.max(0, (event.registeredUsers / event.participantQuantity) * 100)} className={'h-1'} />
+          <div key={index} className={'flex flex-col'}>
+            {index > 0 && <Separator />}
+            <div className={'flex justify-between items-center py-2'}>
+              <div className={'flex flex-col'}>
+                <span>{event.title}</span>
+                <span className={'text-muted-foreground text-xs'}>
+                  {event.eventDate} · {event.author}
+                </span>
+              </div>
+              <div className={'flex flex-col'}>
+                {event.registeredUsers} / {event.participantQuantity}
+                <Progress value={Math.max(0, (event.registeredUsers / event.participantQuantity) * 100)} className={'h-1'} />
+              </div>
             </div>
           </div>
         ))}

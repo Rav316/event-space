@@ -4,7 +4,7 @@ import { Loader } from 'lucide-react';
 import { AnimatedTabs } from '@/components/shared';
 import { adminTabs } from '@/constants/admin-tabs.tsx';
 import { useState } from 'react';
-import { AdminReviewTab } from '@/components/shared/admin';
+import { AdminComplaintsTab, AdminEventsTab, AdminReviewTab, AdminUsersTab } from '@/components/shared/admin';
 
 const AdminPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -19,11 +19,11 @@ const AdminPage = () => {
       case 0:
         return <AdminReviewTab />;
       case 1:
-        return <div>Users tab</div>;
+        return <AdminUsersTab />;
       case 2:
-        return <div>Events tab</div>;
+        return <AdminEventsTab />;
       case 3:
-        return <div>Complaints tab</div>;
+        return <AdminComplaintsTab />;
     }
   };
 
