@@ -12,7 +12,7 @@ import {
 import { useSpaceFilterStore } from '@/store/use-space-filter-store.ts';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useSpaceTypes } from '@/api/space-types/hooks.ts';
+import { useSpaceTypes } from '@/api/spaces/hooks.ts';
 
 export const SpaceFilters = () => {
   const spaceFilter = useSpaceFilterStore((state) => state.filter);

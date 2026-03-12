@@ -23,3 +23,8 @@ export interface Space {
   capacity: number;
   building: Building;
 }
+
+export interface SpaceType {
+  id: number;
+  name: string;
+}

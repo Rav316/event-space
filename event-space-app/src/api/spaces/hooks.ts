@@ -11,3 +11,11 @@ export const useSpaces = (filter: SpaceFilter) => {
     staleTime: Infinity,
   });
 };
+
+export const useSpaceTypes = () => {
+  return useQuery({
+    queryFn: Api.spaces.findAllSpaceTypes,
+    queryKey: SPACES_KEYS.spaceTypes,
+    staleTime: Infinity,
+  });
+};

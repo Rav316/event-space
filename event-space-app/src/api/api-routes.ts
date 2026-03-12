@@ -9,4 +9,5 @@ export const ApiRoutes = {
   BUILDINGS: '/buildings',
   SPACE_TYPES: '/space-types',
   STATISTICS: '/statistics',
+  COMPLAINTS: '/complaints',
 };

@@ -6,8 +6,8 @@ import * as eventCategories from '@/api/event-categories/service';
 import * as eventReviews from '@/api/event-reviews/service';
 import * as spaces from '@/api/spaces/service';
 import * as buildings from '@/api/buildings/service';
-import * as spaceTypes from '@/api/space-types/service';
 import * as statistics from '@/api/statistics/service';
+import * as complaints from '@/api/complaint/service';
 
 export const Api = {
   auth,
@@ -18,6 +18,6 @@ export const Api = {
   eventReviews,
   spaces,
   buildings,
-  spaceTypes,
   statistics,
+  complaints
 };

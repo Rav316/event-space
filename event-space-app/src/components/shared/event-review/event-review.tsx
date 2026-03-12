@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui';
 import { Flag } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import type { EventReviewReadDto } from '@/api/event-reviews/model.ts';
 import { UserAvatar, StarRating } from '@/components/shared';
 import {
@@ -9,12 +9,14 @@ import {
 } from '@/api/event-reviews/hooks.ts';
 import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
 import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
+import { ComplaintDialog } from '@/components/shared/event-review/complaint-dialog.tsx';
 
 interface Props {
   review: EventReviewReadDto;
 }
 
 export const EventReview: React.FC<Props> = ({ review }) => {
+  const [complaintOpen, setComplaintOpen] = useState(false);
   const staticContentUrl = import.meta.env.VITE_STATIC_URL;
   const date = new Date(review.createdAt);
   const formattedDate = date
@@ -85,11 +87,18 @@ export const EventReview: React.FC<Props> = ({ review }) => {
           helpfulMarks={review.helpfulMarks}
         />
 
-        <Button variant={'ghost'}>
+        <Button variant={'ghost'} onClick={() => setComplaintOpen(true)}>
           <Flag />
           <span>Пожаловаться</span>
         </Button>
       </div>
+
+      <ComplaintDialog
+        open={complaintOpen}
+        onClose={() => setComplaintOpen(false)}
+        reviewId={review.id}
+        eventId={review.event}
+      />
     </div>
   );
 };
