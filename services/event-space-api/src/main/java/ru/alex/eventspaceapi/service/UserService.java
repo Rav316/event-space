@@ -3,6 +3,8 @@ package ru.alex.eventspaceapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,12 +17,15 @@ import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.FacultyRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
+import ru.alex.eventspaceapi.dto.filter.UserFilter;
 import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
+import ru.alex.eventspaceapi.dto.user.UserListDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
 import ru.alex.eventspaceapi.exception.FacultyNotFoundException;
 import ru.alex.eventspaceapi.exception.UserNotFoundException;
+import ru.alex.eventspaceapi.mapper.user.UserListMapper;
 import ru.alex.eventspaceapi.mapper.user.UserDetailsMapper;
 import ru.alex.eventspaceapi.mapper.user.UserEditMapper;
 import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
@@ -41,6 +46,13 @@ public class UserService implements UserDetailsService {
     private final UserDetailsMapper userDetailsMapper;
     private final UserReadMapper userReadMapper;
     private final UserEditMapper userEditMapper;
+    private final UserListMapper userListMapper;
+
+
+    public Page<UserListDto> findAll(UserFilter filter, Sort sort) {
+        return userRepository.findAll(filter, sort)
+                .map(userListMapper::toDto);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
