@@ -20,6 +20,7 @@ const MyRegistrationsPage = lazy(
 const StatisticsPage = lazy(() => import('@/pages/statistics-page.tsx'));
 const RegistrationPage = lazy(() => import('@/pages/registration-page.tsx'));
 const AdminPage = lazy(() => import('@/pages/admin-page.tsx'));
+const DirectoriesPage = lazy(() => import('@/pages/directories-page.tsx'));
 
 const App = () => {
   const token = useAuthStore((state) => state.accessToken);
@@ -86,6 +87,14 @@ const App = () => {
               element={
                 <RequireAdmin>
                   <AdminPage />
+                </RequireAdmin>
+              }
+            />
+            <Route
+              path={'/admin/directories'}
+              element={
+                <RequireAdmin>
+                  <DirectoriesPage />
                 </RequireAdmin>
               }
             />

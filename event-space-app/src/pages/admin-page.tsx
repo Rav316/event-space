@@ -2,7 +2,7 @@ import { Wrapper } from '@/components/hoc';
 import { useMe } from '@/api/auth/hooks.ts';
 import { Loader } from 'lucide-react';
 import { AnimatedTabs } from '@/components/shared';
-import { adminTabs } from '@/constants/admin-tabs.tsx';
+import { adminTabs } from '@/constants/admin-tabs.ts';
 import { useState } from 'react';
 import { AdminComplaintsTab, AdminEventsTab, AdminReviewTab, AdminUsersTab } from '@/components/shared/admin';
 

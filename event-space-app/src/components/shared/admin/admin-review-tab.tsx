@@ -3,13 +3,18 @@ import { FolderTree } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { LastUsersBlock } from '@/components/shared/admin/last-users-block.tsx';
 import { ActiveEventsBlock } from '@/components/shared/admin/active-events-block.tsx';
+import { Link } from 'react-router';
 
 export const AdminReviewTab = () => {
   return (
     <div className={'flex flex-col gap-2'}>
       <AdminStatisticsBlock />
       <div className={'border flex rounded-2xl border-[#E5E5E5] p-3'}>
-        <div className={'flex gap-4 justify-between items-center w-full max-[750px]:flex-col max-[750px]:items-start'}>
+        <div
+          className={
+            'flex gap-4 justify-between items-center w-full max-[750px]:flex-col max-[750px]:items-start'
+          }
+        >
           <div className={'flex gap-4'}>
             <div
               className={
@@ -25,10 +30,12 @@ export const AdminReviewTab = () => {
               </span>
             </div>
           </div>
-          <Button>
-            <FolderTree />
-            <span>Открыть справочники</span>
-          </Button>
+          <Link to={'/admin/directories'}>
+            <Button>
+              <FolderTree />
+              <span>Открыть справочники</span>
+            </Button>
+          </Link>
         </div>
       </div>
       <div className={'flex w-full gap-2 max-[710px]:flex-col'}>
