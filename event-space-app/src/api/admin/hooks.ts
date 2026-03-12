@@ -23,3 +23,10 @@ export const useEventsByFilter = (filter: AdminListFilter, sort?: string) => {
     queryFn: () => Api.admin.findAllEvents(filter, sort),
   });
 }
+
+export const useComplaintsByFilter = (filter: AdminListFilter, sort?: string) => {
+  return useQuery({
+    queryKey: [ADMIN_KEYS.COMPLAINTS, filter, sort],
+    queryFn: () => Api.admin.findAllComplaints(filter, sort),
+  });
+}

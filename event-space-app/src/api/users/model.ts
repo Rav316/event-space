@@ -84,4 +84,5 @@ export interface UserAdminListDto {
   course: number;
   faculty: FacultyListDto;
   active: boolean;
+  avatarUrl: string;
 }

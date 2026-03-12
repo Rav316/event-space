@@ -2,9 +2,11 @@ import { UserAvatar } from '@/components/shared';
 import { Badge, Separator } from '@/components/ui';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAdminStatistics } from '@/api/admin/hooks.ts';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 export const LastUsersBlock = () => {
   const { data: statistics, isPending } = useAdminStatistics();
+
 
   return (
     <div className={'border border-[#E5E5E5] rounded-2xl p-3 w-full flex flex-col gap-2'}>
@@ -29,7 +31,7 @@ export const LastUsersBlock = () => {
                   <UserAvatar
                     firstName={user.firstName}
                     lastName={user.lastName}
-                    avatarUrl={user.avatarUrl}
+                    avatarUrl={getAvatarUrl(user.avatarUrl)}
                   />
                   <span>
                     {user.firstName} {user.lastName}

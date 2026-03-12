@@ -1,5 +1,19 @@
 import type { EventCategory } from '@/api/event-categories/model.ts';
 
+export interface ComplaintListDto {
+  id: number;
+  authorFirstName: string;
+  authorLastName: string;
+  authorId: number;
+  targetType: 'EVENT_REVIEW' | 'EVENT';
+  targetId: number;
+  targetSnapshot: string;
+  complaintTypeName: string;
+  description: string;
+  complaintDate: string;
+  status: number;
+}
+
 export interface EventAdminListDto {
   id: number;
   name: string;

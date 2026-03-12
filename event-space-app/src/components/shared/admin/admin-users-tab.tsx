@@ -36,6 +36,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useUsersByFilter } from '@/api/admin/hooks.ts';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
@@ -154,7 +155,7 @@ export const AdminUsersTab = () => {
 
       <Table className={'table-fixed w-full'}>
         <colgroup>
-          <col className={'w-[40px]'} />
+          <col className={'w-10'} />
           <col className={'w-[35%]'} />
           <col className={'w-[15%]'} />
           <col className={'w-[25%]'} />
@@ -222,6 +223,7 @@ export const AdminUsersTab = () => {
                       <UserAvatar
                         firstName={user.firstName}
                         lastName={user.lastName}
+                        avatarUrl={getAvatarUrl(user.avatarUrl)}
                       />
                       <div className={'flex flex-col'}>
                         <span className={'font-medium'}>

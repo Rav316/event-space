@@ -26,6 +26,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { complaintCreateSchema } from '@/schemas/complaint-create-schema.ts';
 import type { ComplaintCreateDto } from '@/api/complaint/model.ts';
+import { COMPLAINT_TARGET_TYPES } from '@/api/complaint/constants.ts';
 import type { z } from 'zod';
 
 type ComplaintFormValues = z.infer<typeof complaintCreateSchema>;
@@ -42,8 +43,7 @@ interface Props {
 export const ComplaintDialog: React.FC<Props> = ({
   open,
   onClose,
-  reviewId,
-  eventId,
+  reviewId
 }) => {
   const { data: complaintTypes, isPending: isComplaintTypesPending } =
     useComplaintTypes(open);
@@ -52,7 +52,6 @@ export const ComplaintDialog: React.FC<Props> = ({
   const form = useForm<ComplaintFormValues>({
     resolver: zodResolver(complaintCreateSchema),
     defaultValues: {
-      target: `review:${reviewId}:event:${eventId}`,
       complaintType: undefined,
       description: '',
     },
@@ -65,7 +64,8 @@ export const ComplaintDialog: React.FC<Props> = ({
 
   const handleSubmit = (data: ComplaintFormValues) => {
     const dto: ComplaintCreateDto = {
-      target: data.target,
+      targetType: COMPLAINT_TARGET_TYPES.EVENT_REVIEW,
+      targetId: reviewId,
       complaintType: data.complaintType!,
       description: data.description,
     };
@@ -151,8 +151,7 @@ export const ComplaintDialog: React.FC<Props> = ({
                 placeholder={
                   'Опишите подробно, что именно не так с этим отзывом...'
                 }
-                className={'resize-none'}
-                rows={4}
+                className={'resize-none min-h-20 max-h-40 overflow-y-auto break-all'}
               />
               <span className={'text-xs text-muted-foreground text-right'}>
                 {description.length}/{MAX_DESCRIPTION_LENGTH}

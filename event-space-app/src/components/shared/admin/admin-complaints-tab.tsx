@@ -32,141 +32,63 @@ import {
   Eye,
   Settings,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useComplaintsByFilter } from '@/api/admin/hooks.ts';
+import type { ComplaintListDto } from '@/api/admin/model.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
-type TargetType = 'review' | 'event';
-type ComplaintStatus = 'pending' | 'reviewed' | 'resolved' | 'rejected';
-
-const mockComplaints = [
-  {
-    id: 1,
-    author: { firstName: 'Анна', lastName: 'Иванова', id: 'user123' },
-    targetType: 'review' as TargetType,
-    targetTitle: 'Отзыв на "Хакатон AI Challenge"',
-    reasonTitle: 'Неприемлемое поведение',
-    reasonDescription:
-      'Пользователь оставил отзыв с оскорбительным содержанием и нецензурной лексикой.',
-    date: '2024-02-10',
-    status: 'pending' as ComplaintStatus,
-  },
-  {
-    id: 2,
-    author: { firstName: 'Михаил', lastName: 'Сергеев', id: 'user789' },
-    targetType: 'review' as TargetType,
-    targetTitle: 'Отзыв на "Концерт студенческого хора"',
-    reasonTitle: 'Спам',
-    reasonDescription: 'Пользователь оставил несколько одинаковых отзывов подряд.',
-    date: '2024-02-11',
-    status: 'pending' as ComplaintStatus,
-  },
-  {
-    id: 3,
-    author: { firstName: 'Елена', lastName: 'Кузнецова', id: 'user234' },
-    targetType: 'event' as TargetType,
-    targetTitle: 'Мероприятие "Мастер-класс по веб-дизайну"',
-    reasonTitle: 'Мошенничество',
-    reasonDescription:
-      'Мероприятие заявлено как бесплатное, но при регистрации требуют оплату.',
-    date: '2024-02-05',
-    status: 'reviewed' as ComplaintStatus,
-  },
-  {
-    id: 4,
-    author: { firstName: 'Дмитрий', lastName: 'Волков', id: 'user890' },
-    targetType: 'event' as TargetType,
-    targetTitle: 'Мероприятие "Спортивный турнир по футболу"',
-    reasonTitle: 'Дезинформация',
-    reasonDescription: 'Информация о мероприятии не соответствует действительности.',
-    date: '2024-01-28',
-    status: 'resolved' as ComplaintStatus,
-  },
-  {
-    id: 5,
-    author: { firstName: 'Светлана', lastName: 'Морозова', id: 'user345' },
-    targetType: 'event' as TargetType,
-    targetTitle: 'Мероприятие "Фотовыставка «Наш кампус»"',
-    reasonTitle: 'Неприемлемый контент',
-    reasonDescription: 'Изображение мероприятия содержит неприемлемый контент.',
-    date: '2024-01-15',
-    status: 'rejected' as ComplaintStatus,
-  },
-  {
-    id: 6,
-    author: { firstName: 'Артём', lastName: 'Громов', id: 'user456' },
-    targetType: 'review' as TargetType,
-    targetTitle: 'Отзыв на "Научная конференция"',
-    reasonTitle: 'Ложная информация',
-    reasonDescription: 'Отзыв содержит заведомо ложные сведения об организаторе.',
-    date: '2024-02-08',
-    status: 'pending' as ComplaintStatus,
-  },
-  {
-    id: 7,
-    author: { firstName: 'Ольга', lastName: 'Белова', id: 'user567' },
-    targetType: 'event' as TargetType,
-    targetTitle: 'Мероприятие "Олимпиада по математике"',
-    reasonTitle: 'Некорректное описание',
-    reasonDescription: 'Описание мероприятия вводит участников в заблуждение.',
-    date: '2024-02-20',
-    status: 'resolved' as ComplaintStatus,
-  },
-];
-
-const statusConfig: Record<ComplaintStatus, { label: string; className: string; icon?: React.ReactNode }> = {
-  pending: {
+const statusConfig: Record<number, { label: string; className: string; icon?: React.ReactNode }> = {
+  0: {
     label: 'Ожидает',
     className: 'bg-yellow-100 text-yellow-700 border-yellow-200',
     icon: <AlertTriangle className={'w-3 h-3'} />,
   },
-  reviewed: {
+  1: {
     label: 'Рассмотрена',
     className: 'bg-gray-100 text-gray-700 border-gray-200',
   },
-  resolved: {
+  2: {
     label: 'Решена',
     className: 'bg-gray-900 text-white border-gray-900',
   },
-  rejected: {
+  3: {
     label: 'Отклонена',
     className: 'bg-white text-gray-700 border-gray-300',
   },
 };
 
-const targetTypeLabels: Record<TargetType, string> = {
-  review: 'Отзыв',
-  event: 'Мероприятие',
+const targetTypeLabels: Record<string, string> = {
+  EVENT_REVIEW: 'Отзыв',
+  EVENT: 'Мероприятие',
 };
 
-const statusOrder: Record<ComplaintStatus, number> = { pending: 0, reviewed: 1, resolved: 2, rejected: 3 };
+type SortCol = 'targetType' | 'complaintTypeName' | 'complaintDate' | 'status';
 
-type SortCol = 'author' | 'targetType' | 'reasonTitle' | 'date' | 'status';
+const sortColToField: Record<SortCol, string> = {
+  targetType: 'targetType',
+  complaintTypeName: 'complaintTypeName',
+  complaintDate: 'complaintDate',
+  status: 'status',
+};
 
-function sortComplaints(complaints: typeof mockComplaints, key: SortCol, dir: 'asc' | 'desc') {
-  return [...complaints].sort((a, b) => {
-    let cmp = 0;
-    if (key === 'author')
-      cmp = `${a.author.lastName} ${a.author.firstName}`.localeCompare(
-        `${b.author.lastName} ${b.author.firstName}`,
-        'ru',
-      );
-    else if (key === 'targetType') cmp = a.targetType.localeCompare(b.targetType);
-    else if (key === 'reasonTitle') cmp = a.reasonTitle.localeCompare(b.reasonTitle, 'ru');
-    else if (key === 'date') cmp = a.date.localeCompare(b.date);
-    else if (key === 'status') cmp = statusOrder[a.status] - statusOrder[b.status];
-    return dir === 'asc' ? cmp : -cmp;
-  });
+function getTargetTitle(complaint: ComplaintListDto): string {
+  try {
+    const snapshot = JSON.parse(complaint.targetSnapshot);
+    if (complaint.targetType === 'EVENT_REVIEW') return snapshot.title ?? `Отзыв #${complaint.targetId}`;
+    if (complaint.targetType === 'EVENT') return snapshot.name ?? `Мероприятие #${complaint.targetId}`;
+  } catch {
+    // ignore
+  }
+  return `#${complaint.targetId}`;
 }
-
-type Complaint = (typeof mockComplaints)[number];
 
 function ReviewDialog({
   complaint,
   open,
   onClose,
 }: {
-  complaint: Complaint | null;
+  complaint: ComplaintListDto | null;
   open: boolean;
   onClose: () => void;
 }) {
@@ -185,23 +107,25 @@ function ReviewDialog({
           <div className={'flex flex-col gap-0.5'}>
             <span className={'font-medium text-sm'}>Жалобщик</span>
             <span className={'text-sm text-muted-foreground'}>
-              {complaint.author.firstName} {complaint.author.lastName}
+              {complaint.authorFirstName} {complaint.authorLastName}
             </span>
           </div>
           <div className={'flex flex-col gap-0.5'}>
             <span className={'font-medium text-sm'}>
-              {complaint.targetType === 'review' ? 'Отзыв' : 'Мероприятие'}
+              {targetTypeLabels[complaint.targetType] ?? complaint.targetType}
             </span>
-            <span className={'text-sm text-muted-foreground'}>{complaint.targetTitle}</span>
+            <span className={'text-sm text-muted-foreground'}>{getTargetTitle(complaint)}</span>
           </div>
           <div className={'flex flex-col gap-0.5'}>
             <span className={'font-medium text-sm'}>Причина</span>
-            <span className={'text-sm text-muted-foreground'}>{complaint.reasonTitle}</span>
+            <span className={'text-sm text-muted-foreground'}>{complaint.complaintTypeName}</span>
           </div>
-          <div className={'flex flex-col gap-0.5'}>
-            <span className={'font-medium text-sm'}>Описание</span>
-            <span className={'text-sm text-muted-foreground'}>{complaint.reasonDescription}</span>
-          </div>
+          {complaint.description && (
+            <div className={'flex flex-col gap-0.5'}>
+              <span className={'font-medium text-sm'}>Описание</span>
+              <span className={'text-sm text-muted-foreground break-all'}>{complaint.description}</span>
+            </div>
+          )}
           <div className={'flex flex-col gap-1.5'}>
             <span className={'font-medium text-sm'}>Комментарий администратора</span>
             <Textarea
@@ -228,9 +152,22 @@ export const AdminComplaintsTab = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
-  const [reviewComplaint, setReviewComplaint] = useState<Complaint | null>(null);
+  const [reviewComplaint, setReviewComplaint] = useState<ComplaintListDto | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const sort = sortKey ? `${sortColToField[sortKey]},${sortDir}` : undefined;
+  const { data } = useComplaintsByFilter({ page, size: pageSize, search: debouncedSearch || undefined }, sort);
+
+  const complaints = data?.content ?? [];
+  const totalPages = data?.totalPages ?? 0;
+  const totalElements = data?.totalElements ?? 0;
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -250,24 +187,6 @@ export const AdminComplaintsTab = () => {
     );
   };
 
-  const filtered = search.trim()
-    ? mockComplaints.filter((c) => {
-        const q = search.toLowerCase();
-        return (
-          c.author.firstName.toLowerCase().includes(q) ||
-          c.author.lastName.toLowerCase().includes(q) ||
-          c.reasonTitle.toLowerCase().includes(q) ||
-          c.targetTitle.toLowerCase().includes(q)
-        );
-      })
-    : mockComplaints;
-
-  const filteredComplaints = sortKey ? sortComplaints(filtered, sortKey, sortDir) : filtered;
-  const totalPages = Math.ceil(filteredComplaints.length / pageSize);
-  const pageComplaints = filteredComplaints.slice(page * pageSize, (page + 1) * pageSize);
-
-  const pendingCount = mockComplaints.filter((c) => c.status === 'pending').length;
-
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString('ru-RU', {
       day: '2-digit',
@@ -281,11 +200,6 @@ export const AdminComplaintsTab = () => {
         <div className={'flex items-center gap-2'}>
           <AlertTriangle className={'w-5 h-5'} />
           <span className={'font-medium text-lg'}>Жалобы пользователей</span>
-          {pendingCount > 0 && (
-            <Badge className={'bg-red-500 text-white border-red-500 rounded-full h-5 min-w-5 flex items-center justify-center text-xs px-1.5'}>
-              {pendingCount}
-            </Badge>
-          )}
         </div>
       </div>
 
@@ -301,7 +215,8 @@ export const AdminComplaintsTab = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            {(['author', 'targetType', 'reasonTitle', 'date', 'status'] as const).map((col) => (
+            <TableHead>Жалобщик</TableHead>
+            {(['targetType', 'complaintTypeName', 'complaintDate', 'status'] as const).map((col) => (
               <TableHead
                 key={col}
                 className={'cursor-pointer select-none'}
@@ -310,10 +225,9 @@ export const AdminComplaintsTab = () => {
                 <div className={'flex items-center gap-1'}>
                   {
                     {
-                      author: 'Жалобщик',
                       targetType: 'На что',
-                      reasonTitle: 'Причина',
-                      date: 'Дата',
+                      complaintTypeName: 'Причина',
+                      complaintDate: 'Дата',
                       status: 'Статус',
                     }[col]
                   }
@@ -325,22 +239,22 @@ export const AdminComplaintsTab = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pageComplaints.map((complaint) => {
+          {complaints.map((complaint) => {
             const sc = statusConfig[complaint.status];
             return (
               <TableRow key={complaint.id}>
                 <TableCell>
                   <div className={'flex items-center gap-3'}>
                     <UserAvatar
-                      firstName={complaint.author.firstName}
-                      lastName={complaint.author.lastName}
+                      firstName={complaint.authorFirstName}
+                      lastName={complaint.authorLastName}
                     />
                     <div className={'flex flex-col'}>
                       <span className={'font-medium whitespace-nowrap'}>
-                        {complaint.author.firstName} {complaint.author.lastName}
+                        {complaint.authorFirstName} {complaint.authorLastName}
                       </span>
                       <span className={'text-xs text-muted-foreground'}>
-                        ID: {complaint.author.id}
+                        ID: {complaint.authorId}
                       </span>
                     </div>
                   </div>
@@ -348,29 +262,31 @@ export const AdminComplaintsTab = () => {
                 <TableCell>
                   <div className={'flex flex-col'}>
                     <Badge variant="outline" className={'w-fit whitespace-nowrap'}>
-                      {targetTypeLabels[complaint.targetType]}
+                      {targetTypeLabels[complaint.targetType] ?? complaint.targetType}
                     </Badge>
                     <span className={'text-xs text-muted-foreground mt-1 max-w-40 truncate'}>
-                      {complaint.targetTitle}
+                      {getTargetTitle(complaint)}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className={'max-w-xs'}>
                   <div className={'flex flex-col'}>
-                    <span className={'font-medium'}>{complaint.reasonTitle}</span>
-                    <span className={'text-xs line-clamp-2'}>
-                      {complaint.reasonDescription}
-                    </span>
+                    <span className={'font-medium'}>{complaint.complaintTypeName}</span>
+                    {complaint.description && (
+                      <span className={'text-xs line-clamp-2'}>{complaint.description}</span>
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className={'whitespace-nowrap text-sm'}>
-                  {formatDate(complaint.date)}
+                  {formatDate(complaint.complaintDate)}
                 </TableCell>
                 <TableCell>
-                  <Badge className={`${sc.className} flex items-center gap-1 w-fit whitespace-nowrap`}>
-                    {sc.icon}
-                    {sc.label}
-                  </Badge>
+                  {sc && (
+                    <Badge className={`${sc.className} flex items-center gap-1 w-fit whitespace-nowrap`}>
+                      {sc.icon}
+                      {sc.label}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell className={'text-right'}>
                   <DropdownMenu>
@@ -397,7 +313,7 @@ export const AdminComplaintsTab = () => {
 
       <div className={'flex items-center justify-between'}>
         <span className={'text-sm text-muted-foreground'}>
-          {filteredComplaints.length} жалоб
+          {totalElements} жалоб
         </span>
         <div className={'flex items-center gap-3'}>
           <div className={'flex items-center gap-2'}>

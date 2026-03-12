@@ -4,7 +4,8 @@ export interface ComplaintType {
 }
 
 export interface ComplaintCreateDto {
-  target: string;
+  targetType: number;
+  targetId: number;
   complaintType: number;
   description: string;
 }
