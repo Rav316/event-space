@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.EventCategory;
 import ru.alex.eventspaceapi.database.repository.EventCategoryRepositoryCustom;
+import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryDeleteImpactDto;
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.statistics.CategoryStatisticsDto;
@@ -32,6 +33,12 @@ import static ru.alex.eventspaceapi.database.entity.QEventCategory.eventCategory
 public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static final String SQL_DELETE_IMPACT = """
+            SELECT
+                (SELECT COUNT(*) FROM event WHERE event_category_id = :id)                                     AS events,
+                (SELECT COUNT(*) FROM event_review er JOIN event e ON er.event_id = e.id WHERE e.event_category_id = :id) AS reviews
+            """;
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
             "id", eventCategory.id,
@@ -73,6 +80,16 @@ public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCusto
         }
 
         return predicate;
+    }
+
+    @Override
+    public EventCategoryDeleteImpactDto getDeleteImpact(Integer id) {
+        return jdbcTemplate.queryForObject(SQL_DELETE_IMPACT, Map.of("id", id), (rs, rowNum) ->
+                new EventCategoryDeleteImpactDto(
+                        rs.getLong("events"),
+                        rs.getLong("reviews")
+                )
+        );
     }
 
     @Override

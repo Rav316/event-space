@@ -20,7 +20,6 @@ public abstract class FilterBase extends OncePerRequestFilter {
 
         return method.equalsIgnoreCase(HttpMethod.GET.toString()) && (
                 requestURI.startsWith("/api/faculties") ||
-                        requestURI.startsWith("/api/event-categories") ||
                         requestURI.startsWith("/api/users/exists-by-email")
         );
     }
