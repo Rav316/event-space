@@ -149,7 +149,9 @@ const EventEditPage = () => {
   return (
     <Wrapper>
       {isEventPending ? (
-        <div className={'flex justify-center items-center h-[calc(100vh-5rem)]'}>
+        <div
+          className={'flex justify-center items-center h-[calc(100vh-5rem)]'}
+        >
           <Spinner />
         </div>
       ) : (

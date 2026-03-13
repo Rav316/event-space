@@ -1,6 +1,7 @@
 package ru.alex.eventspaceapi.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.User;
@@ -20,4 +21,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
 
     @Query("SELECT u.email FROM User u WHERE u.newEventNotifications = true AND u.active = true")
     List<String> findEmailsWithNewEventNotifications();
+
+    @Modifying
+    @Query("UPDATE User u SET u.active = false WHERE u.id IN :userIds")
+    void setUsersInactive(List<Integer> userIds);
+
 }

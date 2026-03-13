@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.dto.auth.RefreshTokenDto;
 import ru.alex.eventspaceapi.dto.response.AuthResponse;
 import ru.alex.eventspaceapi.dto.user.UserLoginDto;
+import ru.alex.eventspaceapi.dto.user.UserPasswordChangeDto;
 import ru.alex.eventspaceapi.dto.user.UserRegisterDto;
 import ru.alex.eventspaceapi.service.AuthService;
 
@@ -35,5 +36,12 @@ public class AuthController {
             throw new ResponseStatusException(UNAUTHORIZED, "refresh token is missing");
         }
         return new ResponseEntity<>(authService.refreshAccessToken(refreshTokenDto), OK);
+    }
+
+    @PatchMapping("/profile/change-password")
+    public ResponseEntity<AuthResponse> changePassword(
+            @Validated @RequestBody UserPasswordChangeDto userPasswordChangeDto
+    ) {
+        return new ResponseEntity<>(authService.changePassword(userPasswordChangeDto), OK);
     }
 }

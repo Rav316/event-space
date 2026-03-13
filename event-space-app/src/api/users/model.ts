@@ -51,12 +51,6 @@ export interface UserEditData {
   avatarRemoved: boolean;
 }
 
-export interface UserPasswordChangeDto {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 export interface UserAuthorDto {
   id: number;
   firstName: string;
@@ -79,4 +73,16 @@ export interface TopOrganizerDto {
   lastName: string;
   avatarUrl: string;
   eventsCount: number;
+}
+
+export interface UserAdminListDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: number;
+  course: number;
+  faculty: FacultyListDto;
+  active: boolean;
+  avatarUrl: string;
 }

@@ -25,11 +25,13 @@ const StatisticsPage = () => {
   };
 
   return (
-    <Wrapper className={'flex flex-col gap-y-3 py-5 mt-5'}>
-      <h1 className={'text-3xl font-medium'}>Статистика мероприятий</h1>
-      <span className={'text-muted-foreground'}>
-        Анализ посещаемости и эффективности мероприятий
-      </span>
+    <Wrapper className={'flex flex-col gap-y-3 py-5'}>
+      <div className={'flex flex-col'}>
+        <h1 className={'text-3xl font-bold'}>Статистика мероприятий</h1>
+        <span className={'text-muted-foreground'}>
+          Анализ посещаемости и эффективности мероприятий
+        </span>
+      </div>
       <EventStatisticsBlocks />
       <div className={'max-w-[800px] max-[900px]:max-w-none'}>
         <AnimatedTabs

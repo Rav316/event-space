@@ -4,7 +4,7 @@ import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import { Badge, Button } from '@/components/ui';
 import { EventCardLabel } from '@/components/shared/event/event-card-label.tsx';
 import { Calendar, Clock, MapPin, QrCode } from 'lucide-react';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { formatDate } from '@/utils/format-date.ts';
 import { Link } from 'react-router';
 import { EventQrCodeDialog } from '@/components/modal';
@@ -31,7 +31,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
 
       <div className="flex flex-col gap-4 p-5 w-full justify-between">
         <div className="flex items-center gap-2">
-          <Badge className={categoryColors[event.category.id - 1]}>
+          <Badge style={categoryBadgeStyle(event.category.color)}>
             {event.category.name}
           </Badge>
           {compareWithCurrentTime(event.eventDate, event.endTime) === 1 &&

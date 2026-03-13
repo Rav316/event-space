@@ -26,9 +26,7 @@ export const PopularEventsSection: React.FC<Props> = ({ className }) => {
       <div className={'flex items-center gap-3 mb-5'}>
         <Flame className={'text-orange-500'} />
         <div className={'flex flex-col gap-y-1'}>
-          <span className={'font-medium text-2xl'}>
-            Популярные мероприятия
-          </span>
+          <span className={'font-medium text-2xl'}>Популярные мероприятия</span>
           <span className={'text-muted-foreground'}>
             События с наибольшим числом регистраций
           </span>

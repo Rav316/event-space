@@ -21,7 +21,8 @@ public class EventListRowMapper implements RowMapper<EventListDto> {
                 ? null
                 : new EventCategoryReadDto(
                 rs.getInt("category_id"),
-                rs.getString("category_name")
+                rs.getString("category_name"),
+                rs.getString("category_color")
         );
 
         SpaceReadDto space = rs.getInt("space_id") == 0

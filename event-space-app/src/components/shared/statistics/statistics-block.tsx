@@ -9,22 +9,26 @@ interface Props {
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
   value: number | string;
-  delta: number;
+  delta?: number;
   isPercent?: boolean;
+  deltaLabel?: string;
+  subtitle?: string;
   className?: string;
 }
 
-export const EventStatisticsBlock: React.FC<Props> = ({
+export const StatisticsBlock: React.FC<Props> = ({
   title,
   Icon,
   value,
   delta,
   isPercent = false,
+  deltaLabel = 'к прошлому месяцу',
+  subtitle,
   className,
 }) => {
-  const isNegative = delta < 0;
-  const isZero = delta === 0;
-  const displayDelta = Math.abs(delta);
+  const isNegative = (delta ?? 0) < 0;
+  const isZero = (delta ?? 0) === 0;
+  const displayDelta = Math.abs(delta ?? 0);
 
   const percentColor = isZero
     ? 'text-gray-500'
@@ -53,20 +57,32 @@ export const EventStatisticsBlock: React.FC<Props> = ({
             if (match) {
               const num = parseFloat(match[1]);
               const suffix = match[2];
-              const decimals = match[1].includes('.') ? (match[1].split('.')[1]?.length ?? 0) : 0;
-              return <AnimatedNumber value={num} decimals={decimals} suffix={suffix} />;
+              const decimals = match[1].includes('.')
+                ? (match[1].split('.')[1]?.length ?? 0)
+                : 0;
+              return (
+                <AnimatedNumber
+                  value={num}
+                  decimals={decimals}
+                  suffix={suffix}
+                />
+              );
             }
             return value;
           })()
         )}
       </h3>
-      <span className="text-muted-foreground">
-        <span className={percentColor}>
-          {sign}
-          {!isPercent ? `${displayDelta}` : `${displayDelta * 100}%`}
-        </span>{' '}
-        к прошлому месяцу
-      </span>
+      {subtitle !== undefined ? (
+        <span className="text-muted-foreground">{subtitle}</span>
+      ) : delta !== undefined ? (
+        <span className="text-muted-foreground">
+          <span className={percentColor}>
+            {sign}
+            {!isPercent ? `${displayDelta}` : `${displayDelta * 100}%`}
+          </span>{' '}
+          {deltaLabel}
+        </span>
+      ) : null}
     </div>
   );
 };

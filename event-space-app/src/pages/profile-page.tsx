@@ -2,7 +2,8 @@ import { Wrapper } from '@/components/hoc';
 import {
   AnimatedTabs,
   ProfileHeader,
-  ProfileMainInfoBlock, ProfileStatisticsGroup,
+  ProfileMainInfoBlock,
+  ProfileStatisticsGroup,
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
 import { useEffect, useState } from 'react';
@@ -14,7 +15,6 @@ import { useMe } from '@/api/auth/hooks.ts';
 import type { UserEditDto } from '@/api/users/model.ts';
 import { useCheckEmail, useEditUser } from '@/api/users/hooks.ts';
 import { deepEqual } from '@/utils/deep-equal.ts';
-import { queryClient } from '@/api/query-client.ts';
 import { validateEmailUnique } from '@/utils/validation.ts';
 import { UserInfo, UserSettings } from '@/components/shared/profile-tabs';
 
@@ -110,7 +110,6 @@ const ProfilePage = () => {
     const emailOk = await validateEmailUnique({
       email: data.email,
       defaultEmail: defaultValues.email,
-      queryClient,
       checkEmailMutation,
       form: userProfileForm,
     });

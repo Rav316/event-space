@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { Badge, Button } from '@/components/ui';
 import * as React from 'react';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { Link } from 'react-router';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
 import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
@@ -44,7 +44,7 @@ export const EventCard: React.FC<Props> = ({ event }) => {
       )}
     >
       <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">
-        <Badge className={categoryColors[event.category.id - 1]}>
+        <Badge style={categoryBadgeStyle(event.category.color)}>
           {event.category.name}
         </Badge>
         {event.isAttended && (

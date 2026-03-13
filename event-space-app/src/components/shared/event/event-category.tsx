@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Badge } from '@/components/ui';
-import { categoryColors } from '@/constants/category-colors.ts';
 import { cn } from '@/lib/utils.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 import { useDelayedToggle } from '@/hooks/use-delayed-toggle.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 
 interface Props {
   id: number;
   text: string;
   count: number;
+  color?: string;
   isResult?: boolean;
 }
 
@@ -16,6 +17,7 @@ export const EventCategory: React.FC<Props> = ({
   id,
   text,
   count,
+  color,
   isResult,
 }) => {
   const clickable = !isResult;
@@ -50,9 +52,8 @@ export const EventCategory: React.FC<Props> = ({
       )}
     >
       <Badge
-        className={cn(categoryColors[id - 1], {
-          'border border-[#E5E5E5]': isResult,
-        })}
+        className={cn({ 'border border-[#E5E5E5]': isResult })}
+        style={!isResult && color ? categoryBadgeStyle(color) : undefined}
       >
         <span className={'max-[460px]:text-xs'}>{text}</span>
       </Badge>

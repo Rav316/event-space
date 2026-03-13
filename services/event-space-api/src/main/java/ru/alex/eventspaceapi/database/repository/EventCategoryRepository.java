@@ -11,4 +11,6 @@ import java.util.List;
 public interface EventCategoryRepository extends JpaRepository<EventCategory, Integer>, EventCategoryRepositoryCustom {
     @Query("SELECT ec FROM EventCategory ec LEFT JOIN FETCH ec.events e ORDER BY ec.name")
     List<EventCategory> findAllWithEvents();
+
+    boolean existsByName(String name);
 }

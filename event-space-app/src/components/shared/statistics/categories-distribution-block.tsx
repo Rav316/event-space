@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 import React from 'react';
 import type { CategoryDistributionDto } from '@/api/statistics/model.ts';
-import { categoryChartColors } from '@/constants/category-chart-colors.ts';
 
 interface Props {
   categoriesDistribution: CategoryDistributionDto[];
@@ -21,6 +20,7 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
   const pieData = categoriesDistribution.map((item) => ({
     name: item.category.name,
     value: item.count,
+    color: item.category.color ?? '#6366F1',
   }));
 
   return (
@@ -46,12 +46,8 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
                   dataKey="value"
                   animationDuration={600}
                 >
-                  {pieData.map((_, i) => (
-                    <Cell
-                      key={i}
-                      fill={categoryChartColors[i % categoryChartColors.length]}
-                      className="outline-none"
-                    />
+                  {pieData.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} className="outline-none" />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -64,10 +60,7 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
               <div key={i} className="flex items-center gap-2 min-w-[120px]">
                 <div
                   className="w-3 h-3 rounded-sm shrink-0"
-                  style={{
-                    backgroundColor:
-                      categoryChartColors[i % categoryChartColors.length],
-                  }}
+                  style={{ backgroundColor: entry.color }}
                 ></div>
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
                   {entry.name} — {entry.value}

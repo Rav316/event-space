@@ -23,7 +23,7 @@ export const SpaceList: React.FC<Props> = ({
     >
       <div className={'flex items-center gap-2 mb-2'}>
         <Building2 />
-        <span>Доступные кабинеты</span>
+        <span>Доступные пространства</span>
       </div>
       <ScrollArea className="h-[300px]">
         <div className="flex flex-col gap-2">
