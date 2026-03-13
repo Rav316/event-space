@@ -297,52 +297,53 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 e.deadline,
                 e.participant_quantity,
             
-                c.id   AS category_id,
-                c.name AS category_name,
-            
+                c.id    AS category_id,
+                c.name  AS category_name,
+                c.color AS category_color,
+
                 s.id   AS space_id,
                 s.name AS space_name,
                 s.capacity AS space_capacity,
-            
+
                 b.id   AS building_id,
                 b.name AS building_name,
                 b.address AS building_address,
-            
+
                 concat(a.first_name, ' ', a.last_name) AS author,
-            
+
                 (
                     SELECT COUNT(*)
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                 ) AS registered_users,
-            
+
                 EXISTS (
                     SELECT 1
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS is_registered,
-            
+
                 (
                     SELECT eu.attended
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS is_attended,
-            
+
                 (
                     SELECT eu.qr_token
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS qr_token
-            
+
             FROM event e
             LEFT JOIN event_category c ON c.id = e.event_category_id
             LEFT JOIN space s ON s.id = e.space_id
             LEFT JOIN building b ON b.id = s.building_id
             LEFT JOIN users a ON a.id = e.author
-            
+
             WHERE (e.event_date, e.start_time) > (CURRENT_DATE, CURRENT_TIME)
             ORDER BY e.event_date , e.start_time DESC, e.id DESC
             LIMIT 6;
@@ -367,52 +368,53 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 e.deadline,
                 e.participant_quantity,
             
-                c.id   AS category_id,
-                c.name AS category_name,
-            
+                c.id    AS category_id,
+                c.name  AS category_name,
+                c.color AS category_color,
+
                 s.id   AS space_id,
                 s.name AS space_name,
                 s.capacity AS space_capacity,
-            
+
                 b.id   AS building_id,
                 b.name AS building_name,
                 b.address AS building_address,
-            
+
                 concat(a.first_name, ' ', a.last_name) AS author,
-            
+
                 (
                     SELECT COUNT(*)
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                 ) AS registered_users,
-            
+
                 EXISTS (
                     SELECT 1
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS is_registered,
-            
+
                 (
                     SELECT eu.attended
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS is_attended,
-            
+
                 (
                     SELECT eu.qr_token
                     FROM event_user eu
                     WHERE eu.event_id = e.id
                       AND eu.user_id = :userId
                 ) AS qr_token
-            
+
             FROM event e
             LEFT JOIN event_category c ON c.id = e.event_category_id
             LEFT JOIN space s ON s.id = e.space_id
             LEFT JOIN building b ON b.id = s.building_id
             LEFT JOIN users a ON a.id = e.author
-            
+
             WHERE (e.event_date, e.start_time) > (CURRENT_DATE, CURRENT_TIME)
             ORDER BY registered_users DESC, e.event_date
             LIMIT 6;
@@ -429,8 +431,9 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 SELECT
                     e.id,
                     e.name,
-                    c.id AS category_id,
-                    c.name AS category_name,
+                    c.id    AS category_id,
+                    c.name  AS category_name,
+                    c.color AS category_color,
                     e.event_date,
                     e.start_time,
                     e.end_time

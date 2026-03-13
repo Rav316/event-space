@@ -95,7 +95,7 @@ public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCusto
     @Override
     public CategoryStatisticsDto getCategoryStatistics(Integer userId) {
         String sqlCategoryDistribution = """
-                SELECT c.id, c.name, COUNT(c.id) AS event_count
+                SELECT c.id, c.name, c.color, COUNT(c.id) AS event_count
                 FROM event_user eu
                 JOIN event e ON eu.event_id = e.id
                 JOIN event_category c ON e.event_category_id = c.id
@@ -106,6 +106,7 @@ public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCusto
                 select
                     ec.id as category_id,
                     ec.name as category_name,
+                    ec.color as category_color,
                     round(
                             case
                                 when count(distinct e.id) = 0 then 0
@@ -141,8 +142,8 @@ public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCusto
                 sqlCategoryDistribution,
                 params,
                 (rs, rowNum) -> new CategoryStatisticsDto.CategoryDistributionDto(
-                        new EventCategoryReadDto(rs.getInt(1), rs.getString(2)),
-                        rs.getInt(3)
+                        new EventCategoryReadDto(rs.getInt("id"), rs.getString("name"), rs.getString("color")),
+                        rs.getInt("event_count")
                 )
         );
 
@@ -150,8 +151,8 @@ public class EventCategoryRepositoryImpl implements EventCategoryRepositoryCusto
                 sqlCategoryActivity,
                 params,
                 (rs, rowNum) -> new CategoryStatisticsDto.CategoryActivityDto(
-                        new EventCategoryReadDto(rs.getInt(1), rs.getString(2)),
-                        rs.getDouble(3)
+                        new EventCategoryReadDto(rs.getInt("category_id"), rs.getString("category_name"), rs.getString("category_color")),
+                        rs.getDouble("activity_percent")
                 )
         );
 
