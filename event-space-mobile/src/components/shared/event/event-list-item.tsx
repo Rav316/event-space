@@ -1,7 +1,7 @@
 import { StyledText } from '@/src/components/ui';
 import { Image } from 'expo-image';
 import { Badge } from '@/src/components/ui/badge';
-import { categoryColors } from '@/src/constants/category-colors';
+import { categoryBadgeStyle } from '@/src/utils/category-badge-style';
 import { Calendar, MapPin } from 'lucide-react-native';
 import { Dimensions, Platform, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
@@ -107,10 +107,8 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           {imageElement}
 
           <View className={'flex-1 items-start h-full gap-1'}>
-            <Badge className={categoryColors[event.category.id - 1].badge}>
-              <StyledText
-                className={categoryColors[event.category.id - 1].text}
-              >
+            <Badge style={categoryBadgeStyle(event.category.color).badge}>
+              <StyledText style={categoryBadgeStyle(event.category.color).text}>
                 {event.category.name}
               </StyledText>
             </Badge>

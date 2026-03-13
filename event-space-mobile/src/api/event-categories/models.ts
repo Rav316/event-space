@@ -1,6 +1,7 @@
 export interface EventCategoryReadDto {
   id: number;
   name: string;
+  color: string;
 }
 
 export interface EventCategoryCountDto {
