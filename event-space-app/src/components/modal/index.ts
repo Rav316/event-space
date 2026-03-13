@@ -8,3 +8,6 @@ export { EventShareDialog } from './event-share-dialog';
 export { BuildingCreateDialog } from './building-create-dialog';
 export { BuildingDeleteDialog } from './building-delete-dialog';
 export { BuildingEditDialog } from './building-edit-dialog';
+export { SpaceCreateDialog } from './space-create-dialog';
+export { SpaceEditDialog } from './space-edit-dialog';
+export { SpaceDeleteDialog } from './space-delete-dialog';

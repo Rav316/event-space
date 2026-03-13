@@ -17,9 +17,7 @@ import {
 } from '@/components/ui';
 import { buildingEditSchema } from '@/schemas/building-edit-schema.ts';
 import { useCheckBuildingName, useEditBuilding } from '@/api/buildings/hooks.ts';
-import { queryClient } from '@/api/query-client.ts';
 import type { BuildingEditDto } from '@/api/buildings/model.ts';
-import { BUILDINGS_KEYS } from '@/api/buildings/keys.ts';
 import { z } from 'zod';
 
 type BuildingEditForm = z.infer<typeof buildingEditSchema>;
@@ -51,11 +49,7 @@ export const BuildingEditDialog = ({ id, name, address }: Props) => {
 
   const onSubmit = form.handleSubmit(async (data) => {
     if (data.name !== name) {
-      let nameExists = queryClient.getQueryData<boolean>(BUILDINGS_KEYS.nameExists(data.name));
-
-      if (nameExists === undefined) {
-        nameExists = await checkNameMutation.mutateAsync(data.name);
-      }
+      const nameExists = await checkNameMutation.mutateAsync(data.name);
 
       if (nameExists) {
         form.setError('name', {

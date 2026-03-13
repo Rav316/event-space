@@ -29,6 +29,9 @@ export const useCreateBuilding = () => {
       await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.BUILDINGS] });
       toast.success('Локация успешно добавлена');
     },
+    onError: () => {
+      toast.error('Произошла ошибка при создании локации');
+    },
   });
 };
 
@@ -38,6 +41,9 @@ export const useEditBuilding = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.BUILDINGS] });
       toast.success('Локация успешно изменена');
+    },
+    onError: () => {
+      toast.error('Произошла ошибка при изменении локации');
     },
   });
 };
@@ -57,6 +63,9 @@ export const useDeleteBuilding = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.BUILDINGS] });
       toast.success('Локация удалена');
+    },
+    onError: () => {
+      toast.error('Произошла ошибка при удалении локации');
     },
   });
 };

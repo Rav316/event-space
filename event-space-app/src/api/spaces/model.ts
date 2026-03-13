@@ -4,8 +4,9 @@ export interface SpaceListDto {
   id: number;
   name: string;
   building: number;
+  typeId: number;
   type: string;
-  floor: number;
+  floor: number | null;
   capacity: number;
 }
 
@@ -27,4 +28,25 @@ export interface Space {
 export interface SpaceType {
   id: number;
   name: string;
+}
+
+export interface SpaceCreateDto {
+  name: string;
+  building: number;
+  type: number;
+  floor?: number;
+  capacity: number;
+}
+
+export interface SpaceEditDto {
+  name: string;
+  building: number;
+  type: number;
+  floor: number | null;
+  capacity: number;
+}
+
+export interface SpaceDeleteImpactDto {
+  events: number;
+  reviews: number;
 }

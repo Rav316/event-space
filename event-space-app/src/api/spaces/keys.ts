@@ -4,4 +4,6 @@ export const SPACES_KEYS = {
   all: ['spaces'] as const,
   filters: (filter: SpaceFilter) => [...SPACES_KEYS.all, filter] as const,
   spaceTypes: ['space-types'] as const,
+  nameAndBuildingExists: (name: string, building: number) => ['spaces', 'nameAndBuildingExists', name, building] as const,
+  deleteImpact: (id: number) => ['spaces', 'deleteImpact', id] as const,
 };

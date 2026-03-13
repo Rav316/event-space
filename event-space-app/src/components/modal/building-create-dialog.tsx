@@ -17,9 +17,7 @@ import {
 } from '@/components/ui';
 import { buildingCreateSchema } from '@/schemas/building-create-schema.ts';
 import { useCheckBuildingName, useCreateBuilding } from '@/api/buildings/hooks.ts';
-import { queryClient } from '@/api/query-client.ts';
 import type { BuildingCreateDto } from '@/api/buildings/model.ts';
-import { BUILDINGS_KEYS } from '@/api/buildings/keys.ts';
 
 export const BuildingCreateDialog = () => {
   const [open, setOpen] = useState(false);
@@ -35,11 +33,7 @@ export const BuildingCreateDialog = () => {
   const createMutation = useCreateBuilding();
 
   const onSubmit = form.handleSubmit(async (data) => {
-    let nameExists = queryClient.getQueryData<boolean>(BUILDINGS_KEYS.nameExists(data.name));
-
-    if (nameExists === undefined) {
-      nameExists = await checkNameMutation.mutateAsync(data.name);
-    }
+    const nameExists = await checkNameMutation.mutateAsync(data.name);
 
     if (nameExists) {
       form.setError('name', {

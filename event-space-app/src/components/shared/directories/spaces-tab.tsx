@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, DoorOpen, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, DoorOpen } from 'lucide-react';
 import {
   Badge,
   Button,
@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/ui';
 import { SearchInput } from '@/components/shared';
+import { SpaceCreateDialog, SpaceDeleteDialog, SpaceEditDialog } from '@/components/modal';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useSpacesByFilter } from '@/api/admin/hooks.ts';
@@ -74,19 +75,16 @@ export const SpacesTab = () => {
             <span className={'font-medium text-xl'}>Кабинеты и аудитории</span>
           </div>
           <span className={'text-muted-foreground text-sm'}>
-            Управление помещениями для мероприятий
+            Управление пространствами для мероприятий
           </span>
         </div>
-        <Button>
-          <Plus />
-          <span>Добавить кабинет</span>
-        </Button>
+        <SpaceCreateDialog />
       </div>
 
       <SearchInput
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder={'Поиск кабинетов...'}
+        placeholder={'Поиск пространств...'}
       />
 
       <Table className={'table-fixed w-full'}>
@@ -125,12 +123,15 @@ export const SpacesTab = () => {
               <TableCell>{space.capacity} чел.</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Pencil className={'w-4 h-4 text-muted-foreground'} />
-                  </Button>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Trash2 className={'w-4 h-4 text-red-500'} />
-                  </Button>
+                  <SpaceEditDialog
+                    id={space.id}
+                    name={space.name}
+                    buildingId={space.building}
+                    typeId={space.typeId}
+                    floor={space.floor}
+                    capacity={space.capacity}
+                  />
+                  <SpaceDeleteDialog id={space.id} name={space.name} />
                 </div>
               </TableCell>
             </TableRow>
