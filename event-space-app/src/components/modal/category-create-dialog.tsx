@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import {
   Button,
+  ColorPicker,
   Dialog,
   DialogContent,
   DialogFooter,
@@ -24,7 +25,7 @@ export const CategoryCreateDialog = () => {
 
   const form = useForm<EventCategoryCreateDto>({
     resolver: zodResolver(categoryCreateSchema),
-    defaultValues: { name: '' },
+    defaultValues: { name: '', color: '#6366F1' },
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
@@ -71,6 +72,17 @@ export const CategoryCreateDialog = () => {
             />
             {form.formState.errors.name && (
               <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Цвет</Label>
+            <ColorPicker
+              value={form.watch('color')}
+              onChange={(color) => form.setValue('color', color, { shouldValidate: false })}
+            />
+            {form.formState.errors.color && (
+              <FormErrorMessage>{form.formState.errors.color.message}</FormErrorMessage>
             )}
           </div>
 

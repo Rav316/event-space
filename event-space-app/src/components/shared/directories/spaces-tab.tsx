@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useSpacesByFilter } from '@/api/admin/hooks.ts';
 
-const PAGE_SIZE_OPTIONS = [5, 10, 15];
+const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
 type SortCol = 'name' | 'type' | 'floor' | 'capacity';
 
@@ -35,7 +35,7 @@ export const SpacesTab = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 300);
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
@@ -153,7 +153,7 @@ export const SpacesTab = () => {
                 setPage(0);
               }}
             >
-              <SelectTrigger className={'h-8 w-16'}>
+              <SelectTrigger className={'h-8 w-[70px]'}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

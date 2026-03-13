@@ -24,13 +24,13 @@ import { useDebounce } from 'use-debounce';
 import { useCategoriesByFilter } from '@/api/admin/hooks.ts';
 import { CategoryCreateDialog, CategoryDeleteDialog, CategoryEditDialog } from '@/components/modal';
 
-const PAGE_SIZE_OPTIONS = [5, 10, 15];
+const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
 export const CategoriesTab = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 300);
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [sortDir, setSortDir] = useState<'asc' | 'desc' | null>(null);
 
   useEffect(() => {
@@ -99,10 +99,19 @@ export const CategoriesTab = () => {
         <TableBody>
           {rows.map((category) => (
             <TableRow key={category.id}>
-              <TableCell className={'font-medium'}>{category.name}</TableCell>
+              <TableCell>
+                <div className={'flex items-center gap-2.5'}>
+                  <span
+                    className={'inline-block h-4 w-4 shrink-0 rounded-sm border border-border'}
+                    style={{ backgroundColor: category.color ?? '#6366F1' }}
+                    title={category.color}
+                  />
+                  <span className={'font-medium'}>{category.name}</span>
+                </div>
+              </TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <CategoryEditDialog id={category.id} name={category.name} />
+                  <CategoryEditDialog id={category.id} name={category.name} color={category.color} />
                   <CategoryDeleteDialog id={category.id} name={category.name} />
                 </div>
               </TableCell>
@@ -125,7 +134,7 @@ export const CategoriesTab = () => {
                 setPage(0);
               }}
             >
-              <SelectTrigger className={'h-8 w-16'}>
+              <SelectTrigger className={'h-8 w-[70px]'}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

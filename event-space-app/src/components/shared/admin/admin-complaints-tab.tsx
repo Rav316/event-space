@@ -325,7 +325,7 @@ export const AdminComplaintsTab = () => {
                 setPage(0);
               }}
             >
-              <SelectTrigger className={'h-8 w-16'}>
+              <SelectTrigger className={'h-8 w-[70px]'}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

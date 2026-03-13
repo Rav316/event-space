@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Pencil } from 'lucide-react';
 import {
   Button,
+  ColorPicker,
   Dialog,
   DialogContent,
   DialogFooter,
@@ -25,23 +26,24 @@ type CategoryEditForm = z.infer<typeof categoryEditSchema>;
 interface Props {
   id: number;
   name: string;
+  color: string;
 }
 
-export const CategoryEditDialog = ({ id, name }: Props) => {
+export const CategoryEditDialog = ({ id, name, color }: Props) => {
   const [open, setOpen] = useState(false);
 
   const form = useForm<CategoryEditForm>({
     resolver: zodResolver(categoryEditSchema),
-    defaultValues: { name },
+    defaultValues: { name, color },
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
 
   useEffect(() => {
     if (open) {
-      form.reset({ name });
+      form.reset({ name, color });
     }
-  }, [open, name, form]);
+  }, [open, name, color, form]);
 
   const checkNameMutation = useCheckCategoryName();
   const editMutation = useEditCategory();
@@ -59,7 +61,7 @@ export const CategoryEditDialog = ({ id, name }: Props) => {
       }
     }
 
-    const dto: EventCategoryEditDto = { name: data.name };
+    const dto: EventCategoryEditDto = { name: data.name, color: data.color };
     await editMutation.mutateAsync({ id, data: dto });
     setOpen(false);
   });
@@ -86,6 +88,17 @@ export const CategoryEditDialog = ({ id, name }: Props) => {
             />
             {form.formState.errors.name && (
               <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Цвет</Label>
+            <ColorPicker
+              value={form.watch('color')}
+              onChange={(c) => form.setValue('color', c, { shouldValidate: false })}
+            />
+            {form.formState.errors.color && (
+              <FormErrorMessage>{form.formState.errors.color.message}</FormErrorMessage>
             )}
           </div>
 

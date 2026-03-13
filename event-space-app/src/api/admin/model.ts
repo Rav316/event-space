@@ -68,6 +68,7 @@ export interface BuildingReadDto {
 export interface EventCategoryReadDto {
   id: number;
   name: string;
+  color: string;
 }
 
 export interface FacultyReadDto {

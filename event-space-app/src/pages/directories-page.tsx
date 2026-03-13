@@ -18,6 +18,7 @@ const DirectoriesPage = () => {
       case 1:
         return <SpacesTab />;
       case 2:
+        // TODO сделать colorPicker для категории и хранить цвет категории на бекэнде
         return <CategoriesTab />;
       case 3:
         return <FacultiesTab />;

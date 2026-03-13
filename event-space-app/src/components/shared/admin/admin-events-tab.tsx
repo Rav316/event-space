@@ -28,7 +28,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useEventsByFilter } from '@/api/admin/hooks.ts';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { eventStatuses } from '@/constants/event-statuses.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
@@ -174,7 +174,7 @@ export const AdminEventsTab = () => {
                   <TableCell>
                     <Badge
                       variant="outline"
-                      className={categoryColors[event.category.id - 1]}
+                      style={categoryBadgeStyle(event.category.color)}
                     >
                       {event.category.name}
                     </Badge>
@@ -236,7 +236,7 @@ export const AdminEventsTab = () => {
                 setPage(0);
               }}
             >
-              <SelectTrigger className={'h-8 w-16'}>
+              <SelectTrigger className={'h-8 w-[70px]'}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
