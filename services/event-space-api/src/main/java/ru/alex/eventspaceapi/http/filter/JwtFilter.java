@@ -41,7 +41,8 @@ public class JwtFilter extends FilterBase {
                             !requestURI.matches("^/api/events/\\d+/reviews/my$") &&
                             !requestURI.startsWith("/api/events/my")) ||
                     requestURI.equals("/api/users/top-organizers") ||
-                            requestURI.startsWith("/api/events/event-categories")
+                            requestURI.startsWith("/api/events/event-categories") ||
+                            requestURI.startsWith("/api/faculties")
             )) {
                 filterChain.doFilter(request, response);
                 return;

@@ -11,9 +11,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.Faculty;
 import ru.alex.eventspaceapi.database.repository.FacultyRepositoryCustom;
+import ru.alex.eventspaceapi.dto.faculty.FacultyDeleteImpactDto;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.util.PageUtils;
 import ru.alex.eventspaceapi.util.QueryDslUtils;
@@ -27,6 +29,11 @@ import static ru.alex.eventspaceapi.database.entity.QFaculty.faculty;
 @RequiredArgsConstructor
 public class FacultyRepositoryImpl implements FacultyRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static final String SQL_DELETE_IMPACT = """
+            SELECT COUNT(*) AS users FROM users WHERE faculty_id = :id
+            """;
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
             "id", faculty.id,
@@ -60,6 +67,13 @@ public class FacultyRepositoryImpl implements FacultyRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(faculties, pageable, total != null ? total : 0);
+    }
+
+    @Override
+    public FacultyDeleteImpactDto getDeleteImpact(Integer id) {
+        return jdbcTemplate.queryForObject(SQL_DELETE_IMPACT, Map.of("id", id), (rs, rowNum) ->
+                new FacultyDeleteImpactDto(rs.getLong("users"))
+        );
     }
 
     private BooleanExpression buildPredicate(AdminListFilter filter) {
