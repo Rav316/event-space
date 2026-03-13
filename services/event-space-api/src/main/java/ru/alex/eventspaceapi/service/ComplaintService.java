@@ -16,7 +16,9 @@ import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.complaint.ComplaintCreateDto;
 import ru.alex.eventspaceapi.dto.complaint.ComplaintListDto;
+import ru.alex.eventspaceapi.dto.complaint.ComplaintReviewDto;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
+import ru.alex.eventspaceapi.exception.ComplaintNotFoundException;
 import ru.alex.eventspaceapi.exception.ComplaintTypeNotFoundException;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.EventReviewNotFoundException;
@@ -26,6 +28,7 @@ import ru.alex.eventspaceapi.model.ComplaintStatus;
 import ru.alex.eventspaceapi.model.ComplaintTargetType;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
@@ -68,6 +71,16 @@ public class ComplaintService {
         complaint.setStatus(ComplaintStatus.UNDER_CONSIDERATION);
 
         complaintRepository.save(complaint);
+    }
+
+    @Transactional
+    public void reviewComplaint(Integer id, ComplaintReviewDto dto) {
+        Complaint complaint = complaintRepository.findById(id)
+                .orElseThrow(() -> new ComplaintNotFoundException(id));
+        complaint.setAdminComment(dto.comment());
+        complaint.setStatus(dto.resolved() ? ComplaintStatus.RESOLVED : ComplaintStatus.REJECTED);
+        complaint.setReviewedBy(userRepository.getReferenceById(Objects.requireNonNull(getAuthorizedUser()).id()));
+        complaint.setReviewedAt(Instant.now());
     }
 
     private String buildSnapshot(ComplaintTargetType targetType, Integer targetId) {

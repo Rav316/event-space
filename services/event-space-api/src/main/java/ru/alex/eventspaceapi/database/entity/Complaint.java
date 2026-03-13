@@ -10,6 +10,7 @@ import org.hibernate.type.SqlTypes;
 import ru.alex.eventspaceapi.model.ComplaintStatus;
 import ru.alex.eventspaceapi.model.ComplaintTargetType;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -48,4 +49,13 @@ public class Complaint {
     private ComplaintStatus status;
 
     private String description;
+
+    private String adminComment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewed_by", referencedColumnName = "id")
+    private User reviewedBy;
+
+    @Column(name = "reviewed_at")
+    private Instant reviewedAt;
 }

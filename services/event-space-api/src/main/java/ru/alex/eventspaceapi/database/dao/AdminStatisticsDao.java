@@ -22,7 +22,7 @@ public class AdminStatisticsDao {
                 (SELECT COUNT(*) FROM event
                   WHERE event_date > CURRENT_DATE
                      OR (event_date = CURRENT_DATE AND start_time > CURRENT_TIME))   AS active_events,
-                (SELECT COUNT(*) FROM complaint)                                     AS total_complaints
+                (SELECT COUNT(*) FROM complaint WHERE status = 'UNDER_CONSIDERATION') AS pending_complaints
             """;
 
     private static final String SQL_LATEST_USERS = """
@@ -54,7 +54,7 @@ public class AdminStatisticsDao {
                         rs.getLong("active_users"),
                         rs.getLong("total_events"),
                         rs.getLong("active_events"),
-                        rs.getLong("total_complaints")
+                        rs.getLong("pending_complaints")
                 }
         );
 

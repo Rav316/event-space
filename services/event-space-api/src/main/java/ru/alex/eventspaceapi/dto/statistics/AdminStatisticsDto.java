@@ -8,7 +8,7 @@ public record AdminStatisticsDto(
         Long activeUsers,
         Long totalEvents,
         Long activeEvents,
-        Long totalComplaints,
+        Long pendingComplaints,
         List<UserPreviewDto> latestUsers,
         List<EventPreviewDto> latestActiveEvents
 ) {

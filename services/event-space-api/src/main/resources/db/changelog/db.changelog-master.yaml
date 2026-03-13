@@ -99,3 +99,7 @@ databaseChangeLog:
       file: db/changelog/db-update-event-table-4.0.sql
   - include:
       file: db/changelog/db-update-event-category-table-1.0.sql
+  - include:
+      file: db/changelog/db-update-complaint-table-3.0.sql
+  - include:
+      file: db/changelog/db-update-complaint-table-3.1.sql

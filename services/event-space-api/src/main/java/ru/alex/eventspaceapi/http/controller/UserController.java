@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
 import ru.alex.eventspaceapi.dto.user.UserDeleteDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
+import ru.alex.eventspaceapi.mapper.user.UserBlockDto;
 import ru.alex.eventspaceapi.service.AuthService;
 import ru.alex.eventspaceapi.service.UserService;
 
@@ -42,6 +44,27 @@ public class UserController {
             @RequestPart(value = "avatarRemoved", required = false) Boolean avatarRemoved
             ) {
         return new ResponseEntity<>(userService.update(id, userEditDto, avatar, avatarRemoved), OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/block")
+    public ResponseEntity<Void> blockUsers(@RequestBody List<Integer> userIds) {
+        userService.blockUsers(userIds);
+        return new ResponseEntity<>(OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/block")
+    public ResponseEntity<Void> blockUser(@PathVariable Integer id, @RequestBody UserBlockDto userBlockDto) {
+        userService.blockUser(id, userBlockDto);
+        return new ResponseEntity<>(OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/unlcok")
+    public ResponseEntity<Void> unlockUser(@PathVariable Integer id) {
+        userService.unlockUser(id);
+        return new ResponseEntity<>(OK);
     }
 
     @PostMapping("/profile/delete")
