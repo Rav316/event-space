@@ -24,7 +24,11 @@ import {
   type SpaceCreateFormData,
   spaceCreateSchema,
 } from '@/schemas/space-create-schema.ts';
-import { useCheckSpaceNameAndBuilding, useCreateSpace, useSpaceTypes } from '@/api/spaces/hooks.ts';
+import {
+  useCheckSpaceNameAndBuilding,
+  useCreateSpace,
+  useSpaceTypes,
+} from '@/api/spaces/hooks.ts';
 import { useBuildings } from '@/api/buildings/hooks.ts';
 
 export const SpaceCreateDialog = () => {
@@ -32,7 +36,13 @@ export const SpaceCreateDialog = () => {
 
   const form = useForm<SpaceCreateFormData>({
     resolver: zodResolver(spaceCreateSchema),
-    defaultValues: { name: '', building: undefined, type: undefined, floor: undefined, capacity: undefined },
+    defaultValues: {
+      name: '',
+      building: undefined,
+      type: undefined,
+      floor: undefined,
+      capacity: undefined,
+    },
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
@@ -43,7 +53,10 @@ export const SpaceCreateDialog = () => {
   const createMutation = useCreateSpace();
 
   const onSubmit = form.handleSubmit(async (data) => {
-    const nameExists = await checkNameMutation.mutateAsync({ name: data.name, building: data.building });
+    const nameExists = await checkNameMutation.mutateAsync({
+      name: data.name,
+      building: data.building,
+    });
 
     if (nameExists) {
       form.setError('name', {
@@ -59,7 +72,13 @@ export const SpaceCreateDialog = () => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); form.reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus />
@@ -80,7 +99,9 @@ export const SpaceCreateDialog = () => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -100,14 +121,18 @@ export const SpaceCreateDialog = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {buildings.map((b) => (
-                        <SelectItem key={b.id} value={String(b.id)}>{b.name}</SelectItem>
+                        <SelectItem key={b.id} value={String(b.id)}>
+                          {b.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 )}
               />
               {form.formState.errors.building && (
-                <FormErrorMessage>{form.formState.errors.building.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.formState.errors.building.message}
+                </FormErrorMessage>
               )}
             </div>
 
@@ -126,14 +151,18 @@ export const SpaceCreateDialog = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {spaceTypes.map((t) => (
-                        <SelectItem key={t.id} value={String(t.id)}>{t.name}</SelectItem>
+                        <SelectItem key={t.id} value={String(t.id)}>
+                          {t.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 )}
               />
               {form.formState.errors.type && (
-                <FormErrorMessage>{form.formState.errors.type.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.formState.errors.type.message}
+                </FormErrorMessage>
               )}
             </div>
           </div>
@@ -146,11 +175,16 @@ export const SpaceCreateDialog = () => {
                 type="number"
                 placeholder="1"
                 {...form.register('floor', {
-                  setValueAs: (v) => (v === '' || v === null || v === undefined ? undefined : Number(v)),
+                  setValueAs: (v) =>
+                    v === '' || v === null || v === undefined
+                      ? undefined
+                      : Number(v),
                 })}
               />
               {form.formState.errors.floor && (
-                <FormErrorMessage>{form.formState.errors.floor.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.formState.errors.floor.message}
+                </FormErrorMessage>
               )}
             </div>
 
@@ -161,11 +195,19 @@ export const SpaceCreateDialog = () => {
                 type="number"
                 placeholder="30"
                 {...form.register('capacity', {
-                  setValueAs: (v) => (v === '' || v === null || v === undefined || Number.isNaN(Number(v)) ? undefined : Number(v)),
+                  setValueAs: (v) =>
+                    v === '' ||
+                    v === null ||
+                    v === undefined ||
+                    Number.isNaN(Number(v))
+                      ? undefined
+                      : Number(v),
                 })}
               />
               {form.formState.errors.capacity && (
-                <FormErrorMessage>{form.formState.errors.capacity.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.formState.errors.capacity.message}
+                </FormErrorMessage>
               )}
             </div>
           </div>
@@ -174,12 +216,20 @@ export const SpaceCreateDialog = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); form.reset(); }}
+              onClick={() => {
+                setOpen(false);
+                form.reset();
+              }}
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={createMutation.isPending || checkNameMutation.isPending}>
-              {(createMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={createMutation.isPending || checkNameMutation.isPending}
+            >
+              {(createMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {createMutation.isPending ? 'Сохранение...' : 'Добавить'}
             </Button>
           </DialogFooter>

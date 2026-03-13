@@ -1,9 +1,4 @@
-import {
-  ArrowDown,
-  ArrowUp,
-  ArrowUpDown,
-  Tags,
-} from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Tags } from 'lucide-react';
 import {
   Button,
   Select,
@@ -22,7 +17,11 @@ import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useCategoriesByFilter } from '@/api/admin/hooks.ts';
-import { CategoryCreateDialog, CategoryDeleteDialog, CategoryEditDialog } from '@/components/modal';
+import {
+  CategoryCreateDialog,
+  CategoryDeleteDialog,
+  CategoryEditDialog,
+} from '@/components/modal';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
@@ -38,7 +37,10 @@ export const CategoriesTab = () => {
   }, [debouncedSearch]);
 
   const sort = sortDir ? `name,${sortDir}` : undefined;
-  const { data } = useCategoriesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
+  const { data } = useCategoriesByFilter(
+    { page, size: pageSize, search: debouncedSearch },
+    sort,
+  );
 
   const rows = data?.content ?? [];
   const totalElements = data?.metadata.totalElements ?? 0;
@@ -51,13 +53,17 @@ export const CategoriesTab = () => {
 
   const SortIcon = () => {
     if (sortDir === null) return <ArrowUpDown className={'ml-1 h-4 w-4'} />;
-    return sortDir === 'asc'
-      ? <ArrowUp className={'ml-1 h-4 w-4'} />
-      : <ArrowDown className={'ml-1 h-4 w-4'} />;
+    return sortDir === 'asc' ? (
+      <ArrowUp className={'ml-1 h-4 w-4'} />
+    ) : (
+      <ArrowDown className={'ml-1 h-4 w-4'} />
+    );
   };
 
   return (
-    <div className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}>
+    <div
+      className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}
+    >
       <div className={'flex justify-between items-center'}>
         <div className={'flex flex-col'}>
           <div className={'flex gap-2 items-center'}>
@@ -102,7 +108,9 @@ export const CategoriesTab = () => {
               <TableCell>
                 <div className={'flex items-center gap-2.5'}>
                   <span
-                    className={'inline-block h-4 w-4 shrink-0 rounded-sm border border-border'}
+                    className={
+                      'inline-block h-4 w-4 shrink-0 rounded-sm border border-border'
+                    }
                     style={{ backgroundColor: category.color ?? '#6366F1' }}
                     title={category.color}
                   />
@@ -111,7 +119,11 @@ export const CategoriesTab = () => {
               </TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <CategoryEditDialog id={category.id} name={category.name} color={category.color} />
+                  <CategoryEditDialog
+                    id={category.id}
+                    name={category.name}
+                    color={category.color}
+                  />
                   <CategoryDeleteDialog id={category.id} name={category.name} />
                 </div>
               </TableCell>
@@ -126,7 +138,9 @@ export const CategoriesTab = () => {
         </span>
         <div className={'flex items-center gap-3'}>
           <div className={'flex items-center gap-2'}>
-            <span className={'text-sm text-muted-foreground'}>Строк на странице</span>
+            <span className={'text-sm text-muted-foreground'}>
+              Строк на странице
+            </span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => {

@@ -47,11 +47,7 @@ export const CategoriesDistributionBlock: React.FC<Props> = ({
                   animationDuration={600}
                 >
                   {pieData.map((entry, i) => (
-                    <Cell
-                      key={i}
-                      fill={entry.color}
-                      className="outline-none"
-                    />
+                    <Cell key={i} fill={entry.color} className="outline-none" />
                   ))}
                 </Pie>
                 <Tooltip />

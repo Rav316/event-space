@@ -6,7 +6,6 @@ import { ActiveEventsBlock } from '@/components/shared/admin/active-events-block
 import { Link } from 'react-router';
 
 export const AdminReviewTab = () => {
-
   return (
     <div className={'flex flex-col gap-2'}>
       <AdminStatisticsBlock />

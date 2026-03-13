@@ -21,29 +21,55 @@ export const findAllByFilter = async (
 };
 
 export const findAllSpaceTypes = async (): Promise<SpaceType[]> => {
-  const response = await axiosInstance.get<SpaceType[]>(`${ApiRoutes.SPACES}/types`);
+  const response = await axiosInstance.get<SpaceType[]>(
+    `${ApiRoutes.SPACES}/types`,
+  );
   return response.data;
 };
 
-export const existsByNameAndBuilding = async (name: string, building: number): Promise<boolean> => {
-  const response = await axiosInstance.get<boolean>(`${ApiRoutes.SPACES}/exists-by-name-and-building`, {
-    params: { name, building },
-  });
+export const existsByNameAndBuilding = async (
+  name: string,
+  building: number,
+): Promise<boolean> => {
+  const response = await axiosInstance.get<boolean>(
+    `${ApiRoutes.SPACES}/exists-by-name-and-building`,
+    {
+      params: { name, building },
+    },
+  );
   return response.data;
 };
 
-export const createSpace = async (data: SpaceCreateDto): Promise<SpaceListDto> => {
-  const response = await axiosInstance.post<SpaceListDto>(ApiRoutes.SPACES, data);
+export const createSpace = async (
+  data: SpaceCreateDto,
+): Promise<SpaceListDto> => {
+  const response = await axiosInstance.post<SpaceListDto>(
+    ApiRoutes.SPACES,
+    data,
+  );
   return response.data;
 };
 
-export const editSpace = async ({ id, data }: { id: number; data: SpaceEditDto }): Promise<SpaceListDto> => {
-  const response = await axiosInstance.put<SpaceListDto>(`${ApiRoutes.SPACES}/${id}`, data);
+export const editSpace = async ({
+  id,
+  data,
+}: {
+  id: number;
+  data: SpaceEditDto;
+}): Promise<SpaceListDto> => {
+  const response = await axiosInstance.put<SpaceListDto>(
+    `${ApiRoutes.SPACES}/${id}`,
+    data,
+  );
   return response.data;
 };
 
-export const getDeleteImpact = async (id: number): Promise<SpaceDeleteImpactDto> => {
-  const response = await axiosInstance.get<SpaceDeleteImpactDto>(`${ApiRoutes.SPACES}/${id}/delete-impact`);
+export const getDeleteImpact = async (
+  id: number,
+): Promise<SpaceDeleteImpactDto> => {
+  const response = await axiosInstance.get<SpaceDeleteImpactDto>(
+    `${ApiRoutes.SPACES}/${id}/delete-impact`,
+  );
   return response.data;
 };
 

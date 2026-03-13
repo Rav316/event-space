@@ -55,11 +55,18 @@ export const SpaceDeleteDialog = ({ id, name }: Props) => {
         ) : (
           <div className={'flex flex-col gap-3'}>
             <p>
-              Вы действительно хотите удалить пространство <span className={'font-medium'}>«{name}»</span>?
+              Вы действительно хотите удалить пространство{' '}
+              <span className={'font-medium'}>«{name}»</span>?
             </p>
             {hasImpact && (
-              <div className={'rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700'}>
-                <p className={'font-medium mb-1'}>Вместе с ним будет удалено:</p>
+              <div
+                className={
+                  'rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700'
+                }
+              >
+                <p className={'font-medium mb-1'}>
+                  Вместе с ним будет удалено:
+                </p>
                 <ul className={'list-disc list-inside space-y-0.5'}>
                   {impact.events > 0 && <li>{impact.events} мероприятие(й)</li>}
                   {impact.reviews > 0 && <li>{impact.reviews} отзыв(ов)</li>}

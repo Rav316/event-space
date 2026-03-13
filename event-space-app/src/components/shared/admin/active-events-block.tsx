@@ -25,7 +25,9 @@ export const ActiveEventsBlock = () => {
           ))
         ) : !statistics?.latestActiveEvents?.length ? (
           <div className={'flex flex-1 items-center justify-center py-6'}>
-            <span className={'text-muted-foreground text-sm'}>Нет активных мероприятий</span>
+            <span className={'text-muted-foreground text-sm'}>
+              Нет активных мероприятий
+            </span>
           </div>
         ) : (
           statistics.latestActiveEvents.map((event, index) => (
@@ -35,12 +37,19 @@ export const ActiveEventsBlock = () => {
                 <div className={'flex flex-col'}>
                   <span>{event.name}</span>
                   <span className={'text-muted-foreground text-xs'}>
-                    {event.eventDate} · {event.authorFirstName} {event.authorLastName}
+                    {event.eventDate} · {event.authorFirstName}{' '}
+                    {event.authorLastName}
                   </span>
                 </div>
                 <div className={'flex flex-col items-end'}>
                   {event.registeredUsers} / {event.participantQuantity}
-                  <Progress value={Math.max(0, (event.registeredUsers / event.participantQuantity) * 100)} className={'h-1'} />
+                  <Progress
+                    value={Math.max(
+                      0,
+                      (event.registeredUsers / event.participantQuantity) * 100,
+                    )}
+                    className={'h-1'}
+                  />
                 </div>
               </div>
             </div>
@@ -49,4 +58,4 @@ export const ActiveEventsBlock = () => {
       </div>
     </div>
   );
-}
+};

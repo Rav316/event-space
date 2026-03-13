@@ -3,7 +3,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar, TriangleAlert, Users } from 'lucide-react';
 import { useAdminStatistics } from '@/api/admin/hooks.ts';
 
-
 export const AdminStatisticsBlock = () => {
   const { data: statistics, isPending: isStatisticsPending } =
     useAdminStatistics();

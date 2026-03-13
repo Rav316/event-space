@@ -21,7 +21,10 @@ import {
   Spinner,
 } from '@/components/ui';
 import { facultyCreateSchema } from '@/schemas/faculty-create-schema.ts';
-import { useCheckFacultyName, useCreateFaculty } from '@/api/faculties/hooks.ts';
+import {
+  useCheckFacultyName,
+  useCreateFaculty,
+} from '@/api/faculties/hooks.ts';
 import { useBuildings } from '@/api/buildings/hooks.ts';
 import type { FacultyCreateDto } from '@/api/faculties/model.ts';
 
@@ -56,7 +59,13 @@ export const FacultyCreateDialog = () => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); form.reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus />
@@ -77,7 +86,9 @@ export const FacultyCreateDialog = () => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -96,14 +107,18 @@ export const FacultyCreateDialog = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {buildings.map((b) => (
-                      <SelectItem key={b.id} value={String(b.id)}>{b.name}</SelectItem>
+                      <SelectItem key={b.id} value={String(b.id)}>
+                        {b.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               )}
             />
             {form.formState.errors.building && (
-              <FormErrorMessage>{form.formState.errors.building.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.building.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -111,12 +126,20 @@ export const FacultyCreateDialog = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); form.reset(); }}
+              onClick={() => {
+                setOpen(false);
+                form.reset();
+              }}
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={createMutation.isPending || checkNameMutation.isPending}>
-              {(createMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={createMutation.isPending || checkNameMutation.isPending}
+            >
+              {(createMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {createMutation.isPending ? 'Сохранение...' : 'Добавить'}
             </Button>
           </DialogFooter>

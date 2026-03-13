@@ -32,17 +32,33 @@ export const existsByName = async (name: string): Promise<boolean> => {
   return response.data;
 };
 
-export const createCategory = async (data: EventCategoryCreateDto): Promise<EventCategory> => {
-  const response = await axiosInstance.post<EventCategory>(ApiRoutes.EVENT_CATEGORIES, data);
+export const createCategory = async (
+  data: EventCategoryCreateDto,
+): Promise<EventCategory> => {
+  const response = await axiosInstance.post<EventCategory>(
+    ApiRoutes.EVENT_CATEGORIES,
+    data,
+  );
   return response.data;
 };
 
-export const editCategory = async ({ id, data }: { id: number; data: EventCategoryEditDto }): Promise<EventCategory> => {
-  const response = await axiosInstance.put<EventCategory>(`${ApiRoutes.EVENT_CATEGORIES}/${id}`, data);
+export const editCategory = async ({
+  id,
+  data,
+}: {
+  id: number;
+  data: EventCategoryEditDto;
+}): Promise<EventCategory> => {
+  const response = await axiosInstance.put<EventCategory>(
+    `${ApiRoutes.EVENT_CATEGORIES}/${id}`,
+    data,
+  );
   return response.data;
 };
 
-export const getDeleteImpact = async (id: number): Promise<EventCategoryDeleteImpactDto> => {
+export const getDeleteImpact = async (
+  id: number,
+): Promise<EventCategoryDeleteImpactDto> => {
   const response = await axiosInstance.get<EventCategoryDeleteImpactDto>(
     `${ApiRoutes.EVENT_CATEGORIES}/${id}/delete-impact`,
   );

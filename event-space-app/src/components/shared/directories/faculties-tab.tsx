@@ -38,7 +38,10 @@ export const FacultiesTab = () => {
   }, [debouncedSearch]);
 
   const sort = sortKey ? `${sortKey},${sortDir}` : undefined;
-  const { data } = useFacultiesByFilter({ page, size: pageSize, search: debouncedSearch }, sort);
+  const { data } = useFacultiesByFilter(
+    { page, size: pageSize, search: debouncedSearch },
+    sort,
+  );
 
   const rows = data?.content ?? [];
   const totalElements = data?.metadata.totalElements ?? 0;
@@ -55,13 +58,17 @@ export const FacultiesTab = () => {
 
   const SortIcon = ({ col }: { col: SortCol }) => {
     if (sortKey !== col) return <ArrowUpDown className={'ml-1 h-4 w-4'} />;
-    return sortDir === 'asc'
-      ? <ArrowUp className={'ml-1 h-4 w-4'} />
-      : <ArrowDown className={'ml-1 h-4 w-4'} />;
+    return sortDir === 'asc' ? (
+      <ArrowUp className={'ml-1 h-4 w-4'} />
+    ) : (
+      <ArrowDown className={'ml-1 h-4 w-4'} />
+    );
   };
 
   return (
-    <div className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}>
+    <div
+      className={'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'}
+    >
       <div className={'flex justify-between items-center'}>
         <div className={'flex flex-col'}>
           <div className={'flex gap-2 items-center'}>
@@ -111,7 +118,11 @@ export const FacultiesTab = () => {
               <TableCell>{faculty.building}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <FacultyEditDialog id={faculty.id} name={faculty.name} buildingName={faculty.building} />
+                  <FacultyEditDialog
+                    id={faculty.id}
+                    name={faculty.name}
+                    buildingName={faculty.building}
+                  />
                   <FacultyDeleteDialog id={faculty.id} name={faculty.name} />
                 </div>
               </TableCell>
@@ -126,7 +137,9 @@ export const FacultiesTab = () => {
         </span>
         <div className={'flex items-center gap-3'}>
           <div className={'flex items-center gap-2'}>
-            <span className={'text-sm text-muted-foreground'}>Строк на странице</span>
+            <span className={'text-sm text-muted-foreground'}>
+              Строк на странице
+            </span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => {

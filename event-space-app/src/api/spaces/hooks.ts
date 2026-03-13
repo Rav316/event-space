@@ -28,7 +28,10 @@ export const useCheckSpaceNameAndBuilding = () => {
     mutationFn: ({ name, building }: { name: string; building: number }) =>
       Api.spaces.existsByNameAndBuilding(name, building),
     onSuccess: (exists, { name, building }) => {
-      queryClient.setQueryData(SPACES_KEYS.nameAndBuildingExists(name, building), exists);
+      queryClient.setQueryData(
+        SPACES_KEYS.nameAndBuildingExists(name, building),
+        exists,
+      );
     },
   });
 };

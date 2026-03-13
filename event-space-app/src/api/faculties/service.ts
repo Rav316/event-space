@@ -1,4 +1,9 @@
-import type { FacultyCreateDto, FacultyDeleteImpactDto, FacultyEditDto, FacultyListDto } from '@/api/faculties/model.ts';
+import type {
+  FacultyCreateDto,
+  FacultyDeleteImpactDto,
+  FacultyEditDto,
+  FacultyListDto,
+} from '@/api/faculties/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
 import type { FacultyReadDto } from '@/api/admin/model.ts';
@@ -18,17 +23,33 @@ export const existsByName = async (name: string): Promise<boolean> => {
   return response.data;
 };
 
-export const createFaculty = async (data: FacultyCreateDto): Promise<FacultyReadDto> => {
-  const response = await axiosInstance.post<FacultyReadDto>(ApiRoutes.FACULTIES, data);
+export const createFaculty = async (
+  data: FacultyCreateDto,
+): Promise<FacultyReadDto> => {
+  const response = await axiosInstance.post<FacultyReadDto>(
+    ApiRoutes.FACULTIES,
+    data,
+  );
   return response.data;
 };
 
-export const editFaculty = async ({ id, data }: { id: number; data: FacultyEditDto }): Promise<FacultyReadDto> => {
-  const response = await axiosInstance.put<FacultyReadDto>(`${ApiRoutes.FACULTIES}/${id}`, data);
+export const editFaculty = async ({
+  id,
+  data,
+}: {
+  id: number;
+  data: FacultyEditDto;
+}): Promise<FacultyReadDto> => {
+  const response = await axiosInstance.put<FacultyReadDto>(
+    `${ApiRoutes.FACULTIES}/${id}`,
+    data,
+  );
   return response.data;
 };
 
-export const getDeleteImpact = async (id: number): Promise<FacultyDeleteImpactDto> => {
+export const getDeleteImpact = async (
+  id: number,
+): Promise<FacultyDeleteImpactDto> => {
   const response = await axiosInstance.get<FacultyDeleteImpactDto>(
     `${ApiRoutes.FACULTIES}/${id}/delete-impact`,
   );

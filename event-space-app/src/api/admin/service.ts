@@ -16,53 +16,74 @@ import type { PageResponse } from '@/api/model.ts';
 export const getStatistics = async (): Promise<AdminStatisticsDto> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/statistics`);
   return response.data;
-}
+};
 
-export const findAllUsers = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<UserAdminListDto>> => {
+export const findAllUsers = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<UserAdminListDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/users`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllEvents = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<EventAdminListDto>> => {
+export const findAllEvents = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<EventAdminListDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/events`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllComplaints = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<ComplaintListDto>> => {
+export const findAllComplaints = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<ComplaintListDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/complaints`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllBuildings = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<BuildingReadDto>> => {
+export const findAllBuildings = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<BuildingReadDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/buildings`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllSpaces = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<SpaceListDto>> => {
+export const findAllSpaces = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<SpaceListDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/spaces`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllCategories = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<EventCategoryReadDto>> => {
+export const findAllCategories = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<EventCategoryReadDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/categories`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};
 
-export const findAllFaculties = async (filter: AdminListFilter, sort?: string): Promise<PageResponse<FacultyReadDto>> => {
+export const findAllFaculties = async (
+  filter: AdminListFilter,
+  sort?: string,
+): Promise<PageResponse<FacultyReadDto>> => {
   const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/faculties`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;
-}
+};

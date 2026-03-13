@@ -32,8 +32,12 @@ export const useCreateCategory = () => {
   return useMutation({
     mutationFn: Api.eventCategories.createCategory,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.CATEGORIES] });
-      await queryClient.invalidateQueries({ queryKey: EVENT_CATEGORIES_KEYS.all });
+      await queryClient.invalidateQueries({
+        queryKey: [ADMIN_KEYS.CATEGORIES],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: EVENT_CATEGORIES_KEYS.all,
+      });
       toast.success('Категория успешно добавлена');
     },
     onError: () => {
@@ -46,8 +50,12 @@ export const useEditCategory = () => {
   return useMutation({
     mutationFn: Api.eventCategories.editCategory,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.CATEGORIES] });
-      await queryClient.invalidateQueries({ queryKey: EVENT_CATEGORIES_KEYS.all });
+      await queryClient.invalidateQueries({
+        queryKey: [ADMIN_KEYS.CATEGORIES],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: EVENT_CATEGORIES_KEYS.all,
+      });
       toast.success('Категория успешно изменена');
     },
     onError: () => {
@@ -69,8 +77,12 @@ export const useDeleteCategory = () => {
   return useMutation({
     mutationFn: Api.eventCategories.deleteCategory,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.CATEGORIES] });
-      await queryClient.invalidateQueries({ queryKey: EVENT_CATEGORIES_KEYS.all });
+      await queryClient.invalidateQueries({
+        queryKey: [ADMIN_KEYS.CATEGORIES],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: EVENT_CATEGORIES_KEYS.all,
+      });
       toast.success('Категория удалена');
     },
     onError: () => {

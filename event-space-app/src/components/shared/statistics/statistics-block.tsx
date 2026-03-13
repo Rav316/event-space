@@ -57,8 +57,16 @@ export const StatisticsBlock: React.FC<Props> = ({
             if (match) {
               const num = parseFloat(match[1]);
               const suffix = match[2];
-              const decimals = match[1].includes('.') ? (match[1].split('.')[1]?.length ?? 0) : 0;
-              return <AnimatedNumber value={num} decimals={decimals} suffix={suffix} />;
+              const decimals = match[1].includes('.')
+                ? (match[1].split('.')[1]?.length ?? 0)
+                : 0;
+              return (
+                <AnimatedNumber
+                  value={num}
+                  decimals={decimals}
+                  suffix={suffix}
+                />
+              );
             }
             return value;
           })()

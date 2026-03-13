@@ -73,7 +73,12 @@ export const FacultyEditDialog = ({ id, name, buildingName }: Props) => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
           <Pencil className={'w-4 h-4 text-muted-foreground'} />
@@ -93,7 +98,9 @@ export const FacultyEditDialog = ({ id, name, buildingName }: Props) => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -112,14 +119,18 @@ export const FacultyEditDialog = ({ id, name, buildingName }: Props) => {
                   </SelectTrigger>
                   <SelectContent>
                     {buildings.map((b) => (
-                      <SelectItem key={b.id} value={String(b.id)}>{b.name}</SelectItem>
+                      <SelectItem key={b.id} value={String(b.id)}>
+                        {b.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               )}
             />
             {form.formState.errors.building && (
-              <FormErrorMessage>{form.formState.errors.building.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.building.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -131,8 +142,13 @@ export const FacultyEditDialog = ({ id, name, buildingName }: Props) => {
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={editMutation.isPending || checkNameMutation.isPending}>
-              {(editMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={editMutation.isPending || checkNameMutation.isPending}
+            >
+              {(editMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {editMutation.isPending ? 'Сохранение...' : 'Сохранить'}
             </Button>
           </DialogFooter>

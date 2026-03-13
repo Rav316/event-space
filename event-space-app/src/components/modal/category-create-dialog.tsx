@@ -17,7 +17,10 @@ import {
   Spinner,
 } from '@/components/ui';
 import { categoryCreateSchema } from '@/schemas/category-create-schema.ts';
-import { useCheckCategoryName, useCreateCategory } from '@/api/event-categories/hooks.ts';
+import {
+  useCheckCategoryName,
+  useCreateCategory,
+} from '@/api/event-categories/hooks.ts';
 import type { EventCategoryCreateDto } from '@/api/event-categories/model.ts';
 
 export const CategoryCreateDialog = () => {
@@ -50,7 +53,13 @@ export const CategoryCreateDialog = () => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); form.reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus />
@@ -71,7 +80,9 @@ export const CategoryCreateDialog = () => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -79,10 +90,14 @@ export const CategoryCreateDialog = () => {
             <Label>Цвет</Label>
             <ColorPicker
               value={form.watch('color')}
-              onChange={(color) => form.setValue('color', color, { shouldValidate: false })}
+              onChange={(color) =>
+                form.setValue('color', color, { shouldValidate: false })
+              }
             />
             {form.formState.errors.color && (
-              <FormErrorMessage>{form.formState.errors.color.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.color.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -90,12 +105,20 @@ export const CategoryCreateDialog = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); form.reset(); }}
+              onClick={() => {
+                setOpen(false);
+                form.reset();
+              }}
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={createMutation.isPending || checkNameMutation.isPending}>
-              {(createMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={createMutation.isPending || checkNameMutation.isPending}
+            >
+              {(createMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {createMutation.isPending ? 'Сохранение...' : 'Добавить'}
             </Button>
           </DialogFooter>

@@ -3,26 +3,50 @@ import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Input } from './input';
 
-const hsvToRgb = (h: number, s: number, v: number): [number, number, number] => {
+const hsvToRgb = (
+  h: number,
+  s: number,
+  v: number,
+): [number, number, number] => {
   const f = (n: number) => {
     const k = (n + h / 60) % 6;
     return v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
   };
-  return [Math.round(f(5) * 255), Math.round(f(3) * 255), Math.round(f(1) * 255)];
-}
+  return [
+    Math.round(f(5) * 255),
+    Math.round(f(3) * 255),
+    Math.round(f(1) * 255),
+  ];
+};
 
 const rgbToHex = (r: number, g: number, b: number): string => {
-  return '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('').toUpperCase();
-}
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => x.toString(16).padStart(2, '0'))
+      .join('')
+      .toUpperCase()
+  );
+};
 
 const hexToRgb = (hex: string): [number, number, number] | null => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
-}
+  return m
+    ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)]
+    : null;
+};
 
-const rgbToHsv = (r: number, g: number, b: number): [number, number, number] => {
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+const rgbToHsv = (
+  r: number,
+  g: number,
+  b: number,
+): [number, number, number] => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b),
+    d = max - min;
   let h = 0;
   const s = max === 0 ? 0 : d / max;
   const v = max;
@@ -32,17 +56,29 @@ const rgbToHsv = (r: number, g: number, b: number): [number, number, number] => 
     else h = ((r - g) / d + 4) * 60;
   }
   return [h, s, v];
-}
+};
 
 const hexFromValue = (value: string): string => {
   return /^#[0-9A-Fa-f]{6}$/.test(value) ? value.toUpperCase() : '#6366F1';
-}
+};
 
 const PRESETS = [
-  '#EF4444', '#F97316', '#F59E0B', '#EAB308',
-  '#84CC16', '#22C55E', '#10B981', '#14B8A6',
-  '#06B6D4', '#3B82F6', '#6366F1', '#8B5CF6',
-  '#A855F7', '#EC4899', '#64748B', '#374151',
+  '#EF4444',
+  '#F97316',
+  '#F59E0B',
+  '#EAB308',
+  '#84CC16',
+  '#22C55E',
+  '#10B981',
+  '#14B8A6',
+  '#06B6D4',
+  '#3B82F6',
+  '#6366F1',
+  '#8B5CF6',
+  '#A855F7',
+  '#EC4899',
+  '#64748B',
+  '#374151',
 ];
 
 interface ColorPickerProps {
@@ -51,7 +87,11 @@ interface ColorPickerProps {
   className?: string;
 }
 
-export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPickerProps) => {
+export const ColorPicker = ({
+  value: valueProp,
+  onChange,
+  className,
+}: ColorPickerProps) => {
   const value = valueProp ?? '#6366F1';
   const [open, setOpen] = React.useState(false);
 
@@ -89,7 +129,8 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const s = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-      const v = 1 - Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+      const v =
+        1 - Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
       const [h] = hsvRef.current;
       setHsv([h, s, v]);
       const hex = rgbToHex(...hsvToRgb(h, s, v));
@@ -104,7 +145,10 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
       const el = hueRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      const newHue = Math.max(0, Math.min(360, ((clientX - rect.left) / rect.width) * 360));
+      const newHue = Math.max(
+        0,
+        Math.min(360, ((clientX - rect.left) / rect.width) * 360),
+      );
       const [, s, v] = hsvRef.current;
       setHsv([newHue, s, v]);
       const hex = rgbToHex(...hsvToRgb(newHue, s, v));
@@ -119,7 +163,9 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
       if (dragging.current === 'gradient') applyGradient(e.clientX, e.clientY);
       if (dragging.current === 'hue') applyHue(e.clientX);
     };
-    const onUp = () => { dragging.current = null; };
+    const onUp = () => {
+      dragging.current = null;
+    };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
     return () => {
@@ -165,7 +211,9 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
             className="h-5 w-5 shrink-0 rounded border border-border shadow-sm"
             style={{ backgroundColor: value }}
           />
-          <span className="font-mono text-muted-foreground">{value.toUpperCase()}</span>
+          <span className="font-mono text-muted-foreground">
+            {value.toUpperCase()}
+          </span>
         </button>
       </PopoverTrigger>
 
@@ -178,11 +226,16 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
           ref={gradientRef}
           className="relative h-40 w-full cursor-crosshair"
           style={{ backgroundColor: hueColor }}
-          onMouseDown={(e) => { dragging.current = 'gradient'; applyGradient(e.clientX, e.clientY); }}
+          onMouseDown={(e) => {
+            dragging.current = 'gradient';
+            applyGradient(e.clientX, e.clientY);
+          }}
         >
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(to right, #fff, transparent)' }}
+            style={{
+              background: 'linear-gradient(to right, #fff, transparent)',
+            }}
           />
           <div
             className="pointer-events-none absolute inset-0"
@@ -211,7 +264,10 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
                 background:
                   'linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)',
               }}
-              onMouseDown={(e) => { dragging.current = 'hue'; applyHue(e.clientX); }}
+              onMouseDown={(e) => {
+                dragging.current = 'hue';
+                applyHue(e.clientX);
+              }}
             >
               <div
                 className="pointer-events-none absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.25)]"
@@ -224,7 +280,9 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="w-8 shrink-0 text-xs font-medium text-muted-foreground">HEX</span>
+            <span className="w-8 shrink-0 text-xs font-medium text-muted-foreground">
+              HEX
+            </span>
             <Input
               value={hexInput}
               onChange={handleHexInput}
@@ -256,4 +314,4 @@ export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPick
       </PopoverContent>
     </Popover>
   );
-}
+};

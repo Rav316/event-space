@@ -17,5 +17,5 @@ export const directoriesTabs: Tab[] = [
   {
     text: 'Факультеты',
     Icon: Building2,
-  }
+  },
 ];

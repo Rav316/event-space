@@ -7,4 +7,4 @@ export const ADMIN_KEYS = {
   SPACES: 'admin-spaces',
   CATEGORIES: 'admin-categories',
   FACULTIES: 'admin-faculties',
-}
+};

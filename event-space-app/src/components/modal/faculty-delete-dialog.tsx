@@ -10,7 +10,10 @@ import {
   DialogTrigger,
   Spinner,
 } from '@/components/ui';
-import { useDeleteFaculty, useFacultyDeleteImpact } from '@/api/faculties/hooks.ts';
+import {
+  useDeleteFaculty,
+  useFacultyDeleteImpact,
+} from '@/api/faculties/hooks.ts';
 
 interface Props {
   id: number;
@@ -53,11 +56,18 @@ export const FacultyDeleteDialog = ({ id, name }: Props) => {
         ) : (
           <div className={'flex flex-col gap-3'}>
             <p>
-              Вы действительно хотите удалить факультет <span className={'font-medium'}>«{name}»</span>?
+              Вы действительно хотите удалить факультет{' '}
+              <span className={'font-medium'}>«{name}»</span>?
             </p>
             {impact && impact.users > 0 && (
-              <div className={'rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700'}>
-                <p className={'font-medium mb-1'}>Вместе с ним будет удалено:</p>
+              <div
+                className={
+                  'rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700'
+                }
+              >
+                <p className={'font-medium mb-1'}>
+                  Вместе с ним будет удалено:
+                </p>
                 <ul className={'list-disc list-inside space-y-0.5'}>
                   <li>{impact.users} пользователь(ей)</li>
                 </ul>

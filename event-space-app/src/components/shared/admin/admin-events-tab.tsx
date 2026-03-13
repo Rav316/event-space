@@ -44,21 +44,29 @@ const sortColToParam: Record<SortCol, string> = {
   participants: 'registeredUsers',
 };
 
-
 function ParticipantsBar({ current, max }: { current: number; max: number }) {
   const pct = max > 0 ? Math.min((current / max) * 100, 100) : 0;
   return (
     <div className={'flex items-center gap-2'}>
-      <span className={'text-sm whitespace-nowrap w-[60px] text-right inline-block'}>{current}/{max}</span>
+      <span
+        className={'text-sm whitespace-nowrap w-[60px] text-right inline-block'}
+      >
+        {current}/{max}
+      </span>
       <div className={'h-2 rounded-full bg-gray-200 w-[70px] shrink-0'}>
-        <div className={'h-2 rounded-full bg-gray-700'} style={{ width: `${pct}%` }} />
+        <div
+          className={'h-2 rounded-full bg-gray-700'}
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </div>
   );
 }
 
 export const AdminEventsTab = () => {
-  const [deleteTarget, setDeleteTarget] = useState<EventAdminListDto | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<EventAdminListDto | null>(
+    null,
+  );
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [search, setSearch] = useState('');

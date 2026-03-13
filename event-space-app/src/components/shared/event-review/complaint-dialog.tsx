@@ -43,7 +43,7 @@ interface Props {
 export const ComplaintDialog: React.FC<Props> = ({
   open,
   onClose,
-  reviewId
+  reviewId,
 }) => {
   const { data: complaintTypes, isPending: isComplaintTypesPending } =
     useComplaintTypes(open);
@@ -151,7 +151,9 @@ export const ComplaintDialog: React.FC<Props> = ({
                 placeholder={
                   'Опишите подробно, что именно не так с этим отзывом...'
                 }
-                className={'resize-none min-h-20 max-h-40 overflow-y-auto break-all'}
+                className={
+                  'resize-none min-h-20 max-h-40 overflow-y-auto break-all'
+                }
               />
               <span className={'text-xs text-muted-foreground text-right'}>
                 {description.length}/{MAX_DESCRIPTION_LENGTH}

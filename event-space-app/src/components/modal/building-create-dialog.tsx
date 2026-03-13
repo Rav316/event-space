@@ -16,7 +16,10 @@ import {
   Spinner,
 } from '@/components/ui';
 import { buildingCreateSchema } from '@/schemas/building-create-schema.ts';
-import { useCheckBuildingName, useCreateBuilding } from '@/api/buildings/hooks.ts';
+import {
+  useCheckBuildingName,
+  useCreateBuilding,
+} from '@/api/buildings/hooks.ts';
 import type { BuildingCreateDto } from '@/api/buildings/model.ts';
 
 export const BuildingCreateDialog = () => {
@@ -49,7 +52,13 @@ export const BuildingCreateDialog = () => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); form.reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus />
@@ -70,7 +79,9 @@ export const BuildingCreateDialog = () => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -82,7 +93,9 @@ export const BuildingCreateDialog = () => {
               {...form.register('address')}
             />
             {form.formState.errors.address && (
-              <FormErrorMessage>{form.formState.errors.address.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.address.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -90,12 +103,20 @@ export const BuildingCreateDialog = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); form.reset(); }}
+              onClick={() => {
+                setOpen(false);
+                form.reset();
+              }}
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={createMutation.isPending || checkNameMutation.isPending}>
-              {(createMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={createMutation.isPending || checkNameMutation.isPending}
+            >
+              {(createMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {createMutation.isPending ? 'Сохранение...' : 'Добавить'}
             </Button>
           </DialogFooter>

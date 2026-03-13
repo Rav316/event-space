@@ -4,7 +4,12 @@ import { Loader } from 'lucide-react';
 import { AnimatedTabs } from '@/components/shared';
 import { adminTabs } from '@/constants/admin-tabs.ts';
 import { useState } from 'react';
-import { AdminComplaintsTab, AdminEventsTab, AdminReviewTab, AdminUsersTab } from '@/components/shared/admin';
+import {
+  AdminComplaintsTab,
+  AdminEventsTab,
+  AdminReviewTab,
+  AdminUsersTab,
+} from '@/components/shared/admin';
 import { useAdminStatistics } from '@/api/admin/hooks.ts';
 
 const AdminPage = () => {
@@ -20,7 +25,7 @@ const AdminPage = () => {
   const tabs = adminTabs.map((tab) =>
     tab.text === 'Жалобы'
       ? { ...tab, badge: statistics?.pendingComplaints }
-      : tab
+      : tab,
   );
 
   const renderTabContent = () => {

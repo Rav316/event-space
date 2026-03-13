@@ -16,7 +16,12 @@ interface Props {
   eventName: string;
 }
 
-export const EventDeleteDialog = ({ open, onClose, eventId, eventName }: Props) => {
+export const EventDeleteDialog = ({
+  open,
+  onClose,
+  eventId,
+  eventName,
+}: Props) => {
   const { mutate: deleteEvent, isPending } = useAdminDeleteEvent();
 
   const onDelete = () => {
@@ -37,7 +42,11 @@ export const EventDeleteDialog = ({ open, onClose, eventId, eventName }: Props) 
           <Button variant={'outline'} onClick={onClose} disabled={isPending}>
             Отмена
           </Button>
-          <Button variant={'destructive'} onClick={onDelete} disabled={isPending}>
+          <Button
+            variant={'destructive'}
+            onClick={onDelete}
+            disabled={isPending}
+          >
             {isPending && <Spinner />}
             Удалить
           </Button>

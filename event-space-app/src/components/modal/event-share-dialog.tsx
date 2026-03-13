@@ -109,7 +109,7 @@ export const EventShareDialog: React.FC<Props> = ({
                 className="flex flex-col items-center gap-2 rounded-xl border border-[#E5E5E5] p-3 hover:bg-muted transition-colors"
               >
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-lg">
-                  {<option.icon/>}
+                  {<option.icon />}
                 </div>
                 <span className="text-xs font-medium">{option.label}</span>
               </a>

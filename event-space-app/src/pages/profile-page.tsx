@@ -2,7 +2,8 @@ import { Wrapper } from '@/components/hoc';
 import {
   AnimatedTabs,
   ProfileHeader,
-  ProfileMainInfoBlock, ProfileStatisticsGroup,
+  ProfileMainInfoBlock,
+  ProfileStatisticsGroup,
 } from '@/components/shared';
 import { profileTabs } from '@/constants/profile-tabs.ts';
 import { useEffect, useState } from 'react';

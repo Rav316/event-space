@@ -33,12 +33,18 @@ import {
   Settings,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useComplaintsByFilter, useReviewComplaint } from '@/api/admin/hooks.ts';
+import {
+  useComplaintsByFilter,
+  useReviewComplaint,
+} from '@/api/admin/hooks.ts';
 import type { ComplaintListDto } from '@/api/admin/model.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
-const statusConfig: Record<number, { label: string; className: string; icon?: React.ReactNode }> = {
+const statusConfig: Record<
+  number,
+  { label: string; className: string; icon?: React.ReactNode }
+> = {
   0: {
     label: 'Ожидает',
     className: 'bg-yellow-100 text-yellow-700 border-yellow-200',
@@ -71,8 +77,10 @@ const sortColToField: Record<SortCol, string> = {
 function getTargetTitle(complaint: ComplaintListDto): string {
   try {
     const snapshot = JSON.parse(complaint.targetSnapshot);
-    if (complaint.targetType === 'EVENT_REVIEW') return snapshot.title ?? `Отзыв #${complaint.targetId}`;
-    if (complaint.targetType === 'EVENT') return snapshot.name ?? `Мероприятие #${complaint.targetId}`;
+    if (complaint.targetType === 'EVENT_REVIEW')
+      return snapshot.title ?? `Отзыв #${complaint.targetId}`;
+    if (complaint.targetType === 'EVENT')
+      return snapshot.name ?? `Мероприятие #${complaint.targetId}`;
   } catch {
     // ignore
   }
@@ -103,11 +111,18 @@ function ReviewDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        if (!v) onClose();
+      }}
+    >
       <DialogContent className={'sm:max-w-md'}>
         <DialogHeader>
           <DialogTitle>Рассмотрение жалобы</DialogTitle>
-          <DialogDescription>Рассмотрите жалобу и примите соответствующие меры</DialogDescription>
+          <DialogDescription>
+            Рассмотрите жалобу и примите соответствующие меры
+          </DialogDescription>
         </DialogHeader>
         <div className={'flex flex-col gap-4 py-2'}>
           <div className={'flex flex-col gap-0.5'}>
@@ -120,20 +135,28 @@ function ReviewDialog({
             <span className={'font-medium text-sm'}>
               {targetTypeLabels[complaint.targetType] ?? complaint.targetType}
             </span>
-            <span className={'text-sm text-muted-foreground'}>{getTargetTitle(complaint)}</span>
+            <span className={'text-sm text-muted-foreground'}>
+              {getTargetTitle(complaint)}
+            </span>
           </div>
           <div className={'flex flex-col gap-0.5'}>
             <span className={'font-medium text-sm'}>Причина</span>
-            <span className={'text-sm text-muted-foreground'}>{complaint.complaintTypeName}</span>
+            <span className={'text-sm text-muted-foreground'}>
+              {complaint.complaintTypeName}
+            </span>
           </div>
           {complaint.description && (
             <div className={'flex flex-col gap-0.5'}>
               <span className={'font-medium text-sm'}>Описание</span>
-              <span className={'text-sm text-muted-foreground break-all'}>{complaint.description}</span>
+              <span className={'text-sm text-muted-foreground break-all'}>
+                {complaint.description}
+              </span>
             </div>
           )}
           <div className={'flex flex-col gap-1.5'}>
-            <span className={'font-medium text-sm'}>Комментарий администратора</span>
+            <span className={'font-medium text-sm'}>
+              Комментарий администратора
+            </span>
             <Textarea
               value={comment}
               onChange={(e) => setComment(e.target.value.slice(0, MAX_COMMENT))}
@@ -148,7 +171,11 @@ function ReviewDialog({
           </div>
         </div>
         <div className={'flex justify-end gap-2 pt-2'}>
-          <Button variant="outline" onClick={() => handleReview(false)} disabled={isPending}>
+          <Button
+            variant="outline"
+            onClick={() => handleReview(false)}
+            disabled={isPending}
+          >
             Отклонить
           </Button>
           <Button onClick={() => handleReview(true)} disabled={isPending}>
@@ -167,7 +194,8 @@ export const AdminComplaintsTab = () => {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
-  const [reviewComplaint, setReviewComplaint] = useState<ComplaintListDto | null>(null);
+  const [reviewComplaint, setReviewComplaint] =
+    useState<ComplaintListDto | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -175,7 +203,10 @@ export const AdminComplaintsTab = () => {
   }, [search]);
 
   const sort = sortKey ? `${sortColToField[sortKey]},${sortDir}` : undefined;
-  const { data } = useComplaintsByFilter({ page, size: pageSize, search: debouncedSearch || undefined }, sort);
+  const { data } = useComplaintsByFilter(
+    { page, size: pageSize, search: debouncedSearch || undefined },
+    sort,
+  );
 
   const complaints = data?.content ?? [];
   const totalElements = data?.metadata.totalElements ?? 0;
@@ -207,7 +238,9 @@ export const AdminComplaintsTab = () => {
     });
 
   return (
-    <div className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}>
+    <div
+      className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}
+    >
       <div className={'flex items-center justify-between min-h-8'}>
         <div className={'flex items-center gap-2'}>
           <AlertTriangle className={'w-5 h-5'} />
@@ -228,7 +261,14 @@ export const AdminComplaintsTab = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Жалобщик</TableHead>
-            {(['targetType', 'complaintTypeName', 'complaintDate', 'status'] as const).map((col) => (
+            {(
+              [
+                'targetType',
+                'complaintTypeName',
+                'complaintDate',
+                'status',
+              ] as const
+            ).map((col) => (
               <TableHead
                 key={col}
                 className={'cursor-pointer select-none'}
@@ -273,19 +313,31 @@ export const AdminComplaintsTab = () => {
                 </TableCell>
                 <TableCell>
                   <div className={'flex flex-col'}>
-                    <Badge variant="outline" className={'w-fit whitespace-nowrap'}>
-                      {targetTypeLabels[complaint.targetType] ?? complaint.targetType}
+                    <Badge
+                      variant="outline"
+                      className={'w-fit whitespace-nowrap'}
+                    >
+                      {targetTypeLabels[complaint.targetType] ??
+                        complaint.targetType}
                     </Badge>
-                    <span className={'text-xs text-muted-foreground mt-1 max-w-40 truncate'}>
+                    <span
+                      className={
+                        'text-xs text-muted-foreground mt-1 max-w-40 truncate'
+                      }
+                    >
                       {getTargetTitle(complaint)}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className={'max-w-xs'}>
                   <div className={'flex flex-col'}>
-                    <span className={'font-medium'}>{complaint.complaintTypeName}</span>
+                    <span className={'font-medium'}>
+                      {complaint.complaintTypeName}
+                    </span>
                     {complaint.description && (
-                      <span className={'text-xs line-clamp-2'}>{complaint.description}</span>
+                      <span className={'text-xs line-clamp-2'}>
+                        {complaint.description}
+                      </span>
                     )}
                   </div>
                 </TableCell>
@@ -294,7 +346,9 @@ export const AdminComplaintsTab = () => {
                 </TableCell>
                 <TableCell>
                   {sc && (
-                    <Badge className={`${sc.className} flex items-center gap-1 w-fit whitespace-nowrap`}>
+                    <Badge
+                      className={`${sc.className} flex items-center gap-1 w-fit whitespace-nowrap`}
+                    >
                       {sc.icon}
                       {sc.label}
                     </Badge>
@@ -329,7 +383,9 @@ export const AdminComplaintsTab = () => {
         </span>
         <div className={'flex items-center gap-3'}>
           <div className={'flex items-center gap-2'}>
-            <span className={'text-sm text-muted-foreground'}>Строк на странице</span>
+            <span className={'text-sm text-muted-foreground'}>
+              Строк на странице
+            </span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => {

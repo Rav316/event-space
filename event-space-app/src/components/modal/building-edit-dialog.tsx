@@ -16,7 +16,10 @@ import {
   Spinner,
 } from '@/components/ui';
 import { buildingEditSchema } from '@/schemas/building-edit-schema.ts';
-import { useCheckBuildingName, useEditBuilding } from '@/api/buildings/hooks.ts';
+import {
+  useCheckBuildingName,
+  useEditBuilding,
+} from '@/api/buildings/hooks.ts';
 import type { BuildingEditDto } from '@/api/buildings/model.ts';
 import { z } from 'zod';
 
@@ -66,7 +69,12 @@ export const BuildingEditDialog = ({ id, name, address }: Props) => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={(value) => { setOpen(value); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
           <Pencil className={'w-4 h-4 text-muted-foreground'} />
@@ -86,7 +94,9 @@ export const BuildingEditDialog = ({ id, name, address }: Props) => {
               {...form.register('name')}
             />
             {form.formState.errors.name && (
-              <FormErrorMessage>{form.formState.errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.name.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -98,7 +108,9 @@ export const BuildingEditDialog = ({ id, name, address }: Props) => {
               {...form.register('address')}
             />
             {form.formState.errors.address && (
-              <FormErrorMessage>{form.formState.errors.address.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {form.formState.errors.address.message}
+              </FormErrorMessage>
             )}
           </div>
 
@@ -110,8 +122,13 @@ export const BuildingEditDialog = ({ id, name, address }: Props) => {
             >
               Отмена
             </Button>
-            <Button type="submit" disabled={editMutation.isPending || checkNameMutation.isPending}>
-              {(editMutation.isPending || checkNameMutation.isPending) && <Spinner />}
+            <Button
+              type="submit"
+              disabled={editMutation.isPending || checkNameMutation.isPending}
+            >
+              {(editMutation.isPending || checkNameMutation.isPending) && (
+                <Spinner />
+              )}
               {editMutation.isPending ? 'Сохранение...' : 'Сохранить'}
             </Button>
           </DialogFooter>

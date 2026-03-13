@@ -21,5 +21,5 @@ export const Api = {
   buildings,
   statistics,
   complaints,
-  admin
+  admin,
 };
