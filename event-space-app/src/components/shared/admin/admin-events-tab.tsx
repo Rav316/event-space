@@ -22,14 +22,16 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
-  Ban,
   Settings,
+  Trash2,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useEventsByFilter } from '@/api/admin/hooks.ts';
 import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { eventStatuses } from '@/constants/event-statuses.ts';
+import { EventDeleteDialog } from '@/components/modal/event-delete-dialog.tsx';
+import type { EventAdminListDto } from '@/api/admin/model.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
@@ -56,6 +58,7 @@ function ParticipantsBar({ current, max }: { current: number; max: number }) {
 }
 
 export const AdminEventsTab = () => {
+  const [deleteTarget, setDeleteTarget] = useState<EventAdminListDto | null>(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [search, setSearch] = useState('');
@@ -209,8 +212,9 @@ export const AdminEventsTab = () => {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           className={'text-red-600 gap-2 cursor-pointer'}
+                          onClick={() => setDeleteTarget(event)}
                         >
-                          <Ban className={'w-4 h-4'} /> Отменить
+                          <Trash2 className={'w-4 h-4'} /> Удалить
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -268,6 +272,14 @@ export const AdminEventsTab = () => {
           </div>
         </div>
       </div>
+      {deleteTarget && (
+        <EventDeleteDialog
+          open={!!deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          eventId={deleteTarget.id}
+          eventName={deleteTarget.name}
+        />
+      )}
     </div>
   );
 };

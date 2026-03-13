@@ -47,6 +47,11 @@ export const AnimatedTabs: React.FC<Props> = ({
               <tab.Icon className="w-4 h-4 z-10 max-[350px]:hidden" />
             )}
             {tab.text}
+            {tab.badge != null && tab.badge > 0 && (
+              <span className="bg-red-500 text-white text-xs font-semibold rounded-full px-1.5 py-0.5 leading-none min-w-[18px] text-center">
+                {tab.badge}
+              </span>
+            )}
           </button>
         ))}
       </div>

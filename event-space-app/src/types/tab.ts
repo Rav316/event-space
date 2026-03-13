@@ -6,4 +6,5 @@ export type Tab = {
   Icon?: React.ForwardRefExoticComponent<
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >;
+  badge?: number;
 };

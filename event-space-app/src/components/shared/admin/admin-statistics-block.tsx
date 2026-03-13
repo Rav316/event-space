@@ -44,7 +44,7 @@ export const AdminStatisticsBlock = () => {
             <StatisticsBlock
               title={'Жалобы'}
               Icon={TriangleAlert}
-              value={statistics?.totalComplaints ?? 0}
+              value={statistics?.pendingComplaints ?? 0}
               subtitle={'требуют рассмотрения'}
             />
           </>

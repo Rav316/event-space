@@ -8,6 +8,7 @@ import type { AuthResponse } from '@/api/auth/model.ts';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { useNavigate } from 'react-router';
 import { USERS_KEYS } from '@/api/users/keys.ts';
+import { ADMIN_KEYS } from '@/api/admin/keys.ts';
 
 export const useTopOrganizers = () => {
   return useQuery({
@@ -43,6 +44,40 @@ export const useCheckEmail = () => {
     onSuccess: (exists, email) => {
       queryClient.setQueryData(['emailExists', email], exists);
     },
+  });
+};
+
+export const useBlockUser = () => {
+  return useMutation({
+    mutationFn: ({ id, reason }: { id: number; reason: string }) =>
+      Api.users.blockUser(id, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.USERS] });
+      toast.success('Пользователь заблокирован');
+    },
+    onError: () => toast.error('Ошибка при блокировке пользователя'),
+  });
+};
+
+export const useBlockUsers = () => {
+  return useMutation({
+    mutationFn: (userIds: number[]) => Api.users.blockUsers(userIds),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.USERS] });
+      toast.success('Пользователи заблокированы');
+    },
+    onError: () => toast.error('Ошибка при блокировке пользователей'),
+  });
+};
+
+export const useUnlockUser = () => {
+  return useMutation({
+    mutationFn: (id: number) => Api.users.unlockUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.USERS] });
+      toast.success('Пользователь разблокирован');
+    },
+    onError: () => toast.error('Ошибка при разблокировке пользователя'),
   });
 };
 

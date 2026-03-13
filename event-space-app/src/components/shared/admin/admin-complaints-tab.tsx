@@ -33,7 +33,7 @@ import {
   Settings,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useComplaintsByFilter } from '@/api/admin/hooks.ts';
+import { useComplaintsByFilter, useReviewComplaint } from '@/api/admin/hooks.ts';
 import type { ComplaintListDto } from '@/api/admin/model.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
@@ -45,16 +45,12 @@ const statusConfig: Record<number, { label: string; className: string; icon?: Re
     icon: <AlertTriangle className={'w-3 h-3'} />,
   },
   1: {
-    label: 'Рассмотрена',
-    className: 'bg-gray-100 text-gray-700 border-gray-200',
+    label: 'Отклонена',
+    className: 'bg-white text-gray-700 border-gray-300',
   },
   2: {
     label: 'Решена',
     className: 'bg-gray-900 text-white border-gray-900',
-  },
-  3: {
-    label: 'Отклонена',
-    className: 'bg-white text-gray-700 border-gray-300',
   },
 };
 
@@ -83,6 +79,8 @@ function getTargetTitle(complaint: ComplaintListDto): string {
   return `#${complaint.targetId}`;
 }
 
+const MAX_COMMENT = 500;
+
 function ReviewDialog({
   complaint,
   open,
@@ -93,8 +91,16 @@ function ReviewDialog({
   onClose: () => void;
 }) {
   const [comment, setComment] = useState('');
+  const { mutate: review, isPending } = useReviewComplaint(() => {
+    setComment('');
+    onClose();
+  });
 
   if (!complaint) return null;
+
+  const handleReview = (resolved: boolean) => {
+    review({ id: complaint.id, dto: { comment, resolved } });
+  };
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -130,18 +136,24 @@ function ReviewDialog({
             <span className={'font-medium text-sm'}>Комментарий администратора</span>
             <Textarea
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={(e) => setComment(e.target.value.slice(0, MAX_COMMENT))}
               placeholder="Ваш комментарий к решению..."
               className={'resize-none'}
               rows={3}
+              disabled={isPending}
             />
+            <span className={'text-xs text-muted-foreground text-right'}>
+              {comment.length}/{MAX_COMMENT}
+            </span>
           </div>
         </div>
         <div className={'flex justify-end gap-2 pt-2'}>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={() => handleReview(false)} disabled={isPending}>
             Отклонить
           </Button>
-          <Button onClick={onClose}>Принять меры</Button>
+          <Button onClick={() => handleReview(true)} disabled={isPending}>
+            Принять меры
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -37,6 +37,8 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useUsersByFilter } from '@/api/admin/hooks.ts';
 import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
+import { useBlockUser, useBlockUsers, useUnlockUser } from '@/api/users/hooks.ts';
+import { useMe } from '@/api/auth/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
@@ -61,6 +63,13 @@ export const AdminUsersTab = () => {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [blockTarget, setBlockTarget] = useState<number[] | null>(null);
   const [blockReason, setBlockReason] = useState('');
+
+  const { data: meData } = useMe();
+  const currentUserId = meData?.user.id;
+
+  const blockUserMutation = useBlockUser();
+  const blockUsersMutation = useBlockUsers();
+  const unlockUserMutation = useUnlockUser();
 
   useEffect(() => {
     setPage(0);
@@ -92,7 +101,7 @@ export const AdminUsersTab = () => {
     );
   };
 
-  const pageIds = users.map((u) => u.id);
+  const pageIds = users.filter((u) => u.id !== currentUserId).map((u) => u.id);
   const allPageSelected = pageIds.length > 0 && pageIds.every((id) => selected.has(id));
   const somePageSelected = pageIds.some((id) => selected.has(id));
 
@@ -106,6 +115,7 @@ export const AdminUsersTab = () => {
   };
 
   const toggleOne = (id: number) => {
+    if (id === currentUserId) return;
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -119,10 +129,24 @@ export const AdminUsersTab = () => {
     setBlockReason('');
   };
 
-  const handleBlockConfirm = () => {
-    console.log('Block users:', blockTarget, 'Reason:', blockReason);
+  const closeBlockModal = () => {
     setBlockTarget(null);
     setBlockReason('');
+  };
+
+  const handleBlockConfirm = () => {
+    if (!blockTarget) return;
+    if (blockTarget.length === 1) {
+      blockUserMutation.mutate(
+        { id: blockTarget[0], reason: blockReason },
+        { onSuccess: () => { closeBlockModal(); setSelected(new Set()); } },
+      );
+    } else {
+      blockUsersMutation.mutate(
+        blockTarget,
+        { onSuccess: () => { closeBlockModal(); setSelected(new Set()); } },
+      );
+    }
   };
 
   return (
@@ -215,6 +239,7 @@ export const AdminUsersTab = () => {
                     <Checkbox
                       checked={selected.has(user.id)}
                       onCheckedChange={() => toggleOne(user.id)}
+                      disabled={user.id === currentUserId}
                       aria-label="Выбрать пользователя"
                     />
                   </TableCell>
@@ -251,12 +276,12 @@ export const AdminUsersTab = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge>
+                    <Badge variant={user.active ? 'default' : 'destructive'}>
                       {user.active ? 'Активен' : 'Заблокирован'}
                     </Badge>
                   </TableCell>
                   <TableCell className={'text-right'}>
-                    <DropdownMenu>
+                    {user.id !== currentUserId && <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className={'h-8 w-8'}>
                           <Settings className={'w-4 h-4 text-muted-foreground'} />
@@ -271,12 +296,15 @@ export const AdminUsersTab = () => {
                             <Ban className={'w-4 h-4'} /> Заблокировать
                           </DropdownMenuItem>
                         ) : (
-                          <DropdownMenuItem className={'text-green-600 gap-2 cursor-pointer'}>
+                          <DropdownMenuItem
+                            className={'text-green-600 gap-2 cursor-pointer'}
+                            onClick={() => unlockUserMutation.mutate(user.id)}
+                          >
                             <CheckCircle className={'w-4 h-4'} /> Разблокировать
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu>}
                   </TableCell>
                 </TableRow>
               ))}
@@ -332,7 +360,7 @@ export const AdminUsersTab = () => {
         </div>
       </div>
 
-      <Dialog open={blockTarget !== null} onOpenChange={(open) => !open && setBlockTarget(null)}>
+      <Dialog open={blockTarget !== null} onOpenChange={(open) => !open && closeBlockModal()}>
         <DialogContent className={'sm:max-w-md'}>
           <DialogHeader>
             <DialogTitle>Заблокировать пользователя{blockTarget && blockTarget.length > 1 ? 'й' : ''}</DialogTitle>
@@ -343,25 +371,29 @@ export const AdminUsersTab = () => {
                 ? `Будет заблокировано ${blockTarget.length} пользователей.`
                 : 'Укажите причину блокировки.'}
             </span>
-            <Textarea
-              placeholder={'Причина блокировки...'}
-              value={blockReason}
-              onChange={(e) => setBlockReason(e.target.value)}
-              maxLength={128}
-              className={'resize-none min-h-20 max-h-40 overflow-y-auto break-all'}
-            />
-            <span className={`text-xs self-end ${blockReason.length >= 128 ? 'text-red-500' : 'text-muted-foreground'}`}>
-              {blockReason.length}/128
-            </span>
+            {blockTarget?.length === 1 && (
+              <>
+                <Textarea
+                  placeholder={'Причина блокировки...'}
+                  value={blockReason}
+                  onChange={(e) => setBlockReason(e.target.value)}
+                  maxLength={128}
+                  className={'resize-none min-h-20 max-h-40 overflow-y-auto break-all'}
+                />
+                <span className={`text-xs self-end ${blockReason.length >= 128 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                  {blockReason.length}/128
+                </span>
+              </>
+            )}
           </div>
           <DialogFooter>
-            <Button variant={'outline'} onClick={() => setBlockTarget(null)}>
+            <Button variant={'outline'} onClick={closeBlockModal}>
               Отмена
             </Button>
             <Button
               variant={'destructive'}
               onClick={handleBlockConfirm}
-              disabled={!blockReason.trim()}
+              disabled={blockUserMutation.isPending || blockUsersMutation.isPending}
             >
               <Ban className={'w-4 h-4 mr-1'} />
               Заблокировать

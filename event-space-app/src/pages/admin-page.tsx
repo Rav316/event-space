@@ -5,14 +5,23 @@ import { AnimatedTabs } from '@/components/shared';
 import { adminTabs } from '@/constants/admin-tabs.ts';
 import { useState } from 'react';
 import { AdminComplaintsTab, AdminEventsTab, AdminReviewTab, AdminUsersTab } from '@/components/shared/admin';
+import { useAdminStatistics } from '@/api/admin/hooks.ts';
 
 const AdminPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const { data, isPending } = useMe();
+  const { data: statistics } = useAdminStatistics();
+
   if (isPending || !data) {
     return <Loader />;
   }
+
+  const tabs = adminTabs.map((tab) =>
+    tab.text === 'Жалобы'
+      ? { ...tab, badge: statistics?.pendingComplaints }
+      : tab
+  );
 
   const renderTabContent = () => {
     switch (activeIndex) {
@@ -37,7 +46,7 @@ const AdminPage = () => {
         </span>
       </div>
       <AnimatedTabs
-        tabs={adminTabs}
+        tabs={tabs}
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
       />

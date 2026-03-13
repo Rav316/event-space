@@ -1,5 +1,10 @@
 import type { EventCategory } from '@/api/event-categories/model.ts';
 
+export interface ComplaintReviewRequest {
+  comment: string;
+  resolved: boolean;
+}
+
 export interface ComplaintListDto {
   id: number;
   authorFirstName: string;
@@ -36,7 +41,7 @@ export interface AdminStatisticsDto {
   activeUsers: number;
   totalEvents: number;
   activeEvents: number;
-  totalComplaints: number;
+  pendingComplaints: number;
   latestUsers: UserPreviewDto[];
   latestActiveEvents: EventPreviewDto[];
 }
