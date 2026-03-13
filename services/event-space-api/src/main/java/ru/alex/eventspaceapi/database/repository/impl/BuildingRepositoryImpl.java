@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.alex.eventspaceapi.dto.building.BuildingDeleteImpactDto;
 import ru.alex.eventspaceapi.database.entity.Building;
 import ru.alex.eventspaceapi.database.repository.BuildingRepositoryCustom;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
@@ -27,6 +29,15 @@ import static ru.alex.eventspaceapi.database.entity.QBuilding.building;
 @RequiredArgsConstructor
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static final String SQL_DELETE_IMPACT = """
+            SELECT
+                (SELECT COUNT(*) FROM faculty WHERE building_id = :id)                                          AS faculties,
+                (SELECT COUNT(*) FROM users u JOIN faculty f ON u.faculty_id = f.id WHERE f.building_id = :id) AS users,
+                (SELECT COUNT(*) FROM space WHERE building_id = :id)                                           AS spaces,
+                (SELECT COUNT(*) FROM event e JOIN space s ON e.space_id = s.id WHERE s.building_id = :id)     AS events
+            """;
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
             "id", building.id,
@@ -59,6 +70,18 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(buildings, pageable, total != null ? total : 0);
+    }
+
+    @Override
+    public BuildingDeleteImpactDto getDeleteImpact(Integer id) {
+        return jdbcTemplate.queryForObject(SQL_DELETE_IMPACT, Map.of("id", id), (rs, rowNum) ->
+                new BuildingDeleteImpactDto(
+                        rs.getLong("faculties"),
+                        rs.getLong("users"),
+                        rs.getLong("spaces"),
+                        rs.getLong("events")
+                )
+        );
     }
 
     private BooleanExpression buildPredicate(AdminListFilter filter) {
