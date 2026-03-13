@@ -8,3 +8,16 @@ export interface EventCategoryCountDto {
   name: string;
   eventCount: number;
 }
+
+export interface EventCategoryCreateDto {
+  name: string;
+}
+
+export interface EventCategoryEditDto {
+  name: string;
+}
+
+export interface EventCategoryDeleteImpactDto {
+  events: number;
+  reviews: number;
+}

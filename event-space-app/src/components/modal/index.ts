@@ -11,3 +11,6 @@ export { BuildingEditDialog } from './building-edit-dialog';
 export { SpaceCreateDialog } from './space-create-dialog';
 export { SpaceEditDialog } from './space-edit-dialog';
 export { SpaceDeleteDialog } from './space-delete-dialog';
+export { CategoryCreateDialog } from './category-create-dialog';
+export { CategoryEditDialog } from './category-edit-dialog';
+export { CategoryDeleteDialog } from './category-delete-dialog';

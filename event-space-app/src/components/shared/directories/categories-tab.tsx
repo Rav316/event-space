@@ -2,10 +2,7 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
-  Pencil,
-  Plus,
   Tags,
-  Trash2,
 } from 'lucide-react';
 import {
   Button,
@@ -25,6 +22,7 @@ import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useCategoriesByFilter } from '@/api/admin/hooks.ts';
+import { CategoryCreateDialog, CategoryDeleteDialog, CategoryEditDialog } from '@/components/modal';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
@@ -70,10 +68,7 @@ export const CategoriesTab = () => {
             Управление категориями для классификации мероприятий
           </span>
         </div>
-        <Button>
-          <Plus />
-          <span>Добавить категорию</span>
-        </Button>
+        <CategoryCreateDialog />
       </div>
 
       <SearchInput
@@ -107,12 +102,8 @@ export const CategoriesTab = () => {
               <TableCell className={'font-medium'}>{category.name}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Pencil className={'w-4 h-4 text-muted-foreground'} />
-                  </Button>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Trash2 className={'w-4 h-4 text-red-500'} />
-                  </Button>
+                  <CategoryEditDialog id={category.id} name={category.name} />
+                  <CategoryDeleteDialog id={category.id} name={category.name} />
                 </div>
               </TableCell>
             </TableRow>
