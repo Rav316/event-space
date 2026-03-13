@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, MapPin, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, MapPin } from 'lucide-react';
 import {
   Button,
   Select,
@@ -17,6 +17,7 @@ import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useBuildingsByFilter } from '@/api/admin/hooks.ts';
+import { BuildingCreateDialog, BuildingDeleteDialog, BuildingEditDialog } from '@/components/modal';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 15];
 
@@ -39,7 +40,7 @@ export const BuildingTab = () => {
 
   const rows = data?.content ?? [];
   const totalElements = data?.metadata.totalElements ?? 0;
-  const totalPages = data?.metadata.totalElements ?? 0;
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   const handleSort = (key: SortCol) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -69,10 +70,7 @@ export const BuildingTab = () => {
             Управление местами проведения мероприятий
           </span>
         </div>
-        <Button>
-          <Plus />
-          <span>Добавить локацию</span>
-        </Button>
+        <BuildingCreateDialog />
       </div>
 
       <SearchInput
@@ -111,12 +109,8 @@ export const BuildingTab = () => {
               <TableCell>{building.address}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Pencil className={'w-4 h-4 text-muted-foreground'} />
-                  </Button>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Trash2 className={'w-4 h-4 text-red-500'} />
-                  </Button>
+                  <BuildingEditDialog id={building.id} name={building.name} address={building.address} />
+                  <BuildingDeleteDialog id={building.id} name={building.name} />
                 </div>
               </TableCell>
             </TableRow>

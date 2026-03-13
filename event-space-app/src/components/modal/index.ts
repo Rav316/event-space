@@ -5,3 +5,6 @@ export { ConfirmReviewDeletionDialog } from './confirm-review-deletion-dialog';
 export { DeleteAccountModal } from './delete-account-modal';
 export { RemoveEventModal } from './remove-event-modal.tsx';
 export { EventShareDialog } from './event-share-dialog';
+export { BuildingCreateDialog } from './building-create-dialog';
+export { BuildingDeleteDialog } from './building-delete-dialog';
+export { BuildingEditDialog } from './building-edit-dialog';
