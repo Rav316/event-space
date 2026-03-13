@@ -14,3 +14,6 @@ export { SpaceDeleteDialog } from './space-delete-dialog';
 export { CategoryCreateDialog } from './category-create-dialog';
 export { CategoryEditDialog } from './category-edit-dialog';
 export { CategoryDeleteDialog } from './category-delete-dialog';
+export { FacultyCreateDialog } from './faculty-create-dialog';
+export { FacultyEditDialog } from './faculty-edit-dialog';
+export { FacultyDeleteDialog } from './faculty-delete-dialog';

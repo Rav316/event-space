@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, GraduationCap, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, GraduationCap } from 'lucide-react';
 import {
   Button,
   Select,
@@ -17,8 +17,11 @@ import { SearchInput } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { useFacultiesByFilter } from '@/api/admin/hooks.ts';
+import { FacultyCreateDialog } from '@/components/modal/faculty-create-dialog.tsx';
+import { FacultyEditDialog } from '@/components/modal/faculty-edit-dialog.tsx';
+import { FacultyDeleteDialog } from '@/components/modal/faculty-delete-dialog.tsx';
 
-const PAGE_SIZE_OPTIONS = [5, 10, 15];
+const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
 type SortCol = 'name' | 'building';
 
@@ -26,7 +29,7 @@ export const FacultiesTab = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 300);
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [sortKey, setSortKey] = useState<SortCol | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
@@ -69,10 +72,7 @@ export const FacultiesTab = () => {
             Управление факультетами и их локациями
           </span>
         </div>
-        <Button>
-          <Plus />
-          <span>Добавить факультет</span>
-        </Button>
+        <FacultyCreateDialog />
       </div>
 
       <SearchInput
@@ -111,12 +111,8 @@ export const FacultiesTab = () => {
               <TableCell>{faculty.building}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Pencil className={'w-4 h-4 text-muted-foreground'} />
-                  </Button>
-                  <Button variant={'ghost'} size={'icon'} className={'h-8 w-8'}>
-                    <Trash2 className={'w-4 h-4 text-red-500'} />
-                  </Button>
+                  <FacultyEditDialog id={faculty.id} name={faculty.name} buildingName={faculty.building} />
+                  <FacultyDeleteDialog id={faculty.id} name={faculty.name} />
                 </div>
               </TableCell>
             </TableRow>

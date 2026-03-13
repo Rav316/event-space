@@ -3,9 +3,7 @@ import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Input } from './input';
 
-// ── Color conversion utils ─────────────────────────────────────────────────
-
-function hsvToRgb(h: number, s: number, v: number): [number, number, number] {
+const hsvToRgb = (h: number, s: number, v: number): [number, number, number] => {
   const f = (n: number) => {
     const k = (n + h / 60) % 6;
     return v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
@@ -13,16 +11,16 @@ function hsvToRgb(h: number, s: number, v: number): [number, number, number] {
   return [Math.round(f(5) * 255), Math.round(f(3) * 255), Math.round(f(1) * 255)];
 }
 
-function rgbToHex(r: number, g: number, b: number): string {
+const rgbToHex = (r: number, g: number, b: number): string => {
   return '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('').toUpperCase();
 }
 
-function hexToRgb(hex: string): [number, number, number] | null {
+const hexToRgb = (hex: string): [number, number, number] | null => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
 }
 
-function rgbToHsv(r: number, g: number, b: number): [number, number, number] {
+const rgbToHsv = (r: number, g: number, b: number): [number, number, number] => {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
   let h = 0;
@@ -36,11 +34,9 @@ function rgbToHsv(r: number, g: number, b: number): [number, number, number] {
   return [h, s, v];
 }
 
-function hexFromValue(value: string): string {
+const hexFromValue = (value: string): string => {
   return /^#[0-9A-Fa-f]{6}$/.test(value) ? value.toUpperCase() : '#6366F1';
 }
-
-// ── Presets ────────────────────────────────────────────────────────────────
 
 const PRESETS = [
   '#EF4444', '#F97316', '#F59E0B', '#EAB308',
@@ -49,15 +45,13 @@ const PRESETS = [
   '#A855F7', '#EC4899', '#64748B', '#374151',
 ];
 
-// ── Component ──────────────────────────────────────────────────────────────
-
 interface ColorPickerProps {
   value: string;
   onChange: (color: string) => void;
   className?: string;
 }
 
-export function ColorPicker({ value: valueProp, onChange, className }: ColorPickerProps) {
+export const ColorPicker = ({ value: valueProp, onChange, className }: ColorPickerProps) => {
   const value = valueProp ?? '#6366F1';
   const [open, setOpen] = React.useState(false);
 
@@ -69,11 +63,9 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
   const [hsv, setHsv] = React.useState<[number, number, number]>(initHsv);
   const [hexInput, setHexInput] = React.useState(hexFromValue(value));
 
-  // keep a ref so mouse-move callbacks always read latest hsv without re-registering
   const hsvRef = React.useRef(hsv);
   hsvRef.current = hsv;
 
-  // sync when prop changes from outside
   React.useEffect(() => {
     const rgb = hexToRgb(value);
     if (rgb) {
@@ -91,8 +83,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
   const currentHex = rgbToHex(r, g, b);
   const hueColor = `hsl(${hue}, 100%, 50%)`;
 
-  // ── Gradient interaction ──────────────────────────────────────────────────
-
   const applyGradient = React.useCallback(
     (clientX: number, clientY: number) => {
       const el = gradientRef.current;
@@ -109,8 +99,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
     [onChange],
   );
 
-  // ── Hue interaction ───────────────────────────────────────────────────────
-
   const applyHue = React.useCallback(
     (clientX: number) => {
       const el = hueRef.current;
@@ -126,8 +114,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
     [onChange],
   );
 
-  // ── Global mouse listeners ────────────────────────────────────────────────
-
   React.useEffect(() => {
     const onMove = (e: MouseEvent) => {
       if (dragging.current === 'gradient') applyGradient(e.clientX, e.clientY);
@@ -141,8 +127,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
       window.removeEventListener('mouseup', onUp);
     };
   }, [applyGradient, applyHue]);
-
-  // ── Hex input ─────────────────────────────────────────────────────────────
 
   const handleHexInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
@@ -164,8 +148,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
       onChange(color.toUpperCase());
     }
   };
-
-  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -192,7 +174,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
         align="start"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        {/* ── Saturation / Value gradient ── */}
         <div
           ref={gradientRef}
           className="relative h-40 w-full cursor-crosshair"
@@ -207,7 +188,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
             className="pointer-events-none absolute inset-0"
             style={{ background: 'linear-gradient(to top, #000, transparent)' }}
           />
-          {/* Thumb */}
           <div
             className="pointer-events-none absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.3)]"
             style={{
@@ -219,14 +199,11 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
         </div>
 
         <div className="flex flex-col gap-3 p-3">
-          {/* ── Hue slider + preview ── */}
           <div className="flex items-center gap-2.5">
-            {/* Preview */}
             <div
               className="h-8 w-8 shrink-0 rounded-full border border-border shadow-sm"
               style={{ backgroundColor: currentHex }}
             />
-            {/* Hue rail */}
             <div
               ref={hueRef}
               className="relative h-3 flex-1 cursor-pointer rounded-full"
@@ -246,7 +223,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
             </div>
           </div>
 
-          {/* ── Hex input ── */}
           <div className="flex items-center gap-2">
             <span className="w-8 shrink-0 text-xs font-medium text-muted-foreground">HEX</span>
             <Input
@@ -259,7 +235,6 @@ export function ColorPicker({ value: valueProp, onChange, className }: ColorPick
             />
           </div>
 
-          {/* ── Presets ── */}
           <div className="grid grid-cols-8 gap-1">
             {PRESETS.map((color) => (
               <button
