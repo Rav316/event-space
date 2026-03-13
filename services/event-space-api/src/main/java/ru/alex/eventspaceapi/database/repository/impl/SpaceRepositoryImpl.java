@@ -11,9 +11,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.alex.eventspaceapi.database.entity.Space;
 import ru.alex.eventspaceapi.database.repository.SpaceRepositoryCustom;
+import ru.alex.eventspaceapi.dto.space.SpaceDeleteImpactDto;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.filter.SpaceFilter;
 import ru.alex.eventspaceapi.util.PageUtils;
@@ -29,6 +31,13 @@ import static ru.alex.eventspaceapi.database.entity.QSpaceType.spaceType;
 @RequiredArgsConstructor
 public class SpaceRepositoryImpl implements SpaceRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private static final String SQL_DELETE_IMPACT = """
+            SELECT
+                (SELECT COUNT(*) FROM event WHERE space_id = :id)                                              AS events,
+                (SELECT COUNT(*) FROM event_review er JOIN event e ON er.event_id = e.id WHERE e.space_id = :id) AS reviews
+            """;
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
             "id", space.id,
@@ -91,6 +100,16 @@ public class SpaceRepositoryImpl implements SpaceRepositoryCustom {
         }
 
         return predicate;
+    }
+
+    @Override
+    public SpaceDeleteImpactDto getDeleteImpact(Integer id) {
+        return jdbcTemplate.queryForObject(SQL_DELETE_IMPACT, Map.of("id", id), (rs, rowNum) ->
+                new SpaceDeleteImpactDto(
+                        rs.getLong("events"),
+                        rs.getLong("reviews")
+                )
+        );
     }
 
     private BooleanExpression buildPredicate(SpaceFilter filter) {

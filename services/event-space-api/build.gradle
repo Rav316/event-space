@@ -22,11 +22,15 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 apply from: 'version.gradle'
 
 dependencies {
+    implementation "io.github.rav316:nullable-value-spring-boot-starter:${versions.nullableValueStarter}"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'

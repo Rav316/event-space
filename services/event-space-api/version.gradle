@@ -1,15 +1,16 @@
 ext {
     versions = [
             'hypersistenceUtils': '3.15.1',
-            'auth0Jwt': '4.5.0',
+            'auth0Jwt': '4.5.1',
             'mapstruct': '1.6.3',
             'caffeine': '3.2.2',
             'querydsl': '7.0',
             'hibernate': '7.2.2.Final',
             'jakarta': '3.2.0',
-            'openapi': '3.0.1',
+            'openapi': '3.0.2',
             'jackson': '3.0.4',
             'logstash': '9.0',
-            'loki4j': '2.0.3'
+            'loki4j': '2.0.3',
+            'nullableValueStarter': '1.0.1'
     ]
 }

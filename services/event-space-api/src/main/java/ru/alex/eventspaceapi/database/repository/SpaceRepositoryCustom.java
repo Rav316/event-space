@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import ru.alex.eventspaceapi.database.entity.Space;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.filter.SpaceFilter;
+import ru.alex.eventspaceapi.dto.space.SpaceDeleteImpactDto;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface SpaceRepositoryCustom {
     List<Space> findAllByFilter(SpaceFilter filter);
 
     Page<Space> findAllByFilter(AdminListFilter filter, Sort sort);
+
+    SpaceDeleteImpactDto getDeleteImpact(Integer id);
 }

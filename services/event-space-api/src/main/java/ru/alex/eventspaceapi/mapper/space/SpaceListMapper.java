@@ -8,6 +8,7 @@ import ru.alex.eventspaceapi.dto.space.SpaceListDto;
 @Mapper(componentModel = "spring")
 public interface SpaceListMapper {
     @Mapping(target = "building", source = "building.id")
+    @Mapping(target = "typeId", source = "type.id")
     @Mapping(target = "type", source = "type.name")
     SpaceListDto toDto(Space space);
 }
