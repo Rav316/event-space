@@ -66,6 +66,7 @@
     </appender>
 
     <logger name="org.springframework" level="INFO" />
+    <logger name="ru.alex.emailnotificationservice" level="DEBUG" />
 
 
 

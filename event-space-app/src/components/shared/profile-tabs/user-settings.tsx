@@ -32,21 +32,6 @@ export const UserSettings: React.FC<Props> = ({ editMode, form }) => {
             />
           )}
         />
-
-        <ProfileSetting
-          editMode={editMode}
-          title={'Напоминания о событиях'}
-          description={'Напоминания перед началом мероприятий'}
-          value={false}
-          onChange={() => {}}
-        />
-        <ProfileSetting
-          editMode={editMode}
-          title={'Новые мероприятия'}
-          description={'Уведомления о новых мероприятиях'}
-          value={false}
-          onChange={() => {}}
-        />
       </div>
       <div
         className={

@@ -46,16 +46,19 @@ public class EventEmailService {
             log.info("Skip sending email: no recipients for event {}", message.eventId());
             return;
         }
+        log.info("Sending event.created emails for event {} to {} recipients", message.eventId(), recipients.size());
         for (String recipient : recipients) {
             try {
                 sendSingle(message, recipient);
+                log.info("Email sent successfully for event {} to {}", message.eventId(), recipient);
             } catch (MessagingException e) {
-                log.error("Failed to send email about event {} to {}", message.eventId(), recipient, e);
+                log.error("Failed to send email about event {} to {}: {}", message.eventId(), recipient, e.getMessage(), e);
             }
         }
     }
 
     private void sendSingle(EventCreatedMessage message, String recipient) throws MessagingException {
+        log.debug("Building email for event {} to {}, from={}", message.eventId(), recipient, fromAddress);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
@@ -66,6 +69,7 @@ public class EventEmailService {
 
         helper.setText(buildBody(message), true);
 
+        log.debug("Connecting to SMTP and sending email to {}", recipient);
         mailSender.send(mimeMessage);
     }
 

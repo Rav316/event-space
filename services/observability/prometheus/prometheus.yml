@@ -12,4 +12,4 @@ scrape_configs:
     metrics_path: '/api/actuator/prometheus'
     basic_auth: *prom_basic_auth
     static_configs:
-      - targets: [ 'email-notification-service:8081' ]
+      - targets: [ 'email-notification-service:8082' ]

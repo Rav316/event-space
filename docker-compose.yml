@@ -20,6 +20,7 @@ services:
       - "8080:8080"
     depends_on:
       - event-space-db
+      - rabbitmq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://event-space-db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -27,6 +28,9 @@ services:
       - STATIC_CONTENT_PATH=${STATIC_CONTENT_PATH}
       - PROMETHEUS_USERNAME=${PROMETHEUS_USERNAME}
       - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
     volumes:
       - ./services/nginx-static-service/storage:/storage
     networks:

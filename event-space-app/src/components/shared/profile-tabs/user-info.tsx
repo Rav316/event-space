@@ -104,12 +104,28 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="course">Курс</Label>
-              <Input
-                id="course"
-                placeholder="Введите курс"
+              <Select
+                value={
+                  form.watch('course')?.toString() === '0'
+                    ? undefined
+                    : form.watch('course')?.toString()
+                }
+                onValueChange={(value) =>
+                  form.setValue('course', Number(value))
+                }
                 disabled={!editMode}
-                {...form.register('course')}
-              />
+              >
+                <SelectTrigger id={'course'} className={'w-full'}>
+                  <SelectValue placeholder={'Выберите курс'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4].map((course) => (
+                    <SelectItem key={course} value={String(course)}>
+                      {course}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {form.formState.errors.course && (
                 <FormErrorMessage>
                   {form.formState.errors.course.message}
