@@ -105,3 +105,5 @@ databaseChangeLog:
       file: db/changelog/db-update-complaint-table-3.1.sql
   - include:
       file: db/changelog/db-insert-init-data-4.0.sql
+  - include:
+      file: db/changelog/db-update-event-category-table-2.0.sql

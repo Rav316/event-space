@@ -33,6 +33,7 @@ export const CategoriesActivityBlock: React.FC<Props> = ({
   const categoriesActivityRadarData = categoriesActivity.map((item) => ({
     category: item.category.name,
     value: item.activityPercent,
+    displayValue: item.activityPercent === 0 ? 2 : item.activityPercent,
     fullMark: 100,
   }));
 
@@ -53,12 +54,18 @@ export const CategoriesActivityBlock: React.FC<Props> = ({
               <PolarRadiusAxis angle={90} domain={[0, 100]} />
               <Radar
                 name="Моя активность"
-                dataKey="value"
+                dataKey="displayValue"
                 stroke="#f97316"
                 fill="#f97316"
                 fillOpacity={0.6}
+                dot={{ r: 4, fill: '#f97316', strokeWidth: 0 }}
               />
-              <Tooltip />
+              <Tooltip
+                formatter={(_, name, props) => [
+                  `${props.payload.value}%`,
+                  name,
+                ]}
+              />
             </RadarChart>
           </ResponsiveContainer>
         </div>

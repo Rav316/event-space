@@ -30,13 +30,17 @@ export const useLogin = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        if (error.response?.status === 403) {
+        if (!error.response) {
+          Burnt.toast({
+            title: 'Нет соединения с сервером',
+            preset: 'error'
+          });
+        } else if (error.response.status === 403) {
           Burnt.toast({
             title: 'Неверный email или пароль',
             preset: 'error'
           });
         } else {
-          console.error('error', error.response);
           Burnt.toast({
             title: 'Произошла ошибка при входе в систему',
             preset: 'error'

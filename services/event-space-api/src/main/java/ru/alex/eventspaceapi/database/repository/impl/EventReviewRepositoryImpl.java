@@ -75,7 +75,8 @@ public class EventReviewRepositoryImpl implements EventReviewRepositoryCustom {
                         Projections.constructor(
                                 EventCategoryReadDto.class,
                                 eventCategory.id,
-                                eventCategory.name
+                                eventCategory.name,
+                                eventCategory.color
                         ),
                         event.eventDate,
                         eventUser.id.countDistinct().intValue(),

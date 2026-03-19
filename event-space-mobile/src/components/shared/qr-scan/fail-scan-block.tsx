@@ -6,10 +6,11 @@ import { CommonActions } from '@react-navigation/native';
 import React from 'react';
 
 interface Props {
+  title: string;
   errorMessage: string;
 }
 
-export const FailScanBlock: React.FC<Props> = ({ errorMessage }) => {
+export const FailScanBlock: React.FC<Props> = ({ title, errorMessage }) => {
   const navigation = useNavigation();
 
   const handleReturnHome = () => {
@@ -33,7 +34,7 @@ export const FailScanBlock: React.FC<Props> = ({ errorMessage }) => {
     <View className={'w-full items-center gap-5'}>
       <CircleX color={'#DC2627'} width={130} height={130} />
       <StyledText className={'text-3xl font-bold'}>
-        Билет недействителен
+        {title}
       </StyledText>
       <StyledText className={'text-center text-base text-muted-foreground'}>
         {errorMessage}

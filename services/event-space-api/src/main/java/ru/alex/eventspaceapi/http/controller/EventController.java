@@ -147,7 +147,7 @@ public class EventController {
     }
 
     @PostMapping("/confirm-attendance/{token}")
-    @PreAuthorize("hasAnyAuthority('VERIFIER', 'ADMIN')")
+    @PreAuthorize("hasRole('VERIFIER')")
     public ResponseEntity<EventQrInfoDto> confirmParticipantAttendance(@PathVariable String token) {
         return new ResponseEntity<>(eventUserService.confirmParticipantAttendance(token), OK);
     }

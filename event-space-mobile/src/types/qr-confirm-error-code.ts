@@ -16,3 +16,11 @@ export const QR_ERROR_MESSAGES: Record<QrConfirmErrorCode, string> = {
   EVENT_ENDED: 'Мероприятие уже завершено',
   ALREADY_SCANNED: 'Этот QR-код уже был использован'
 };
+
+export const QR_ERROR_TITLES: Record<QrConfirmErrorCode, string> = {
+  INVALID_TOKEN: 'Билет недействителен',
+  TOKEN_NOT_FOUND: 'Билет не найден',
+  TOO_EARLY: 'Слишком рано',
+  EVENT_ENDED: 'Мероприятие завершено',
+  ALREADY_SCANNED: 'Билет уже использован'
+};

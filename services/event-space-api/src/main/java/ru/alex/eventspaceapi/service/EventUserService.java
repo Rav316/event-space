@@ -16,6 +16,7 @@ import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.QrConfirmationException;
 import ru.alex.eventspaceapi.mapper.event.EventQrInfoMapper;
 import ru.alex.eventspaceapi.model.QrConfirmErrorCode;
+import ru.alex.eventspaceapi.util.EventUtils;
 
 import java.time.*;
 import java.util.List;
@@ -130,14 +131,11 @@ public class EventUserService {
     }
 
     private boolean isEventPassed(Event event) {
-        LocalDate now = LocalDate.now();
-        return event.getEventDate().isBefore(now) ||
-                (event.getEventDate().isEqual(now) && event.getEndTime().isBefore(LocalTime.now()));
+        return EventUtils.isEventPassed(event);
     }
 
     private boolean isEventStarted(Event event) {
-        LocalDate now = LocalDate.now();
-        return (event.getEventDate().isEqual(now) && event.getStartTime().isBefore(LocalTime.now()));
+        return EventUtils.isEventStarted(event);
     }
 
     private boolean isValidUUID(String token) {

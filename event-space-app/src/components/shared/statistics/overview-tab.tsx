@@ -32,10 +32,15 @@ export const OverviewTab = () => {
     }),
   );
 
-  const dayOfWeekChartData = statistics.dayOfWeekStatistics.map((item) => ({
-    ...item,
-    dayOfWeek: dayOfWeeks[item.dayOfWeek - 1],
-  }));
+  const dayOfWeekChartData = dayOfWeeks.map((name, index) => {
+    const found = statistics.dayOfWeekStatistics.find(
+      (item) => item.dayOfWeek === index + 1,
+    );
+    return {
+      dayOfWeek: name,
+      attendedEventsCount: found?.attendedEventsCount ?? 0,
+    };
+  });
 
   const reviewsDynamicChartData = statistics.reviewsDynamicStatistics.map(
     (item) => ({

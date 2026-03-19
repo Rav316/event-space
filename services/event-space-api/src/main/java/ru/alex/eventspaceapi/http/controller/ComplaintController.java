@@ -23,7 +23,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/complaints")
-@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class ComplaintController {
     private final ComplaintService complaintService;
@@ -40,6 +39,7 @@ public class ComplaintController {
         return new ResponseEntity<>(CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/review")
     public ResponseEntity<Void> reviewComplaint(
             @PathVariable Integer id,
