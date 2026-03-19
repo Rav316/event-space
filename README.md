@@ -73,7 +73,7 @@ A university-oriented platform for creating, managing, and discovering campus ev
 │  ┌──────────────────────────┐        ┌──────────────────────────────┐      │
 │  │   Event Space API        │        │  Email Notification Service  │      │
 │  │   Spring Boot 4 + Java 21│        │  Spring Boot 4 + Java 21     │      │
-│  │   :8080                  │───────>│  :8081                       │      │
+│  │   :8080                  │───────>│  :8082                       │      │
 │  │                          │ Rabbit │                              │      │
 │  │  • Auth (JWT)            │  MQ    │  • RabbitMQ Consumer         │      │
 │  │  • Events CRUD           │        │  • Thymeleaf Templates       │      │
@@ -252,7 +252,7 @@ Controller Layer     ──►  Service Layer     ──►  Repository Layer  �
 |---|---|
 | **Language** | Java 21 (virtual threads enabled) |
 | **Framework** | Spring Boot 4.0.2 |
-| **Port** | `8081` |
+| **Port** | `8082` |
 | **Queue** | `event.notifications.new-events` |
 
 #### How It Works
@@ -484,7 +484,7 @@ Scrapes metrics from both Spring Boot services at `/api/actuator/prometheus` usi
 
 **Monitored targets:**
 - `event-space-api:8080`
-- `email-notification-service:8081`
+- `email-notification-service:8082`
 
 ### Loki
 
@@ -588,7 +588,7 @@ This launches **10 containers**:
 |---|---|---|
 | `event-space-db` | PostgreSQL 18 | `5433` |
 | `event-space-api` | Spring Boot API | `8080` |
-| `email-notification-service` | Email Service | `8081` |
+| `email-notification-service` | Email Service | `8082` |
 | `event-space-app` | Web App (Nginx) | `3000` |
 | `placeholder_service` | Go Placeholder | Internal |
 | `my_static_server` | Nginx Static | `90` |
