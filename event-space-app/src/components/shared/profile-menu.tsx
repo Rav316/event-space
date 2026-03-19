@@ -61,7 +61,8 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
             <div className={'flex flex-col gap-y-0.5'}>
               <span>{`${user.firstName} ${user.lastName}`}</span>
               <span className={'text-xs text-muted-foreground'}>
-                {userRoles[user.role]}, {user.faculty.name}, {user.course} курс
+                {userRoles[user.role]}, {user.faculty.name}{' '}
+                {user.course && `, ${user.course} курс`}
               </span>
             </div>
           </DropdownMenuLabel>
