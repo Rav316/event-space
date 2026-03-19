@@ -32,25 +32,26 @@ import {
   Ban,
   CheckCircle,
   Settings,
+  ShieldCheck,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import { userRoles } from '@/constants/user-roles.ts';
 import { useUsersByFilter } from '@/api/admin/hooks.ts';
 import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 import {
   useBlockUser,
   useBlockUsers,
+  useChangeUserRole,
   useUnlockUser,
 } from '@/api/users/hooks.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
-const roleLabels: Record<number, string> = {
-  0: 'Студент',
-  1: 'Организатор',
-  2: 'Администратор',
-};
+const roleLabels: Record<number, string> = Object.fromEntries(
+  userRoles.map((label, index) => [index, label]),
+);
 
 type SortCol = 'name' | 'role' | 'faculty' | 'status';
 
@@ -71,6 +72,8 @@ export const AdminUsersTab = () => {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [blockTarget, setBlockTarget] = useState<number[] | null>(null);
   const [blockReason, setBlockReason] = useState('');
+  const [roleTarget, setRoleTarget] = useState<number | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string>('');
 
   const { data: meData } = useMe();
   const currentUserId = meData?.user.id;
@@ -78,6 +81,7 @@ export const AdminUsersTab = () => {
   const blockUserMutation = useBlockUser();
   const blockUsersMutation = useBlockUsers();
   const unlockUserMutation = useUnlockUser();
+  const changeRoleMutation = useChangeUserRole();
 
   useEffect(() => {
     setPage(0);
@@ -134,6 +138,24 @@ export const AdminUsersTab = () => {
       else next.add(id);
       return next;
     });
+  };
+
+  const openRoleModal = (userId: number, currentRole: number) => {
+    setRoleTarget(userId);
+    setSelectedRole(String(currentRole));
+  };
+
+  const closeRoleModal = () => {
+    setRoleTarget(null);
+    setSelectedRole('');
+  };
+
+  const handleRoleConfirm = () => {
+    if (roleTarget === null || selectedRole === '') return;
+    changeRoleMutation.mutate(
+      { id: roleTarget, role: Number(selectedRole) },
+      { onSuccess: closeRoleModal },
+    );
   };
 
   const openBlockModal = (ids: number[]) => {
@@ -316,6 +338,12 @@ export const AdminUsersTab = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            className={'gap-2 cursor-pointer'}
+                            onClick={() => openRoleModal(user.id, user.role)}
+                          >
+                            <ShieldCheck className={'w-4 h-4'} /> Изменить роль
+                          </DropdownMenuItem>
                           {user.active ? (
                             <DropdownMenuItem
                               className={'text-red-600 gap-2 cursor-pointer'}
@@ -389,6 +417,41 @@ export const AdminUsersTab = () => {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={roleTarget !== null}
+        onOpenChange={(open) => !open && closeRoleModal()}
+      >
+        <DialogContent className={'sm:max-w-sm'}>
+          <DialogHeader>
+            <DialogTitle>Изменить роль</DialogTitle>
+          </DialogHeader>
+          <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите роль" />
+            </SelectTrigger>
+            <SelectContent>
+              {userRoles.map((label, index) => (
+                <SelectItem key={index} value={String(index)}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <DialogFooter>
+            <Button variant={'outline'} onClick={closeRoleModal}>
+              Отмена
+            </Button>
+            <Button
+              onClick={handleRoleConfirm}
+              disabled={changeRoleMutation.isPending || selectedRole === ''}
+            >
+              <ShieldCheck className={'w-4 h-4 mr-1'} />
+              Сохранить
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={blockTarget !== null}

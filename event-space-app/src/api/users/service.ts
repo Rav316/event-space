@@ -66,3 +66,7 @@ export const blockUsers = async (userIds: number[]): Promise<void> => {
 export const unlockUser = async (id: number): Promise<void> => {
   await axiosInstance.post(`${ApiRoutes.USERS}/${id}/unlcok`);
 };
+
+export const changeUserRole = async (id: number, role: number): Promise<void> => {
+  await axiosInstance.patch(`${ApiRoutes.USERS}/${id}/role`, { role });
+};

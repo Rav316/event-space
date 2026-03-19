@@ -81,6 +81,18 @@ export const useUnlockUser = () => {
   });
 };
 
+export const useChangeUserRole = () => {
+  return useMutation({
+    mutationFn: ({ id, role }: { id: number; role: number }) =>
+      Api.users.changeUserRole(id, role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.USERS] });
+      toast.success('Роль пользователя изменена');
+    },
+    onError: () => toast.error('Ошибка при изменении роли'),
+  });
+};
+
 export const useDeleteAccount = () => {
   const removeToken = useAuthStore((state) => state.removeTokens);
   const navigate = useNavigate();
