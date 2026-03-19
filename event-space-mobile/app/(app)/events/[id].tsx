@@ -14,7 +14,7 @@ import { Calendar, Flame, MapPin, Share2, Users } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { Badge } from '@/src/components/ui/badge';
 import { Skeleton, StyledText } from '@/src/components/ui';
-import { categoryColors } from '@/src/constants/category-colors';
+import { categoryBadgeStyle } from '@/src/utils/category-badge-style';
 import {
   EventBadge,
   EventDescriptionBlock,
@@ -176,14 +176,10 @@ const EventPage = () => {
                 </View>
               )}
               <Badge
-                className={
-                  'absolute top-2.5 left-2.5 ' +
-                  categoryColors[event.category.id - 1].badge
-                }
+                className={'absolute top-2.5 left-2.5'}
+                style={categoryBadgeStyle(event.category.color).badge}
               >
-                <StyledText
-                  className={categoryColors[event.category.id - 1].text}
-                >
+                <StyledText style={categoryBadgeStyle(event.category.color).text}>
                   {event.category.name}
                 </StyledText>
               </Badge>

@@ -1,9 +1,8 @@
-import type { QueryClient, UseMutationResult } from '@tanstack/react-query';
+import type { UseMutationResult } from '@tanstack/react-query';
 import type { UseFormReturn } from 'react-hook-form';
 
 interface ValidateEmailUniqueOptions {
   email: string;
-  queryClient: QueryClient;
   checkEmailMutation: UseMutationResult<boolean, unknown, string, unknown> & {
     mutateAsync: (email: string) => Promise<boolean>;
   };
@@ -13,18 +12,13 @@ interface ValidateEmailUniqueOptions {
 
 export const validateEmailUnique = async ({
   email,
-  queryClient,
   checkEmailMutation,
   form,
   defaultEmail,
 }: ValidateEmailUniqueOptions) => {
   if (defaultEmail && email === defaultEmail) return true;
 
-  let exists = queryClient.getQueryData<boolean>(['emailExists', email]);
-
-  if (exists === undefined) {
-    exists = await checkEmailMutation.mutateAsync(email);
-  }
+  const exists = await checkEmailMutation.mutateAsync(email);
 
   if (exists && form) {
     form.setError('email', {

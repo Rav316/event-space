@@ -92,9 +92,15 @@ const MyEventsPage = () => {
             <Skeleton className={'w-full h-8'} />
           ) : (
             <Select
-              value={filter.category !== undefined ? filter.category.toString() : 'all'}
+              value={
+                filter.category !== undefined
+                  ? filter.category.toString()
+                  : 'all'
+              }
               onValueChange={(value) =>
-                value === 'all' ? changeCategory() : changeCategory(Number(value))
+                value === 'all'
+                  ? changeCategory()
+                  : changeCategory(Number(value))
               }
             >
               <SelectTrigger id="category" className="w-full">

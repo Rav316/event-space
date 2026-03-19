@@ -81,7 +81,7 @@ export const EventLocationStep: React.FC<Props> = ({
               <span className={'text-muted-foreground text-sm'}>
                 Выберите кабинет в корпусе "
                 {buildings?.find((b) => b.id === filter.building)?.name}" (
-                {spaces?.length} кабинетов доступно)
+                {spaces?.length} пространств доступно)
               </span>
             </div>
             <SpaceFilters />

@@ -40,7 +40,6 @@ export const MyReviewsTab = () => {
                   </div>
                 </CardContent>
               </Card>
-
             </div>
 
             <div className="flex-1">

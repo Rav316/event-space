@@ -35,7 +35,9 @@ export const OrganizerCard: React.FC<Props> = ({ organizer, className }) => {
         <span className={'font-medium truncate'}>
           {organizer.firstName} {organizer.lastName}
         </span>
-        <div className={'flex items-center gap-4 text-sm text-muted-foreground'}>
+        <div
+          className={'flex items-center gap-4 text-sm text-muted-foreground'}
+        >
           <div className={'flex items-center gap-1'}>
             <Calendar className={'h-4 w-4'} />
             <span>{organizer.eventsCount} событий</span>

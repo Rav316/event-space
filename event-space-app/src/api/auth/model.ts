@@ -13,3 +13,9 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface UserPasswordChangeDto {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

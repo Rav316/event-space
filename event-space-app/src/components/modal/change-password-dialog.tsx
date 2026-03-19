@@ -14,10 +14,10 @@ import {
 import { Shield } from 'lucide-react';
 import { PasswordInput } from '@/components/shared';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { UserPasswordChangeDto } from '@/api/users/model.ts';
+import type { UserPasswordChangeDto } from '@/api/auth/model.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { passwordChangeSchema } from '@/schemas/password-change-schema.ts';
-import { useChangePassword } from '@/api/users/hooks.ts';
+import { useChangePassword } from '@/api/auth/hooks.ts';
 import { useState } from 'react';
 
 export const ChangePasswordDialog = () => {

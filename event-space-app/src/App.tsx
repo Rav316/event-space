@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { OutletHeader, RequireGuest } from '@/components/hoc';
+import { OutletHeader, RequireAdmin, RequireGuest } from '@/components/hoc';
 import Page404 from '@/pages/page-404.tsx';
 import { RequireAuth } from '@/components/hoc/require-auth.tsx';
 import { LoginModal } from '@/components/modal';
@@ -19,6 +19,8 @@ const MyRegistrationsPage = lazy(
 );
 const StatisticsPage = lazy(() => import('@/pages/statistics-page.tsx'));
 const RegistrationPage = lazy(() => import('@/pages/registration-page.tsx'));
+const AdminPage = lazy(() => import('@/pages/admin-page.tsx'));
+const DirectoriesPage = lazy(() => import('@/pages/directories-page.tsx'));
 
 const App = () => {
   const token = useAuthStore((state) => state.accessToken);
@@ -78,6 +80,22 @@ const App = () => {
                 <RequireAuth>
                   <StatisticsPage />
                 </RequireAuth>
+              }
+            />
+            <Route
+              path={'/admin'}
+              element={
+                <RequireAdmin>
+                  <AdminPage />
+                </RequireAdmin>
+              }
+            />
+            <Route
+              path={'/admin/directories'}
+              element={
+                <RequireAdmin>
+                  <DirectoriesPage />
+                </RequireAdmin>
               }
             />
             <Route path="*" element={<Page404 />} />

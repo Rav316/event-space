@@ -21,6 +21,8 @@ public class EventCategory {
 
     private String name;
 
+    private String color;
+
     @OneToMany(mappedBy = "category")
     private List<Event> events;
 }

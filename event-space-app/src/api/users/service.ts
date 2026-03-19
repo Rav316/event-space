@@ -4,7 +4,6 @@ import type {
   TopOrganizerDto,
   UserDeleteDto,
   UserEditData,
-  UserPasswordChangeDto,
   UserReadDto,
 } from '@/api/users/model.ts';
 
@@ -45,15 +44,6 @@ export const editUser = async (data: UserEditData): Promise<UserReadDto> => {
   return response.data;
 };
 
-export const changePassword = async (
-  data: UserPasswordChangeDto,
-): Promise<void> => {
-  await axiosInstance.patch<void>(
-    `${ApiRoutes.USERS}/profile/change-password`,
-    data,
-  );
-};
-
 export const deleteAccount = async (data: UserDeleteDto): Promise<void> => {
   await axiosInstance.post<void>(`${ApiRoutes.USERS}/profile/delete`, data);
 };
@@ -63,4 +53,16 @@ export const getTopOrganizers = async (): Promise<TopOrganizerDto[]> => {
     `${ApiRoutes.USERS}/top-organizers`,
   );
   return response.data;
+};
+
+export const blockUser = async (id: number, reason: string): Promise<void> => {
+  await axiosInstance.post(`${ApiRoutes.USERS}/${id}/block`, { reason });
+};
+
+export const blockUsers = async (userIds: number[]): Promise<void> => {
+  await axiosInstance.put(`${ApiRoutes.USERS}/block`, userIds);
+};
+
+export const unlockUser = async (id: number): Promise<void> => {
+  await axiosInstance.post(`${ApiRoutes.USERS}/${id}/unlcok`);
 };

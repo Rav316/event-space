@@ -8,10 +8,7 @@ import { ru } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { Link } from 'react-router';
 import { cn } from '@/lib/utils.ts';
-import {
-  categoryColors,
-  categoryHoverBorderColors,
-} from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import type { EventCalendarDto } from '@/api/events/model.ts';
 
 interface Props {
@@ -113,19 +110,20 @@ export const EventsCalendarSection: React.FC<Props> = ({ className }) => {
               </span>
               {selectedEvents.length > 0 ? (
                 selectedEvents.map((event) => {
-                  const categoryColorClass =
-                    categoryColors[event.category.id - 1];
-                  const categoryHoverBorderClass =
-                    categoryHoverBorderColors[event.category.id - 1];
+                  const badgeStyle = categoryBadgeStyle(event.category.color);
 
                   return (
                     <Link
                       key={event.id}
                       to={`/events/${event.id}`}
                       className={cn(
-                        'flex flex-col gap-1 p-3 rounded-xl border border-[#E5E5E5] transition-all duration-200',
-                        categoryHoverBorderClass,
+                        'flex flex-col gap-1 p-3 rounded-xl border border-[#E5E5E5] transition-all duration-200 hover:border-[var(--cat-color)]',
                       )}
+                      style={
+                        {
+                          '--cat-color': event.category.color,
+                        } as React.CSSProperties
+                      }
                     >
                       <span className={'font-medium truncate'}>
                         {event.name}
@@ -143,7 +141,7 @@ export const EventsCalendarSection: React.FC<Props> = ({ className }) => {
                           </span>
                         </div>
                         {event.category.name && (
-                          <Badge className={categoryColorClass}>
+                          <Badge style={badgeStyle}>
                             {event.category.name}
                           </Badge>
                         )}

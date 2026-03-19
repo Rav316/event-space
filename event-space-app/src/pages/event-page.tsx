@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react';
 import { Wrapper } from '@/components/hoc';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { useNavigate, useParams } from 'react-router';
 import { useEventById, useStepsByEvent } from '@/api/events/hooks.ts';
 import { formatDate } from '@/utils/format-date.ts';
@@ -118,7 +118,7 @@ const EventPage = () => {
                 alt="event-example"
               />
               <div className="absolute z-10 top-3 left-3">
-                <Badge className={categoryColors[event?.category.id - 1]}>
+                <Badge style={categoryBadgeStyle(event?.category.color)}>
                   {event?.category.name}
                 </Badge>
               </div>

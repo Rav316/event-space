@@ -18,7 +18,8 @@ public class EventCalendarRowMapper implements RowMapper<EventCalendarDto> {
                 rs.getString("name"),
                 new EventCategoryReadDto(
                         rs.getInt("category_id"),
-                        rs.getString("category_name")
+                        rs.getString("category_name"),
+                        rs.getString("category_color")
                 ),
                 rs.getDate("event_date").toLocalDate(),
                 rs.getTime("start_time").toLocalTime(),

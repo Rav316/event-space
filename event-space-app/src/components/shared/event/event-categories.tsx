@@ -23,6 +23,7 @@ export const EventCategories = () => {
               id={category.id}
               text={category.name}
               count={category.eventCount}
+              color={category.color}
             />
           ))}
           <EventCategory

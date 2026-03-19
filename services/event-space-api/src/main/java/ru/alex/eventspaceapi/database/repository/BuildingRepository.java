@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.alex.eventspaceapi.database.entity.Building;
 
 @Repository
-public interface BuildingRepository extends JpaRepository<Building, Integer> {
-
+public interface BuildingRepository extends JpaRepository<Building, Integer>, BuildingRepositoryCustom {
+    boolean existsByName(String name);
 }

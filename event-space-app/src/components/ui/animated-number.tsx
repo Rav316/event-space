@@ -1,5 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useInView, useMotionValue, useSpring, useTransform, motion } from 'motion/react';
+import {
+  useInView,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  motion,
+} from 'motion/react';
 
 interface Props {
   value: number;
@@ -19,8 +25,9 @@ export const AnimatedNumber: React.FC<Props> = ({
 
   const motionValue = useMotionValue(0);
   const spring = useSpring(motionValue, { stiffness: 180, damping: 35 });
-  const display = useTransform(spring, (current) =>
-    `${current.toFixed(decimals)}${suffix}`,
+  const display = useTransform(
+    spring,
+    (current) => `${current.toFixed(decimals)}${suffix}`,
   );
 
   useEffect(() => {
@@ -29,5 +36,9 @@ export const AnimatedNumber: React.FC<Props> = ({
     }
   }, [isInView, value, motionValue]);
 
-  return <motion.span ref={ref} className={className}>{display}</motion.span>;
+  return (
+    <motion.span ref={ref} className={className}>
+      {display}
+    </motion.span>
+  );
 };

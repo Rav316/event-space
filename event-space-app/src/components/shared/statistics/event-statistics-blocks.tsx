@@ -1,4 +1,4 @@
-import { EventStatisticsBlock } from '@/components/shared/statistics/event-statistics-block.tsx';
+import { StatisticsBlock } from '@/components/shared/statistics/statistics-block.tsx';
 import { Award, Calendar, MessageSquare, TrendingUp } from 'lucide-react';
 import { Skeleton } from '@/components/ui';
 import { useUserStatistics } from '@/api/statistics/hooks.ts';
@@ -24,26 +24,26 @@ export const EventStatisticsBlocks = () => {
             'grid grid-cols-4 items-center gap-3 w-full max-[1300px]:grid-cols-2 max-[680px]:grid-cols-1'
           }
         >
-          <EventStatisticsBlock
+          <StatisticsBlock
             title={'Всего мероприятий'}
             Icon={Calendar}
             value={data.totalEvents}
             delta={data.monthlyEventsDelta}
           />
-          <EventStatisticsBlock
+          <StatisticsBlock
             title={'Оставлено отзывов'}
             Icon={MessageSquare}
             value={data.reviewsLeft}
             delta={data.monthlyReviewsDelta}
           />
-          <EventStatisticsBlock
+          <StatisticsBlock
             title={'Средняя посещаемость'}
             Icon={TrendingUp}
             value={`${(data.avgAttendance * 100).toFixed(2)}%`}
             delta={Number(data.monthlyAttendanceDelta.toFixed(4))}
             isPercent={true}
           />
-          <EventStatisticsBlock
+          <StatisticsBlock
             title={'Средняя оценка отзывов'}
             Icon={Award}
             value={data.avgReviewRating.toFixed(2)}

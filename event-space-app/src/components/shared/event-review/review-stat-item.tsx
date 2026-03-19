@@ -3,7 +3,7 @@ import { Badge, Button } from '@/components/ui';
 import { Calendar, ExternalLink, Users } from 'lucide-react';
 import React from 'react';
 import type { EventCategory } from '@/api/event-categories/model.ts';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import { formatDateToRuFormat } from '@/utils/format-date-to-ru-format.ts';
 import { timeAgo } from '@/utils/time-ago.ts';
 import { useNavigate } from 'react-router';
@@ -46,7 +46,7 @@ export const ReviewStatItem: React.FC<Props> = ({
           'flex items-center gap-2 max-[475px]:flex-col max-[475px]:items-start'
         }
       >
-        <Badge variant={'outline'} className={categoryColors[category.id - 1]}>
+        <Badge variant={'outline'} style={categoryBadgeStyle(category.color)}>
           {category.name}
         </Badge>
         <div className={'flex items-center gap-2'}>

@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui';
-import { categoryColors } from '@/constants/category-colors.ts';
+import { categoryBadgeStyle } from '@/utils/category-badge-style.ts';
 import {
   Calendar,
   Clock4,
@@ -44,7 +44,7 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
       }
     >
       <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">
-        <Badge className={categoryColors[event.category.id - 1]}>
+        <Badge style={categoryBadgeStyle(event.category.color)}>
           {event.category.name}
         </Badge>
       </div>

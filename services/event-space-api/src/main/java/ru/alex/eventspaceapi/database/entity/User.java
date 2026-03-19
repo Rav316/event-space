@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -66,4 +67,10 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Event> createdEvents;
+
+    @Column(name = "password_changed_at")
+    private Instant passwordChangedAt;
+
+    @Column(name = "blocking_reason")
+    private String blockingReason;
 }
