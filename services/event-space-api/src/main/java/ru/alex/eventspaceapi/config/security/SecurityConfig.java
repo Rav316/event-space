@@ -1,4 +1,4 @@
-package ru.alex.eventspaceapi.config;
+package ru.alex.eventspaceapi.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
