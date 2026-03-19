@@ -148,6 +148,22 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void changeUserRole(Integer id, Integer roleIndex) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
+        if (id.equals(authorizedUserId)) {
+            throw new IllegalStateException("you can't change your own role");
+        }
+        user.setRole(Role.values()[roleIndex]);
+        userRepository.save(user);
+        Cache cache = cacheManager.getCache("users");
+        if (cache != null) {
+            cache.evict(id);
+        }
+    }
+
+    @Transactional
     public void blockUsers(List<Integer> userIds) {
         Integer authorizedUserId = Objects.requireNonNull(getAuthorizedUser()).id();
         List<Integer> filteredUserIds = userIds
