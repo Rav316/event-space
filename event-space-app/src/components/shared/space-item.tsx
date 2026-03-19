@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils.ts';
 interface Props {
   name: string;
   capacity: number;
-  floor: number;
+  floor: number | null;
   type: string;
   selected?: boolean;
   onClick?: () => void;
