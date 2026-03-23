@@ -13,7 +13,7 @@ public record EventStepCreateDto(
         LocalTime startTime,
         @NotNull
         LocalTime endTime,
-        @Size(max = 200)
+        @Size(max = 500)
         String description
 ) {
 }

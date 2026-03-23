@@ -78,19 +78,22 @@ public class FileService {
     }
 
     private void compressWithMagick(Path filePath) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(
-                "convert", filePath.toString(),
-                "-resize", "1920x1080>",
-                "-quality", "75",
-                filePath.toString()
-        );
-
-        pb.redirectErrorStream(true);
-        Process process = pb.start();
-
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw new RuntimeException("ImageMagick compression failed, exit code = " + exitCode);
+        String[] commands = {"convert", "magick"};
+        for (String cmd : commands) {
+            ProcessBuilder pb = new ProcessBuilder(
+                    cmd, filePath.toString(),
+                    "-resize", "1920x1080>",
+                    "-quality", "75",
+                    filePath.toString()
+            );
+            pb.redirectErrorStream(true);
+            try {
+                Process process = pb.start();
+                int exitCode = process.waitFor();
+                if (exitCode == 0) return;
+            } catch (IOException ignored) {
+            }
         }
+        throw new RuntimeException("ImageMagick compression failed: neither 'convert' nor 'magick' worked");
     }
 }
