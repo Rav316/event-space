@@ -29,7 +29,6 @@ A university-oriented platform for creating, managing, and discovering campus ev
 ## Table of Contents
 
 - [Architecture Overview](#architecture-overview)
-- [Project Structure](#project-structure)
 - [Services](#services)
   - [Event Space API](#event-space-api)
   - [Email Notification Service](#email-notification-service)
@@ -120,75 +119,6 @@ event-space-api  ──►  RabbitMQ  ──►  email-notification-service  ─
 ```
 
 Event publishing is asynchronous (`@Async`), so it never blocks the main request thread.
-
----
-
-## Project Structure
-
-```
-event-space/
-│
-├── services/
-│   ├── event-space-api/               # Main REST API (Spring Boot 4, Java 21)
-│   │   ├── src/main/java/             # Application source code
-│   │   ├── src/main/resources/        # Configuration & Liquibase migrations
-│   │   ├── build.gradle               # Gradle build configuration
-│   │   ├── version.gradle             # Dependency version catalog
-│   │   └── Dockerfile                 # Multi-stage Docker build
-│   │
-│   ├── email-notification-service/    # Email notifications (Spring Boot + RabbitMQ)
-│   │   ├── src/main/java/             # Listener, service, config
-│   │   ├── src/main/resources/        # Thymeleaf email templates
-│   │   ├── build.gradle               # Gradle build configuration
-│   │   └── Dockerfile                 # Multi-stage Docker build
-│   │
-│   ├── placeholder-service/           # SVG placeholder generator (Go)
-│   │   ├── main.go                    # HTTP server (~50 lines)
-│   │   ├── go.mod                     # Go module definition
-│   │   └── Dockerfile                 # Two-stage Go build
-│   │
-│   ├── nginx-static-service/          # Static file server & proxy
-│   │   ├── nginx.conf                 # Nginx configuration
-│   │   ├── storage/                   # Media file storage
-│   │   └── cache/                     # Nginx cache directory
-│   │
-│   └── observability/                 # Monitoring & logging configs
-│       ├── prometheus/                # Prometheus scrape configuration
-│       ├── grafana/provisioning/      # Datasources & dashboard JSON
-│       └── loki/                      # Loki log aggregation config
-│
-├── event-space-app/                   # Web application (React 19 + Vite 7)
-│   ├── src/
-│   │   ├── api/                       # API client, hooks, services by domain
-│   │   ├── pages/                     # Route-level page components
-│   │   ├── components/                # 200+ reusable UI components
-│   │   ├── store/                     # Zustand state stores
-│   │   ├── hooks/                     # Custom React hooks
-│   │   ├── schemas/                   # Zod validation schemas
-│   │   ├── types/                     # TypeScript type definitions
-│   │   ├── constants/                 # App constants & mappings
-│   │   └── utils/                     # Utility functions
-│   ├── package.json
-│   ├── vite.config.ts
-│   ├── Dockerfile                    # Multi-stage Docker build (Node → Nginx)
-│   └── nginx.conf                    # Nginx config (reverse proxy + SPA)
-│
-├── event-space-mobile/                # Mobile application (Expo 54 + React Native)
-│   ├── app/                           # File-based routing (Expo Router)
-│   ├── src/
-│   │   ├── api/                       # API client (mirrors web structure)
-│   │   ├── components/                # Native UI components
-│   │   ├── store/                     # Zustand stores
-│   │   ├── hooks/                     # Custom hooks
-│   │   ├── schemas/                   # Zod validation schemas
-│   │   └── storage/                   # MMKV local storage
-│   ├── package.json
-│   └── app.json
-│
-├── docker-compose.yml                 # Full stack orchestration (10 services)
-├── .env.example                       # Environment variable template
-└── README.md                          # This file
-```
 
 ---
 
@@ -363,34 +293,6 @@ Returns `image/svg+xml` with a gray background (`#DDDDDD`) and centered text.
 | Profile | `/profile` | User profile with settings and password management |
 | Statistics | `/statistics` | Platform analytics with charts and metrics |
 
-#### Frontend Architecture
-
-```
-src/
-├── api/                    # Domain-based API layer
-│   ├── {domain}/
-│   │   ├── hooks.ts        # React Query hooks (useQuery, useMutation)
-│   │   ├── service.ts      # Axios API calls
-│   │   ├── keys.ts         # Query key factories
-│   │   └── model.ts        # TypeScript interfaces
-│   ├── api-client.ts       # Base Axios instance
-│   ├── instance.ts         # Configured instance with interceptors
-│   └── query-client.ts     # TanStack Query client config
-│
-├── store/                  # 11 Zustand stores
-│   ├── use-auth-store.ts
-│   ├── use-event-creation-store.ts
-│   ├── use-event-filter-store.ts
-│   └── ...
-│
-├── schemas/                # 14 Zod validation schemas
-├── components/             # 200+ components organized by domain
-│   ├── ui/                 # Base primitives (button, input, dialog, etc.)
-│   ├── shared/             # Domain components (event cards, review forms, etc.)
-│   └── modal/              # Modal dialogs
-└── pages/                  # 12 route-level page components
-```
-
 #### Performance Optimizations
 
 - **Code splitting** — Manual vendor chunks for React, React Router, React Query, Recharts, and Radix UI.
@@ -435,25 +337,6 @@ yarn preview    # Preview the production build locally
 | Animations | Reanimated 4, Gesture Handler 2 |
 | Haptics | Expo Haptics, Burnt (toast notifications) |
 | HTTP | Axios 1.13 |
-
-#### App Navigation
-
-```
-app/
-├── _layout.tsx                    # Root layout
-├── (auth)/
-│   ├── _layout.tsx                # Auth flow layout
-│   └── index.tsx                  # Login / register screen
-└── (app)/
-    ├── _layout.tsx                # Authenticated layout
-    ├── (tabs)/
-    │   ├── _layout.tsx            # Bottom tab navigator
-    │   ├── main.tsx               # Home screen (events feed)
-    │   ├── profile.tsx            # User profile
-    │   └── scan.tsx               # QR code scanner
-    └── qr-scan/
-        └── index.tsx              # QR scan result screen
-```
 
 #### Available Scripts
 
