@@ -33,19 +33,16 @@ const EventsPage = () => {
     <Wrapper>
       <div className={'flex flex-col py-5 gap-y-5'}>
         <div className={'flex flex-col'}>
-          <h1 className={'font-bold text-3xl'}>Все мероприятия</h1>
+          <h1 className={'font-semibold text-3xl'}>Все мероприятия</h1>
           <span className={'text-muted-foreground'}>
             Найдите интересные события и зарегистрируйтесь на участие
           </span>
         </div>
         <EventCategories />
-        <div className={'flex flex-col gap-y-2 leading-4'}>
-          <span className={'font-medium'}>
-            Поиск мероприятий по названию, описанию или автору...
-          </span>
+        <div className={'flex flex-col gap-y-2'}>
           <EventSearch />
+          <EventFilters />
         </div>
-        <EventFilters />
         {!isEventsPending && events?.content.length === 0 ? (
           <EventsNotFound />
         ) : (

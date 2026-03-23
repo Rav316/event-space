@@ -59,7 +59,7 @@ export const OverviewTab = () => {
   return (
     <div className={'flex flex-col gap-5 w-full'}>
       <div className={'flex items-center gap-5 w-full max-[900px]:flex-col'}>
-        <Card className="w-full">
+        <Card className="w-full shadow-none border-[#E8E8E8]">
           <CardHeader>
             <CardTitle className={'flex items-center gap-2'}>
               <BarChart3 className="h-5 w-5" />
@@ -84,7 +84,7 @@ export const OverviewTab = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card className="w-full">
+        <Card className="w-full shadow-none border-[#E8E8E8]">
           <CardHeader>
             <CardTitle className={'flex items-center gap-2'}>
               <Users className="h-5 w-5" />
@@ -110,7 +110,7 @@ export const OverviewTab = () => {
       </div>
       <div
         className={
-          'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'
+          'flex flex-col gap-5 border border-[#E8E8E8] rounded-2xl p-5'
         }
       >
         <CardTitle className={'flex items-center gap-2'}>
@@ -140,7 +140,7 @@ export const OverviewTab = () => {
       </div>
 
       <div className={'flex items-center gap-5 w-full max-[900px]:flex-col'}>
-        <Card className="w-full">
+        <Card className="w-full shadow-none border-[#E8E8E8]">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Clock className="h-5 w-5 mr-2" />
@@ -159,7 +159,7 @@ export const OverviewTab = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card className="w-full">
+        <Card className="w-full shadow-none border-[#E8E8E8]">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Star className="h-5 w-5 mr-2" />

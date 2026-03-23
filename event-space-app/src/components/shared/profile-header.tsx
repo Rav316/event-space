@@ -20,7 +20,7 @@ export const ProfileHeader: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex justify-between items-center max-[500px]:flex-col gap-3 max-[500px]:items-start">
-      <h1 className="text-3xl font-bold">Мой профиль</h1>
+      <h1 className="text-3xl font-semibold">Мой профиль</h1>
 
       <div className="relative">
         <AnimatePresence mode="popLayout">

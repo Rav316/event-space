@@ -40,13 +40,13 @@ export const EventCategory: React.FC<Props> = ({
       className={cn(
         'flex flex-col items-center p-5 max-[460px]:p-2 gap-y-2 max-[460px]:gap-y-1 rounded-2xl w-full transition-all duration-300 select-none',
         {
-          'border border-[#E5E5E5] shadow-md bg-white cursor-pointer hover:translate-y-[-3px] hover:shadow-lg':
+          'border border-[#E8E8E8] bg-white cursor-pointer hover:border-[#C8C8C8]':
             clickable && !localSelected,
 
-          'border border-[#C4C4C4] translate-y-[2px] shadow-sm bg-[#F9F9FB] cursor-pointer':
+          'border border-[#C4C4C4] bg-[#F9F9FB] cursor-pointer':
             clickable && localSelected,
 
-          'bg-[#F4F2F7] border border-[#E5E5E5] shadow-none cursor-default':
+          'bg-[#F7F5F0] border border-[#E8E8E8] cursor-default':
             isResult,
         },
       )}

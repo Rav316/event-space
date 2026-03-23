@@ -23,12 +23,12 @@ export const ProfileStatisticsBlock: React.FC<Props> = ({
   return (
     <div
       className={
-        'flex items-center border border-[#E5E5E5] rounded-2xl p-3 gap-3 max-[800px]:flex-1 max-[615px]:py-2'
+        'flex items-center border border-[#E8E8E8] rounded-2xl p-3 gap-3 max-[800px]:flex-1 max-[615px]:py-2'
       }
     >
       <div
         className={cn(
-          'w-8 h-8 flex rounded-sm items-center justify-center',
+          'w-8 h-8 flex rounded-lg items-center justify-center',
           className,
         )}
       >

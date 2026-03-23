@@ -4,10 +4,10 @@ export const eventStepsGlobalSchema = z
   .object({
     steps: z.array(
       z.object({
-        name: z.string(),
+        name: z.string().min(5, { message: 'Название шага должно содержать не менее 5 символов' }).max(64, { message: 'Название шага должно содержать не более 64 символов' }),
         startTime: z.string(),
         endTime: z.string(),
-        description: z.string().optional(),
+        description: z.string().max(500, { message: 'Описание шага должно содержать не более 500 символов' }).optional(),
       }),
     ),
     eventStartTime: z.string(),

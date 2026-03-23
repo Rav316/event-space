@@ -40,7 +40,7 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
   return (
     <div
       className={
-        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md  transition-all duration-300'
+        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E8E8E8] hover:border-[#C8C8C8] transition-colors duration-200'
       }
     >
       <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">
@@ -99,7 +99,7 @@ export const MyEventCard: React.FC<Props> = ({ event }) => {
       <div className="overflow-hidden rounded-t-2xl">
         <Link to={`/events/${event.id}`}>
           <img
-            className="w-full h-48 object-cover transition-transform duration-300"
+            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
             src={getEventImageUrl(event.name, event.imageUrl)}
             alt={event.name}
             onError={(e) => {

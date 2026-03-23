@@ -67,15 +67,16 @@ const EventEditPage = () => {
         eventDateTimeForm.handleSubmit((data) => {
           updateEventData(data);
           if (
-            data.startTime !== event?.startTime ||
-            data.endTime !== event?.endTime
+            data.startTime !== event?.startTime?.slice(0, 5) ||
+            data.endTime !== event?.endTime?.slice(0, 5)
           ) {
             resetEventSteps();
           }
           next();
         })();
         break;
-      case 2:
+      case 2: {
+        if (Object.keys(eventStepForm.formState.errors).length > 0) return;
         try {
           eventStepsGlobalSchema.parse({
             steps: eventSteps,
@@ -89,6 +90,7 @@ const EventEditPage = () => {
           }
         }
         break;
+      }
       case 3:
         eventLocationForm.handleSubmit((data) => {
           updateEventData(data);

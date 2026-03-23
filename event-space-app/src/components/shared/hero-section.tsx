@@ -1,4 +1,4 @@
-import { ArrowRight, Calendar, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, BarChart2, Calendar, Users } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { Link, useNavigate } from 'react-router';
 import { useAuthModalStore } from '@/store/use-auth-modal-store.ts';
@@ -32,10 +32,10 @@ export const HeroSection = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="px-5 max-w-[600px] py-2.5 bg-white rounded-3xl flex justify-center items-center gap-2 border border-[#E5E5E5]"
+          className="px-4 py-1.5 bg-white rounded-full flex justify-center items-center gap-2 border border-[#E5E5E5]"
         >
-          <Sparkles className="text-purple-600" />
-          <span className="font-medium text-center">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+          <span className="font-medium text-center text-sm text-[#555]">
             Новая платформа для студенческих мероприятий
           </span>
         </motion.div>
@@ -44,9 +44,10 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6 }}
-          className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-800 via-purple-600 to-purple-500 bg-clip-text text-transparent"
+          className="text-5xl md:text-7xl tracking-tight"
         >
-          EventSpace
+          <span className="font-light text-foreground">Event</span>
+          <span className="font-semibold text-foreground">Space</span>
         </motion.h1>
 
         <motion.p
@@ -96,7 +97,7 @@ export const HeroSection = () => {
             description="Мгновенная регистрация участников через QR-коды и push-уведомления"
           />
           <HeroSectionCard
-            Icon={Sparkles}
+            Icon={BarChart2}
             title="Аналитика"
             description="Детальная статистика и отчеты для повышения эффективности мероприятий"
           />

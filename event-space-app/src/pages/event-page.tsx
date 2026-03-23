@@ -34,6 +34,7 @@ import { cn } from '@/lib/utils.ts';
 import { compareWithToday } from '@/utils/compare-with-current-date.ts';
 import { EventQrCodeDialog, EventShareDialog } from '@/components/modal';
 import { useState } from 'react';
+import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
 
 const EventPage = () => {
   const [openQr, setOpenQr] = useState(false);
@@ -98,7 +99,7 @@ const EventPage = () => {
         {compareWithCurrentTime(event.eventDate, event.endTime) === 1 && (
           <div
             className={
-              'flex items-center gap-3 bg-[#F4F2F7] p-3 rounded-lg border border-[#E5E5E5]'
+              'flex items-center gap-3 bg-[#F7F5F0] p-3 rounded-lg border border-[#E8E8E8]'
             }
           >
             <Info className="text-muted-foreground shrink-0" />
@@ -115,6 +116,10 @@ const EventPage = () => {
               <img
                 className="w-full object-cover h-[336px] rounded-2xl"
                 src={getEventImageUrl(event.name, event?.imageUrl)}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = getPlaceholderImageUrl(event.name);
+                }}
                 alt="event-example"
               />
               <div className="absolute z-10 top-3 left-3">
@@ -156,7 +161,7 @@ const EventPage = () => {
               </div>
             </div>
 
-            <h3 className="text-3xl font-bold">{event.name}</h3>
+            <h3 className="text-3xl font-semibold">{event.name}</h3>
 
             <div className="flex flex-wrap items-center gap-2">
               {event.tags?.map((tag, index) => (
@@ -194,20 +199,6 @@ const EventPage = () => {
               />
             </div>
 
-            {event.description && (
-              <EventDescription description={event.description} />
-            )}
-            {isStepsPending || !eventSteps ? (
-              <div className={'flex flex-col gap-4'}>
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <Skeleton className="h-10 w-full" key={index} />
-                ))}
-              </div>
-            ) : (
-              <>
-                {eventSteps.length > 0 && <EventProgram steps={eventSteps} />}
-              </>
-            )}
           </div>
 
           <div className="flex-3 flex flex-col gap-4">
@@ -271,6 +262,20 @@ const EventPage = () => {
             </div>
           </div>
         </div>
+
+        {event.description && (
+          <EventDescription description={event.description} />
+        )}
+        {isStepsPending || !eventSteps ? (
+          <div className={'flex flex-col gap-4'}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <Skeleton className="h-10 w-full" key={index} />
+            ))}
+          </div>
+        ) : (
+          <>{eventSteps.length > 0 && <EventProgram steps={eventSteps} />}</>
+        )}
+
         <EventReviews event={event} />
       </div>
     </Wrapper>

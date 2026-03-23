@@ -55,7 +55,7 @@ const MyEventsPage = () => {
   return (
     <Wrapper className={'mt-5 flex flex-col gap-y-5 mb-5'}>
       <div className={'flex flex-col '}>
-        <h1 className={'font-bold text-3xl'}>Мои мероприятия</h1>
+        <h1 className={'font-semibold text-3xl'}>Мои мероприятия</h1>
         <span className={'text-muted-foreground'}>
           Управляйте опубликованными мероприятиями
         </span>
@@ -79,7 +79,7 @@ const MyEventsPage = () => {
           </>
         )}
       </div>
-      <div className="flex gap-5 border border-[#E5E5E5] rounded-2xl p-4 max-[515px]:flex-col max-[515px]:items-start max-[515px]:gap-y-3 max-[400px]:p-3">
+      <div className="flex gap-5 border border-[#E8E8E8] rounded-2xl p-4 max-[515px]:flex-col max-[515px]:items-start max-[515px]:gap-y-3 max-[400px]:p-3">
         <div className="flex-1 max-[515px]:w-full">
           <SearchInput
             value={searchValue}

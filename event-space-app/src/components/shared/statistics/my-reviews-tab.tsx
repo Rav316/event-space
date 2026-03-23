@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { StarRating } from '@/components/shared';
 import { RatingDistributionBlock } from '@/components/shared/statistics/rating-distribution-block.tsx';
-import { Divide } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { LastReviewsList } from '@/components/shared/statistics/last-reviews-list.tsx';
 import { useReviewStatistics } from '@/api/statistics/hooks.ts';
 import { ReviewStatisticsSkeleton } from '@/components/shared/statistics/review-statistics-skeleton.tsx';
@@ -18,10 +18,10 @@ export const MyReviewsTab = () => {
         <div className="flex flex-col gap-5 w-full">
           <div className="flex items-stretch gap-5 w-full max-[1000px]:flex-col">
             <div className="flex flex-1 gap-5 max-[625px]:flex-col">
-              <Card className="w-full h-full">
+              <Card className="w-full h-full shadow-none border-[#E8E8E8]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Divide />
+                    <Star className="w-5 h-5" />
                     Моя средняя оценка
                   </CardTitle>
                 </CardHeader>

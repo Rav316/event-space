@@ -9,7 +9,7 @@ export const AdminReviewTab = () => {
   return (
     <div className={'flex flex-col gap-2'}>
       <AdminStatisticsBlock />
-      <div className={'border flex rounded-2xl border-[#E5E5E5] p-3'}>
+      <div className={'border flex rounded-2xl border-[#E8E8E8] p-3'}>
         <div
           className={
             'flex gap-4 justify-between items-center w-full max-[750px]:flex-col max-[750px]:items-start'
@@ -18,7 +18,7 @@ export const AdminReviewTab = () => {
           <div className={'flex gap-4'}>
             <div
               className={
-                'rounded-full w-11 h-11 bg-[#E5E5E5] flex items-center justify-center shrink-0 max-[530px]:hidden'
+                'rounded-lg w-11 h-11 bg-[#F5F4F0] flex items-center justify-center shrink-0 max-[530px]:hidden'
               }
             >
               <FolderTree />

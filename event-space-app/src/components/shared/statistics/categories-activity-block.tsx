@@ -38,7 +38,7 @@ export const CategoriesActivityBlock: React.FC<Props> = ({
   }));
 
   return (
-    <Card className="w-full h-full">
+    <Card className="w-full h-full shadow-none border-[#E8E8E8]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="w-5 h-5" />

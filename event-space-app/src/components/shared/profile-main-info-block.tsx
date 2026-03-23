@@ -65,7 +65,7 @@ export const ProfileMainInfoBlock: React.FC<Props> = ({
       (user.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : undefined));
 
   return (
-    <div className="flex flex-col items-center gap-3 border border-[#E5E5E5] rounded-2xl p-5">
+    <div className="flex flex-col items-center gap-3 border border-[#E8E8E8] rounded-2xl p-5">
       <div className="relative">
         <UserAvatar
           avatarUrl={avatarSrc}

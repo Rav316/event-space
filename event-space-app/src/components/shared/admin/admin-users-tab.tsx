@@ -192,7 +192,7 @@ export const AdminUsersTab = () => {
 
   return (
     <div
-      className={'border border-[#E5E5E5] rounded-2xl p-5 flex flex-col gap-4'}
+      className={'border border-[#E8E8E8] rounded-2xl p-5 flex flex-col gap-4'}
     >
       <div className={'flex items-center justify-between'}>
         <span className={'font-medium text-lg'}>Управление пользователями</span>

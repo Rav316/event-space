@@ -8,7 +8,7 @@ export const ActiveEventsBlock = () => {
   return (
     <div
       className={
-        'border border-[#E5E5E5] rounded-2xl p-3 w-full flex flex-col gap-2'
+        'border border-[#E8E8E8] rounded-2xl p-3 w-full flex flex-col gap-2'
       }
     >
       <span className={'font-medium'}>Активные мероприятия</span>
@@ -41,14 +41,16 @@ export const ActiveEventsBlock = () => {
                     {event.authorLastName}
                   </span>
                 </div>
-                <div className={'flex flex-col items-end'}>
-                  {event.registeredUsers} / {event.participantQuantity}
+                <div className={'flex flex-col items-end gap-1 shrink-0'}>
+                  <span className={'text-sm text-muted-foreground'}>
+                    {event.registeredUsers} / {event.participantQuantity}
+                  </span>
                   <Progress
                     value={Math.max(
                       0,
                       (event.registeredUsers / event.participantQuantity) * 100,
                     )}
-                    className={'h-1'}
+                    className={'h-1.5 w-24'}
                   />
                 </div>
               </div>

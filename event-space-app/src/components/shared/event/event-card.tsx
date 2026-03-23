@@ -39,8 +39,8 @@ export const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <div
       className={cn(
-        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E5E5E5] shadow-md transition-all duration-300',
-        'hover:translate-y-[-3px] hover:shadow-lg',
+        'group relative min-h-[350px] flex flex-col rounded-2xl border border-[#E8E8E8] transition-colors duration-200',
+        'hover:border-[#C8C8C8]',
       )}
     >
       <div className="absolute flex flex-col gap-2 z-10 top-3 left-3">

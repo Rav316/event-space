@@ -15,7 +15,7 @@ export const UserSettings: React.FC<Props> = ({ editMode, form }) => {
     <form className={'flex flex-col gap-5'}>
       <div
         className={
-          'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'
+          'flex flex-col gap-5 border border-[#E8E8E8] rounded-2xl p-5'
         }
       >
         <h3 className={'font-medium text-xl'}>Уведомления</h3>
@@ -35,7 +35,7 @@ export const UserSettings: React.FC<Props> = ({ editMode, form }) => {
       </div>
       <div
         className={
-          'flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5'
+          'flex flex-col gap-5 border border-[#E8E8E8] rounded-2xl p-5'
         }
       >
         <h3 className={'font-medium text-xl'}>Безопасность</h3>

@@ -31,7 +31,7 @@ export const ProfileStatisticsGroup = () => {
           }
         >
           <ProfileStatisticsBlock
-            className={'bg-gray-200'}
+            className={'bg-[#F5F4F0]'}
             title={'Создано событий'}
             Icon={Calendar}
             value={statistics.createdEvents}

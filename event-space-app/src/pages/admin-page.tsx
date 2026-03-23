@@ -19,7 +19,11 @@ const AdminPage = () => {
   const { data: statistics } = useAdminStatistics();
 
   if (isPending || !data) {
-    return <Loader />;
+    return (
+      <div className={'flex items-center justify-center min-h-[40vh]'}>
+        <Loader className={'animate-spin text-muted-foreground'} />
+      </div>
+    );
   }
 
   const tabs = adminTabs.map((tab) =>
@@ -44,7 +48,7 @@ const AdminPage = () => {
   return (
     <Wrapper className={'flex flex-col py-5 gap-5'}>
       <div className={'flex flex-col'}>
-        <span className={'font-bold text-3xl'}>Административная панель</span>
+        <span className={'font-semibold text-3xl'}>Административная панель</span>
         <span className={'text-muted-foreground'}>
           Добро пожаловать, {data.user.firstName}! Управление системой
           EventSpace

@@ -16,7 +16,7 @@ export const GetStartedSection: React.FC<Props> = ({ className }) => {
     <div
       className={cn(
         className,
-        'flex flex-col gap-y-5 items-center border rounded-2xl bg-[#F4F2F7] p-5',
+        'flex flex-col gap-y-5 items-center border border-[#E8E8E8] rounded-2xl bg-[#F7F5F0] p-5',
       )}
     >
       <span className={'font-medium text-2xl'}>Организуете мероприятия?</span>

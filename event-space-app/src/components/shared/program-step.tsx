@@ -28,13 +28,20 @@ export const ProgramStep: React.FC<Props> = ({
   isLastStep,
 }) => {
   const form = useForm({
-    defaultValues: step,
+    defaultValues: {
+      ...step,
+      startTime: step.startTime.slice(0, 5),
+      endTime: step.endTime.slice(0, 5),
+    },
     resolver: zodResolver(eventStepSchema),
+    mode: 'onChange',
   });
 
-  const handleBlur = form.handleSubmit((data) => {
+  const handleBlur = async () => {
+    const data = form.getValues();
     updateStep(index, data);
-  });
+    await form.trigger();
+  };
 
   return (
     <FormProvider {...form}>
@@ -77,7 +84,7 @@ export const ProgramStep: React.FC<Props> = ({
             <input
               type="hidden"
               {...form.register('startTime')}
-              value={step.startTime}
+              value={step.startTime.slice(0, 5)}
             />
             <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
               {step.startTime.slice(0, 5)}
@@ -91,7 +98,7 @@ export const ProgramStep: React.FC<Props> = ({
             <input
               type={'hidden'}
               {...form.register('endTime')}
-              value={step.endTime}
+              value={step.endTime.slice(0, 5)}
             />
             <span className="p-[7px] border rounded-sm bg-gray-100 text-sm">
               {step.endTime.slice(0, 5)}

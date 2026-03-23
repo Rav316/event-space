@@ -42,6 +42,7 @@ export const useEventEditForms = (event?: EventDetailsDto) => {
 
   const eventStepForm = useForm<EventStepCreateDto>({
     resolver: zodResolver(eventStepSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       startTime: '',

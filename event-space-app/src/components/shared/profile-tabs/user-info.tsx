@@ -28,7 +28,7 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
   return (
     <FormProvider {...form}>
       <form className="flex flex-col gap-5">
-        <div className="flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5">
+        <div className="flex flex-col gap-5 border border-[#E8E8E8] rounded-2xl p-5">
           <h3 className={'font-medium text-xl'}>Основная информация</h3>
           <div className="grid grid-cols-2 gap-5 max-[500px]:grid-cols-1">
             <div className="flex flex-col gap-1">
@@ -167,8 +167,8 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 border border-[#E5E5E5] rounded-2xl p-5">
-          <span>Социальные сети</span>
+        <div className="flex flex-col gap-5 border border-[#E8E8E8] rounded-2xl p-5">
+          <h3 className={'font-medium text-xl'}>Социальные сети</h3>
           <div className="flex gap-5 max-[600px]:flex-col">
             <div className="flex flex-col gap-1 flex-1">
               <Label htmlFor="telegram">Telegram</Label>

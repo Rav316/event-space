@@ -40,7 +40,7 @@ const DirectoriesPage = () => {
           </Button>
         </div>
         <div className={'flex flex-col'}>
-          <span className={'font-bold text-3xl'}>Управление справочниками</span>
+          <span className={'font-semibold text-3xl'}>Управление справочниками</span>
           <span className={'text-muted-foreground'}>
             Настройка локаций, категорий и других справочных данных
           </span>

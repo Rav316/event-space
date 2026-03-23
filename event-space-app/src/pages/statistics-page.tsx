@@ -27,7 +27,7 @@ const StatisticsPage = () => {
   return (
     <Wrapper className={'flex flex-col gap-y-3 py-5'}>
       <div className={'flex flex-col'}>
-        <h1 className={'text-3xl font-bold'}>Статистика мероприятий</h1>
+        <h1 className={'text-3xl font-semibold'}>Статистика мероприятий</h1>
         <span className={'text-muted-foreground'}>
           Анализ посещаемости и эффективности мероприятий
         </span>

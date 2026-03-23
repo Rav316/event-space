@@ -14,7 +14,7 @@ export const eventStepSchema = z
     }),
     description: z
       .string()
-      .max(200, { message: 'Описание должно содержать не более 200 символов' })
+      .max(500, { message: 'Описание должно содержать не более 500 символов' })
       .optional(),
   })
   .refine(

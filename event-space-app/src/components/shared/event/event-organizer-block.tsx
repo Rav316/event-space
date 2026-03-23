@@ -23,7 +23,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        'flex flex-col gap-4 border border-[#E5E5E5] rounded-2xl p-5',
+        'flex flex-col gap-4 border border-[#E8E8E8] rounded-2xl p-5',
         className,
       )}
     >

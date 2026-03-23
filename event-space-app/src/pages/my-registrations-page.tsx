@@ -61,7 +61,7 @@ const MyRegistrationsPage = () => {
   return (
     <Wrapper className="flex flex-col gap-4 my-5">
       <div>
-        <h1 className="text-3xl font-bold">Мои регистрации</h1>
+        <h1 className="text-3xl font-semibold">Мои регистрации</h1>
         <span className="text-muted-foreground">
           Управляйте своими регистрациями и отслеживайте предстоящие мероприятия
         </span>

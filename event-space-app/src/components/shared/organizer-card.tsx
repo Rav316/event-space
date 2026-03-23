@@ -19,8 +19,8 @@ export const OrganizerCard: React.FC<Props> = ({ organizer, className }) => {
   return (
     <div
       className={cn(
-        'flex items-center gap-4 p-5 rounded-2xl border border-[#E5E5E5] shadow-md transition-all duration-300',
-        'hover:translate-y-[-3px] hover:shadow-lg',
+        'flex items-center gap-4 p-5 rounded-2xl border border-[#E8E8E8] transition-colors duration-200',
+        'hover:border-[#C8C8C8]',
         className,
       )}
     >

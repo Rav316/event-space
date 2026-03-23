@@ -10,7 +10,7 @@ export const LastUsersBlock = () => {
   return (
     <div
       className={
-        'border border-[#E5E5E5] rounded-2xl p-3 w-full flex flex-col gap-2'
+        'border border-[#E8E8E8] rounded-2xl p-3 w-full flex flex-col gap-2'
       }
     >
       <span className={'font-medium'}>Последние пользователи</span>
