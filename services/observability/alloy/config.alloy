@@ -1,0 +1,119 @@
+// ─── Discover all running Docker containers ───────────────────────────────────
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+// ─── Relabel: extract container and service labels ────────────────────────────
+discovery.relabel "containers" {
+  targets = discovery.docker.containers.targets
+
+  // Strip leading slash from container name: /my_container → my_container
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+
+  // Use Docker Compose service name as the "service" label
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label  = "service"
+  }
+}
+
+// ─── Collect logs from non-Spring containers via Docker socket ────────────────
+loki.source.docker "containers" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.containers.output
+  forward_to = [loki.process.docker.receiver]
+}
+
+// ─── Docker log pipeline (non-Spring services) ────────────────────────────────
+loki.process "docker" {
+
+  // Drop observability infrastructure logs (avoid noise / circular writes)
+  stage.match {
+    selector = `{service=~"alloy|grafana|prometheus|loki"}`
+    action   = "drop"
+  }
+
+  // Drop Spring Boot services — their logs come from files, not stdout
+  stage.match {
+    selector = `{service=~"event-space-api|email-notification-service"}`
+    action   = "drop"
+  }
+
+  forward_to = [loki.write.loki.receiver]
+}
+
+// ─── Discover Spring Boot JSON log files ─────────────────────────────────────
+local.file_match "spring_services" {
+  path_targets = [
+    {
+      __path__ = "/var/log/event-space-api/app.json",
+      service  = "event-space-api",
+    },
+    {
+      __path__ = "/var/log/email-notification-service/app.json",
+      service  = "email-notification-service",
+    },
+  ]
+}
+
+// ─── Collect logs from Spring Boot JSON files ─────────────────────────────────
+loki.source.file "spring_services" {
+  targets    = local.file_match.spring_services.targets
+  forward_to = [loki.process.spring.receiver]
+}
+
+// ─── Spring Boot JSON log pipeline ────────────────────────────────────────────
+loki.process "spring" {
+
+  // Parse structured JSON produced by LogstashEncoder
+  //   Fields: level, logger_name, thread_name, message, service, userId (MDC)
+  stage.json {
+    expressions = {
+      level       = "level",
+      logger_name = "logger_name",
+      thread_name = "thread_name",
+      message     = "message",
+      userId      = "userId",
+    }
+  }
+
+  // Index level as a Loki label for fast filtering
+  stage.labels {
+    values = {
+      level = "level",
+    }
+  }
+
+  // Rich context in structured metadata (not indexed, cheaper)
+  stage.structured_metadata {
+    values = {
+      logger = "logger_name",
+      thread = "thread_name",
+      userId = "userId",
+    }
+  }
+
+  // Drop lines that failed JSON parsing (no level extracted)
+  stage.match {
+    selector = `{service=~"event-space-api|email-notification-service", level=""}`
+    action   = "drop"
+  }
+
+  // Replace the raw JSON line with the human-readable message
+  stage.output {
+    source = "message"
+  }
+
+  forward_to = [loki.write.loki.receiver]
+}
+
+// ─── Write to Loki ────────────────────────────────────────────────────────────
+loki.write "loki" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

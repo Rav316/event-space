@@ -10,7 +10,6 @@ ext {
             'openapi': '3.0.2',
             'jackson': '3.0.4',
             'logstash': '9.0',
-            'loki4j': '2.0.3',
             'nullableValueStarter': '1.0.1'
     ]
 }

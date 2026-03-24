@@ -1,7 +1,6 @@
 ext {
     versions = [
             'jackson': '3.0.4',
-            'logstash': '9.0',
-            'loki4j': '2.0.3'
+            'logstash': '9.0'
     ]
 }

@@ -38,7 +38,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation "net.logstash.logback:logstash-logback-encoder:${versions.logstash}"
-    implementation "com.github.loki4j:loki-logback-appender:${versions.loki4j}"
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

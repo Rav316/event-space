@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
   "links": [],
   "panels": [
     {
@@ -86,7 +85,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -165,7 +164,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "disableTextWrap": false,
@@ -239,7 +238,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -330,7 +329,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -419,7 +418,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -465,9 +464,10 @@
         "showLabels": false,
         "showTime": false,
         "sortOrder": "Descending",
+        "unwrappedColumns": false,
         "wrapLogMessage": true
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -476,7 +476,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{app=\"$app_name\", env=\"$env_instance\"}",
+          "expr": "{service=\"$app_name\", env=\"$env_instance\"}",
           "queryType": "range",
           "refId": "A"
         }
@@ -671,7 +671,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -680,7 +680,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by(level) (rate({app=\"$app_name\",  env=\"$env_instance\"} | pattern `<date> <time> <_>=<trace_id> <_>=<span_id> <_>=<trace_flags> <type> <_> --- <msg>` |= \"$log_keyword\" [1m]))\n",
+          "expr": "sum by(level) (rate({service=\"$app_name\",  env=\"$env_instance\"} | pattern `<date> <time> <_>=<trace_id> <_>=<span_id> <_>=<trace_flags> <type> <_> --- <msg>` |= \"$log_keyword\" [1m]))\n",
           "queryType": "range",
           "refId": "A"
         }
@@ -770,7 +770,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -869,7 +869,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -971,7 +971,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1072,7 +1072,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1173,7 +1173,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1219,6 +1219,7 @@
         },
         "refresh": 1,
         "regex": "",
+        "regexApplyTo": "value",
         "type": "query"
       },
       {
@@ -1265,6 +1266,7 @@
         },
         "refresh": 1,
         "regex": "",
+        "regexApplyTo": "value",
         "type": "query"
       },
       {
@@ -1283,6 +1285,7 @@
         },
         "refresh": 1,
         "regex": "",
+        "regexApplyTo": "value",
         "type": "query"
       }
     ]
@@ -1292,8 +1295,9 @@
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "",
+  "timezone": "browser",
   "title": "Spring Boot Observability",
   "uid": "dLsDQIUnzb",
-  "version": 2
+  "version": 1,
+  "weekStart": ""
 }

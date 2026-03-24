@@ -1,74 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOGS" value="./logs" />
+    <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
+
     <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="unknown-app"/>
 
+    <!-- Plain-text console output (human-readable, colored) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{userId:-anonymous}] %highlight(%-5level) %-5level %logger{36} - %msg%n</pattern>
+        <encoder>
+            <pattern>%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr(%logger{36}){cyan} - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <!-- Raw SQL debug output (plain text, intentionally separate) -->
     <appender name="RAW_JDBC_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="ASYNC_LOKI" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>16384</queueSize>
-        <discardingThreshold>0</discardingThreshold>
-        <neverBlock>true</neverBlock>
-        <appender-ref ref="LOKI_DIRECT" />
-    </appender>
-
-    <appender name="LOKI_DIRECT" class="com.github.loki4j.logback.Loki4jAppender">
-        <batch>
-            <timeoutMs>10000</timeoutMs>
-            <staticLabels>true</staticLabels>
-        </batch>
-
-        <http>
-            <url>http://loki:3100/loki/api/v1/push</url>
-            <!--            <useProtobufApi>true</useProtobufApi>-->
-        </http>
-        <message>
-            <pattern>%-5level [%thread] %logger{20} - %msg%n</pattern>
-        </message>
-        <labels>
-            app=${APP_NAME}
-        </labels>
-        <structuredMetadata>
-            level = %level
-            thread = %thread
-            class = %logger
-            message = %msg
-        </structuredMetadata>
-    </appender>
-
-    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/application.json</file>
-
+    <!-- JSON file output — collected by Grafana Alloy and forwarded to Loki -->
+    <appender name="FILE_JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/app.json</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/application-%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+            <fileNamePattern>./logs/app.%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
-            <maxHistory>14</maxHistory>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
         </rollingPolicy>
-
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <timeZone>UTC</timeZone>
-            <customFields>
-                {
-                "service": "${APP_NAME}"
-                }
-            </customFields>
+            <customFields>{"service": "${APP_NAME}"}</customFields>
         </encoder>
+    </appender>
+
+    <!-- Async wrapper — decouples application threads from I/O -->
+    <appender name="ASYNC_FILE_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE_JSON"/>
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>false</neverBlock>
     </appender>
 
     <logger name="org.springframework" level="INFO" />
     <logger name="ru.alex.emailnotificationservice" level="DEBUG" />
-
-
 
     <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug" additivity="false">
         <appender-ref ref="RAW_JDBC_CONSOLE"/>
@@ -76,7 +50,6 @@
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="JSON_FILE"/>
-        <appender-ref ref="ASYNC_LOKI"/>
+        <appender-ref ref="ASYNC_FILE_JSON"/>
     </root>
 </configuration>
