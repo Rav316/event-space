@@ -7,10 +7,26 @@ import {
   Textarea,
 } from '@/components/ui';
 import { Clock, Plus } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { ProgramStep } from '@/components/shared';
 import { FormProvider, type useForm } from 'react-hook-form';
 import type { EventCreateDto, EventStepCreateDto } from '@/api/events/model.ts';
+import {
+  DndContext,
+  DragOverlay,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragStartEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 
 interface Props {
   form: ReturnType<typeof useForm<EventStepCreateDto>>;
@@ -19,6 +35,7 @@ interface Props {
   addEventStep: (step: EventStepCreateDto) => void;
   updateEventStep: (index: number, data: Partial<EventStepCreateDto>) => void;
   removeEventStep: (index: number) => void;
+  reorderEventSteps: (oldIndex: number, newIndex: number) => void;
 }
 
 export const EventProgramStep: React.FC<Props> = ({
@@ -28,8 +45,69 @@ export const EventProgramStep: React.FC<Props> = ({
   addEventStep,
   updateEventStep,
   removeEventStep,
+  reorderEventSteps,
 }) => {
+  const dndId = useId();
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const uidCounter = useRef(0);
+  const [stepUids, setStepUids] = useState<string[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeWidth, setActiveWidth] = useState<number | null>(null);
+
+  const generateUid = useCallback(() => {
+    uidCounter.current += 1;
+    return `step-uid-${uidCounter.current}`;
+  }, []);
+
+  useEffect(() => {
+    setStepUids((prev) => {
+      if (eventSteps.length > prev.length) {
+        const newUids = [...prev];
+        for (let i = prev.length; i < eventSteps.length; i++) {
+          newUids.push(generateUid());
+        }
+        return newUids;
+      }
+      if (eventSteps.length < prev.length) {
+        return prev.slice(0, eventSteps.length);
+      }
+      return prev;
+    });
+  }, [eventSteps.length, generateUid]);
+
+  const handleDragStart = (e: DragStartEvent) => {
+    setActiveId(e.active.id as string);
+    setActiveWidth(e.active.rect.current.initial?.width ?? null);
+  };
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    setActiveId(null);
+    setActiveWidth(null);
+
+    if (!over || active.id === over.id) return;
+    const oldIndex = stepUids.indexOf(active.id as string);
+    const newIndex = stepUids.indexOf(over.id as string);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    setStepUids((prev) => {
+      const newUids = [...prev];
+      const [moved] = newUids.splice(oldIndex, 1);
+      newUids.splice(newIndex, 0, moved);
+      return newUids;
+    });
+
+    reorderEventSteps(oldIndex, newIndex);
+  };
+
   const endTime = form.watch('endTime');
+  const activeIndex = activeId ? stepUids.indexOf(activeId) : -1;
+  const activeStep = activeIndex >= 0 ? eventSteps[activeIndex] : null;
 
   const onClickAddEventStep = (data: EventStepCreateDto) => {
     const startTime =
@@ -86,17 +164,54 @@ export const EventProgramStep: React.FC<Props> = ({
         </span>
       </div>
 
-      {eventSteps.length > 0 &&
-        eventSteps.map((step, index) => (
-          <ProgramStep
-            key={index}
-            step={step}
-            index={index}
-            isLastStep={index === eventSteps.length - 1}
-            onStepDelete={() => removeEventStep(index)}
-            updateStep={(i, data) => updateEventStep(i, data)}
-          />
-        ))}
+      {eventSteps.length > 0 && stepUids.length === eventSteps.length && (
+        <DndContext
+          id={dndId}
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragCancel={() => {
+            setActiveId(null);
+            setActiveWidth(null);
+          }}
+        >
+          <SortableContext items={stepUids} strategy={verticalListSortingStrategy}>
+            {eventSteps.map((step, index) => (
+              <ProgramStep
+                key={stepUids[index]}
+                dragId={stepUids[index]}
+                step={step}
+                index={index}
+                onStepDelete={() => {
+                  setStepUids((prev) => prev.filter((_, i) => i !== index));
+                  removeEventStep(index);
+                }}
+                updateStep={(i, data) => updateEventStep(i, data)}
+              />
+            ))}
+          </SortableContext>
+          <DragOverlay
+            dropAnimation={{
+              duration: 240,
+              easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+          >
+            {activeStep && activeId ? (
+              <div style={{ width: activeWidth ?? undefined }}>
+                <ProgramStep
+                  dragId={activeId}
+                  step={activeStep}
+                  index={activeIndex}
+                  isOverlay
+                  onStepDelete={() => {}}
+                  updateStep={() => {}}
+                />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      )}
 
       {!isFormDisabled && (
         <FormProvider {...form}>

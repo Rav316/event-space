@@ -34,6 +34,9 @@ const EventCreatePage = () => {
   const updateEventStep = useEventCreationStore(
     (state) => state.updateEventStep,
   );
+  const reorderEventSteps = useEventCreationStore(
+    (state) => state.reorderEventSteps,
+  );
   const eventImage = useEventImageStore((state) => state.file);
   const previewUrl = useEventImageStore((state) => state.previewUrl);
   const setFile = useEventImageStore((state) => state.setFile);
@@ -128,6 +131,7 @@ const EventCreatePage = () => {
             addEventStep={addEventStep}
             updateEventStep={updateEventStep}
             removeEventStep={removeEventStep}
+            reorderEventSteps={reorderEventSteps}
           />
         );
       case 3:

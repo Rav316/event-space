@@ -37,6 +37,7 @@ const EventEditPage = () => {
     addEventStep,
     updateEventStep,
     removeEventStep,
+    reorderEventSteps,
     resetEventSteps,
     spaceFilter,
     updateSpaceFilter,
@@ -114,8 +115,6 @@ const EventEditPage = () => {
       case 1:
         return <DateTimeStep form={eventDateTimeForm} />;
       case 2:
-        // TODO как то нормально обрабатывать евент
-        // TODO сейчас у меня через знак "!", это не есть хорошо
         return (
           <EventProgramStep
             form={eventStepForm}
@@ -124,10 +123,10 @@ const EventEditPage = () => {
             addEventStep={addEventStep}
             updateEventStep={updateEventStep}
             removeEventStep={removeEventStep}
+            reorderEventSteps={reorderEventSteps}
           />
         );
       case 3:
-        // TODO тут также обработать проблему с "!"
         return (
           <EventLocationStep
             form={eventLocationForm}

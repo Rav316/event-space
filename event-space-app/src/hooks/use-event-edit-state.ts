@@ -4,6 +4,7 @@ import type {
   EventStepCreateDto,
 } from '@/api/events/model.ts';
 import type { SpaceFilter } from '@/api/spaces/model.ts';
+import { recalculateStepTimes } from '@/utils/recalculate-step-times.ts';
 
 export const useEventEditState = (event?: EventDetailsDto) => {
   const staticContentUrl = import.meta.env.VITE_STATIC_URL;
@@ -59,7 +60,7 @@ export const useEventEditState = (event?: EventDetailsDto) => {
     setEventSteps((prev) => {
       const newSteps = [...prev];
       newSteps.splice(index, 1);
-      return newSteps;
+      return recalculateStepTimes(newSteps, eventData?.startTime ?? '00:00');
     });
   };
 
@@ -84,6 +85,15 @@ export const useEventEditState = (event?: EventDetailsDto) => {
     setImageFile(new File([], ''));
   };
 
+  const reorderEventSteps = (oldIndex: number, newIndex: number) => {
+    setEventSteps((prev) => {
+      const steps = [...prev];
+      const [moved] = steps.splice(oldIndex, 1);
+      steps.splice(newIndex, 0, moved);
+      return recalculateStepTimes(steps, eventData?.startTime ?? '00:00');
+    });
+  };
+
   const resetEventSteps = () => {
     setEventSteps([]);
   };
@@ -95,6 +105,7 @@ export const useEventEditState = (event?: EventDetailsDto) => {
     addEventStep,
     updateEventStep,
     removeEventStep,
+    reorderEventSteps,
     resetEventSteps,
     spaceFilter,
     updateSpaceFilter,

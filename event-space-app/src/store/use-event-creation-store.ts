@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { getTodayDate } from '@/utils/get-today-date.ts';
+import { recalculateStepTimes } from '@/utils/recalculate-step-times.ts';
 
 interface EventCreationState {
   event: EventCreateDto;
@@ -14,6 +15,7 @@ interface EventCreationState {
   resetEvent: () => void;
   resetEventSteps: () => void;
   updateEventStep: (index: number, data: Partial<EventStepCreateDto>) => void;
+  reorderEventSteps: (oldIndex: number, newIndex: number) => void;
 }
 
 export const useEventCreationStore = create<EventCreationState>()(
@@ -53,7 +55,12 @@ export const useEventCreationStore = create<EventCreationState>()(
       removeEventStep: (index) =>
         set(
           (state) => {
-            state.eventSteps.splice(index, 1);
+            const steps = [...state.eventSteps];
+            steps.splice(index, 1);
+            state.eventSteps = recalculateStepTimes(
+              steps,
+              state.event.startTime || '00:00',
+            );
           },
           false,
           'removeEventStep',
@@ -93,6 +100,17 @@ export const useEventCreationStore = create<EventCreationState>()(
           },
           false,
           'updateEventStep',
+        ),
+      reorderEventSteps: (oldIndex: number, newIndex: number) =>
+        set(
+          (state) => {
+            const steps = [...state.eventSteps];
+            const [moved] = steps.splice(oldIndex, 1);
+            steps.splice(newIndex, 0, moved);
+            state.eventSteps = recalculateStepTimes(steps, state.event.startTime);
+          },
+          false,
+          'reorderEventSteps',
         ),
     })),
     {

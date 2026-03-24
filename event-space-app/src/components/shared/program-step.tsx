@@ -5,19 +5,22 @@ import {
   RequiredMark,
   Textarea,
 } from '@/components/ui';
-import React from 'react';
-import { Trash2 } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { GripVertical, Trash2 } from 'lucide-react';
 import type { EventStepCreateDto } from '@/api/events/model.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventStepSchema } from '@/schemas/event-step-schema.ts';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Props {
   step: EventStepCreateDto;
   index: number;
   onStepDelete: () => void;
   updateStep: (index: number, data: Partial<EventStepCreateDto>) => void;
-  isLastStep: boolean;
+  dragId: string;
+  isOverlay?: boolean;
 }
 
 export const ProgramStep: React.FC<Props> = ({
@@ -25,8 +28,24 @@ export const ProgramStep: React.FC<Props> = ({
   index,
   onStepDelete,
   updateStep,
-  isLastStep,
+  dragId,
+  isOverlay = false,
 }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: dragId, disabled: isOverlay });
+
+  const style = {
+    transform:
+      isDragging && !isOverlay ? undefined : CSS.Translate.toString(transform),
+    transition,
+  };
+
   const form = useForm({
     defaultValues: {
       ...step,
@@ -37,6 +56,11 @@ export const ProgramStep: React.FC<Props> = ({
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    form.setValue('startTime', step.startTime.slice(0, 5));
+    form.setValue('endTime', step.endTime.slice(0, 5));
+  }, [step.startTime, step.endTime, form]);
+
   const handleBlur = async () => {
     const data = form.getValues();
     updateStep(index, data);
@@ -46,13 +70,27 @@ export const ProgramStep: React.FC<Props> = ({
   return (
     <FormProvider {...form}>
       <div
-        className={
-          'relative flex flex-col gap-4 p-5 border border-dashed border-[#E5E5E5] rounded-md'
-        }
+        ref={isOverlay ? undefined : setNodeRef}
+        style={isOverlay ? undefined : style}
+        className={[
+          'relative w-full min-w-0 flex flex-col gap-4 p-5 border border-dashed border-[#E5E5E5] rounded-md bg-card',
+          isDragging && !isOverlay ? 'opacity-0 pointer-events-none' : '',
+          isOverlay ? 'opacity-100 pointer-events-none' : '',
+        ].join(' ')}
       >
-        <div className={'flex justify-between items-end'}>
-          <Label htmlFor={`name-${index}`}>Название</Label>
-          {isLastStep && (
+        <div className={'flex justify-between items-center'}>
+          <div className={'flex items-center gap-2'}>
+            <button
+              type="button"
+              className={'cursor-grab active:cursor-grabbing touch-none text-[#B8B8C0] hover:text-[#888]'}
+              {...attributes}
+              {...listeners}
+            >
+              <GripVertical width={18} height={18} />
+            </button>
+            <Label htmlFor={`name-${index}`}>Название</Label>
+          </div>
+          {!isOverlay && (
             <Trash2
               onClick={onStepDelete}
               className={'text-red-500 cursor-pointer'}
