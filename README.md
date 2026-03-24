@@ -99,12 +99,13 @@ A university-oriented platform for creating, managing, and discovering campus ev
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                          OBSERVABILITY                                     │
 │                                                                            │
-│  ┌────────────────┐   ┌────────────────┐   ┌────────────────────┐          │
-│  │  Prometheus    │   │  Loki          │   │  Grafana           │          │
-│  │  :9090         │   │  :3100         │   │  :3001             │          │
-│  │  Metrics scrape│   │  Log           │   │  Auto-provisioned  │          │
-│  │  every 15s     │   │  aggregation   │   │  dashboards        │          │
-│  └────────────────┘   └────────────────┘   └────────────────────┘          │
+│  ┌────────────────┐   ┌────────────────┐   ┌──────────────┐   ┌─────────┐ │
+│  │  Prometheus    │   │  Loki          │   │  Alloy       │   │ Grafana │ │
+│  │  :9090         │   │  :3100         │   │  :12345      │   │  :3001  │ │
+│  │  Metrics scrape│   │  Log           │   │  Log         │   │  Dash-  │ │
+│  │  every 15s     │   │  aggregation   │   │  collector   │   │  boards │ │
+│  └────────────────┘   └───────▲────────┘   └──────┬───────┘   └─────────┘ │
+│                               └───────────────────┘                        │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -156,7 +157,7 @@ Event publishing is asynchronous (`@Async`), so it never blocks the main request
 | API Docs | SpringDoc OpenAPI 3.0.1 |
 | Query Optimization | Hypersistence Utils 3.15.1 |
 | Metrics | Micrometer + Prometheus |
-| Logging | Logback + logstash-encoder 9.0, Loki4j 2.0.3 |
+| Logging | Logback + logstash-logback-encoder 9.0 (JSON to file, collected by Alloy) |
 | Messaging | Spring AMQP (RabbitMQ) |
 | Serialization | Jackson Databind 3.0.4 |
 
@@ -202,7 +203,7 @@ Publishing is fully asynchronous and never blocks the API response.
 | Email | Spring Mail, Gmail SMTP |
 | Templates | Thymeleaf (HTML email rendering) |
 | Metrics | Micrometer + Prometheus |
-| Logging | Logback + logstash-encoder, Loki4j |
+| Logging | Logback + logstash-logback-encoder 9.0 (JSON to file, collected by Alloy) |
 
 ---
 
@@ -369,6 +370,24 @@ Scrapes metrics from both Spring Boot services at `/api/actuator/prometheus` usi
 - `event-space-api:8080`
 - `email-notification-service:8082`
 
+### Grafana Alloy
+
+> **Log collection and forwarding agent**
+
+| | |
+|---|---|
+| **Port** | `12345` |
+| **Config** | `services/observability/alloy/config.alloy` |
+
+Collects structured JSON logs from Spring Boot services by reading log files directly (via shared Docker named volumes) and forwards them to Loki. Non-Spring containers (RabbitMQ, Nginx, etc.) are collected via the Docker socket.
+
+**Pipeline for Spring Boot services:**
+1. Reads `app.json` from each service's log volume
+2. Parses the JSON produced by `LogstashEncoder`
+3. Promotes `level` to an indexed Loki label; `logger`, `thread`, `userId` go to structured metadata
+4. Drops entries without a `level` (e.g. raw SQL plain-text lines)
+5. Replaces the raw JSON line with the human-readable `message`
+
 ### Loki
 
 > **Centralized log aggregation**
@@ -380,7 +399,7 @@ Scrapes metrics from both Spring Boot services at `/api/actuator/prometheus` usi
 | **Schema** | v13 (TSDB) |
 | **Storage** | Filesystem |
 
-Both Spring Boot services push structured JSON logs to Loki via the Loki4j appender (configured in `logback-spring.xml`). Log level threshold: `WARN+`.
+Receives structured logs from Alloy. Each Spring Boot log entry is indexed by `service` and `level` labels, enabling fast filtering in Grafana.
 
 ### Grafana
 
@@ -400,14 +419,28 @@ Comes pre-provisioned with:
 ```
 Spring Boot services
     │
-    ├── Console Appender ──► stdout (container logs)
-    ├── JSON File Appender ──► Structured JSON logs
-    └── Loki4j Appender ──► Loki :3100 (WARN+ async)
-                                  │
-                                  ▼
-                          Grafana Dashboards
+    ├── Console Appender ──► stdout  (plain-text, colored, human-readable)
+    │
+    └── AsyncAppender
+            └── RollingFileAppender ──► /app/logs/app.json  (structured JSON)
+                                               │
+                                        Docker named volume
+                                               │
+                                               ▼
+                                        Grafana Alloy
+                                          • parse JSON
+                                          • label: level, service
+                                          • metadata: logger, thread, userId
+                                          • drop entries without level
+                                               │
+                                               ▼
+                                          Loki :3100
+                                               │
+                                               ▼
+                                        Grafana Dashboards
 ```
 
+Log files rotate daily (max 50 MB per file, 7-day retention, 500 MB total cap).
 MDC filter enriches every log entry with `userId` for request tracing.
 
 ---
@@ -465,7 +498,7 @@ Start all backend services and infrastructure with a single command:
 docker compose up -d
 ```
 
-This launches **10 containers**:
+This launches **11 containers**:
 
 | Container | Service | Port |
 |---|---|---|
@@ -479,6 +512,7 @@ This launches **10 containers**:
 | `prometheus` | Prometheus | `9090` |
 | `grafana` | Grafana | `3001` |
 | `loki` | Loki | `3100` |
+| `alloy` | Grafana Alloy | `12345` |
 
 Database migrations are applied automatically via Liquibase on API startup. RabbitMQ includes a healthcheck — dependent services wait for it to be ready.
 
