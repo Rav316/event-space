@@ -22,6 +22,7 @@ export * from './alert';
 export * from './scroll-area';
 export * from './command';
 export { Calendar } from './calendar';
+export { DatePicker } from './date-picker';
 export { PageLoader } from './page-loader';
 export { AnimatedNumber } from './animated-number';
 export * from './table';
