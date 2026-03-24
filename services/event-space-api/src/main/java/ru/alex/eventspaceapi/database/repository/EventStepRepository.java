@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface EventStepRepository extends JpaRepository<EventStep, Integer>, EventStepRepositoryCustom {
-    @Query("SELECT es FROM EventStep es WHERE es.event.id = :eventId")
+    @Query("SELECT es FROM EventStep es WHERE es.event.id = :eventId ORDER BY es.startTime, es.endTime")
     List<EventStep> findAllByEvent(Integer eventId);
 
     @Modifying
