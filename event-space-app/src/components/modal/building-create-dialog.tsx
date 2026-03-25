@@ -202,7 +202,7 @@ export const BuildingCreateDialog = () => {
               Кликните на карту или перетащите маркер — адрес заполнится
               автоматически
             </p>
-            <div className="h-[260px] rounded-xl overflow-hidden border border-[#E8E8E8]">
+            <div className="h-[200px] sm:h-[260px] rounded-xl overflow-hidden border border-[#E8E8E8]">
               {open && (
                 <Map
                   ref={mapRef}
