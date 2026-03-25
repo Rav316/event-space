@@ -6,6 +6,7 @@ import {
   NoActualEventsBlock,
   PopularEventsSection,
   TopOrganizersSection,
+  VenuesMapSection,
 } from '@/components/shared';
 import { Button } from '@/components/ui';
 import { ArrowRight, Calendar } from 'lucide-react';
@@ -69,6 +70,7 @@ const MainPage = () => {
 
           <PopularEventsSection className={'mt-10'} />
           <TopOrganizersSection className={'mt-10'} />
+          <VenuesMapSection className={'mt-10'} />
           <EventsCalendarSection className={'mt-10'} />
 
           <GetStartedSection className={'mb-5 mt-10'} />

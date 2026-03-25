@@ -9,7 +9,6 @@ export const useBuildings = () => {
   return useQuery({
     queryFn: Api.buildings.findAll,
     queryKey: BUILDINGS_KEYS.all,
-    staleTime: Infinity,
   });
 };
 
@@ -39,7 +38,10 @@ export const useEditBuilding = () => {
   return useMutation({
     mutationFn: Api.buildings.editBuilding,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.BUILDINGS] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [ADMIN_KEYS.BUILDINGS] }),
+        queryClient.invalidateQueries({ queryKey: BUILDINGS_KEYS.all }),
+      ]);
       toast.success('Локация успешно изменена');
     },
     onError: () => {

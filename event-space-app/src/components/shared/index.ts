@@ -32,4 +32,5 @@ export { PopularEventsSection } from './popular-events-section';
 export { TopOrganizersSection } from './top-organizers-section';
 export { OrganizerCard } from './organizer-card';
 export { EventsCalendarSection } from './events-calendar-section';
+export { VenuesMapSection } from './venues-map-section';
 export * as toastLogout from './toast-logout';

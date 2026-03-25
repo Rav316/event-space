@@ -124,6 +124,8 @@ export const BuildingTab = () => {
                     id={building.id}
                     name={building.name}
                     address={building.address}
+                    latitude={building.latitude}
+                    longitude={building.longitude}
                   />
                   <BuildingDeleteDialog id={building.id} name={building.name} />
                 </div>
