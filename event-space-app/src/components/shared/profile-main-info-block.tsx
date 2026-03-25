@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils.ts';
 import { useMe } from '@/api/auth/hooks.ts';
 import { userRoles } from '@/constants/user-roles.ts';
 import { UserAvatar } from '@/components/shared';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 interface Props {
   editMode?: boolean;
@@ -36,7 +37,6 @@ export const ProfileMainInfoBlock: React.FC<Props> = ({
 
   if (!data) return null;
 
-  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
   const user = data.user;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +61,7 @@ export const ProfileMainInfoBlock: React.FC<Props> = ({
 
   const avatarSrc =
     !avatarRemoved &&
-    (previewUrl ??
-      (user.avatarUrl ? `${staticContentUrl}${user.avatarUrl}` : undefined));
+    (previewUrl ?? getAvatarUrl(user.avatarUrl));
 
   return (
     <div className="flex flex-col items-center gap-3 border border-[#E8E8E8] rounded-2xl p-5">

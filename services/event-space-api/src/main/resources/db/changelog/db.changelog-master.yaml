@@ -111,3 +111,6 @@ databaseChangeLog:
       file: db/changelog/db-update-event-step-table-1.2.sql
   - include:
       file: db/changelog/db-update-building-table-3.0.sql
+  - include:
+      file: db/changelog/db-insert-init-data-5.0.sql
+      context: prod

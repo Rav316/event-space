@@ -10,6 +10,7 @@ import {
 import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store.ts';
 import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
 import { ComplaintDialog } from '@/components/shared/event-review/complaint-dialog.tsx';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 interface Props {
   review: EventReviewReadDto;
@@ -17,7 +18,6 @@ interface Props {
 
 export const EventReview: React.FC<Props> = ({ review }) => {
   const [complaintOpen, setComplaintOpen] = useState(false);
-  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
   const date = new Date(review.createdAt);
   const formattedDate = date
     .toLocaleString('ru-RU', {
@@ -51,11 +51,7 @@ export const EventReview: React.FC<Props> = ({ review }) => {
           className={'mt-[5px]'}
           firstName={review.author.firstName}
           lastName={review.author.lastName}
-          avatarUrl={
-            review.author.avatarUrl
-              ? `${staticContentUrl}${review.author.avatarUrl}`
-              : false
-          }
+          avatarUrl={getAvatarUrl(review.author.avatarUrl)}
         />
 
         <div className="flex flex-col gap-0.5">

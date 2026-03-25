@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { EventListForUserDto } from '@/api/events/model.ts';
 import { getEventImageUrl } from '@/utils/get-event-image-url.ts';
+import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
 import { Badge, Button } from '@/components/ui';
 import { EventCardLabel } from '@/components/shared/event/event-card-label.tsx';
 import { Calendar, Clock, MapPin, QrCode } from 'lucide-react';
@@ -24,6 +25,10 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           <img
             className="absolute inset-0 w-full h-full object-cover max-[900px]:static max-[900px]:h-full"
             src={getEventImageUrl(event.name, event.imageUrl)}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = getPlaceholderImageUrl(event.name);
+            }}
             alt={event.name}
           />
         </Link>
@@ -79,6 +84,8 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
               eventFinished={
                 compareWithCurrentTime(event.eventDate, event.endTime) === 1
               }
+              eventDate={event.eventDate}
+              startTime={event.startTime}
             />
             <Link to={`/events/${event.id}`}>
               <Button variant="outline">Подробнее</Button>

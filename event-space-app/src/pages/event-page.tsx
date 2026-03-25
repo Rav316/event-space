@@ -157,6 +157,8 @@ const EventPage = () => {
                   eventFinished={
                     compareWithCurrentTime(event.eventDate, event.endTime) === 1
                   }
+                  eventDate={event.eventDate}
+                  startTime={event.startTime}
                 />
               </div>
             </div>
@@ -238,6 +240,7 @@ const EventPage = () => {
                 qrToken={event.qrToken}
                 attended={event.isAttended}
                 eventDate={event.eventDate}
+                startTime={event.startTime}
                 endTime={event.endTime}
                 deadline={event.deadline}
               />

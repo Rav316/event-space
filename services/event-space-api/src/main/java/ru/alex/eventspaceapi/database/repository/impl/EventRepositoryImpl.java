@@ -550,10 +550,10 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                     orderSpecifiers.add(event.startTime.desc());
                     break;
                 case "popularity":
-                    orderSpecifiers.add(event.eventUsers.size().asc());
+                    orderSpecifiers.add(event.eventUsers.size().desc());
                     break;
                 case "availability":
-                    orderSpecifiers.add(event.eventUsers.size().desc());
+                    orderSpecifiers.add(event.eventUsers.size().asc());
                     break;
                 case "alphabet":
                     orderSpecifiers.add(event.name.asc());

@@ -481,7 +481,7 @@ cp .env.example .env
 | `POSTGRES_DB` | Yes | `event_space_db` | PostgreSQL database name |
 | `POSTGRES_USER` | Yes | `postgres` | PostgreSQL username |
 | `POSTGRES_PASSWORD` | Yes | — | PostgreSQL password |
-| `STATIC_CONTENT_PATH` | Yes | — | Absolute path to `services/nginx-static-service/storage` |
+| `STATIC_CONTENT_PATH` | Local API only | — | Absolute path to `services/nginx-static-service/storage` when running API outside Docker Compose |
 | `GMAIL_APP_PASSWORD` | Yes | — | Google [App Password](https://support.google.com/accounts/answer/185833) for SMTP |
 | `GMAIL_USERNAME` | Yes | — | Gmail address used to send emails |
 | `MAIL_FROM` | Yes | — | Sender address (usually same as `GMAIL_USERNAME`) |

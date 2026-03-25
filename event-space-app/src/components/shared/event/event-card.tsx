@@ -105,6 +105,8 @@ export const EventCard: React.FC<Props> = ({ event }) => {
           eventFinished={
             compareWithCurrentTime(event.eventDate, event.endTime) === 1
           }
+          eventDate={event.eventDate}
+          startTime={event.startTime}
         />
       </div>
 

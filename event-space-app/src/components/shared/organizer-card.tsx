@@ -3,6 +3,7 @@ import type { TopOrganizerDto } from '@/api/users/model.ts';
 import { UserAvatar } from '@/components/shared';
 import { Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 interface Props {
   organizer: TopOrganizerDto;
@@ -10,11 +11,7 @@ interface Props {
 }
 
 export const OrganizerCard: React.FC<Props> = ({ organizer, className }) => {
-  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
-
-  const avatarUrl = organizer.avatarUrl
-    ? `${staticContentUrl}${organizer.avatarUrl}`
-    : undefined;
+  const avatarUrl = getAvatarUrl(organizer.avatarUrl);
 
   return (
     <div

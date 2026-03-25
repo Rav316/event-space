@@ -136,12 +136,13 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
             )
             SELECT
                 EXTRACT(MONTH FROM m.month_start)::int AS month,
-                COALESCE(COUNT(DISTINCT e.id), 0) AS confirmed_events_count
+                COALESCE(COUNT(DISTINCT eu.event_id), 0) AS confirmed_events_count
             FROM last_6_months m
             LEFT JOIN event e
                 ON date_trunc('month', e.event_date) = m.month_start
             LEFT JOIN event_user eu
                 ON eu.event_id = e.id
+               AND eu.attended = true
                AND eu.confirmed_at IS NOT NULL
                AND eu.user_id = :userId
             GROUP BY m.month_start

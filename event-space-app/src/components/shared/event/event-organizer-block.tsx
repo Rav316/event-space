@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils.ts';
 import { UserAvatar } from '@/components/shared';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 interface Props {
   className?: string;
@@ -17,9 +18,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
   faculty,
   avatarUrl,
 }) => {
-  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
-
-  const avatarUrlFinal = avatarUrl ? `${staticContentUrl}${avatarUrl}` : false;
+  const avatarUrlFinal = getAvatarUrl(avatarUrl);
   return (
     <div
       className={cn(

@@ -16,6 +16,7 @@ import { UserAvatar } from '@/components/shared';
 import { useAuthStore } from '@/store/use-auth-store.ts';
 import { queryClient } from '@/api/query-client.ts';
 import { showLogoutSuccess } from '@/components/shared/toast-logout.tsx';
+import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
 
 interface Props {
   className?: string;
@@ -30,12 +31,7 @@ export const ProfileMenu: React.FC<Props> = ({ className }) => {
     return;
   }
   const user = data.user;
-
-  const staticContentUrl = import.meta.env.VITE_STATIC_URL;
-
-  const avatarUrl = user.avatarUrl
-    ? `${staticContentUrl}${user.avatarUrl}`
-    : false;
+  const avatarUrl = getAvatarUrl(user.avatarUrl);
 
   const onLogout = () => {
     navigate('/', { replace: true });

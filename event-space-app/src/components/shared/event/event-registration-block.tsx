@@ -19,6 +19,7 @@ interface Props {
   qrToken?: string;
   attended?: boolean;
   eventDate: string;
+  startTime: string;
   endTime: string;
   deadline?: string;
 }
@@ -33,6 +34,7 @@ export const EventRegistrationBlock: React.FC<Props> = ({
   qrToken,
   attended = false,
   eventDate,
+  startTime,
   endTime,
   deadline,
 }) => {
@@ -80,6 +82,8 @@ export const EventRegistrationBlock: React.FC<Props> = ({
             open={openQr}
             onOpenChange={setOpenQr}
             eventFinished={compareWithCurrentTime(eventDate, endTime) === 1}
+            eventDate={eventDate}
+            startTime={startTime}
           />
         </>
       )}
