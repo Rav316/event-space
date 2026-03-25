@@ -22,6 +22,10 @@ public class Building {
 
     private String address;
 
+    private Double latitude;
+
+    private Double longitude;
+
     @OneToMany(mappedBy = "building")
     private List<Faculty> faculties;
 

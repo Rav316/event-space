@@ -9,6 +9,8 @@ public record BuildingCreateDto(
         String name,
         @NotNull
         @Size(min = 10)
-        String address
+        String address,
+        Double latitude,
+        Double longitude
 ) {
 }

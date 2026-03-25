@@ -34,7 +34,9 @@ public class EventListRowMapper implements RowMapper<EventListDto> {
                 new BuildingReadDto(
                         rs.getInt("building_id"),
                         rs.getString("building_name"),
-                        rs.getString("building_address")
+                        rs.getString("building_address"),
+                        null,
+                        null
                 )
         );
 

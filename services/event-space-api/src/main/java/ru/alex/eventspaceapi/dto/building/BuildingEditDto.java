@@ -6,6 +6,8 @@ public record BuildingEditDto(
         @Size(min = 3)
         String name,
         @Size(min = 10)
-        String address
+        String address,
+        Double latitude,
+        Double longitude
 ) {
 }
