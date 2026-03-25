@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useBuildings } from '@/api/buildings/hooks.ts';
@@ -77,27 +77,34 @@ export const VenuesMapSection: React.FC<Props> = ({ className }) => {
   const mapRef = useRef<MapRef>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const withCoords = (buildings ?? []).filter(
-    (b) => b.latitude != null && b.longitude != null,
+  const withCoords = useMemo(
+    () => (buildings ?? []).filter((b) => b.latitude != null && b.longitude != null),
+    [buildings],
   );
 
   const selectedBuilding = withCoords.find((b) => b.id === selectedId) ?? null;
 
+  const defaultCenter: [number, number] = useMemo(
+    () =>
+      withCoords.length > 0
+        ? [withCoords[0].longitude!, withCoords[0].latitude!]
+        : [37.6173, 55.7558],
+    [withCoords],
+  );
+
+  const handleBuildingClick = useCallback(
+    (building: Building) => {
+      setSelectedId(building.id);
+      mapRef.current?.flyTo({
+        center: [building.longitude!, building.latitude!],
+        zoom: 13,
+        duration: 800,
+      });
+    },
+    [],
+  );
+
   if (!isPending && withCoords.length === 0) return null;
-
-  const defaultCenter: [number, number] =
-    withCoords.length > 0
-      ? [withCoords[0].longitude!, withCoords[0].latitude!]
-      : [37.6173, 55.7558];
-
-  const handleLegendClick = (building: Building) => {
-    setSelectedId(building.id);
-    mapRef.current?.flyTo({
-      center: [building.longitude!, building.latitude!],
-      zoom: 16,
-      duration: 800,
-    });
-  };
 
   return (
     <motion.div
@@ -130,7 +137,7 @@ export const VenuesMapSection: React.FC<Props> = ({ className }) => {
                   key={building.id}
                   longitude={building.longitude!}
                   latitude={building.latitude!}
-                  onClick={() => setSelectedId(building.id)}
+                  onClick={() => handleBuildingClick(building)}
                 >
                   <MarkerContent>
                     <div
@@ -168,14 +175,14 @@ export const VenuesMapSection: React.FC<Props> = ({ className }) => {
         </div>
 
         {/* Legend */}
-        <div className="md:w-56 md:shrink-0 flex flex-col border border-[#E8E8E8] rounded-2xl overflow-hidden">
+        <div className="md:w-60 md:shrink-0 flex flex-col border border-[#E8E8E8] rounded-2xl overflow-hidden">
           <div className="px-3 py-2.5 border-b border-[#E8E8E8]">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               Локации · {withCoords.length}
             </span>
           </div>
           {/* Mobile: horizontal scroll strip; desktop: vertical list */}
-          <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible md:overflow-y-auto md:flex-1">
+          <div className="flex md:flex-col md:h-[378px] md:overflow-y-auto overflow-x-auto">
             {isPending
               ? Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="px-3 py-3 border-r md:border-r-0 md:border-b border-[#E8E8E8] last:border-0 shrink-0">
@@ -189,7 +196,7 @@ export const VenuesMapSection: React.FC<Props> = ({ className }) => {
                     <button
                       key={building.id}
                       type="button"
-                      onClick={() => handleLegendClick(building)}
+                      onClick={() => handleBuildingClick(building)}
                       className={`shrink-0 text-left px-3 py-3 border-r md:border-r-0 md:border-b border-[#E8E8E8] last:border-0 transition-colors duration-150 flex items-start gap-2 md:w-full ${
                         isActive ? 'bg-[#F7F5F0]' : 'hover:bg-[#F7F5F0]'
                       }`}

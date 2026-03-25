@@ -13,6 +13,11 @@ html body[data-scroll-locked] {
   margin-right: 0 !important;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d4 transparent;
+}
+
 :root {
   scrollbar-gutter: stable;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
