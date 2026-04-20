@@ -70,7 +70,7 @@ loki.source.file "spring_services" {
 loki.process "spring" {
 
   // Parse structured JSON produced by LogstashEncoder
-  //   Fields: level, logger_name, thread_name, message, service, userId (MDC)
+  //   Fields: level, logger_name, thread_name, message, service, userId, traceId, spanId (MDC)
   stage.json {
     expressions = {
       level       = "level",
@@ -78,6 +78,8 @@ loki.process "spring" {
       thread_name = "thread_name",
       message     = "message",
       userId      = "userId",
+      traceId     = "traceId",
+      spanId      = "spanId",
     }
   }
 
@@ -88,12 +90,15 @@ loki.process "spring" {
     }
   }
 
-  // Rich context in structured metadata (not indexed, cheaper)
+  // Rich context in structured metadata (not indexed, cheaper).
+  // traceId / spanId let Grafana jump Loki -> Tempo via the derived field.
   stage.structured_metadata {
     values = {
-      logger = "logger_name",
-      thread = "thread_name",
-      userId = "userId",
+      logger  = "logger_name",
+      thread  = "thread_name",
+      userId  = "userId",
+      traceId = "traceId",
+      spanId  = "spanId",
     }
   }
 

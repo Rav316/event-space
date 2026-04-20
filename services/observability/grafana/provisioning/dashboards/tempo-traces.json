@@ -1,0 +1,257 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Distributed traces collected via OpenTelemetry and stored in Grafana Tempo.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "row",
+      "id": 100,
+      "title": "Recent traces",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "table",
+      "id": 1,
+      "title": "All traces for $service",
+      "description": "Latest traces emitted by the selected service. Click a Trace ID to open the full flame-graph view.",
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "gridPos": { "h": 11, "w": 24, "x": 0, "y": 1 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Duration" },
+            "properties": [
+              { "id": "unit", "value": "ms" },
+              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } },
+              { "id": "color", "value": { "mode": "continuous-GrYlRd" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Trace ID" },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open trace",
+                    "url": "",
+                    "internal": {
+                      "datasourceUid": "tempo",
+                      "datasourceName": "Tempo",
+                      "query": { "query": "${__value.raw}", "queryType": "traceql" }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [ { "displayName": "Start time", "desc": true } ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "tempo", "uid": "tempo" },
+          "queryType": "traceql",
+          "query": "{ resource.service.name = \"$service\" }",
+          "limit": 100,
+          "tableType": "traces"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "id": 101,
+      "title": "Slow & erroneous traces",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 12 },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "type": "table",
+      "id": 2,
+      "title": "Slow traces (> ${slow_threshold})",
+      "description": "Traces whose total duration exceeds the configured threshold.",
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 13 },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto", "cellOptions": { "type": "auto" } } },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Duration" },
+            "properties": [
+              { "id": "unit", "value": "ms" },
+              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } },
+              { "id": "color", "value": { "mode": "continuous-GrYlRd" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Trace ID" },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open trace",
+                    "url": "",
+                    "internal": {
+                      "datasourceUid": "tempo",
+                      "datasourceName": "Tempo",
+                      "query": { "query": "${__value.raw}", "queryType": "traceql" }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": { "showHeader": true, "sortBy": [ { "displayName": "Duration", "desc": true } ] },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "tempo", "uid": "tempo" },
+          "queryType": "traceql",
+          "query": "{ resource.service.name = \"$service\" && duration > ${slow_threshold} }",
+          "limit": 50,
+          "tableType": "traces"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "id": 3,
+      "title": "Error traces",
+      "description": "Traces containing at least one span with status = error.",
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 13 },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto", "cellOptions": { "type": "auto" } } },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Duration" },
+            "properties": [
+              { "id": "unit", "value": "ms" },
+              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } },
+              { "id": "color", "value": { "mode": "continuous-GrYlRd" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Trace ID" },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open trace",
+                    "url": "",
+                    "internal": {
+                      "datasourceUid": "tempo",
+                      "datasourceName": "Tempo",
+                      "query": { "query": "${__value.raw}", "queryType": "traceql" }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": { "showHeader": true, "sortBy": [ { "displayName": "Start time", "desc": true } ] },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "tempo", "uid": "tempo" },
+          "queryType": "traceql",
+          "query": "{ resource.service.name = \"$service\" && status = error }",
+          "limit": 50,
+          "tableType": "traces"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": 4,
+      "title": "How to use",
+      "gridPos": { "h": 4, "w": 24, "x": 0, "y": 23 },
+      "options": {
+        "mode": "markdown",
+        "content": "- Pick a **service** from the dropdown above to scope all panels.\n- Click any **Trace ID** to open the full flame-graph view.\n- From inside a trace, click **Logs for this trace** to jump into Loki.\n- Tweak **Slow threshold** to tighten or widen the slow-traces panel.\n- Want a freeform query? *Explore → Tempo* + TraceQL, e.g. `{ resource.service.name = \"event-space-api\" && name =~ \".*POST.*\" }`."
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["tempo", "tracing", "opentelemetry"],
+  "templating": {
+    "list": [
+      {
+        "name": "service",
+        "label": "Service",
+        "type": "custom",
+        "query": "event-space-api,email-notification-service",
+        "current": { "selected": true, "text": "event-space-api", "value": "event-space-api" },
+        "options": [
+          { "selected": true,  "text": "event-space-api",            "value": "event-space-api" },
+          { "selected": false, "text": "email-notification-service", "value": "email-notification-service" }
+        ],
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "slow_threshold",
+        "label": "Slow threshold",
+        "type": "custom",
+        "query": "200ms,500ms,1s,2s,5s",
+        "current": { "selected": true, "text": "500ms", "value": "500ms" },
+        "options": [
+          { "selected": false, "text": "200ms", "value": "200ms" },
+          { "selected": true,  "text": "500ms", "value": "500ms" },
+          { "selected": false, "text": "1s",    "value": "1s" },
+          { "selected": false, "text": "2s",    "value": "2s" },
+          { "selected": false, "text": "5s",    "value": "5s" }
+        ],
+        "includeAll": false,
+        "multi": false
+      }
+    ]
+  },
+  "time": { "from": "now-15m", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Tempo · Distributed Traces",
+  "uid": "tempo-traces",
+  "version": 2,
+  "weekStart": ""
+}

@@ -106,6 +106,11 @@ A university-oriented platform for creating, managing, and discovering campus ev
 │  │  every 15s     │   │  aggregation   │   │  collector   │   │  boards │  │
 │  └────────────────┘   └───────▲────────┘   └──────┬───────┘   └─────────┘  │
 │                               └───────────────────┘                        │
+│  ┌────────────────┐                                                        │
+│  │  Tempo         │  ◄── OTLP (4317/4318) from Spring Boot services        │
+│  │  :3200         │      (OpenTelemetry Java agent)                        │
+│  │  Trace store   │                                                        │
+│  └────────────────┘                                                        │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -401,6 +406,21 @@ Collects structured JSON logs from Spring Boot services by reading log files dir
 
 Receives structured logs from Alloy. Each Spring Boot log entry is indexed by `service` and `level` labels, enabling fast filtering in Grafana.
 
+### Tempo
+
+> **Distributed tracing backend**
+
+| | |
+|---|---|
+| **Port (HTTP queries)** | `3200` |
+| **OTLP gRPC** | `4317` |
+| **OTLP HTTP** | `4318` |
+| **Retention** | 48 hours |
+
+Accepts OTLP traces from both Spring Boot services (instrumented at runtime via the OpenTelemetry Java agent v2.26.1, attached with `-javaagent:` in each service's Dockerfile) and serves them to Grafana through the Tempo datasource. The agent auto-instruments HTTP, JDBC/Hibernate, Spring AMQP and HTTP-client calls out of the box, so traces arrive with full DB-query and message-publish spans without any code changes.
+
+Each log line produced by the Spring services carries the active `traceId` / `spanId` (the agent's Logback instrumentation populates MDC, Alloy surfaces both fields as Loki structured metadata), which Grafana uses to jump seamlessly between a Loki log line and the full trace in Tempo — and vice versa.
+
 ### Grafana
 
 > **Visualization dashboards**
@@ -411,8 +431,8 @@ Receives structured logs from Alloy. Each Spring Boot log entry is indexed by `s
 | **Default credentials** | `admin` / `admin` |
 
 Comes pre-provisioned with:
-- **Datasources**: Prometheus + Loki (auto-configured)
-- **Dashboards**: JVM Micrometer metrics, Spring Boot Observability
+- **Datasources**: Prometheus + Loki + Tempo (auto-configured, with trace ↔ log correlation)
+- **Dashboards**: JVM Micrometer metrics, Spring Boot Observability, **Tempo · Distributed Traces**
 
 ### Logging Architecture
 
@@ -498,7 +518,7 @@ Start all backend services and infrastructure with a single command:
 docker compose up -d
 ```
 
-This launches **11 containers**:
+This launches **12 containers**:
 
 | Container | Service | Port |
 |---|---|---|
@@ -513,6 +533,7 @@ This launches **11 containers**:
 | `grafana` | Grafana | `3001` |
 | `loki` | Loki | `3100` |
 | `alloy` | Grafana Alloy | `12345` |
+| `tempo` | Grafana Tempo | `3200` / `4317` / `4318` |
 
 Database migrations are applied automatically via Liquibase on API startup. RabbitMQ includes a healthcheck — dependent services wait for it to be ready.
 
@@ -602,6 +623,7 @@ After starting all services:
 | RabbitMQ Management | http://localhost:15672 |
 | Grafana Dashboards | http://localhost:3001 |
 | Prometheus | http://localhost:9090 |
+| Tempo (trace API) | http://localhost:3200 |
 | Nginx Static / Media | http://localhost:90/media |
 
 ---

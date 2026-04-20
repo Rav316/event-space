@@ -21,6 +21,7 @@ services:
     depends_on:
       - event-space-db
       - rabbitmq
+      - tempo
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://event-space-db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -31,6 +32,13 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - OTEL_SERVICE_NAME=event-space-api
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+      - OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_CAPTURE_MDC_ATTRIBUTES=*
     volumes:
       - ./services/nginx-static-service/storage:/storage
       - event_space_api_logs:/app/logs
@@ -43,6 +51,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8082"
+    depends_on:
+      - rabbitmq
+      - tempo
     environment:
       - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
       - GMAIL_USERNAME=${GMAIL_USERNAME}
@@ -52,6 +63,13 @@ services:
       - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
       - RABBITMQ_HOST=rabbitmq
+      - OTEL_SERVICE_NAME=email-notification-service
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+      - OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_CAPTURE_MDC_ATTRIBUTES=*
     volumes:
       - email_notification_service_logs:/app/logs
     networks:
@@ -170,6 +188,19 @@ services:
     networks:
       - my_network
 
+  tempo:
+    image: grafana/tempo:2.10.4
+    command: [ "-config.file=/etc/tempo/tempo.yaml" ]
+    volumes:
+      - ./services/observability/tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    ports:
+      - "3200:3200"   # Tempo HTTP (queries)
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    networks:
+      - my_network
+
 networks:
   my_network:
     name: my_network
@@ -183,3 +214,4 @@ volumes:
   static_content_data:
   event_space_api_logs:
   email_notification_service_logs:
+  tempo_data:
