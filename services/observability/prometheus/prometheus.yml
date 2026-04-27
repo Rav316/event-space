@@ -13,3 +13,7 @@ scrape_configs:
     basic_auth: *prom_basic_auth
     static_configs:
       - targets: [ 'email-notification-service:8082' ]
+  - job_name: 'postgres-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: [ 'postgres-exporter:9187' ]
