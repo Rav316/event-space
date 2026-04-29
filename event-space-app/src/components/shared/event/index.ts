@@ -19,3 +19,4 @@ export { EventsNotFound } from './events-not-found';
 export { EventsPagination } from './events-pagination';
 export { EventList } from './event-list';
 export { EventListItem } from './event-list-item';
+export { EventComplaintDialog } from './event-complaint-dialog';

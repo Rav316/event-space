@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const educationDataSchema = z.object({
   program: z
     .number({
-      error: (iss) => iss.input === undefined ? 'Выберите направление' : undefined,
+      error: (iss) => iss.input === undefined ? 'Выберите направление' : "Invalid input",
     })
     .min(1, { message: 'Выберите направление' }),
   course: z.number().optional(),

@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   Calendar,
   CircleCheck,
+  Flag,
   Flame,
   Info,
   MapPin,
@@ -23,6 +24,7 @@ import { compareWithCurrentTime } from '@/utils/compare-with-current-time.ts';
 import { EventReviews } from '@/components/shared/event-review';
 import {
   EventBadge,
+  EventComplaintDialog,
   EventDescription,
   EventOrganizerBlock,
   EventProgram,
@@ -39,6 +41,7 @@ import { getPlaceholderImageUrl } from '@/utils/get-placeholder-image-url.ts';
 const EventPage = () => {
   const [openQr, setOpenQr] = useState(false);
   const [openShare, setOpenShare] = useState(false);
+  const [openComplaint, setOpenComplaint] = useState(false);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -159,6 +162,18 @@ const EventPage = () => {
                   }
                   eventDate={event.eventDate}
                   startTime={event.startTime}
+                />
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setOpenComplaint(true)}
+                >
+                  <Flag className="h-4 w-4" />
+                </Button>
+                <EventComplaintDialog
+                  open={openComplaint}
+                  onClose={() => setOpenComplaint(false)}
+                  eventId={event.id}
                 />
               </div>
             </div>
