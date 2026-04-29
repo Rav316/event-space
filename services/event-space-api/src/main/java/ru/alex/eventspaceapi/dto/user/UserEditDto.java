@@ -2,6 +2,8 @@ package ru.alex.eventspaceapi.dto.user;
 
 import jakarta.validation.constraints.*;
 
+import java.util.List;
+
 public record UserEditDto(
         @NotNull
         @Size(min = 2, max = 64)
@@ -22,6 +24,7 @@ public record UserEditDto(
         String tgUsername,
         String vkUrl,
         String githubUrl,
-        Boolean newEventNotifications
+        List<Integer> notificationCategoryIds,
+        Boolean emailNotificationsEnabled
 ) {
 }

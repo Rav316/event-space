@@ -55,7 +55,8 @@ const ProfilePage = () => {
     tgUsername: user?.tgUsername || '',
     vkUrl: user?.vkUrl || '',
     githubUrl: user?.githubUrl || '',
-    newEventNotifications: user?.newEventNotifications,
+    notificationCategoryIds: user?.notificationCategoryIds ?? [],
+    emailNotificationsEnabled: user?.emailNotificationsEnabled ?? true,
   };
 
   const userProfileForm = useForm<UserEditDto>({
@@ -100,7 +101,6 @@ const ProfilePage = () => {
   };
 
   const onSubmit = userProfileForm.handleSubmit(async (data) => {
-    console.log('newEventNotifications', data.newEventNotifications);
     const isChanged = !deepEqual(data, defaultValues);
     if (!isChanged && !selectedFile) {
       setEditMode(false);

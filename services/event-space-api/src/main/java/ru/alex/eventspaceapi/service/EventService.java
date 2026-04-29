@@ -201,7 +201,9 @@ public class EventService {
             eventStepRepository.insertEventStepsBatch(eventSteps);
         }
 
-        List<String> recipients = userRepository.findEmailsWithNewEventNotifications();
+        List<String> recipients = savedEvent.getCategory() != null
+                ? userRepository.findEmailsByNotificationCategory(savedEvent.getCategory().getId())
+                : List.of();
         if(!recipients.isEmpty()) {
             EventCreatedMessage message = new EventCreatedMessage(
                     savedEvent.getId(),

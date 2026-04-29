@@ -17,7 +17,8 @@ export interface UserReadDto {
   active: boolean;
   registerDate: Date;
   program: ProgramListDto;
-  newEventNotifications: boolean;
+  notificationCategoryIds: number[];
+  emailNotificationsEnabled: boolean;
 }
 
 export interface UserRegisterDto {
@@ -41,7 +42,8 @@ export interface UserEditDto {
   tgUsername?: string;
   vkUrl?: string;
   githubUrl?: string;
-  newEventNotifications?: boolean;
+  notificationCategoryIds?: number[];
+  emailNotificationsEnabled?: boolean;
 }
 
 export interface UserEditData {

@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import ru.alex.eventspaceapi.database.entity.EventCategory;
 import ru.alex.eventspaceapi.database.entity.Program;
 import ru.alex.eventspaceapi.database.entity.User;
+import ru.alex.eventspaceapi.database.repository.EventCategoryRepository;
 import ru.alex.eventspaceapi.database.repository.ProgramRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
@@ -34,6 +36,7 @@ import ru.alex.eventspaceapi.mapper.user.UserEditMapper;
 import ru.alex.eventspaceapi.mapper.user.UserReadMapper;
 import ru.alex.eventspaceapi.model.Role;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +50,7 @@ public class UserService implements UserDetailsService {
     private final FileService fileService;
     private final UserRepository userRepository;
     private final ProgramRepository programRepository;
+    private final EventCategoryRepository eventCategoryRepository;
     private final UserDetailsMapper userDetailsMapper;
     private final UserReadMapper userReadMapper;
     private final UserEditMapper userEditMapper;
@@ -94,6 +98,13 @@ public class UserService implements UserDetailsService {
             Program program = programRepository.findById(userEditDto.program())
                     .orElseThrow(() -> new ProgramNotFoundException(userEditDto.program()));
             user.setProgram(program);
+        }
+        if (userEditDto.notificationCategoryIds() != null) {
+            List<EventCategory> categories = eventCategoryRepository.findAllById(userEditDto.notificationCategoryIds());
+            user.setNotificationCategories(new HashSet<>(categories));
+        }
+        if (userEditDto.emailNotificationsEnabled() != null) {
+            user.setEmailNotificationsEnabled(userEditDto.emailNotificationsEnabled());
         }
 
         if(avatarRemoved != null && avatarRemoved) {

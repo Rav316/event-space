@@ -19,8 +19,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
     Optional<User> findByEmailWithProgram(String email);
     boolean existsByEmail(String email);
 
-    @Query("SELECT u.email FROM User u WHERE u.newEventNotifications = true AND u.active = true")
-    List<String> findEmailsWithNewEventNotifications();
+    @Query("SELECT u.email FROM User u JOIN u.notificationCategories c WHERE c.id = :categoryId AND u.active = true AND u.emailNotificationsEnabled = true")
+    List<String> findEmailsByNotificationCategory(Integer categoryId);
 
     @Modifying
     @Query("UPDATE User u SET u.active = false WHERE u.id IN :userIds")

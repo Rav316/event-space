@@ -7,7 +7,9 @@ import ru.alex.eventspaceapi.model.Role;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -15,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "program")
+@EqualsAndHashCode(exclude = {"program", "notificationCategories"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,11 +50,19 @@ public class User {
     @Column(name = "github_url")
     private String githubUrl;
 
-    @Column(name = "new_event_notifications")
-    private boolean newEventNotifications = false;
+    @ManyToMany
+    @JoinTable(
+            name = "user_notification_category",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<EventCategory> notificationCategories = new HashSet<>();
 
     @Column(name = "isActive")
     private boolean active = true;
+
+    @Column(name = "email_notifications_enabled")
+    private boolean emailNotificationsEnabled = true;
 
     @Column(name = "register_date")
     @CreationTimestamp
