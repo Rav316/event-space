@@ -61,6 +61,7 @@ public class AuthService {
                 .orElseThrow(() -> new ProgramNotFoundException(userRegisterDto.program()));
         user.setProgram(program);
         user.setPassword(passwordEncoder.encode(userRegisterDto.password()));
+        user.setRole(Role.PARTICIPANT);
         return new AuthResponse(
                 userReadMapper.toDto(userRepository.save(user)),
                 jwtService.generateAccessToken(user.getId(), user.getEmail()),

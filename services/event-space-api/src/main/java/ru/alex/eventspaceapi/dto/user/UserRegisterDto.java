@@ -1,8 +1,6 @@
 package ru.alex.eventspaceapi.dto.user;
 
 import jakarta.validation.constraints.*;
-import ru.alex.eventspaceapi.model.Role;
-import ru.alex.eventspaceapi.validation.EnumIndex;
 
 public record UserRegisterDto(
         @NotNull
@@ -14,9 +12,6 @@ public record UserRegisterDto(
         @NotNull
         @Email
         String email,
-        @NotNull
-        @EnumIndex(enumClass = Role.class)
-        Integer role,
         @NotNull
         Integer program,
         @Min(1)
