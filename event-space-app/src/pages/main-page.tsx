@@ -5,6 +5,7 @@ import {
   HeroSection,
   NoActualEventsBlock,
   PopularEventsSection,
+  RecommendedEventsSection,
   TopOrganizersSection,
   VenuesMapSection,
 } from '@/components/shared';
@@ -69,6 +70,7 @@ const MainPage = () => {
           )}
 
           <PopularEventsSection className={'mt-10'} />
+          <RecommendedEventsSection className={'mt-10'} />
           <TopOrganizersSection className={'mt-10'} />
           <VenuesMapSection className={'mt-10'} />
           <EventsCalendarSection className={'mt-10'} />

@@ -28,6 +28,8 @@ public interface EventRepositoryCustom {
 
     List<EventListDto> getPopularEvents(Integer userId);
 
+    List<EventListDto> getRecommendedEvents(Integer userId, List<Integer> categoryIds);
+
     List<EventCalendarDto> getEventsByMonth(Integer year, Integer month);
 
     EventAuthorStatisticsDto getEventStatisticsByUser(Integer userId);

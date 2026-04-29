@@ -1,8 +1,10 @@
 package ru.alex.eventspaceapi.dto.program;
 
+import java.util.List;
+
 public record ProgramReadDto(
         Integer id,
         String name,
-        String building
+        List<Integer> preferredCategoryIds
 ) {
 }

@@ -9,6 +9,7 @@ public record EventFilter (
         Boolean hasPlaces,
         String sort,
         String period,
-        Integer page
+        Integer page,
+        List<Integer> preferredCategoryIds
 ) {
 }

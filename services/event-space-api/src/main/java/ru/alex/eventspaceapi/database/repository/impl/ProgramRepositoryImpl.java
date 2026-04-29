@@ -37,8 +37,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
             "id", program.id,
-            "name", program.name,
-            "building", program.building.name
+            "name", program.name
     );
 
     @Override
@@ -53,7 +52,6 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
         List<Program> programs = queryFactory
                 .selectFrom(program)
-                .leftJoin(program.building).fetchJoin()
                 .where(predicate)
                 .orderBy(sortOrder)
                 .limit(pageable.getPageSize())
@@ -80,10 +78,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         BooleanExpression predicate = Expressions.TRUE.isTrue();
 
         if (filter.search() != null && !filter.search().isBlank()) {
-            predicate = predicate.and(
-                    program.name.containsIgnoreCase(filter.search())
-                            .or(program.building.name.containsIgnoreCase(filter.search()))
-            );
+            predicate = predicate.and(program.name.containsIgnoreCase(filter.search()));
         }
 
         return predicate;

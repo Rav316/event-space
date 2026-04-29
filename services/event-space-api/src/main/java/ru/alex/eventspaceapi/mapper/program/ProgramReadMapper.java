@@ -7,6 +7,9 @@ import ru.alex.eventspaceapi.dto.program.ProgramReadDto;
 
 @Mapper(componentModel = "spring")
 public interface ProgramReadMapper {
-    @Mapping(target = "building", source = "building.name")
+    @Mapping(
+            target = "preferredCategoryIds",
+            expression = "java(program.getPreferredCategories().stream().map(ru.alex.eventspaceapi.database.entity.EventCategory::getId).toList())"
+    )
     ProgramReadDto toDto(Program program);
 }

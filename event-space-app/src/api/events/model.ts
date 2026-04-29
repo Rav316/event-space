@@ -92,6 +92,7 @@ export interface EventFilter {
   sort?: EventSortCategory;
   period: EventPeriod;
   page?: number;
+  preferredCategoryIds?: number[];
 }
 
 export interface EventMyFilter {

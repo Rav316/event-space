@@ -214,6 +214,13 @@ export const getPopularEvents = async (): Promise<EventListDto[]> => {
   return response.data;
 };
 
+export const getRecommendedEvents = async (): Promise<EventListDto[]> => {
+  const response = await axiosInstance.get<EventListDto[]>(
+    `${ApiRoutes.EVENTS}/recommended`,
+  );
+  return response.data;
+};
+
 export const getEventsByMonth = async (
   year: number,
   month: number,

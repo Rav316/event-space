@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogFooter,
@@ -13,11 +14,6 @@ import {
   FormErrorMessage,
   Input,
   Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Spinner,
 } from '@/components/ui';
 import { programCreateSchema } from '@/schemas/program-create-schema.ts';
@@ -25,7 +21,7 @@ import {
   useCheckProgramName,
   useCreateProgram,
 } from '@/api/programs/hooks.ts';
-import { useBuildings } from '@/api/buildings/hooks.ts';
+import { useEventCategories } from '@/api/event-categories/hooks.ts';
 import type { ProgramCreateDto } from '@/api/programs/model.ts';
 
 export const ProgramCreateDialog = () => {
@@ -33,12 +29,12 @@ export const ProgramCreateDialog = () => {
 
   const form = useForm<ProgramCreateDto>({
     resolver: zodResolver(programCreateSchema),
-    defaultValues: { name: '', building: undefined },
+    defaultValues: { name: '', preferredCategoryIds: [] },
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
 
-  const { data: buildings = [] } = useBuildings();
+  const { data: categories = [] } = useEventCategories();
   const checkNameMutation = useCheckProgramName();
   const createMutation = useCreateProgram();
 
@@ -93,33 +89,39 @@ export const ProgramCreateDialog = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label>Корпус</Label>
+            <Label>Рекомендуемые категории мероприятий</Label>
             <Controller
               control={form.control}
-              name="building"
+              name="preferredCategoryIds"
               render={({ field }) => (
-                <Select
-                  value={field.value !== undefined ? String(field.value) : ''}
-                  onValueChange={(v) => field.onChange(Number(v))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Выберите корпус" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {buildings.map((b) => (
-                      <SelectItem key={b.id} value={String(b.id)}>
-                        {b.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="grid grid-cols-2 gap-2">
+                  {categories.map((category) => {
+                    const checked = field.value?.includes(category.id) ?? false;
+                    return (
+                      <label
+                        key={category.id}
+                        className="flex items-center gap-2 cursor-pointer select-none"
+                      >
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={(value) => {
+                            const next = value
+                              ? [...(field.value ?? []), category.id]
+                              : (field.value ?? []).filter((id) => id !== category.id);
+                            field.onChange(next);
+                          }}
+                        />
+                        <span
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        <span className="text-sm">{category.name}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               )}
             />
-            {form.formState.errors.building && (
-              <FormErrorMessage>
-                {form.formState.errors.building.message}
-              </FormErrorMessage>
-            )}
           </div>
 
           <DialogFooter>

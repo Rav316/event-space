@@ -33,10 +33,8 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
 
     private static final String SQL_DELETE_IMPACT = """
             SELECT
-                (SELECT COUNT(*) FROM program WHERE building_id = :id)                                          AS programs,
-                (SELECT COUNT(*) FROM users u JOIN program f ON u.program_id = f.id WHERE f.building_id = :id) AS users,
-                (SELECT COUNT(*) FROM space WHERE building_id = :id)                                           AS spaces,
-                (SELECT COUNT(*) FROM event e JOIN space s ON e.space_id = s.id WHERE s.building_id = :id)     AS events
+                (SELECT COUNT(*) FROM space WHERE building_id = :id)                                       AS spaces,
+                (SELECT COUNT(*) FROM event e JOIN space s ON e.space_id = s.id WHERE s.building_id = :id) AS events
             """;
 
     private static final Map<String, ComparableExpressionBase<?>> SORT_BINDINGS = Map.of(
@@ -76,8 +74,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     public BuildingDeleteImpactDto getDeleteImpact(Integer id) {
         return jdbcTemplate.queryForObject(SQL_DELETE_IMPACT, Map.of("id", id), (rs, rowNum) ->
                 new BuildingDeleteImpactDto(
-                        rs.getLong("programs"),
-                        rs.getLong("users"),
                         rs.getLong("spaces"),
                         rs.getLong("events")
                 )

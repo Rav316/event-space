@@ -95,6 +95,16 @@ public class EventService {
         return eventRepository.getPopularEvents(authorizedUser != null ? authorizedUser.id() : null);
     }
 
+    public List<EventListDto> getRecommendedEvents() {
+        UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
+        User user = userRepository.findById(authorizedUser.id()).orElseThrow();
+        if (user.getProgram() == null) return List.of();
+        List<Integer> categoryIds = user.getProgram().getPreferredCategories()
+                .stream().map(EventCategory::getId).toList();
+        if (categoryIds.isEmpty()) return List.of();
+        return eventRepository.getRecommendedEvents(authorizedUser.id(), categoryIds);
+    }
+
     public List<EventCalendarDto> getEventsByMonth(Integer year, Integer month) {
         return eventRepository.getEventsByMonth(year, month);
     }

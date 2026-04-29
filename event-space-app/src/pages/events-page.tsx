@@ -3,6 +3,7 @@ import { useEventsByFilter } from '@/api/events/hooks.ts';
 import { useEventFilterStore } from '@/store/use-event-filter-store.ts';
 import { useEffect } from 'react';
 import { useEventCategoriesWithEventCount } from '@/api/event-categories/hooks.ts';
+import { useMe } from '@/api/auth/hooks.ts';
 import { Skeleton } from '@/components/ui';
 import {
   EventCategories,
@@ -20,8 +21,14 @@ const EventsPage = () => {
   const { data: eventCategories, isPending: isEventCategoriesPending } =
     useEventCategoriesWithEventCount();
 
+  const { data: meData } = useMe();
+  const preferredCategoryIds = meData?.user?.program?.preferredCategoryIds;
+
   const { data: events, isPending: isEventsPending } = useEventsByFilter({
-    filter: { ...eventFilter },
+    filter: {
+      ...eventFilter,
+      preferredCategoryIds: preferredCategoryIds?.length ? preferredCategoryIds : undefined,
+    },
     page: currentPage,
   });
 

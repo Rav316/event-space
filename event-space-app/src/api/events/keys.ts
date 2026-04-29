@@ -9,6 +9,7 @@ export const EVENTS_KEYS = {
   all: ['events'] as const,
   actual: ['events', 'actual'] as const,
   popular: ['events', 'popular'] as const,
+  recommended: ['events', 'recommended'] as const,
   calendar: (year: number, month: number) =>
     ['events', 'calendar', year, month] as const,
   upcoming: ['events', 'upcoming'] as const,

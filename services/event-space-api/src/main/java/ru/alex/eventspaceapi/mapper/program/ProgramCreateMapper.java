@@ -8,6 +8,6 @@ import ru.alex.eventspaceapi.dto.program.ProgramCreateDto;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProgramCreateMapper {
-    @Mapping(target = "building", ignore = true)
+    @Mapping(target = "preferredCategories", ignore = true)
     Program toEntity(ProgramCreateDto dto);
 }

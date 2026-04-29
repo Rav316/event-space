@@ -14,6 +14,6 @@ import ru.alex.eventspaceapi.dto.program.ProgramEditDto;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface ProgramEditMapper {
-    @Mapping(target = "building", ignore = true)
+    @Mapping(target = "preferredCategories", ignore = true)
     void updateFromDto(ProgramEditDto dto, @MappingTarget Program program);
 }

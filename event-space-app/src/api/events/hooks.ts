@@ -1,4 +1,5 @@
 import { useEventCreationStore } from '@/store/use-event-creation-store.ts';
+import { useAuthStore } from '@/store/use-auth-store.ts';
 import {
   useInfiniteQuery,
   useMutation,
@@ -82,6 +83,15 @@ export const usePopularEvents = () => {
   return useQuery({
     queryFn: Api.events.getPopularEvents,
     queryKey: EVENTS_KEYS.popular,
+  });
+};
+
+export const useRecommendedEvents = () => {
+  const token = useAuthStore((s) => s.accessToken);
+  return useQuery({
+    enabled: !!token,
+    queryFn: Api.events.getRecommendedEvents,
+    queryKey: EVENTS_KEYS.recommended,
   });
 };
 

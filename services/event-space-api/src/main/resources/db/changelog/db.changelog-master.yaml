@@ -116,3 +116,7 @@ databaseChangeLog:
       context: prod
   - include:
       file: db/changelog/db-rename-faculty-to-program-1.0.sql
+  - include:
+      file: db/changelog/db-add-program-category-mapping-1.0.sql
+  - include:
+      file: db/changelog/db-update-program-table-1.0.sql

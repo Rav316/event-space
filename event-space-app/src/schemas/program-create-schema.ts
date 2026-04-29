@@ -5,5 +5,5 @@ export const programCreateSchema = z.object({
     .string()
     .min(5, 'Название должно содержать не менее 5 символов')
     .max(128, 'Название должно содержать не более 128 символов'),
-  building: z.number({ error: 'Выберите корпус' }).min(1, 'Выберите корпус'),
+  preferredCategoryIds: z.array(z.number()),
 });

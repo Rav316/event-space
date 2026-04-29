@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,10 +21,14 @@ public class Program {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_id", referencedColumnName = "id")
-    private Building building;
-
     @OneToMany(mappedBy = "program")
     private List<User> users;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "program_category",
+            joinColumns = @JoinColumn(name = "program_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<EventCategory> preferredCategories = new ArrayList<>();
 }

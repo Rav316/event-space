@@ -27,8 +27,5 @@ public class Building {
     private Double longitude;
 
     @OneToMany(mappedBy = "building")
-    private List<Program> programs;
-
-    @OneToMany(mappedBy = "building")
     private List<Space> spaces;
 }

@@ -81,5 +81,5 @@ export interface EventCategoryReadDto {
 export interface ProgramReadDto {
   id: number;
   name: string;
-  building: string;
+  preferredCategoryIds: number[];
 }

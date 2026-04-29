@@ -67,6 +67,11 @@ public class EventController {
         return eventService.getPopularEvents();
     }
 
+    @GetMapping("/recommended")
+    public List<EventListDto> getRecommendedEvents() {
+        return eventService.getRecommendedEvents();
+    }
+
     @GetMapping("/calendar")
     public List<EventCalendarDto> getEventsByMonth(
             @RequestParam("year") Integer year,

@@ -23,7 +23,7 @@ import { ProgramDeleteDialog } from '@/components/modal/program-delete-dialog.ts
 
 const PAGE_SIZE_OPTIONS = [10, 15, 25];
 
-type SortCol = 'name' | 'building';
+type SortCol = 'name';
 
 export const ProgramsTab = () => {
   const [search, setSearch] = useState('');
@@ -76,7 +76,7 @@ export const ProgramsTab = () => {
             <span className={'font-medium text-xl'}>Направления</span>
           </div>
           <span className={'text-muted-foreground text-sm'}>
-            Управление направлениями и их локациями
+            Управление направлениями
           </span>
         </div>
         <ProgramCreateDialog />
@@ -90,24 +90,20 @@ export const ProgramsTab = () => {
 
       <Table className={'table-fixed w-full'}>
         <colgroup>
-          <col className={'w-[68%]'} />
-          <col className={'w-[20%]'} />
+          <col className={'w-[88%]'} />
           <col className={'w-[12%]'} />
         </colgroup>
         <TableHeader>
           <TableRow>
-            {(['name', 'building'] as const).map((col) => (
-              <TableHead
-                key={col}
-                className={'cursor-pointer select-none'}
-                onClick={() => handleSort(col)}
-              >
-                <div className={'flex items-center'}>
-                  {{ name: 'Название', building: 'Корпус' }[col]}
-                  <SortIcon col={col} />
-                </div>
-              </TableHead>
-            ))}
+            <TableHead
+              className={'cursor-pointer select-none'}
+              onClick={() => handleSort('name')}
+            >
+              <div className={'flex items-center'}>
+                Название
+                <SortIcon col={'name'} />
+              </div>
+            </TableHead>
             <TableHead className={'text-right'}>Действия</TableHead>
           </TableRow>
         </TableHeader>
@@ -115,13 +111,12 @@ export const ProgramsTab = () => {
           {rows.map((program) => (
             <TableRow key={program.id}>
               <TableCell className={'font-medium'}>{program.name}</TableCell>
-              <TableCell>{program.building}</TableCell>
               <TableCell className={'text-right'}>
                 <div className={'flex items-center justify-end gap-1'}>
                   <ProgramEditDialog
                     id={program.id}
                     name={program.name}
-                    buildingName={program.building}
+                    preferredCategoryIds={program.preferredCategoryIds ?? []}
                   />
                   <ProgramDeleteDialog id={program.id} name={program.name} />
                 </div>

@@ -3,8 +3,10 @@ package ru.alex.eventspaceapi.database.repository.impl;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -103,6 +105,8 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                         .where(eventUser.event.eq(event));
 
 
+        OrderSpecifier<?>[] sortOrder = buildSortOrder(filter.sort(), filter.preferredCategoryIds());
+
         List<Tuple> rows = queryFactory
                 .select(event, registeredUsersCount)
                 .from(event)
@@ -111,7 +115,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .leftJoin(space.building, building).fetchJoin()
                 .leftJoin(event.author, user).fetchJoin()
                 .where(predicate)
-                .orderBy(getSortOrder(filter.sort()))
+                .orderBy(sortOrder)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
@@ -426,6 +430,84 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     }
 
     @Override
+    public List<EventListDto> getRecommendedEvents(Integer userId, List<Integer> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return List.of();
+        }
+
+        String sql = """
+                SELECT
+                e.id,
+                e.name,
+                e.short_description,
+                e.image_url,
+                e.event_date,
+                e.start_time,
+                e.end_time,
+                e.deadline,
+                e.participant_quantity,
+            
+                c.id    AS category_id,
+                c.name  AS category_name,
+                c.color AS category_color,
+            
+                s.id   AS space_id,
+                s.name AS space_name,
+                s.capacity AS space_capacity,
+            
+                b.id   AS building_id,
+                b.name AS building_name,
+                b.address AS building_address,
+            
+                concat(a.first_name, ' ', a.last_name) AS author,
+            
+                (
+                    SELECT COUNT(*)
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                ) AS registered_users,
+            
+                EXISTS (
+                    SELECT 1
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS is_registered,
+            
+                (
+                    SELECT eu.attended
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS is_attended,
+            
+                (
+                    SELECT eu.qr_token
+                    FROM event_user eu
+                    WHERE eu.event_id = e.id
+                      AND eu.user_id = :userId
+                ) AS qr_token
+            
+            FROM event e
+            LEFT JOIN event_category c ON c.id = e.event_category_id
+            LEFT JOIN space s ON s.id = e.space_id
+            LEFT JOIN building b ON b.id = s.building_id
+            LEFT JOIN users a ON a.id = e.author
+            
+            WHERE (e.event_date, e.start_time) > (CURRENT_DATE, CURRENT_TIME)
+              AND e.event_category_id IN (:categoryIds)
+            ORDER BY e.event_date, e.start_time, e.id DESC
+            LIMIT 6;
+            """;
+
+        Map<String, Object> params = new java.util.HashMap<>();
+        params.put("userId", userId);
+        params.put("categoryIds", categoryIds);
+
+        return jdbcTemplate.query(sql, params, eventListRowMapper);
+    }
+
+    @Override
     public List<EventCalendarDto> getEventsByMonth(Integer year, Integer month) {
         String sql = """
                 SELECT
@@ -538,6 +620,19 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
         }
 
         return predicate;
+    }
+
+    private OrderSpecifier<?>[] buildSortOrder(String sort, List<Integer> preferredCategoryIds) {
+        List<OrderSpecifier<?>> orders = new ArrayList<>();
+        if (preferredCategoryIds != null && !preferredCategoryIds.isEmpty()) {
+            NumberExpression<Integer> boost = new CaseBuilder()
+                    .when(event.category.id.in(preferredCategoryIds))
+                    .then(0)
+                    .otherwise(1);
+            orders.add(boost.asc());
+        }
+        Collections.addAll(orders, getSortOrder(sort));
+        return orders.toArray(new OrderSpecifier[0]);
     }
 
     private OrderSpecifier<?>[] getSortOrder(String sort) {
