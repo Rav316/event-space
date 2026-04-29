@@ -1,5 +1,5 @@
 import type { Role } from '@/api/auth/model.ts';
-import type { FacultyListDto } from '@/api/faculties/model.ts';
+import type { ProgramListDto } from '@/api/programs/model.ts';
 
 export interface UserReadDto {
   id: number;
@@ -16,7 +16,7 @@ export interface UserReadDto {
   githubUrl: string;
   active: boolean;
   registerDate: Date;
-  faculty: FacultyListDto;
+  program: ProgramListDto;
   newEventNotifications: boolean;
 }
 
@@ -25,7 +25,7 @@ export interface UserRegisterDto {
   lastName: string;
   email: string;
   role: Role;
-  faculty?: number;
+  program?: number;
   course?: number;
   password: string;
 }
@@ -35,7 +35,7 @@ export interface UserEditDto {
   lastName: string;
   email: string;
   phone?: string;
-  faculty: number;
+  program: number;
   course?: number;
   description?: string;
   tgUsername?: string;
@@ -59,7 +59,7 @@ export interface UserAuthorDto {
 }
 
 export interface UserEventAuthorDto extends UserAuthorDto {
-  faculty: string;
+  program: string;
 }
 
 export interface UserDeleteDto {
@@ -82,7 +82,7 @@ export interface UserAdminListDto {
   email: string;
   role: number;
   course: number;
-  faculty: FacultyListDto;
+  program: ProgramListDto;
   active: boolean;
   avatarUrl: string;
 }

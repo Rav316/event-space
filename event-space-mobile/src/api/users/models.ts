@@ -1,4 +1,4 @@
-import { FacultyListDto } from '@/src/api/faculties/models';
+import { ProgramListDto } from '@/src/api/programs/models';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 export interface UserReadDto {
@@ -16,7 +16,7 @@ export interface UserReadDto {
   githubUrl: string;
   active: boolean;
   registerDate: Date;
-  faculty: FacultyListDto;
+  program: ProgramListDto;
 }
 
 export interface UserEditDto {
@@ -24,7 +24,7 @@ export interface UserEditDto {
   lastName: string;
   email: string;
   phone?: string;
-  faculty: number;
+  program: number;
   course?: number;
   description?: string;
   tgUsername?: string;
@@ -47,5 +47,5 @@ export interface UserAuthorDto {
 }
 
 export interface UserEventAuthorDto extends UserAuthorDto {
-  faculty: string;
+  program: string;
 }

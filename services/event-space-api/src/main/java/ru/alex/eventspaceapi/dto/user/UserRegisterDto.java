@@ -18,7 +18,7 @@ public record UserRegisterDto(
         @EnumIndex(enumClass = Role.class)
         Integer role,
         @NotNull
-        Integer faculty,
+        Integer program,
         @Min(1)
         @Max(4)
         Short course,

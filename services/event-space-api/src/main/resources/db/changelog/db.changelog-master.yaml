@@ -114,3 +114,5 @@ databaseChangeLog:
   - include:
       file: db/changelog/db-insert-init-data-5.0.sql
       context: prod
+  - include:
+      file: db/changelog/db-rename-faculty-to-program-1.0.sql

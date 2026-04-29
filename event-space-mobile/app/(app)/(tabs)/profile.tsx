@@ -53,7 +53,7 @@ const ProfileTab = () => {
     firstName: '',
     lastName: '',
     email: '',
-    faculty: 0,
+    program: 0,
     course: undefined,
     description: '',
     phone: '',
@@ -73,7 +73,7 @@ const ProfileTab = () => {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         email: user.email || '',
-        faculty: user.faculty?.id || 0,
+        program: user.program?.id || 0,
         course: user.course,
         description: user.description || '',
         phone: user.phone || '',
@@ -180,7 +180,7 @@ const ProfileTab = () => {
                 ·
               </StyledText>
               <StyledText className={'text-muted-foreground'}>
-                {user.faculty.name}
+                {user.program.name}
               </StyledText>
             </View>
             <ProfileForm form={profileForm} />

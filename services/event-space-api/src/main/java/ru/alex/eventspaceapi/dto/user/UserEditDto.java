@@ -14,7 +14,7 @@ public record UserEditDto(
         String email,
         String phone,
         @NotNull
-        Integer faculty,
+        Integer program,
         @Min(1)
         @Max(4)
         Integer course,

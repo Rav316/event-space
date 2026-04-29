@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/src/components/ui/select';
-import { useFaculties } from '@/src/api/faculties/hooks';
+import { usePrograms } from '@/src/api/programs/hooks';
 
 interface Props {
   form: ReturnType<typeof useForm<UserEditDto>>;
@@ -19,7 +19,7 @@ interface Props {
 const courses = [1, 2, 3, 4];
 
 export const ProfileForm: React.FC<Props> = ({ form }) => {
-  const { data: faculties, isPending: isFacultiesPending } = useFaculties();
+  const { data: programs, isPending: isProgramsPending } = usePrograms();
 
   return (
     <View className={'w-full gap-4 mt-6'}>
@@ -117,44 +117,44 @@ export const ProfileForm: React.FC<Props> = ({ form }) => {
       </View>
       <View className={'flex-row gap-2 w-full'}>
         <View className={'gap-1 flex-1 basis-0'}>
-          <StyledLabel className={'text-base'}>Факультет</StyledLabel>
-          {isFacultiesPending ? (
+          <StyledLabel className={'text-base'}>Направление</StyledLabel>
+          {isProgramsPending ? (
             <Skeleton className={'h-10 w-full'} />
           ) : (
             <Controller
               control={form.control}
-              name={'faculty'}
+              name={'program'}
               render={({
                 field: { value, onChange },
                 fieldState: { error }
               }) => {
 
-                const selectedFaculty = faculties?.find(
-                  (faculty) => faculty.id === value
+                const selectedProgram = programs?.find(
+                  (program) => program.id === value
                 );
 
                 return (
                   <>
                     <Select
                       value={
-                        selectedFaculty
+                        selectedProgram
                           ? {
-                              value: selectedFaculty.id.toString(),
-                              label: selectedFaculty.name
+                              value: selectedProgram.id.toString(),
+                              label: selectedProgram.name
                             }
                           : undefined
                       }
                       onValueChange={(val) => onChange(Number(val?.value))}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder={'Факультет'} />
+                        <SelectValue placeholder={'Направление'} />
                       </SelectTrigger>
                       <SelectContent className={'w-full'}>
-                        {faculties?.map((faculty) => (
+                        {programs?.map((program) => (
                           <SelectItem
-                            key={faculty.id}
-                            value={faculty.id.toString()}
-                            label={faculty.name}
+                            key={program.id}
+                            value={program.id.toString()}
+                            label={program.name}
                           />
                         ))}
                       </SelectContent>

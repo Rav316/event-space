@@ -1,5 +1,5 @@
 import * as auth from '@/api/auth/service';
-import * as faculties from '@/api/faculties/service';
+import * as programs from '@/api/programs/service';
 import * as users from '@/api/users/service';
 import * as events from '@/api/events/service';
 import * as eventCategories from '@/api/event-categories/service';
@@ -12,7 +12,7 @@ import * as admin from '@/api/admin/service';
 
 export const Api = {
   auth,
-  faculties,
+  programs,
   users,
   events,
   eventCategories,

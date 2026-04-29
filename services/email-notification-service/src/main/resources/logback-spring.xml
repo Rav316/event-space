@@ -7,7 +7,7 @@
     <!-- Plain-text console output (human-readable, colored) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%thread]){faint} %clr([%X{traceId:-},%X{spanId:-}]){yellow} %clr(%logger{36}){cyan} - %msg%n</pattern>
+            <pattern>%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr(%logger{36}){cyan} - %msg%n</pattern>
         </encoder>
     </appender>
 

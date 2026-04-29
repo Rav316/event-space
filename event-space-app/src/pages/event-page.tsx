@@ -248,7 +248,7 @@ const EventPage = () => {
                 <EventOrganizerBlock
                   firstName={event.author.firstName}
                   lastName={event.author.lastName}
-                  faculty={event.author.faculty}
+                  program={event.author.program}
                   avatarUrl={event.author.avatarUrl}
                   className={'max-[980px]:flex-1 max-[900px]:flex-none'}
                 />

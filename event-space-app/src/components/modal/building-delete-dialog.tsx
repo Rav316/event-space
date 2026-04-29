@@ -36,7 +36,7 @@ export const BuildingDeleteDialog = ({ id, name }: Props) => {
 
   const hasImpact =
     impact &&
-    (impact.faculties > 0 ||
+    (impact.programs > 0 ||
       impact.users > 0 ||
       impact.spaces > 0 ||
       impact.events > 0);
@@ -73,8 +73,8 @@ export const BuildingDeleteDialog = ({ id, name }: Props) => {
                   Вместе с ней будет удалено:
                 </p>
                 <ul className={'list-disc list-inside space-y-0.5'}>
-                  {impact.faculties > 0 && (
-                    <li>{impact.faculties} факультет(ов)</li>
+                  {impact.programs > 0 && (
+                    <li>{impact.programs} направление(ов)</li>
                   )}
                   {impact.users > 0 && <li>{impact.users} пользователь(ей)</li>}
                   {impact.spaces > 0 && <li>{impact.spaces} помещение(й)</li>}

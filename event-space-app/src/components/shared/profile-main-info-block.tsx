@@ -144,9 +144,9 @@ export const ProfileMainInfoBlock: React.FC<Props> = ({
 
       <div className="flex justify-between w-full max-[425px]:justify-center min-[800px]:max-[1300px]:justify-center">
         <span className="text-muted-foreground max-[425px]:hidden min-[800px]:max-[1300px]:hidden">
-          Факультет
+          Направление
         </span>
-        <span className="font-medium text-center">{user.faculty.name}</span>
+        <span className="font-medium text-center">{user.program.name}</span>
       </div>
 
       <div

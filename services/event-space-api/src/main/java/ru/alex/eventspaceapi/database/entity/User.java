@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "faculty")
+@EqualsAndHashCode(exclude = "program")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +59,8 @@ public class User {
     private LocalDate registerDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id", referencedColumnName = "id")
-    private Faculty faculty;
+    @JoinColumn(name = "program_id", referencedColumnName = "id")
+    private Program program;
 
     @OneToMany(mappedBy = "user")
     private List<EventUser> eventUsers;

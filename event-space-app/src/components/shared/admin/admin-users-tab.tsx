@@ -53,12 +53,12 @@ const roleLabels: Record<number, string> = Object.fromEntries(
   userRoles.map((label, index) => [index, label]),
 );
 
-type SortCol = 'name' | 'role' | 'faculty' | 'status';
+type SortCol = 'name' | 'role' | 'program' | 'status';
 
 const sortColToParam: Record<SortCol, string> = {
   name: 'fullName',
   role: 'role',
-  faculty: 'faculty',
+  program: 'program',
   status: 'status',
 };
 
@@ -242,7 +242,7 @@ export const AdminUsersTab = () => {
                 aria-label="Выбрать всех"
               />
             </TableHead>
-            {(['name', 'role', 'faculty', 'status'] as const).map((col) => (
+            {(['name', 'role', 'program', 'status'] as const).map((col) => (
               <TableHead
                 key={col}
                 className={'cursor-pointer select-none'}
@@ -253,7 +253,7 @@ export const AdminUsersTab = () => {
                     {
                       name: 'Пользователь',
                       role: 'Роль',
-                      faculty: 'Факультет/Курс',
+                      program: 'Направление/Курс',
                       status: 'Статус',
                     }[col]
                   }
@@ -310,7 +310,7 @@ export const AdminUsersTab = () => {
                   </TableCell>
                   <TableCell>
                     <div className={'flex flex-col'}>
-                      <span>{user.faculty?.name}</span>
+                      <span>{user.program?.name}</span>
                       {user.course != null && (
                         <span className={'text-xs text-muted-foreground'}>
                           {user.course} курс

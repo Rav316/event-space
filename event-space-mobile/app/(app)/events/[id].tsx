@@ -256,7 +256,7 @@ const EventPage = () => {
               <EventOrganizerBlock
                 firstName={event.author?.firstName}
                 lastName={event.author?.lastName}
-                faculty={event.author?.faculty}
+                program={event.author?.program}
               />
             )}
             <EventShareBlock eventId={id} event={event} />

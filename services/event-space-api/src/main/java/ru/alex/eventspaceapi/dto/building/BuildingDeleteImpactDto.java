@@ -1,7 +1,7 @@
 package ru.alex.eventspaceapi.dto.building;
 
 public record BuildingDeleteImpactDto(
-        long faculties,
+        long programs,
         long users,
         long spaces,
         long events

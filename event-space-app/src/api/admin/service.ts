@@ -5,7 +5,7 @@ import type {
   ComplaintListDto,
   BuildingReadDto,
   EventCategoryReadDto,
-  FacultyReadDto,
+  ProgramReadDto,
 } from '@/api/admin/model.ts';
 import { axiosInstance } from '@/api/instance.ts';
 import { ApiRoutes } from '@/api/api-routes.ts';
@@ -78,11 +78,11 @@ export const findAllCategories = async (
   return response.data;
 };
 
-export const findAllFaculties = async (
+export const findAllPrograms = async (
   filter: AdminListFilter,
   sort?: string,
-): Promise<PageResponse<FacultyReadDto>> => {
-  const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/faculties`, {
+): Promise<PageResponse<ProgramReadDto>> => {
+  const response = await axiosInstance.get(`${ApiRoutes.ADMIN}/programs`, {
     params: { ...filter, ...(sort ? { sort } : {}) },
   });
   return response.data;

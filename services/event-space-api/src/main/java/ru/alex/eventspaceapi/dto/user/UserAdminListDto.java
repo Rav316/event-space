@@ -1,6 +1,6 @@
 package ru.alex.eventspaceapi.dto.user;
 
-import ru.alex.eventspaceapi.dto.faculty.FacultyListDto;
+import ru.alex.eventspaceapi.dto.program.ProgramListDto;
 
 public record UserAdminListDto(
         Integer id,
@@ -9,7 +9,7 @@ public record UserAdminListDto(
         String email,
         Integer role,
         Integer course,
-        FacultyListDto faculty,
+        ProgramListDto program,
         boolean active,
         String avatarUrl
 ) {

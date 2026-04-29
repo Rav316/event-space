@@ -78,7 +78,7 @@ export interface EventCategoryReadDto {
   color: string;
 }
 
-export interface FacultyReadDto {
+export interface ProgramReadDto {
   id: number;
   name: string;
   building: string;

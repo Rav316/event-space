@@ -11,7 +11,7 @@ export const userProfileSchema = z.object({
     .max(64, { message: 'Фамилия должна содержать не более 64 символов' }),
   email: z.email({ message: 'Некорректный email' }),
   phone: z.string().optional(),
-  faculty: z.number().min(1, { message: 'Выберите факультет' }),
+  program: z.number().min(1, { message: 'Выберите направление' }),
   course: z.number().optional(),
   description: z.string().optional(),
   tgUsername: z.string().optional(),

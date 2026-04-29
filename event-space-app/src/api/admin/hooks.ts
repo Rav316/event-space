@@ -65,13 +65,13 @@ export const useCategoriesByFilter = (
   });
 };
 
-export const useFacultiesByFilter = (
+export const useProgramsByFilter = (
   filter: AdminListFilter,
   sort?: string,
 ) => {
   return useQuery({
-    queryKey: [ADMIN_KEYS.FACULTIES, filter, sort],
-    queryFn: () => Api.admin.findAllFaculties(filter, sort),
+    queryKey: [ADMIN_KEYS.PROGRAMS, filter, sort],
+    queryFn: () => Api.admin.findAllPrograms(filter, sort),
   });
 };
 

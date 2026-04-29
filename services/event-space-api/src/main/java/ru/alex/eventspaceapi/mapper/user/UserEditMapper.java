@@ -1,19 +1,19 @@
 package ru.alex.eventspaceapi.mapper.user;
 
 import org.mapstruct.*;
-import ru.alex.eventspaceapi.database.entity.Faculty;
+import ru.alex.eventspaceapi.database.entity.Program;
 import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserEditMapper {
-    @Mapping(target = "faculty", source = "faculty", qualifiedByName = "mapFaculty")
+    @Mapping(target = "program", source = "program", qualifiedByName = "mapProgram")
     void updateFromEntity(UserEditDto dto, @MappingTarget User entity);
 
-    @Named("mapFaculty")
-    default Faculty mapFaculty(Integer facultyId) {
-        Faculty faculty = new Faculty();
-        faculty.setId(facultyId);
-        return faculty;
+    @Named("mapProgram")
+    default Program mapProgram(Integer programId) {
+        Program program = new Program();
+        program.setId(programId);
+        return program;
     }
 }

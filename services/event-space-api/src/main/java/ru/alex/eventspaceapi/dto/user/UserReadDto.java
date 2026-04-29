@@ -1,7 +1,7 @@
 package ru.alex.eventspaceapi.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ru.alex.eventspaceapi.dto.faculty.FacultyListDto;
+import ru.alex.eventspaceapi.dto.program.ProgramListDto;
 
 import java.time.LocalDate;
 
@@ -22,6 +22,6 @@ public record UserReadDto(
         boolean newEventNotifications,
         boolean active,
         LocalDate registerDate,
-        FacultyListDto faculty
+        ProgramListDto program
 ) {
 }

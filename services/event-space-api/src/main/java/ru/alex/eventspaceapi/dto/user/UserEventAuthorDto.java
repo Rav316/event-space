@@ -4,7 +4,7 @@ public record UserEventAuthorDto(
         Integer id,
         String firstName,
         String lastName,
-        String faculty,
+        String program,
         String avatarUrl
 ) {
 }

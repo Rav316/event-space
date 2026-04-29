@@ -11,7 +11,7 @@ import ru.alex.eventspaceapi.model.Role;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserRegisterMapper {
     @Mapping(target = "role", source = "role", qualifiedByName = "intToRole")
-    @Mapping(target = "faculty.id", source = "faculty")
+    @Mapping(target = "program.id", source = "program")
     User toEntity(UserRegisterDto dto);
 
     @Named("intToRole")

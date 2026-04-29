@@ -9,7 +9,7 @@ import {
   BuildingTab,
   SpacesTab,
   CategoriesTab,
-  FacultiesTab,
+  ProgramsTab,
 } from '@/components/shared/directories';
 
 const DirectoriesPage = () => {
@@ -25,7 +25,7 @@ const DirectoriesPage = () => {
       case 2:
         return <CategoriesTab />;
       case 3:
-        return <FacultiesTab />;
+        return <ProgramsTab />;
     }
   };
 

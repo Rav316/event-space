@@ -32,7 +32,7 @@ export const useRegistrationForms = () => {
     resolver: zodResolver(roleStatusSchema),
     defaultValues: {
       role: registrationData.role,
-      faculty: registrationData.faculty,
+      program: registrationData.program,
       course: registrationData.course,
     },
   });

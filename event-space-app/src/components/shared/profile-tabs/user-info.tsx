@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import { FormProvider, type useForm } from 'react-hook-form';
 import { useHookFormMask } from 'use-mask-input';
-import { useFaculties } from '@/api/faculties/hooks.ts';
+import { usePrograms } from '@/api/programs/hooks.ts';
 import type { UserEditDto } from '@/api/users/model.ts';
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
 
 export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
   const registerWithMask = useHookFormMask(form.register);
-  const { data: faculties, isPending: isFacultiesPending } = useFaculties();
+  const { data: programs, isPending: isProgramsPending } = usePrograms();
 
   return (
     <FormProvider {...form}>
@@ -74,28 +74,28 @@ export const UserInfo: React.FC<Props> = ({ editMode, form }) => {
               )}
             </div>
             <div className="flex flex-col gap-1">
-              <Label htmlFor="faculty">Факультет</Label>
-              {isFacultiesPending ? (
+              <Label htmlFor="program">Направление</Label>
+              {isProgramsPending ? (
                 <Skeleton className={'w-full h-8'} />
               ) : (
                 <Select
                   value={
-                    form.watch('faculty')?.toString() === '0'
+                    form.watch('program')?.toString() === '0'
                       ? undefined
-                      : form.watch('faculty')?.toString()
+                      : form.watch('program')?.toString()
                   }
                   onValueChange={(value) =>
-                    form.setValue('faculty', Number(value))
+                    form.setValue('program', Number(value))
                   }
                   disabled={!editMode}
                 >
-                  <SelectTrigger id={'faculty'} className={'w-full'}>
-                    <SelectValue placeholder={'Выберите факультет'} />
+                  <SelectTrigger id={'program'} className={'w-full'}>
+                    <SelectValue placeholder={'Выберите направление'} />
                   </SelectTrigger>
                   <SelectContent>
-                    {faculties?.map((faculty) => (
-                      <SelectItem key={faculty.id} value={String(faculty.id)}>
-                        {faculty.name}
+                    {programs?.map((program) => (
+                      <SelectItem key={program.id} value={String(program.id)}>
+                        {program.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

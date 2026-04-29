@@ -15,7 +15,7 @@ export const directoriesTabs: Tab[] = [
     Icon: Tags,
   },
   {
-    text: 'Факультеты',
+    text: 'Направления',
     Icon: Building2,
   },
 ];

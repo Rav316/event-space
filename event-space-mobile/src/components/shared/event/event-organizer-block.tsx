@@ -8,7 +8,7 @@ interface Props {
   className?: string;
   firstName: string;
   lastName: string;
-  faculty: string;
+  program: string;
   avatarUrl?: string | false;
 }
 
@@ -16,7 +16,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
   className,
   firstName,
   lastName,
-  faculty,
+  program,
   avatarUrl
 }) => {
   const staticContentUrl = process.env.EXPO_PUBLIC_STATIC_URL;
@@ -41,7 +41,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
         <View>
           <StyledText className={'font-medium text-base'}>Alex test</StyledText>
           <StyledText className={'text-muted-foreground text-xs'}>
-            {faculty}
+            {program}
           </StyledText>
         </View>
       </View>

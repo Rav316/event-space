@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
 
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty f WHERE u.id = :id")
-    Optional<User> findByIdWithFaculty(Integer id);
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.program f WHERE u.id = :id")
+    Optional<User> findByIdWithProgram(Integer id);
 
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty f WHERE u.email = :email")
-    Optional<User> findByEmailWithFaculty(String email);
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.program f WHERE u.email = :email")
+    Optional<User> findByEmailWithProgram(String email);
     boolean existsByEmail(String email);
 
     @Query("SELECT u.email FROM User u WHERE u.newEventNotifications = true AND u.active = true")

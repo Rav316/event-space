@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import ru.alex.eventspaceapi.database.entity.Faculty;
+import ru.alex.eventspaceapi.database.entity.Program;
 import ru.alex.eventspaceapi.database.entity.User;
-import ru.alex.eventspaceapi.database.repository.FacultyRepository;
+import ru.alex.eventspaceapi.database.repository.ProgramRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.filter.AdminListFilter;
 import ru.alex.eventspaceapi.dto.user.TopOrganizerDto;
@@ -25,7 +25,7 @@ import ru.alex.eventspaceapi.dto.user.UserAdminListDto;
 import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
 import ru.alex.eventspaceapi.dto.user.UserEditDto;
 import ru.alex.eventspaceapi.dto.user.UserReadDto;
-import ru.alex.eventspaceapi.exception.FacultyNotFoundException;
+import ru.alex.eventspaceapi.exception.ProgramNotFoundException;
 import ru.alex.eventspaceapi.exception.UserNotFoundException;
 import ru.alex.eventspaceapi.mapper.user.UserBlockDto;
 import ru.alex.eventspaceapi.mapper.user.UserListMapper;
@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     private final CacheManager cacheManager;
     private final FileService fileService;
     private final UserRepository userRepository;
-    private final FacultyRepository facultyRepository;
+    private final ProgramRepository programRepository;
     private final UserDetailsMapper userDetailsMapper;
     private final UserReadMapper userReadMapper;
     private final UserEditMapper userEditMapper;
@@ -60,14 +60,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmailWithFaculty(email)
+        return userRepository.findByEmailWithProgram(email)
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
     }
 
     @Cacheable(value = "users", key = "#id")
     public UserDetailsDto loadById(Integer id) {
-        return userRepository.findByIdWithFaculty(id)
+        return userRepository.findByIdWithProgram(id)
                 .map(userDetailsMapper::toDto)
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + id));
     }
@@ -90,10 +90,10 @@ public class UserService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         userEditMapper.updateFromEntity(userEditDto, user);
-        if (userEditDto.faculty() != null) {
-            Faculty faculty = facultyRepository.findById(userEditDto.faculty())
-                    .orElseThrow(() -> new FacultyNotFoundException(userEditDto.faculty()));
-            user.setFaculty(faculty);
+        if (userEditDto.program() != null) {
+            Program program = programRepository.findById(userEditDto.program())
+                    .orElseThrow(() -> new ProgramNotFoundException(userEditDto.program()));
+            user.setProgram(program);
         }
 
         if(avatarRemoved != null && avatarRemoved) {

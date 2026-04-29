@@ -11,7 +11,7 @@ export const roleStatusSchema = z.object({
     .refine((value) => value !== Roles.ADMIN, {
       message: 'Выберите роль',
     }),
-  faculty: z.number().min(1, { message: 'Выберите факультет' }),
+  program: z.number().min(1, { message: 'Выберите направление' }),
   course: z.number().optional(),
 });
 

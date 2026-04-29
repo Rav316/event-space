@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.alex.eventspaceapi.dto.building.BuildingReadDto;
 import ru.alex.eventspaceapi.dto.eventCategory.EventCategoryReadDto;
-import ru.alex.eventspaceapi.dto.faculty.FacultyReadDto;
+import ru.alex.eventspaceapi.dto.program.ProgramReadDto;
 import ru.alex.eventspaceapi.dto.complaint.ComplaintListDto;
 import ru.alex.eventspaceapi.dto.space.SpaceListDto;
 import ru.alex.eventspaceapi.dto.event.EventAdminListDto;
@@ -23,7 +23,7 @@ import ru.alex.eventspaceapi.service.BuildingService;
 import ru.alex.eventspaceapi.service.ComplaintService;
 import ru.alex.eventspaceapi.service.EventService;
 import ru.alex.eventspaceapi.service.EventCategoryService;
-import ru.alex.eventspaceapi.service.FacultyService;
+import ru.alex.eventspaceapi.service.ProgramService;
 import ru.alex.eventspaceapi.service.SpaceService;
 import ru.alex.eventspaceapi.service.UserService;
 
@@ -39,7 +39,7 @@ public class AdminController {
     private final BuildingService buildingService;
     private final SpaceService spaceService;
     private final EventCategoryService eventCategoryService;
-    private final FacultyService facultyService;
+    private final ProgramService programService;
 
     @GetMapping("/statistics")
     public AdminStatisticsDto getStatistics() {
@@ -76,8 +76,8 @@ public class AdminController {
         return PageResponse.of(eventCategoryService.findAllByFilter(filter, sort));
     }
 
-    @GetMapping("/faculties")
-    public PageResponse<FacultyReadDto> findAllFaculties(@Validated @ModelAttribute AdminListFilter filter, Sort sort) {
-        return PageResponse.of(facultyService.findAllByFilter(filter, sort));
+    @GetMapping("/programs")
+    public PageResponse<ProgramReadDto> findAllPrograms(@Validated @ModelAttribute AdminListFilter filter, Sort sort) {
+        return PageResponse.of(programService.findAllByFilter(filter, sort));
     }
 }

@@ -48,7 +48,7 @@ const ProfilePage = () => {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
-    faculty: user?.faculty.id || 0,
+    program: user?.program.id || 0,
     course: user?.course,
     description: user?.description || '',
     phone: user?.phone || '',

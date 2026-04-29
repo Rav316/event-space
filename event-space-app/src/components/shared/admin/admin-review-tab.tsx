@@ -26,7 +26,7 @@ export const AdminReviewTab = () => {
             <div className={'flex flex-col'}>
               <span className={'font-medium'}>Управление справочниками</span>
               <span className={'text-muted-foreground text-sm'}>
-                Настройте локации, кабинеты, категории, факультеты и теги
+                Настройте локации, кабинеты, категории, направления и теги
               </span>
             </div>
           </div>

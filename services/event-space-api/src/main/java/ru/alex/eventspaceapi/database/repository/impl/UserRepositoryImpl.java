@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 "id", user.id,
                 "fullName", fullName,
                 "role", user.role,
-                "faculty", user.faculty.name,
+                "program", user.program.name,
                 "status", user.active
         );
     }
@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         List<User> users = queryFactory
                 .selectFrom(user)
-                .leftJoin(user.faculty).fetchJoin()
+                .leftJoin(user.program).fetchJoin()
                 .where(predicate)
                 .orderBy(sortOrder)
                 .limit(pageable.getPageSize())
@@ -114,7 +114,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             predicate = predicate.and(user
                     .firstName.containsIgnoreCase(filter.search())
                     .or(user.lastName.containsIgnoreCase(filter.search()))
-                    .or(user.faculty.name.contains(filter.search()))
+                    .or(user.program.name.contains(filter.search()))
                     .or(user.email.containsIgnoreCase(filter.search()))
             );
         }

@@ -10,7 +10,7 @@ import {
   Skeleton,
 } from '@/components/ui';
 import { BookOpen, Building, GraduationCap, Users } from 'lucide-react';
-import { useFaculties } from '@/api/faculties/hooks.ts';
+import { usePrograms } from '@/api/programs/hooks.ts';
 import { FormProvider, useForm } from 'react-hook-form';
 import React from 'react';
 import type { RoleStatusData } from '@/schemas/role-status-schema.ts';
@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const StepRoleStatus: React.FC<Props> = ({ form }) => {
-  const { data, isPending } = useFaculties();
+  const { data, isPending } = usePrograms();
 
   const onRoleChange = (role: Role) => {
     form.setValue('role', role);
@@ -84,8 +84,8 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="faculty">
-              Факультет <RequiredMark />
+            <Label htmlFor="program">
+              Направление <RequiredMark />
             </Label>
             {isPending ? (
               <Skeleton className={'h-9 w-[236px]'} />
@@ -94,26 +94,26 @@ export const StepRoleStatus: React.FC<Props> = ({ form }) => {
                 <div className="relative">
                   <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
                   <Select
-                    value={form.watch('faculty')?.toString()}
+                    value={form.watch('program')?.toString()}
                     onValueChange={(value) =>
-                      form.setValue('faculty', Number(value))
+                      form.setValue('program', Number(value))
                     }
                   >
-                    <SelectTrigger className="pl-10" id={'faculty'}>
-                      <SelectValue placeholder="Выберите ваш факультет" />
+                    <SelectTrigger className="pl-10" id={'program'}>
+                      <SelectValue placeholder="Выберите ваш направление" />
                     </SelectTrigger>
                     <SelectContent>
-                      {data?.map((faculty) => (
-                        <SelectItem key={faculty.id} value={String(faculty.id)}>
-                          {faculty.name}
+                      {data?.map((program) => (
+                        <SelectItem key={program.id} value={String(program.id)}>
+                          {program.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-                {form.formState.errors.faculty && (
+                {form.formState.errors.program && (
                   <FormErrorMessage>
-                    {form.formState.errors.faculty.message}
+                    {form.formState.errors.program.message}
                   </FormErrorMessage>
                 )}
               </>

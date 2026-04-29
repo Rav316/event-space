@@ -7,7 +7,7 @@ interface Props {
   className?: string;
   firstName: string;
   lastName: string;
-  faculty: string;
+  program: string;
   avatarUrl?: string | false;
 }
 
@@ -15,7 +15,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
   className,
   firstName,
   lastName,
-  faculty,
+  program,
   avatarUrl,
 }) => {
   const avatarUrlFinal = getAvatarUrl(avatarUrl);
@@ -39,7 +39,7 @@ export const EventOrganizerBlock: React.FC<Props> = ({
           <span
             className={'font-medium text-lg'}
           >{`${firstName} ${lastName}`}</span>
-          <span className={'text-muted-foreground'}>{faculty}</span>
+          <span className={'text-muted-foreground'}>{program}</span>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export interface BuildingEditDto {
 }
 
 export interface BuildingDeleteImpactDto {
-  faculties: number;
+  programs: number;
   users: number;
   spaces: number;
   events: number;
