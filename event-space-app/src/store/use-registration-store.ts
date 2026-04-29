@@ -16,7 +16,6 @@ export const useRegistrationStore = create<RegistrationState>()(
         firstName: '',
         lastName: '',
         email: '',
-        role: 0,
         password: '',
       },
       setRegistrationData: (data) => {
@@ -38,7 +37,6 @@ export const useRegistrationStore = create<RegistrationState>()(
               firstName: '',
               lastName: '',
               email: '',
-              role: 0,
               password: '',
             };
           },

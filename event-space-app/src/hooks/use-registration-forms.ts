@@ -7,9 +7,9 @@ import {
   type PersonalInfoData,
 } from '@/schemas/personal-info-schema';
 import {
-  roleStatusSchema,
-  type RoleStatusData,
-} from '@/schemas/role-status-schema';
+  educationDataSchema,
+  type EducationData,
+} from '@/schemas/education-data-schema.ts';
 import { useRegistrationStore } from '@/store/use-registration-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -28,10 +28,9 @@ export const useRegistrationForms = () => {
     reValidateMode: 'onSubmit',
   });
 
-  const roleStatusForm = useForm<RoleStatusData>({
-    resolver: zodResolver(roleStatusSchema),
+  const educationDataForm = useForm<EducationData>({
+    resolver: zodResolver(educationDataSchema),
     defaultValues: {
-      role: registrationData.role,
       program: registrationData.program,
       course: registrationData.course,
     },
@@ -45,5 +44,5 @@ export const useRegistrationForms = () => {
     },
   });
 
-  return { personalDataForm, roleStatusForm, passwordCreateForm };
+  return { personalDataForm, educationDataForm: educationDataForm, passwordCreateForm };
 };

@@ -10,7 +10,7 @@ import { ArrowLeft, ArrowRight, Calendar, UserPlus } from 'lucide-react';
 import { Link } from 'react-router';
 import {
   StepPersonalData,
-  StepRoleStatus,
+  StepEducationData,
   StepSecurity,
 } from '@/components/shared/registration';
 import { registrationSteps } from '@/constants/registration-steps.ts';
@@ -36,7 +36,7 @@ const RegistrationPage = () => {
   const registrationMutation = useRegistration();
   const checkEmailMutation = useCheckEmail();
 
-  const { personalDataForm, roleStatusForm, passwordCreateForm } =
+  const { personalDataForm, educationDataForm, passwordCreateForm } =
     useRegistrationForms();
 
   const renderStepContent = () => {
@@ -44,7 +44,7 @@ const RegistrationPage = () => {
       case 0:
         return <StepPersonalData form={personalDataForm} />;
       case 1:
-        return <StepRoleStatus form={roleStatusForm} />;
+        return <StepEducationData form={educationDataForm} />;
       case 2:
         return <StepSecurity form={passwordCreateForm} />;
       default:
@@ -71,7 +71,7 @@ const RegistrationPage = () => {
         break;
       }
       case 1:
-        setRegistrationData(roleStatusForm.getValues());
+        setRegistrationData(educationDataForm.getValues());
         break;
       case 2:
         setRegistrationData(passwordCreateForm.getValues());
@@ -97,7 +97,9 @@ const RegistrationPage = () => {
             className="inline-flex items-center space-x-2 text-primary"
           >
             <Calendar className="h-8 w-8" />
-            <span className="text-2xl font-bold">EventSpace</span>
+            <span className="font-semibold text-foreground text-2xl">
+              EventSpace
+            </span>
           </Link>
           <p className="text-muted-foreground mt-2">
             Присоединяйтесь к нашему сообществу
@@ -135,7 +137,7 @@ const RegistrationPage = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : currentStep === 1 ? (
-                <Button onClick={roleStatusForm.handleSubmit(onStepNext)}>
+                <Button onClick={educationDataForm.handleSubmit(onStepNext)}>
                   <span>Далее</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>

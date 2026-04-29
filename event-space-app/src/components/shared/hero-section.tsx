@@ -34,7 +34,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.6 }}
           className="px-4 py-1.5 bg-white rounded-full flex justify-center items-center gap-2 border border-[#E5E5E5]"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
           <span className="font-medium text-center text-sm text-[#555]">
             Новая платформа для студенческих мероприятий
           </span>
@@ -67,14 +67,14 @@ export const HeroSection = () => {
           className="flex gap-x-3 w-auto justify-center max-[440px]:flex-col max-[440px]:gap-y-3 max-[440px]:w-full"
         >
           <Button
-            className="group h-[40px] max-[440px]:w-full"
+            className="group h-10 max-[440px]:w-full"
             onClick={handleEventCreateClick}
           >
             Создать мероприятие
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-[3px] transition-transform" />
           </Button>
           <Link to="/events">
-            <Button variant="outline" className="h-[40px] max-[440px]:w-full">
+            <Button variant="outline" className="h-10 max-[440px]:w-full">
               Обзор мероприятий
             </Button>
           </Link>

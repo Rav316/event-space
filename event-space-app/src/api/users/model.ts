@@ -25,7 +25,6 @@ export interface UserRegisterDto {
   firstName: string;
   lastName: string;
   email: string;
-  role: Role;
   program?: number;
   course?: number;
   password: string;
