@@ -124,3 +124,5 @@ databaseChangeLog:
       file: db/changelog/db-create-user-notification-category-table-1.0.sql
   - include:
       file: db/changelog/db-update-users-table-4.0.sql
+  - include:
+      file: db/changelog/db-create-event-reminder-table-1.0.sql

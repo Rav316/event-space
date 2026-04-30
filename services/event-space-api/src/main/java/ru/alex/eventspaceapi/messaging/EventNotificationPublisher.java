@@ -21,4 +21,12 @@ public class EventNotificationPublisher {
                 message
         );
     }
+
+    public void publishEventReminder(EventReminderMessage message) {
+        rabbitTemplate.convertAndSend(
+                rabbitProperties.exchange(),
+                rabbitProperties.reminderRoutingKey(),
+                message
+        );
+    }
 }

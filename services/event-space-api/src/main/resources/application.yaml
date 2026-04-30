@@ -17,6 +17,14 @@ app:
       exchange: event.notifications
       routing-key: event.created
       queue: event.notifications.new-events
+      reminder-routing-key: event.reminder
+      reminder-queue: event.notifications.reminders
+  reminder:
+    zone: Europe/Moscow
+    lead-time: PT24H
+    batch-size: 100
+    max-attempts: 5
+    poll-ms: 60000
   metrics:
     username: ${PROMETHEUS_USERNAME}
     password: ${PROMETHEUS_PASSWORD}

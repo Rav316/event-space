@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.alex.eventspaceapi.database.entity.Event;
 import ru.alex.eventspaceapi.database.entity.EventUser;
+import ru.alex.eventspaceapi.database.entity.User;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
@@ -33,6 +34,7 @@ public class EventUserService {
     private final EventUserRepository eventUserRepository;
     private final UserRepository userRepository;
     private final EventQrInfoMapper eventQrInfoMapper;
+    private final EventReminderService eventReminderService;
 
 
     @Transactional
@@ -59,13 +61,16 @@ public class EventUserService {
             throw new IllegalStateException("unable to register for events: no seats available");
         }
 
+        User user = userRepository.findById(authorizedUserId)
+                .orElseThrow(() -> new EntityNotFoundException("user not found: " + authorizedUserId));
         EventUser eventUser = EventUser.builder()
                 .event(event)
-                .user(userRepository.getReferenceById(authorizedUserId))
+                .user(user)
                 .qrToken(UUID.randomUUID())
                 .registeredAt(Instant.now())
                 .build();
         eventUserRepository.save(eventUser);
+        eventReminderService.scheduleFor(event, user);
     }
 
     @Transactional
@@ -81,6 +86,7 @@ public class EventUserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you cannot cancel your registration after your attendance has been marked");
         }
         eventUserRepository.deleteById(eventUser.getId());
+        eventReminderService.cancelFor(event.getId(), eventUser.getUser().getId());
     }
 
     @Transactional

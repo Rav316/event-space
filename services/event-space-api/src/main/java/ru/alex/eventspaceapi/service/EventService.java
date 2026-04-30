@@ -63,6 +63,7 @@ public class EventService {
     private final EventListForUserMapper eventListForUserMapper;
     private final EventAdminListMapper eventAdminListMapper;
     private final EventNotificationPublisher eventNotificationPublisher;
+    private final EventReminderService eventReminderService;
 
     public Page<EventListDto> findAllByFilter(EventFilter filter) {
         UserDetailsDto authorizedUser = getAuthorizedUser();
@@ -315,6 +316,9 @@ public class EventService {
             eventStepRepository.insertEventStepsBatch(eventSteps);
         }
 
+        if (dto.eventDate() != null || dto.startTime() != null) {
+            eventReminderService.rescheduleFor(savedEvent);
+        }
     }
 
     @Transactional

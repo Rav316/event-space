@@ -43,6 +43,23 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue eventReminderQueue(RabbitProperties properties) {
+        return QueueBuilder.durable(properties.reminderQueue()).build();
+    }
+
+    @Bean
+    public Binding eventReminderBinding(
+            Queue eventReminderQueue,
+            TopicExchange eventNotificationExchange,
+            RabbitProperties properties
+    ) {
+        return BindingBuilder
+                .bind(eventReminderQueue)
+                .to(eventNotificationExchange)
+                .with(properties.reminderRoutingKey());
+    }
+
+    @Bean
     public MessageConverter jacksonMessageConverter() {
         return new JacksonJsonMessageConverter();
     }

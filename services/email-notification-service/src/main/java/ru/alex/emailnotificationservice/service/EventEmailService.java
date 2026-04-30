@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import ru.alex.emailnotificationservice.config.MailProperties;
 import ru.alex.emailnotificationservice.messaging.EventCreatedMessage;
+import ru.alex.emailnotificationservice.messaging.EventReminderMessage;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -71,6 +72,54 @@ public class EventEmailService {
 
         log.debug("Connecting to SMTP and sending email to {}", recipient);
         mailSender.send(mimeMessage);
+    }
+
+    public void sendEventReminder(EventReminderMessage message) {
+        String recipient = message.recipientEmail();
+        if (recipient == null || recipient.isBlank()) {
+            log.warn("Skip reminder email: empty recipient for event {}", message.eventId());
+            return;
+        }
+        try {
+            sendReminderSingle(message, recipient);
+            log.info("Reminder email sent for event {} to {}", message.eventId(), recipient);
+        } catch (MessagingException e) {
+            log.error("Failed to send reminder email for event {} to {}: {}", message.eventId(), recipient, e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendReminderSingle(EventReminderMessage message, String recipient) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        helper.setFrom(fromAddress);
+        helper.setTo(recipient);
+        helper.setSubject("Напоминание: мероприятие через 24 часа — " + message.name());
+
+        helper.setText(buildReminderBody(message), true);
+
+        mailSender.send(mimeMessage);
+    }
+
+    private String buildReminderBody(EventReminderMessage message) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        String eventDate = message.eventDate() != null ? message.eventDate().format(dateFormatter) : "";
+        String startTime = message.startTime() != null ? message.startTime().format(timeFormatter) : "";
+        String endTime = message.endTime() != null ? message.endTime().format(timeFormatter) : "";
+
+        Context context = new Context();
+        context.setVariable("message", message);
+        context.setVariable("eventDate", eventDate);
+        context.setVariable("startTime", startTime);
+        context.setVariable("endTime", endTime);
+        context.setVariable("eventUrl", websiteUrl + "/events/" + message.eventId());
+        context.setVariable("shortDescription", message.shortDescription());
+
+        return templateEngine.process("email/event-reminder", context);
     }
 
     private String buildBody(EventCreatedMessage message) {

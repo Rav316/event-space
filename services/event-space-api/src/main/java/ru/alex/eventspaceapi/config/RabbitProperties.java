@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 public record RabbitProperties(
         String exchange,
         String queue,
-        String routingKey
+        String routingKey,
+        String reminderQueue,
+        String reminderRoutingKey
 ) {
 }

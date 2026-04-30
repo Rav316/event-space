@@ -48,7 +48,7 @@ public class AdminStatisticsDao {
             """;
 
     public AdminStatisticsDto getAdminStatistics() {
-        var counts = jdbcTemplate.queryForObject(SQL_COUNTS, Map.of(), (rs, rowNum) ->
+        long[] counts = jdbcTemplate.queryForObject(SQL_COUNTS, Map.of(), (rs, rowNum) ->
                 new long[]{
                         rs.getLong("total_users"),
                         rs.getLong("active_users"),

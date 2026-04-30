@@ -8,12 +8,12 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @Configuration
-@EnableConfigurationProperties(RabbitProperties.class)
+@EnableConfigurationProperties({RabbitProperties.class, ReminderProperties.class})
 public class RabbitConfig {
 
     @Bean
@@ -34,6 +34,21 @@ public class RabbitConfig {
                 .bind(eventNotificationQueue)
                 .to(eventNotificationExchange)
                 .with(properties.routingKey());
+    }
+
+    @Bean
+    public Queue eventReminderQueue(RabbitProperties properties) {
+        return new Queue(properties.reminderQueue(), true);
+    }
+
+    @Bean
+    public Binding eventReminderBinding(Queue eventReminderQueue,
+                                        TopicExchange eventNotificationExchange,
+                                        RabbitProperties properties) {
+        return BindingBuilder
+                .bind(eventReminderQueue)
+                .to(eventNotificationExchange)
+                .with(properties.reminderRoutingKey());
     }
 
     @Bean
