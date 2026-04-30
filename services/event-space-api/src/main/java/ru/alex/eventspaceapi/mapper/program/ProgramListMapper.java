@@ -2,14 +2,26 @@ package ru.alex.eventspaceapi.mapper.program;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import ru.alex.eventspaceapi.database.entity.EventCategory;
 import ru.alex.eventspaceapi.database.entity.Program;
 import ru.alex.eventspaceapi.dto.program.ProgramListDto;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProgramListMapper {
     @Mapping(
             target = "preferredCategoryIds",
-            expression = "java(program.getPreferredCategories().stream().map(ru.alex.eventspaceapi.database.entity.EventCategory::getId).toList())"
+            source = "program.preferredCategories",
+            qualifiedByName = "mapPreferredCategoryIds"
     )
     ProgramListDto toDto(Program program);
+
+    @Named("mapPreferredCategoryIds")
+    default List<Integer> mapPreferredCategoryIds(List<EventCategory> categories) {
+        return categories.stream()
+                .map(EventCategory::getId)
+                .toList();
+    }
 }

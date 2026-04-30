@@ -8,7 +8,7 @@ export const EventDescription: React.FC<Props> = ({ description }) => {
   return (
     <div className={'flex flex-col gap-3'}>
       <span className={'font-medium text-xl'}>Описание мероприятия</span>
-      <p className={'whitespace-pre-line leading-relaxed text-foreground/80'}>
+      <p className={'whitespace-pre-line leading-relaxed text-foreground/80 break-words'}>
         {description}
       </p>
     </div>

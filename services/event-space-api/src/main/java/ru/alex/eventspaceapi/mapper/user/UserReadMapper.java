@@ -14,6 +14,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = ProgramListMapper.class)
 public interface UserReadMapper {
     @Mapping(source = "notificationCategories", target = "notificationCategoryIds", qualifiedByName = "categoriesToIds")
+    @Mapping(source = "program.preferredCategories", target = "program.preferredCategoryIds", qualifiedByName = "mapPreferredCategoryIds")
     UserReadDto toDto(User entity);
 
     @Named("categoriesToIds")
