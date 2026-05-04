@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { OutletHeader, RequireAdmin, RequireGuest } from '@/components/hoc';
+import { OutletHeader, RequireAdmin, RequireEventManager, RequireGuest } from '@/components/hoc';
 import Page404 from '@/pages/page-404.tsx';
 import { RequireAuth } from '@/components/hoc/require-auth.tsx';
 import { LoginModal } from '@/components/modal';
@@ -43,21 +43,28 @@ const App = () => {
             <Route
               path={'/my-events'}
               element={
-                <RequireAuth>
+                <RequireEventManager>
                   <MyEventsPage />
-                </RequireAuth>
+                </RequireEventManager>
               }
             />
             <Route
               path={'/events/create'}
               element={
-                <RequireAuth>
+                <RequireEventManager>
                   <EventCreatePage />
-                </RequireAuth>
+                </RequireEventManager>
               }
             />
             <Route path={'/events/:eventId'} element={<EventPage />} />
-            <Route path={'/events/:eventId/edit'} element={<EventEditPage />} />
+            <Route
+              path={'/events/:eventId/edit'}
+              element={
+                <RequireEventManager>
+                  <EventEditPage />
+                </RequireEventManager>
+              }
+            />
             <Route
               path={'/profile'}
               element={

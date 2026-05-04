@@ -9,12 +9,17 @@ import {
 import { Briefcase, Calendar, ChartColumn, Menu, Users } from 'lucide-react';
 import * as React from 'react';
 import { Link } from 'react-router';
+import { useMe } from '@/api/auth/hooks.ts';
+import { Roles } from '@/api/auth/model.ts';
 
 interface Props {
   className?: string;
 }
 
 export const NavigationMenu: React.FC<Props> = ({ className }) => {
+  const { data } = useMe();
+  const isEventManager = data?.user.role === Roles.ADMIN || data?.user.role === Roles.ORGANIZER;
+
   return (
     <div className={className}>
       <DropdownMenu>
@@ -30,12 +35,14 @@ export const NavigationMenu: React.FC<Props> = ({ className }) => {
               Все мероприятия
             </DropdownMenuItem>
           </Link>
-          <Link to={'/my-events'}>
-            <DropdownMenuItem>
-              <Briefcase />
-              Мои мероприятия
-            </DropdownMenuItem>
-          </Link>
+          {isEventManager && (
+            <Link to={'/my-events'}>
+              <DropdownMenuItem>
+                <Briefcase />
+                Мои мероприятия
+              </DropdownMenuItem>
+            </Link>
+          )}
           <Link to={'/my-registrations'}>
             <DropdownMenuItem>
               <Users />

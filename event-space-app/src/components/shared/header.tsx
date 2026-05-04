@@ -61,15 +61,17 @@ export const Header = () => {
                   />
                 )}
               </NavLink>
-              <NavLink to={'/my-events'}>
-                {({ isActive }) => (
-                  <HeaderItem
-                    Icon={Briefcase}
-                    text={'Мои мероприятия'}
-                    isActive={isActive}
-                  />
-                )}
-              </NavLink>
+              {(data.user.role === Roles.ADMIN || data.user.role === Roles.ORGANIZER) && (
+                <NavLink to={'/my-events'}>
+                  {({ isActive }) => (
+                    <HeaderItem
+                      Icon={Briefcase}
+                      text={'Мои мероприятия'}
+                      isActive={isActive}
+                    />
+                  )}
+                </NavLink>
+              )}
               <NavLink to={'/my-registrations'}>
                 {({ isActive }) => (
                   <HeaderItem
@@ -118,12 +120,14 @@ export const Header = () => {
               </div>
             ) : (
               <>
-                <Link to={'/events/create'}>
-                  <Button className={'h-[30px]'}>
-                    <Plus />
-                    <span className={'max-[320px]:hidden'}>Создать</span>
-                  </Button>
-                </Link>
+                {(data.user.role === Roles.ADMIN || data.user.role === Roles.ORGANIZER) && (
+                  <Link to={'/events/create'}>
+                    <Button className={'h-[30px]'}>
+                      <Plus />
+                      <span className={'max-[320px]:hidden'}>Создать</span>
+                    </Button>
+                  </Link>
+                )}
                 <ProfileMenu />
                 <NavigationMenu className={'hidden max-[1350px]:block'} />
               </>
