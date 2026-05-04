@@ -158,6 +158,7 @@ public class EventController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<Void> create(
             @Validated @RequestPart("event") EventCreateDto eventCreateDto,
             @RequestPart(value = "image", required = false) MultipartFile image
@@ -167,6 +168,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<Void> update(
             @PathVariable Integer id,
             @Validated @RequestPart("event") EventEditDto eventEditDto,
@@ -189,6 +191,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     public ResponseEntity<Void> removeEvent(@PathVariable Integer id) {
         eventService.delete(id);
         return new ResponseEntity<>(NO_CONTENT);
