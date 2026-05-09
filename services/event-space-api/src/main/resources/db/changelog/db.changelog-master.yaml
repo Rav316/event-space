@@ -115,6 +115,12 @@ databaseChangeLog:
       file: db/changelog/db-insert-init-data-5.0.sql
       context: prod
   - include:
+      file: db/changelog/db-update-event-init-data-1.0.sql
+      context: prod
+  - include:
+      file: db/changelog/db-update-event-init-data-2.0.sql
+      context: prod
+  - include:
       file: db/changelog/db-rename-faculty-to-program-1.0.sql
   - include:
       file: db/changelog/db-add-program-category-mapping-1.0.sql

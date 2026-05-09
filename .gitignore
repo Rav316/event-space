@@ -5,3 +5,4 @@
 /services/observability/prometheus/secrets/prometheus_basic_auth_password
 .claude
 nginx-static/
+/services/nginx-static-service/init-content

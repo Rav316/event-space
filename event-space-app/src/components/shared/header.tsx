@@ -120,7 +120,7 @@ export const Header = () => {
               </div>
             ) : (
               <>
-                {(data.user.role === Roles.ADMIN || data.user.role === Roles.ORGANIZER) && (
+                {(data?.user.role === Roles.ADMIN || data?.user.role === Roles.ORGANIZER) && (
                   <Link to={'/events/create'}>
                     <Button className={'h-[30px]'}>
                       <Plus />
