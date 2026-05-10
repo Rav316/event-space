@@ -5,7 +5,7 @@ import Page404 from '@/pages/page-404.tsx';
 import { RequireAuth } from '@/components/hoc/require-auth.tsx';
 import { LoginModal } from '@/components/modal';
 import { useAuthStore } from '@/store/use-auth-store.ts';
-import { PageLoader, TopProgressBar } from '@/components/ui';
+import { PageLoader } from '@/components/ui';
 
 const MainPage = lazy(() => import('@/pages/main-page.tsx'));
 const EventsPage = lazy(() => import('@/pages/events-page.tsx'));
@@ -27,7 +27,6 @@ const App = () => {
 
   return (
     <>
-      <TopProgressBar />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route key={token ? 'auth' : 'guest'} element={<OutletHeader />}>

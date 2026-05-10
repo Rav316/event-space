@@ -27,4 +27,3 @@ export { PageLoader } from './page-loader';
 export { AnimatedNumber } from './animated-number';
 export * from './table';
 export { ColorPicker } from './color-picker';
-export { TopProgressBar } from './top-progress-bar';
