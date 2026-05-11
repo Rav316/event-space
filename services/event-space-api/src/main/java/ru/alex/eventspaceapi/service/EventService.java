@@ -77,7 +77,9 @@ public class EventService {
     }
 
     public Page<EventListMyDto> findAllMyEvents(EventMyFilter filter) {
-        return eventRepository.findAllEventsByUser(Objects.requireNonNull(getAuthorizedUser()).id(), filter)
+        UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
+        Integer userId = authorizedUser.role() == Role.ADMIN ? null : authorizedUser.id();
+        return eventRepository.findAllEventsByUser(userId, filter)
                 .map(eventListMyMapper::toDto);
     }
 

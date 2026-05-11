@@ -155,6 +155,7 @@ const EventPage = () => {
                 <EventQrCodeDialog
                   eventId={event.id}
                   value={event.qrToken}
+                  attended={event.isAttended}
                   open={openQr}
                   onOpenChange={setOpenQr}
                   eventFinished={

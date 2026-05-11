@@ -234,7 +234,9 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
     @Override
     public Page<Event> findAllEventsByUser(Integer userId, EventMyFilter filter) {
-        BooleanExpression predicate = event.author.id.eq(userId).and(buildPredicate(filter));
+        BooleanExpression predicate = userId != null
+                ? event.author.id.eq(userId).and(buildPredicate(filter))
+                : buildPredicate(filter);
         int page = filter.page() != null ? filter.page() : 0;
 
         List<Event> events = queryFactory
@@ -535,13 +537,19 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
     @Override
     public EventAuthorStatisticsDto getEventStatisticsByUser(Integer userId) {
-        String sql = """
+        String sql = userId != null ? """
                 SELECT
                     COUNT(DISTINCT e.id)  events_count,
                     COUNT(eu.user_id) participants_count
                 FROM event e
                 LEFT JOIN event_user eu ON eu.event_id = e.id
                 WHERE e.author = :userId;
+                """ : """
+                SELECT
+                    COUNT(DISTINCT e.id)  events_count,
+                    COUNT(eu.user_id) participants_count
+                FROM event e
+                LEFT JOIN event_user eu ON eu.event_id = e.id;
                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);

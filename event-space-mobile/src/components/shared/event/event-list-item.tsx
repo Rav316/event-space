@@ -3,27 +3,21 @@ import { Image } from 'expo-image';
 import { Badge } from '@/src/components/ui/badge';
 import { categoryBadgeStyle } from '@/src/utils/category-badge-style';
 import { Calendar, MapPin } from 'lucide-react-native';
-import { Dimensions, Platform, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { useColorScheme } from 'nativewind';
 import { getEventImageUrl } from '@/src/utils/get-event-image-url';
 import { EventListPreviewDto } from '@/src/api/events/models';
-import { ContextMenuView } from 'react-native-ios-context-menu';
-import {formatDateToRuFormat} from "@/src/utils/format-date-to-ru-format";
-import { Link } from 'expo-router';
+import { formatDateToRuFormat } from '@/src/utils/format-date-to-ru-format';
+import { router } from 'expo-router';
 
 interface Props {
   event: EventListPreviewDto;
 }
 
-const PREVIEW_WIDTH = Dimensions.get('window').width - 48;
-const MAX_PREVIEW_HEIGHT = Dimensions.get('window').height * 0.6;
-
 export const EventListItem: React.FC<Props> = ({ event }) => {
   const { colorScheme } = useColorScheme();
-  const [previewHeight, setPreviewHeight] = useState(PREVIEW_WIDTH);
   const [imageError, setImageError] = useState(false);
-
   const imageUrl = event.imageUrl ? getEventImageUrl(event.imageUrl) : null;
 
   const getPlaceholderText = (name: string) => {
@@ -37,51 +31,13 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
   const placeholderText = event.name ? getPlaceholderText(event.name) : 'EV';
 
   const imageElement = imageUrl && !imageError ? (
-    Platform.OS === 'ios' ? (
-      <ContextMenuView
-        menuConfig={{
-          menuTitle: '',
-          menuItems: []
-        }}
-        previewConfig={{
-          previewType: 'CUSTOM',
-          previewSize: 'INHERIT',
-          borderRadius: 16,
-          preferredCommitStyle: 'dismiss',
-          isResizeAnimated: false,
-        }}
-        renderPreview={() => (
-          <View style={{ width: PREVIEW_WIDTH, height: previewHeight }}>
-            <Image
-              source={{ uri: imageUrl }}
-              style={styles.previewImage}
-              contentFit="cover"
-            />
-          </View>
-        )}
-      >
-        <Image
-          source={{ uri: imageUrl }}
-          style={styles.image}
-          contentFit={'cover'}
-          transition={200}
-          onLoad={(e) => {
-            const { width, height } = e.source;
-            const ratio = height / width;
-            setPreviewHeight(Math.min(PREVIEW_WIDTH * ratio, MAX_PREVIEW_HEIGHT));
-          }}
-          onError={() => setImageError(true)}
-        />
-      </ContextMenuView>
-    ) : (
-      <Image
-        source={{ uri: imageUrl }}
-        style={styles.image}
-        contentFit={'cover'}
-        transition={200}
-        onError={() => setImageError(true)}
-      />
-    )
+    <Image
+      source={{ uri: imageUrl }}
+      style={styles.image}
+      contentFit={'cover'}
+      transition={200}
+      onError={() => setImageError(true)}
+    />
   ) : (
     <View
       style={styles.image}
@@ -97,7 +53,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
   );
 
   return (
-    <Link href={`/events/${event.id}`}>
+    <Pressable onPress={() => router.push(`/events/${event.id}`)}>
       <View
         className={
           'rounded-2xl border-2 border-[#E5E5E5] dark:border-[#333333] p-4 bg-white dark:bg-[#1A1A1A]'
@@ -145,7 +101,7 @@ export const EventListItem: React.FC<Props> = ({ event }) => {
           </View>
         </View>
       </View>
-    </Link>
+    </Pressable>
   );
 };
 
@@ -155,8 +111,4 @@ export const styles = StyleSheet.create({
     height: 100,
     borderRadius: 16
   },
-  previewImage: {
-    width: '100%',
-    height: '100%'
-  }
 });

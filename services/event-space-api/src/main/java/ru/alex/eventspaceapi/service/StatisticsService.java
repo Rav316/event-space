@@ -11,6 +11,9 @@ import ru.alex.eventspaceapi.database.repository.EventUserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewStatisticsDto;
 import ru.alex.eventspaceapi.dto.statistics.*;
 
+import ru.alex.eventspaceapi.dto.user.UserDetailsDto;
+import ru.alex.eventspaceapi.model.Role;
+
 import java.util.Objects;
 
 import static ru.alex.eventspaceapi.util.AuthUtils.getAuthorizedUser;
@@ -29,7 +32,9 @@ public class StatisticsService {
     }
 
     public EventAuthorStatisticsDto getAuthoredEventsStatistics() {
-        return eventRepository.getEventStatisticsByUser(Objects.requireNonNull(getAuthorizedUser()).id());
+        UserDetailsDto authorizedUser = Objects.requireNonNull(getAuthorizedUser());
+        Integer userId = authorizedUser.role() == Role.ADMIN ? null : authorizedUser.id();
+        return eventRepository.getEventStatisticsByUser(userId);
     }
 
     public UserStatisticsDto getUserStatistics() {
