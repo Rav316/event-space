@@ -132,3 +132,5 @@ databaseChangeLog:
       file: db/changelog/db-update-users-table-4.0.sql
   - include:
       file: db/changelog/db-create-event-reminder-table-1.0.sql
+  - include:
+      file: db/changelog/db-update-space-table-3.0.sql
