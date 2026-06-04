@@ -11,6 +11,9 @@ import { useEventReviewFilterStore } from '@/store/use-event-review-filter-store
 import { HelpfulButton } from '@/components/shared/event-review/helpful-button.tsx';
 import { ComplaintDialog } from '@/components/shared/event-review/complaint-dialog.tsx';
 import { getAvatarUrl } from '@/utils/get-avatar-url.ts';
+import { useMe } from '@/api/auth/hooks.ts';
+import { Roles } from '@/api/auth/model.ts';
+import { AdminReviewDeleteDialog } from '@/components/modal';
 
 interface Props {
   review: EventReviewReadDto;
@@ -30,6 +33,9 @@ export const EventReview: React.FC<Props> = ({ review }) => {
     })
     .replace(',', '');
   const eventReviewFilter = useEventReviewFilterStore((state) => state.filter);
+
+  const { data: me } = useMe();
+  const isAdmin = me?.user.role === Roles.ADMIN;
 
   const markAsHelpfulMutation = useMarkReviewAsHelpful(
     review.event,
@@ -72,7 +78,7 @@ export const EventReview: React.FC<Props> = ({ review }) => {
       <p className={'max-[410px]:leading-5'}>{review.content}</p>
       <div
         className={
-          'flex items-center gap-3 max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2'
+          'flex flex-wrap items-center gap-3 max-[450px]:flex-col max-[450px]:items-start max-[450px]:gap-2'
         }
       >
         <HelpfulButton
@@ -87,6 +93,8 @@ export const EventReview: React.FC<Props> = ({ review }) => {
           <Flag />
           <span>Пожаловаться</span>
         </Button>
+
+        {isAdmin && <AdminReviewDeleteDialog reviewId={review.id} />}
       </div>
 
       <ComplaintDialog

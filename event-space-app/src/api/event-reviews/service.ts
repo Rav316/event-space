@@ -20,6 +20,10 @@ export const unmarkReviewAsHelpful = async (
   );
 };
 
+export const deleteReviewById = async (reviewId: number): Promise<void> => {
+  await axiosInstance.delete<void>(`${ApiRoutes.EVENT_REVIEWS}/${reviewId}`);
+};
+
 export const findAllReviews = async (
   filter: EventReviewFilter,
   page: number,

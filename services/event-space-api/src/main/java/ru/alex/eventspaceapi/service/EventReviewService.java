@@ -14,10 +14,12 @@ import ru.alex.eventspaceapi.database.entity.EventUser;
 import ru.alex.eventspaceapi.database.repository.EventRepository;
 import ru.alex.eventspaceapi.database.repository.EventReviewRepository;
 import ru.alex.eventspaceapi.database.repository.EventUserRepository;
+import ru.alex.eventspaceapi.database.repository.HelpfulMarkRepository;
 import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.eventReview.*;
 import ru.alex.eventspaceapi.dto.filter.EventReviewFilter;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
+import ru.alex.eventspaceapi.exception.EventReviewNotFoundException;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewCreateMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewEditMapper;
 import ru.alex.eventspaceapi.mapper.eventReview.EventReviewMyMapper;
@@ -37,6 +39,7 @@ public class EventReviewService {
     private final EventRepository eventRepository;
     private final EventUserRepository eventUserRepository;
     private final EventReviewRepository eventReviewRepository;
+    private final HelpfulMarkRepository helpfulMarkRepository;
     private final EventReviewReadMapper eventReviewReadMapper;
     private final EventReviewMyMapper eventReviewMyMapper;
     private final EventReviewCreateMapper eventReviewCreateMapper;
@@ -100,5 +103,16 @@ public class EventReviewService {
         eventReviewRepository.deleteByEventAndUser(eventId, authorizedUserId);
         Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorizedUserId);
         Objects.requireNonNull(cacheManager.getCache("reviewStats")).evict(authorizedUserId);
+    }
+
+    @Transactional
+    public void deleteReviewById(Integer reviewId) {
+        EventReview review = eventReviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EventReviewNotFoundException(reviewId));
+        Integer authorId = review.getAuthor().getId();
+        helpfulMarkRepository.deleteAllByReviewId(reviewId);
+        eventReviewRepository.delete(review);
+        Objects.requireNonNull(cacheManager.getCache("overviewStats")).evict(authorId);
+        Objects.requireNonNull(cacheManager.getCache("reviewStats")).evict(authorId);
     }
 }

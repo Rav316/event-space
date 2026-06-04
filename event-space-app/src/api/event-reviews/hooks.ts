@@ -3,6 +3,8 @@ import {
   useInfiniteQuery,
   useMutation,
 } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { AxiosError } from 'axios';
 import { Api } from '@/api/api-client.ts';
 import { queryClient } from '@/api/query-client.ts';
 import type {
@@ -62,6 +64,22 @@ export const useUnmarkReviewAsHelpful = (
 
       updateReviewInList(eventId, filter, reviewId, updater);
       updateMyReview(eventId, updater);
+    },
+  });
+
+export const useDeleteReviewById = () =>
+  useMutation({
+    mutationFn: Api.eventReviews.deleteReviewById,
+    onSuccess: async () => {
+      toast.success('Отзыв успешно удалён');
+      await queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'reviews',
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error('Произошла ошибка при удалении отзыва');
+      }
     },
   });
 

@@ -2,6 +2,7 @@ package ru.alex.eventspaceapi.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.eventspaceapi.dto.eventReview.EventReviewListDto;
@@ -34,6 +35,13 @@ public class EventReviewController {
     @DeleteMapping("/{id}/unmark-as-helpful")
     public ResponseEntity<Void> unmarkReviewAsHelpful(@PathVariable Integer id) {
         helpfulMarkService.unmarkReviewAsHelpful(id);
+        return new ResponseEntity<>(NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteReviewById(@PathVariable Integer id) {
+        eventReviewService.deleteReviewById(id);
         return new ResponseEntity<>(NO_CONTENT);
     }
 }
