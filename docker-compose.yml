@@ -7,7 +7,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_INITDB_ARGS=--locale=en_US.UTF-8 --encoding=UTF8
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/18/docker
     networks:
@@ -31,7 +31,7 @@ services:
       context: ./services/event-space-api
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     depends_on:
       - event-space-db
       - rabbitmq
@@ -64,7 +64,7 @@ services:
       context: ./services/email-notification-service
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
+      - "127.0.0.1:8082:8082"
     depends_on:
       - rabbitmq
     environment:
@@ -102,7 +102,7 @@ services:
     container_name: my_static_server
     restart: always
     ports:
-      - "${NGINX_STATIC_PORT:-90}:80"
+      - "127.0.0.1:${NGINX_STATIC_PORT:-90}:80"
     volumes:
       - ./services/nginx-static-service/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./services/nginx-static-service/storage:/usr/share/nginx/html/media
@@ -130,8 +130,8 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-    - "5672:5672"
-    - "15672:15672"
+    - "127.0.0.1:5672:5672"
+    - "127.0.0.1:15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
