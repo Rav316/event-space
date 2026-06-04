@@ -15,6 +15,8 @@ services:
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:v0.19.1
+    profiles:
+      - observability
     environment:
       - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@event-space-db:5432/${POSTGRES_DB}?sslmode=disable
     ports:
@@ -33,7 +35,6 @@ services:
     depends_on:
       - event-space-db
       - rabbitmq
-      - tempo
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://event-space-db:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -48,6 +49,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=${OTEL_TRACES_EXPORTER:-none}
       - OTEL_METRICS_EXPORTER=none
       - OTEL_LOGS_EXPORTER=none
       - OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_CAPTURE_MDC_ATTRIBUTES=*
@@ -65,7 +67,6 @@ services:
       - "8082:8082"
     depends_on:
       - rabbitmq
-      - tempo
     environment:
       - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
       - GMAIL_USERNAME=${GMAIL_USERNAME}
@@ -79,6 +80,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=${OTEL_TRACES_EXPORTER:-none}
       - OTEL_METRICS_EXPORTER=none
       - OTEL_LOGS_EXPORTER=none
       - OTEL_INSTRUMENTATION_LOGBACK_APPENDER_EXPERIMENTAL_CAPTURE_MDC_ATTRIBUTES=*
@@ -146,6 +148,8 @@ services:
 
   grafana:
     image: grafana/grafana
+    profiles:
+      - observability
     ports:
       - "3001:3000"
     user: "root"
@@ -157,6 +161,8 @@ services:
 
   prometheus:
     image: prom/prometheus
+    profiles:
+      - observability
     ports:
       - "9090:9090"
     user: "root"
@@ -176,6 +182,8 @@ services:
 
   loki:
     image: grafana/loki
+    profiles:
+      - observability
     ports:
       - "3100:3100"
     user: "root"
@@ -188,6 +196,8 @@ services:
 
   alloy:
     image: grafana/alloy:latest
+    profiles:
+      - observability
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./services/observability/alloy/config.alloy:/etc/alloy/config.alloy:ro
@@ -203,6 +213,8 @@ services:
 
   tempo:
     image: grafana/tempo:2.10.4
+    profiles:
+      - observability
     command: [ "-config.file=/etc/tempo/tempo.yaml" ]
     volumes:
       - ./services/observability/tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
