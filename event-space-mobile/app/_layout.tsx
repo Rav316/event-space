@@ -1,5 +1,7 @@
 import '@/global.css';
 
+import { useEffect } from 'react';
+import { axiosInstance } from '@/src/api/instance';
 import { queryClient } from '@/src/api/queryClient';
 import { NAV_THEME } from '@/src/lib/theme';
 import { STORAGE_KEYS } from '@/src/storage/keys';
@@ -20,6 +22,13 @@ export default function RootLayout() {
   const [accessToken] = useMMKVString(STORAGE_KEYS.ACCESS_TOKEN, storage);
 
   const isAuthenticated = !!accessToken;
+
+  // Прогреваем сеть на старте: первый сетевой запрос на iOS вызывает системный
+  // диалог доступа к данным, и пока он висит — запрос падает. Делаем безобидный
+  // запрос здесь, чтобы диалог появился до экрана входа, а не в момент логина.
+  useEffect(() => {
+    axiosInstance.get('/', { timeout: 5000 }).catch(() => {});
+  }, []);
 
   console.log('is authenticated? ', isAuthenticated);
 

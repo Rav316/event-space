@@ -10,7 +10,18 @@
     "ios": {
       "icon": "./assets/images/icon-light.png",
       "supportsTablet": true,
-      "bundleIdentifier": "ru.alex.eventspace"
+      "bundleIdentifier": "ru.alex.eventspace",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false,
+          "NSExceptionDomains": {
+            "194.67.99.12": {
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSIncludesSubdomains": false
+            }
+          }
+        }
+      }
     },
     "android": {
       "icon": "./assets/images/icon-light-rounded.png",
@@ -25,6 +36,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -51,16 +70,16 @@
       [
         "react-native-vision-camera",
         {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
+          "cameraPermissionText": "Приложению нужен доступ к камере для съёмки фото и видео.",
           "enableMicrophonePermission": true,
-          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone.",
+          "microphonePermissionText": "Приложению нужен доступ к микрофону для записи звука.",
           "enableCodeScanner": true
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "Приложению нужен доступ к вашим фотографиям, чтобы вы могли добавлять их к мероприятиям и менять аватар профиля."
         }
       ],
       [
@@ -68,9 +87,9 @@
         {
           "calendarPermission": "Приложению нужен доступ к вашему календарю для добавления мероприятий."
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
-
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
