@@ -59,7 +59,7 @@ export const StepSecurity: React.FC<Props> = ({ form }) => {
                 Рекомендации для пароля:
               </p>
               <ul className="text-xs text-muted-foreground space-y-1">
-                <li>• Минимум 6 символов</li>
+                <li>• Минимум 8 символов</li>
                 <li>• Комбинация букв и цифр</li>
                 <li>• Избегайте простых паролей</li>
               </ul>

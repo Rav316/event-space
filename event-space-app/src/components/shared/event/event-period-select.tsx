@@ -21,8 +21,8 @@ export const EventPeriodSelect = () => {
       onValueChange={(value) => setFilter({ period: value })}
     >
       <SelectTrigger className="h-9 min-w-0 max-[703px]:flex-1">
-        <ClockArrowUp className="h-4 w-4 mr-2" />
-        <span className="font-medium">{currentLabel}</span>
+        <ClockArrowUp className="h-4 w-4 mr-2 shrink-0" />
+        <span className="font-medium truncate min-w-0">{currentLabel}</span>
       </SelectTrigger>
 
       <SelectContent>

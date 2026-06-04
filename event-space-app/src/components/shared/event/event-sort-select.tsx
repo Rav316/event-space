@@ -21,8 +21,8 @@ export const EventSortSelect = () => {
       onValueChange={(value) => setFilter({ sort: value })}
     >
       <SelectTrigger className="h-9 min-w-0 max-[703px]:flex-1">
-        <SortAsc className="h-4 w-4 mr-2" />
-        <span className="font-medium">{currentLabel}</span>
+        <SortAsc className="h-4 w-4 mr-2 shrink-0" />
+        <span className="font-medium truncate min-w-0">{currentLabel}</span>
       </SelectTrigger>
 
       <SelectContent>

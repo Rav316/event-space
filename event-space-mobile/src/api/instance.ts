@@ -6,7 +6,7 @@ import { AuthResponse } from '@/src/api/auth/models';
 
 export const axiosInstance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
-  timeout: 5000,
+  timeout: 15000,
   paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' })
 });
 
