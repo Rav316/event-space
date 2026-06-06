@@ -15,6 +15,7 @@ import ru.alex.eventspaceapi.database.repository.UserRepository;
 import ru.alex.eventspaceapi.dto.event.EventQrInfoDto;
 import ru.alex.eventspaceapi.exception.EventNotFoundException;
 import ru.alex.eventspaceapi.exception.QrConfirmationException;
+import ru.alex.eventspaceapi.config.ReminderProperties;
 import ru.alex.eventspaceapi.mapper.event.EventQrInfoMapper;
 import ru.alex.eventspaceapi.model.QrConfirmErrorCode;
 import ru.alex.eventspaceapi.util.EventUtils;
@@ -35,6 +36,7 @@ public class EventUserService {
     private final UserRepository userRepository;
     private final EventQrInfoMapper eventQrInfoMapper;
     private final EventReminderService eventReminderService;
+    private final ReminderProperties reminderProperties;
 
 
     @Transactional
@@ -104,8 +106,9 @@ public class EventUserService {
                         "No information found for this QR token"
                 ));
         Event event = eventUser.getEvent();
-        ZonedDateTime eventStart = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
-        ZonedDateTime eventEnd = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), ZoneId.systemDefault());
+        ZoneId eventZone = reminderProperties.zone();
+        ZonedDateTime eventStart = ZonedDateTime.of(event.getEventDate(), event.getStartTime(), eventZone);
+        ZonedDateTime eventEnd = ZonedDateTime.of(event.getEventDate(), event.getEndTime(), eventZone);
         Instant now = Instant.now();
 
         if (now.isBefore(eventStart.minusHours(24).toInstant())) {
