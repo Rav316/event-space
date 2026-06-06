@@ -48,6 +48,9 @@ export const EventRegistrationButton: React.FC<Props> = ({
   const registerForEventMutation = useRegisterForEvent(eventId);
   const unregisterFromEventMutation = useUnregisterFromEvent(eventId);
 
+  const isDeadlineExpired =
+    deadline !== undefined && compareWithToday(deadline) === -1;
+
   const handleRegistrationClick = () => {
     if (!data) {
       setAuthModalOpen(true);
@@ -55,7 +58,7 @@ export const EventRegistrationButton: React.FC<Props> = ({
     }
 
     if (isUserRegistered) {
-      if (!canRegister && canUnregister) {
+      if ((!canRegister || isDeadlineExpired) && canUnregister) {
         setIsDialogOpen(true);
         return;
       }
@@ -127,8 +130,9 @@ export const EventRegistrationButton: React.FC<Props> = ({
             <DialogTitle>Подтвердите отмену</DialogTitle>
           </DialogHeader>
           <p>
-            Вы уверены, что хотите отменить регистрацию? Мероприятие уже
-            началось, зарегистрироваться на него больше не получится.
+            {isDeadlineExpired
+              ? 'Вы уверены, что хотите отменить регистрацию? Дедлайн регистрации уже истёк, и при отмене вы больше не сможете зарегистрироваться на мероприятие.'
+              : 'Вы уверены, что хотите отменить регистрацию? Мероприятие уже началось, зарегистрироваться на него больше не получится.'}
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
