@@ -169,7 +169,18 @@
 
    END OF TERMS AND CONDITIONS
 
-   Copyright 2025 Alex
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "[]"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format in question. It may also be
+      included as a machine-readable representation of the license in
+      a file alongside the source code, by providing the appropriate
+      metadata in a file format that supports it.
+
+   Copyright [yyyy] [name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
