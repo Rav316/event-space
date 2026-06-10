@@ -19,6 +19,7 @@
 [![Nginx](https://img.shields.io/badge/Nginx-1.25-009639?logo=nginx&logoColor=white)](https://nginx.org/)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 A university-oriented platform for creating, managing, and discovering campus events. Features a REST API backend, asynchronous email notification service, web application, and cross-platform mobile app — all wired together with message-driven architecture and full observability.
 
