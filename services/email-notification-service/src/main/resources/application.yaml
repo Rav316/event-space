@@ -32,7 +32,7 @@ app:
       reminder-queue: event.notifications.reminders
   mail:
     from: ${MAIL_FROM:noreply@example.com}
-  website-url: http://192.168.0.119:3000
+  website-url: ${WEBSITE_URL:http://localhost:3000}
   metrics:
     username: ${PROMETHEUS_USERNAME}
     password: ${PROMETHEUS_PASSWORD}

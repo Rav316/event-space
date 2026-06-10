@@ -502,9 +502,12 @@ cp .env.example .env
 | `POSTGRES_USER` | Yes | `postgres` | PostgreSQL username |
 | `POSTGRES_PASSWORD` | Yes | — | PostgreSQL password |
 | `STATIC_CONTENT_PATH` | Local API only | — | Absolute path to `services/nginx-static-service/storage` when running API outside Docker Compose |
+| `JWT_ACCESS_SECRET` | Yes | — | Secret key for signing JWT access tokens (min. 32 chars, use a strong random value) |
+| `JWT_REFRESH_SECRET` | Yes | — | Secret key for signing JWT refresh tokens (min. 32 chars, must differ from access secret) |
 | `GMAIL_APP_PASSWORD` | Yes | — | Google [App Password](https://support.google.com/accounts/answer/185833) for SMTP |
 | `GMAIL_USERNAME` | Yes | — | Gmail address used to send emails |
 | `MAIL_FROM` | Yes | — | Sender address (usually same as `GMAIL_USERNAME`) |
+| `WEBSITE_URL` | Yes | `http://localhost:3000` | Base URL of the web app, used in email links |
 | `PROMETHEUS_USERNAME` | No | `prometheus` | Basic auth username for metrics endpoints |
 | `PROMETHEUS_PASSWORD` | Yes | — | Basic auth password for metrics endpoints |
 | `RABBITMQ_USERNAME` | No | `admin` | RabbitMQ management username |
@@ -518,22 +521,29 @@ Start all backend services and infrastructure with a single command:
 docker compose up -d
 ```
 
-This launches **12 containers**:
+This launches **7 core containers** (13 with the `observability` profile):
 
-| Container | Service | Port |
-|---|---|---|
-| `event-space-db` | PostgreSQL 18 | `5433` |
-| `event-space-api` | Spring Boot API | `8080` |
-| `email-notification-service` | Email Service | `8082` |
-| `event-space-app` | Web App (Nginx) | `3000` |
-| `placeholder_service` | Go Placeholder | Internal |
-| `my_static_server` | Nginx Static | `90` |
-| `rabbitmq` | RabbitMQ | `5672` / `15672` |
-| `prometheus` | Prometheus | `9090` |
-| `grafana` | Grafana | `3001` |
-| `loki` | Loki | `3100` |
-| `alloy` | Grafana Alloy | `12345` |
-| `tempo` | Grafana Tempo | `3200` / `4317` / `4318` |
+| Container | Service | Port | Profile |
+|---|---|---|---|
+| `event-space-db` | PostgreSQL 18 | `5433` | core |
+| `event-space-api` | Spring Boot API | `8080` | core |
+| `email-notification-service` | Email Service | `8082` | core |
+| `event-space-app` | Web App (Nginx) | `3000` | core |
+| `placeholder_service` | Go Placeholder | Internal | core |
+| `my_static_server` | Nginx Static | `90` | core |
+| `rabbitmq` | RabbitMQ | `5672` / `15672` | core |
+| `postgres-exporter` | Postgres Exporter | `9187` | observability |
+| `prometheus` | Prometheus | `9090` | observability |
+| `grafana` | Grafana | `3001` | observability |
+| `loki` | Loki | `3100` | observability |
+| `alloy` | Grafana Alloy | `12345` | observability |
+| `tempo` | Grafana Tempo | `3200` / `4317` / `4318` | observability |
+
+To start with full observability stack:
+
+```bash
+docker compose --profile observability up -d
+```
 
 Database migrations are applied automatically via Liquibase on API startup. RabbitMQ includes a healthcheck — dependent services wait for it to be ready.
 
